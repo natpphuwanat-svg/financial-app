@@ -407,223 +407,241 @@
   </div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbw3YFTHRu7hmh2foAAcEBM68xsKbPIO0oTWczq-sXk6LXcS9IVI6qKjN-xKbqMbxmMf/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbw3YFTHRu7hmh2foAAcEBM68xsKbPIO0oTWczq-sXk6LXcS9IVI6qKjN-xKbqMbxmMf/exec";
+  const CACHE_KEY = 'app_dashboard_data_cache';
+  const MAX_RETRIES = 3;
 
-    const realCurrentYear = new Date().getFullYear();
-    const realCurrentMonth = new Date().getMonth() + 1; // 1-12
+  const realCurrentYear = new Date().getFullYear();
+  const realCurrentMonth = new Date().getMonth() + 1; // 1-12
 
-    let selectedYear = realCurrentYear;
-    let selectedMonth = realCurrentMonth;
-    let currentMonthSet = realCurrentMonth <= 6 ? 1 : 2; // Set 1: Jan-Jun, Set 2: Jul-Dec
+  let selectedYear = realCurrentYear;
+  let selectedMonth = realCurrentMonth;
+  let currentMonthSet = realCurrentMonth <= 6 ? 1 : 2;
 
-    const monthSets = {
-      1: [{ name: 'JAN', m: 1 }, { name: 'FEB', m: 2 }, { name: 'MAR', m: 3 }, { name: 'APR', m: 4 }, { name: 'MAY', m: 5 }, { name: 'JUN', m: 6 }],
-      2: [{ name: 'JUL', m: 7 }, { name: 'AUG', m: 8 }, { name: 'SEP', m: 9 }, { name: 'OCT', m: 10 }, { name: 'NOV', m: 11 }, { name: 'DEC', m: 12 }]
+  const monthSets = {
+    1: [{ name: 'JAN', m: 1 }, { name: 'FEB', m: 2 }, { name: 'MAR', m: 3 }, { name: 'APR', m: 4 }, { name: 'MAY', m: 5 }, { name: 'JUN', m: 6 }],
+    2: [{ name: 'JUL', m: 7 }, { name: 'AUG', m: 8 }, { name: 'SEP', m: 9 }, { name: 'OCT', m: 10 }, { name: 'NOV', m: 11 }, { name: 'DEC', m: 12 }]
+  };
+
+  let selectedType = 'Income';
+
+  // Init
+  document.addEventListener("DOMContentLoaded", () => {
+    updateYearUI();
+    renderMonthGrid();
+    loadDashboardDataWithCache();
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === 'visible') fetchDataWithRetry(0);
+    });
+  });
+
+  // Theme Toggle
+  function toggleTheme() {
+    const currentTheme = document.body.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.body.setAttribute('data-theme', newTheme);
+    document.getElementById('themeToggle').innerText = newTheme === 'dark' ? '🌙' : '☀️';
+  }
+
+  // Year Controller
+  function updateYearUI() {
+    document.getElementById('selectedYear').innerText = selectedYear;
+    document.getElementById('prevYearBtn').disabled = (selectedYear <= 2025);
+  }
+
+  function changeYear(delta) {
+    if (selectedYear + delta < 2025) return;
+    selectedYear += delta;
+    updateYearUI();
+    fetchDataWithRetry(0);
+  }
+
+  // Month Controller
+  function renderMonthGrid() {
+    const grid = document.getElementById('monthGrid');
+    const months = monthSets[currentMonthSet];
+
+    grid.innerHTML = months.map(item => `
+      <div class="month-chip ${item.m === selectedMonth ? 'active' : ''}" onclick="selectMonth(${item.m})">
+        ${item.name}
+      </div>
+    `).join('');
+
+    document.getElementById('prevMonthSetBtn').disabled = (currentMonthSet === 1);
+    document.getElementById('nextMonthSetBtn').disabled = (currentMonthSet === 2);
+  }
+
+  function shiftMonthSet(delta) {
+    const newSet = currentMonthSet + delta;
+    if (newSet >= 1 && newSet <= 2) {
+      currentMonthSet = newSet;
+      renderMonthGrid();
+    }
+  }
+
+  function selectMonth(m) {
+    selectedMonth = m;
+    renderMonthGrid();
+    fetchDataWithRetry(0);
+  }
+
+  // ===== ส่วนระบบดึงข้อมูล + CACHE + AUTO RETRY =====
+  function loadDashboardDataWithCache() {
+    const cachedData = localStorage.getItem(CACHE_KEY + `_${selectedYear}_${selectedMonth}`);
+    if (cachedData) {
+      try {
+        renderDashboard(JSON.parse(cachedData));
+      } catch (e) {
+        console.warn("Cache parse error", e);
+      }
+    } else {
+      showLoadingState();
+    }
+    fetchDataWithRetry(0);
+  }
+
+  function fetchDataWithRetry(attempt) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000); // ตัดเวลาที่ 8 วินาที
+
+    const fetchUrl = `${API_URL}?year=${selectedYear}&month=${selectedMonth}`;
+
+    fetch(fetchUrl, { signal: controller.signal })
+      .then(res => res.json())
+      .then(data => {
+        clearTimeout(timeoutId);
+        if (data) {
+          localStorage.setItem(CACHE_KEY + `_${selectedYear}_${selectedMonth}`, JSON.stringify(data));
+          renderDashboard(data);
+        } else {
+          handleFetchError(attempt, "Data is null");
+        }
+      })
+      .catch(err => {
+        clearTimeout(timeoutId);
+        handleFetchError(attempt, err);
+      });
+  }
+
+  function handleFetchError(attempt, err) {
+    console.error(`Fetch attempt ${attempt + 1} failed:`, err);
+    if (attempt < MAX_RETRIES - 1) {
+      setTimeout(() => fetchDataWithRetry(attempt + 1), 1500);
+    } else {
+      const cachedData = localStorage.getItem(CACHE_KEY + `_${selectedYear}_${selectedMonth}`);
+      if (!cachedData) {
+        showErrorMessage("ไม่สามารถโหลดข้อมูลได้ กรุณาลองใหม่อีกครั้ง");
+      }
+    }
+  }
+
+  function renderDashboard(data) {
+    if (document.getElementById('totalBalance')) {
+      document.getElementById('totalBalance').innerText = formatCurrency(data.totalBalance || 0);
+    }
+    if (document.getElementById('totalIncome')) {
+      document.getElementById('totalIncome').innerText = formatCurrency(data.totalIncome || 0);
+    }
+    if (document.getElementById('totalExpense')) {
+      document.getElementById('totalExpense').innerText = formatCurrency(data.totalExpense || 0);
+    }
+    if (document.getElementById('totalDeduction')) {
+      document.getElementById('totalDeduction').innerText = formatCurrency(data.totalDeduction || 0);
+    }
+    if (data.entries) {
+      renderEntriesList(data.entries);
+    }
+  }
+
+  function renderEntriesList(entries) {
+    const listEl = document.getElementById('entriesList');
+    if (!listEl) return;
+    if (entries.length === 0) {
+      listEl.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-sub);">ไม่มีรายการในเดือนนี้</div>';
+      return;
+    }
+    listEl.innerHTML = entries.map(item => `
+      <div class="entry-item" onclick='openEditModal(${JSON.stringify(item)})'>
+        <div>
+          <div class="entry-title">${escapeHtml(item.title || '')}</div>
+          <div class="entry-date">${escapeHtml(item.date || '')}</div>
+        </div>
+        <div class="entry-amount ${item.type}">${item.type === 'expense' ? '-' : '+'}${formatCurrency(item.amount)}</div>
+      </div>
+    `).join('');
+  }
+
+  function formatCurrency(num) {
+    return '฿' + Number(num || 0).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m]));
+  }
+
+  function showLoadingState() {
+    if (document.getElementById('totalBalance')) document.getElementById('totalBalance').innerText = "Loading...";
+  }
+
+  function showErrorMessage(msg) {
+    if (document.getElementById('totalBalance')) document.getElementById('totalBalance').innerText = "Error";
+  }
+
+  // Modal Functionality
+  function closeModal() {
+    document.getElementById('entryModal').classList.remove('active');
+  }
+
+  async function handleFormSubmit(e) {
+    e.preventDefault();
+    const rowIndex = document.getElementById('editRowIndex').value;
+    const action = rowIndex ? 'edit' : 'add';
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.innerText = 'Saving...';
+    submitBtn.disabled = true;
+
+    const payload = {
+      action: action,
+      row: rowIndex ? parseInt(rowIndex) : null,
+      data: {
+        type: selectedType,
+        date: document.getElementById('formDate').value,
+        title: document.getElementById('formTitle').value,
+        amount: parseFloat(document.getElementById('formAmount').value)
+      }
     };
 
-    let selectedType = 'Income';
-
-    // Init
-    document.addEventListener("DOMContentLoaded", () => {
-      updateYearUI();
-      renderMonthGrid();
-      fetchData();
-      
-      document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === 'visible') fetchData();
+    try {
+      await fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify(payload)
       });
-    });
-
-    // Theme Toggle
-    function toggleTheme() {
-      const currentTheme = document.body.getAttribute('data-theme');
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      document.body.setAttribute('data-theme', newTheme);
-      document.getElementById('themeToggle').innerText = newTheme === 'dark' ? '🌙⁺' : '☀️';
+      closeModal();
+      fetchDataWithRetry(0);
+    } catch (err) {
+      alert('Error saving entry.');
+    } finally {
+      submitBtn.innerText = 'Save Entry';
+      submitBtn.disabled = false;
     }
+  }
 
-    // Year Controller with Limit at 2025
-    function updateYearUI() {
-      document.getElementById('selectedYear').innerText = selectedYear;
-      document.getElementById('prevYearBtn').disabled = (selectedYear <= 2025);
-    }
+  async function handleDelete() {
+    if (!confirm('Are you sure you want to delete this entry?')) return;
+    const rowIndex = document.getElementById('editRowIndex').value;
 
-    function changeYear(delta) {
-      if (selectedYear + delta < 2025) return;
-      selectedYear += delta;
-      updateYearUI();
-      fetchData();
-    }
-
-    // Month Controller
-    function renderMonthGrid() {
-      const grid = document.getElementById('monthGrid');
-      const months = monthSets[currentMonthSet];
-      
-      grid.innerHTML = months.map(item => `
-        <div class="month-chip ${item.m === selectedMonth ? 'active' : ''}" onclick="selectMonth(${item.m})">
-          ${item.name}
-        </div>
-      `).join('');
-
-      document.getElementById('prevMonthSetBtn').disabled = (currentMonthSet === 1);
-      document.getElementById('nextMonthSetBtn').disabled = (currentMonthSet === 2);
-    }
-
-    function shiftMonthSet(delta) {
-      const newSet = currentMonthSet + delta;
-      if (newSet >= 1 && newSet <= 2) {
-        currentMonthSet = newSet;
-        renderMonthGrid();
-      }
-    }
-
-    function selectMonth(m) {
-      selectedMonth = m;
-      renderMonthGrid();
-      fetchData();
-    }
-
-    // Reset to Current Date
-    function resetToCurrent() {
-      selectedYear = realCurrentYear;
-      selectedMonth = realCurrentMonth;
-      currentMonthSet = realCurrentMonth <= 6 ? 1 : 2;
-      
-      updateYearUI();
-      renderMonthGrid();
-      fetchData();
-    }
-
-    // Fetch Data from Apps Script API
-    async function fetchData() {
-      document.getElementById('entryList').innerHTML = `<div class="loading-state">Loading data...</div>`;
-      try {
-        const res = await fetch(`${API_URL}?action=getData&year=${selectedYear}&month=${selectedMonth}`);
-        const data = await res.json();
-
-        // Render Cards
-        document.getElementById('balanceAmount').innerText = '฿' + data.balance.toLocaleString('en-US', {minimumFractionDigits: 2});
-        document.getElementById('incomeAmount').innerText = '฿' + data.totalIncome.toLocaleString('en-US', {minimumFractionDigits: 2});
-        document.getElementById('expenseAmount').innerText = '฿' + data.totalExpense.toLocaleString('en-US', {minimumFractionDigits: 2});
-        document.getElementById('deductionAmount').innerText = '฿' + data.totalDeduction.toLocaleString('en-US', {minimumFractionDigits: 2});
-
-        // Render List
-        if (data.items.length === 0) {
-          document.getElementById('entryList').innerHTML = `<div class="loading-state">No transactions found.</div>`;
-          return;
-        }
-
-        document.getElementById('entryList').innerHTML = data.items.map(item => `
-          <div class="entry-item" onclick='openModal("edit", ${JSON.stringify(item)})'>
-            <div class="entry-left">
-              <div class="entry-badge ${item.type}">
-                ${item.type === 'income' ? '↙' : item.type === 'expense' ? '↗' : '−'}
-              </div>
-              <div>
-                <div class="entry-title">${item.title}</div>
-                <div class="entry-date">${item.date}</div>
-              </div>
-            </div>
-            <div class="entry-right">
-              <div class="entry-amount ${item.type}">
-                ${item.type === 'expense' || item.type === 'deduction' ? '-' : '+'}฿${item.amount.toLocaleString('en-US', {minimumFractionDigits: 2})}
-              </div>
-            </div>
-          </div>
-        `).join('');
-
-      } catch (err) {
-        document.getElementById('entryList').innerHTML = `<div class="loading-state">Error loading data.</div>`;
-      }
-    }
-
-    // Modal Controls
-    function selectType(type) {
-      selectedType = type;
-      document.querySelectorAll('.type-btn').forEach(btn => {
-        btn.classList.remove('active', 'income', 'expense', 'deduction');
-        if (btn.innerText.toLowerCase() === type.toLowerCase()) {
-          btn.classList.add('active', type.toLowerCase());
-        }
+    try {
+      await fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'delete', row: parseInt(rowIndex) })
       });
+      closeModal();
+      fetchDataWithRetry(0);
+    } catch (err) {
+      alert('Error deleting entry.');
     }
-
-    function openModal(mode, item = null) {
-      document.getElementById('entryModal').classList.add('active');
-      if (mode === 'add') {
-        document.getElementById('modalTitle').innerText = 'New Entry';
-        document.getElementById('editRowIndex').value = '';
-        document.getElementById('formDate').valueAsDate = new Date();
-        document.getElementById('formTitle').value = '';
-        document.getElementById('formAmount').value = '';
-        document.getElementById('deleteBtn').style.display = 'none';
-        selectType('Income');
-      } else if (mode === 'edit') {
-        document.getElementById('modalTitle').innerText = 'Edit Entry';
-        document.getElementById('editRowIndex').value = item.rowIndex;
-        document.getElementById('formDate').value = item.rawDate;
-        document.getElementById('formTitle').value = item.title;
-        document.getElementById('formAmount').value = item.amount;
-        document.getElementById('deleteBtn').style.display = 'block';
-        selectType(item.financialType);
-      }
-    }
-
-    function closeModal() {
-      document.getElementById('entryModal').classList.remove('active');
-    }
-
-    // Form Submissions
-    async function handleFormSubmit(e) {
-      e.preventDefault();
-      const rowIndex = document.getElementById('editRowIndex').value;
-      const action = rowIndex ? 'edit' : 'add';
-      const submitBtn = document.getElementById('submitBtn');
-      submitBtn.innerText = 'Saving...';
-      submitBtn.disabled = true;
-
-      const payload = {
-        action: action,
-        row: rowIndex ? parseInt(rowIndex) : null,
-        data: {
-          type: selectedType,
-          date: document.getElementById('formDate').value,
-          title: document.getElementById('formTitle').value,
-          amount: parseFloat(document.getElementById('formAmount').value)
-        }
-      };
-
-      try {
-        await fetch(API_URL, {
-          method: 'POST',
-          body: JSON.stringify(payload)
-        });
-        closeModal();
-        fetchData();
-      } catch (err) {
-        alert('Error saving entry.');
-      } finally {
-        submitBtn.innerText = 'Save Entry';
-        submitBtn.disabled = false;
-      }
-    }
-
-    async function handleDelete() {
-      if (!confirm('Are you sure you want to delete this entry?')) return;
-      const rowIndex = document.getElementById('editRowIndex').value;
-      
-      try {
-        await fetch(API_URL, {
-          method: 'POST',
-          body: JSON.stringify({ action: 'delete', row: parseInt(rowIndex) })
-        });
-        closeModal();
-        fetchData();
-      } catch (err) {
-        alert('Error deleting entry.');
-      }
-    }
-  </script>
+  }
+</script>
 </body>
 </html>
