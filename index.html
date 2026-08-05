@@ -1,20 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Financial Overview</title>
-  
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Financial">
-  <link rel="apple-touch-icon" href="icon.png">
-  <link rel="icon" type="image/png" href="icon.png">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
-
   <style>
     :root {
       /* Palette */
@@ -22,524 +5,274 @@
       --blue-grey: #7298C7;
       --lime-400: #A3E635;
 
-      /* Light Theme Base */
-      --bg-color: #F8FAFC;
-      --card-bg: #FFFFFF;
-      --text-main: #1E293B;
-      --text-sub: #64748B;
-      --border-color: #E2E8F0;
+      /* Light Glass Base */
+      --bg-color: #EBF1F6;
+      --glass-bg: rgba(255, 255, 255, 0.55);
+      --glass-card: rgba(255, 255, 255, 0.65);
+      --glass-border: rgba(255, 255, 255, 0.8);
+      --glass-shadow: 0 8px 32px 0 rgba(114, 152, 199, 0.15);
       
+      --text-main: #1C273A;
+      --text-sub: #64748B;
+
       /* Header & Elements Light */
-      --icon-box-bg: #EAF7D9;
-      --icon-box-color: #4D7C0F;
-      --btn-pill-bg: #FFFFFF;
-      --btn-pill-border: #E2E8F0;
+      --icon-box-bg: rgba(163, 230, 53, 0.2);
+      --icon-box-color: #3F6212;
+      --btn-pill-bg: rgba(255, 255, 255, 0.6);
+      --btn-pill-border: rgba(255, 255, 255, 0.9);
       
       /* Functional Colors */
-      --primary: var(--blue-grey);
-      --income-color: #65A30D;
-      --income-bg: #ECFDF5;
+      --income-color: #4D7C0F;
+      --income-bg: rgba(236, 253, 245, 0.7);
       --expense-color: #E11D48;
-      --expense-bg: #FFF1F2;
+      --expense-bg: rgba(255, 241, 242, 0.7);
       --deduction-color: #D97706;
-      --deduction-bg: #FFFBEB;
-      --modal-bg: rgba(15, 23, 42, 0.5);
+      --deduction-bg: rgba(255, 251, 235, 0.7);
+      --modal-bg: rgba(15, 23, 42, 0.35);
     }
 
     [data-theme="dark"] {
-      /* Dark Theme Base */
-      --bg-color: #0F172A;
-      --card-bg: #1E293B;
+      /* Dark Glass Base */
+      --bg-color: #0B1120;
+      --glass-bg: rgba(30, 41, 59, 0.5);
+      --glass-card: rgba(30, 41, 59, 0.65);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
+      
       --text-main: #F8FAFC;
       --text-sub: #94A3B8;
-      --border-color: #334155;
-      
+
       /* Header & Elements Dark */
-      --icon-box-bg: #27381A;
+      --icon-box-bg: rgba(163, 230, 53, 0.15);
       --icon-box-color: var(--lime-400);
-      --btn-pill-bg: #1E293B;
-      --btn-pill-border: #334155;
+      --btn-pill-bg: rgba(30, 41, 59, 0.6);
+      --btn-pill-border: rgba(255, 255, 255, 0.12);
       
       /* Functional Colors (Dark) */
-      --primary: #8EB4E3;
       --income-color: var(--lime-400);
-      --income-bg: #142E15;
+      --income-bg: rgba(20, 46, 21, 0.7);
       --expense-color: #FB7185;
-      --expense-bg: #3F1A24;
+      --expense-bg: rgba(63, 26, 36, 0.7);
       --deduction-color: #FBBF24;
-      --deduction-bg: #3A2E12;
-      --modal-bg: rgba(0, 0, 0, 0.8);
+      --deduction-bg: rgba(58, 46, 18, 0.7);
+      --modal-bg: rgba(0, 0, 0, 0.65);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', 'Noto Sans Thai', sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; padding-bottom: 90px; }
+    * { 
+      box-sizing: border-box; margin: 0; padding: 0; 
+      font-family: 'Inter', 'Noto Sans Thai', -apple-system, BlinkMacSystemFont, sans-serif; 
+      -webkit-tap-highlight-color: transparent; 
+    }
+    
+    body { 
+      background-color: var(--bg-color); 
+      background-image: 
+        radial-gradient(at 10% 10%, rgba(114, 152, 199, 0.25) 0px, transparent 50%),
+        radial-gradient(at 90% 90%, rgba(163, 230, 53, 0.2) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(243, 217, 143, 0.15) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main); 
+      min-height: 100vh; 
+      padding-bottom: 100px; 
+    }
 
-    .container { padding: 0 16px; }
+    .container { padding: 0 18px; }
 
-    /* Custom Header Top Bar */
-    .app-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px 12px; }
+    /* Liquid Glass Top Bar */
+    .app-header { 
+      display: flex; justify-content: space-between; align-items: center; 
+      padding: 18px 22px 14px; 
+    }
     .header-left { display: flex; align-items: center; gap: 12px; }
+    
     .home-icon-box { 
-      width: 42px; height: 42px; border-radius: 14px; 
+      width: 44px; height: 44px; border-radius: 16px; 
       background: var(--icon-box-bg); color: var(--icon-box-color); 
       display: flex; align-items: center; justify-content: center; 
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 4px 15px rgba(163, 230, 53, 0.25);
     }
     .home-icon-box svg { width: 22px; height: 22px; fill: currentColor; }
-    .app-title { font-size: 20px; font-weight: 800; letter-spacing: 0.8px; }
+    .app-title { font-size: 21px; font-weight: 800; letter-spacing: 0.5px; }
     
     .theme-toggle-btn { 
-      background: var(--btn-pill-bg); border: 1px solid var(--btn-pill-border); 
-      border-radius: 50%; width: 40px; height: 40px; 
+      background: var(--btn-pill-bg); 
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--btn-pill-border); 
+      border-radius: 50%; width: 42px; height: 42px; 
       display: flex; align-items: center; justify-content: center; 
       cursor: pointer; font-size: 18px; color: var(--text-main); 
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
+    .theme-toggle-btn:active { transform: scale(0.9); }
 
-    /* Year & Current Section */
-    .year-current-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-    .year-nav-transparent { display: flex; align-items: center; gap: 8px; background: transparent; }
-    .year-nav-btn { background: none; border: none; font-size: 16px; font-weight: 700; color: var(--text-main); cursor: pointer; padding: 4px 8px; }
-    .year-nav-btn:disabled { opacity: 0.25; cursor: not-allowed; }
-    .year-text-display { font-size: 18px; font-weight: 800; letter-spacing: 0.5px; }
+    /* Year & Current Bar */
+    .year-current-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .year-nav-transparent { display: flex; align-items: center; gap: 8px; }
+    .year-nav-btn { 
+      background: none; border: none; font-size: 16px; font-weight: 800; 
+      color: var(--text-main); cursor: pointer; padding: 6px 10px; 
+      transition: opacity 0.2s;
+    }
+    .year-nav-btn:disabled { opacity: 0.2; cursor: not-allowed; }
+    .year-text-display { font-size: 19px; font-weight: 800; letter-spacing: 0.5px; }
 
     .current-btn { 
       display: flex; align-items: center; gap: 6px; 
-      background: var(--btn-pill-bg); border: 1px solid var(--btn-pill-border); 
-      padding: 8px 14px; border-radius: 20px; 
+      background: var(--btn-pill-bg); 
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--btn-pill-border); 
+      padding: 8px 16px; border-radius: 20px; 
       font-size: 12px; font-weight: 800; color: var(--text-main); 
       cursor: pointer; letter-spacing: 0.5px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      transition: all 0.2s ease;
     }
+    .current-btn:active { transform: scale(0.95); }
     .current-btn svg { width: 15px; height: 15px; fill: var(--lime-400); }
 
-    /* Month Selector Bar (Fit width, 2 Sets) */
-    .month-nav-container { display: flex; align-items: center; gap: 4px; margin-bottom: 20px; justify-content: space-between; }
-    .month-arrow-btn { background: none; border: none; color: var(--text-main); font-size: 15px; font-weight: 700; cursor: pointer; padding: 4px; }
+    /* Liquid Month Selector */
+    .month-nav-container { display: flex; align-items: center; gap: 6px; margin-bottom: 22px; justify-content: space-between; }
+    .month-arrow-btn { background: none; border: none; color: var(--text-main); font-size: 16px; font-weight: 800; cursor: pointer; padding: 4px; }
     .month-arrow-btn:disabled { opacity: 0.2; cursor: not-allowed; }
 
     .month-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; flex-grow: 1; }
     .month-chip { 
-      background: var(--btn-pill-bg); border: 1px solid var(--btn-pill-border); 
-      color: var(--text-sub); padding: 9px 0; border-radius: 20px; 
+      background: var(--btn-pill-bg); 
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--btn-pill-border); 
+      color: var(--text-sub); padding: 10px 0; border-radius: 18px; 
       font-size: 12px; font-weight: 700; text-align: center; cursor: pointer; 
-      transition: all 0.2s ease;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
+    .month-chip:active { transform: scale(0.92); }
     .month-chip.active { 
       border: 2px solid var(--lime-400); 
       color: var(--text-main); 
       font-weight: 800;
-      background: var(--btn-pill-bg);
-      box-shadow: 0 0 10px rgba(163, 230, 53, 0.25);
+      background: var(--glass-card);
+      box-shadow: 0 0 16px rgba(163, 230, 53, 0.35);
     }
 
-    /* Balance Card */
+    /* Liquid Glass Main Balance Card */
     .balance-card { 
-      background: linear-gradient(135deg, var(--blue-grey) 0%, #5B82B3 100%); 
-      border-radius: 24px; padding: 22px; border: none; margin-bottom: 16px; 
-      color: #FFFFFF; box-shadow: 0 10px 25px -5px rgba(114, 152, 199, 0.4); 
+      background: linear-gradient(135deg, rgba(114, 152, 199, 0.85) 0%, rgba(91, 130, 179, 0.75) 100%); 
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-radius: 28px; padding: 26px; 
+      border: 1px solid rgba(255, 255, 255, 0.4); 
+      margin-bottom: 18px; color: #FFFFFF; 
+      box-shadow: 0 16px 32px -8px rgba(114, 152, 199, 0.35); 
+      position: relative; overflow: hidden;
     }
-    .balance-label { font-size: 12px; font-weight: 700; color: #E2E8F0; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
-    .balance-amount { font-size: 34px; font-weight: 800; color: #FFFFFF; }
+    .balance-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+      pointer-events: none;
+    }
+    .balance-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.85); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+    .balance-amount { font-size: 36px; font-weight: 800; color: #FFFFFF; text-shadow: 0 2px 10px rgba(0,0,0,0.1); }
 
-    /* Stats Grid */
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-    .stat-card { background: var(--card-bg); border-radius: 16px; padding: 14px 10px; border: 1px solid var(--border-color); text-align: center; }
-    .stat-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-size: 14px; font-weight: bold; }
+    /* Stats Grid Glass Cards */
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 22px; }
+    .stat-card { 
+      background: var(--glass-card); 
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-radius: 20px; padding: 16px 10px; 
+      border: 1px solid var(--glass-border); 
+      text-align: center; box-shadow: var(--glass-shadow);
+    }
+    .stat-icon { width: 32px; height: 32px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-size: 15px; font-weight: bold; }
     .stat-card.income .stat-icon { background: var(--income-bg); color: var(--income-color); }
     .stat-card.expense .stat-icon { background: var(--expense-bg); color: var(--expense-color); }
     .stat-card.deduction .stat-icon { background: var(--deduction-bg); color: var(--deduction-color); }
-    .stat-label { font-size: 10px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; margin-bottom: 4px; }
-    .stat-value { font-size: 13px; font-weight: 700; }
+    .stat-label { font-size: 10px; font-weight: 800; color: var(--text-sub); text-transform: uppercase; margin-bottom: 4px; }
+    .stat-value { font-size: 13px; font-weight: 800; }
     .stat-card.income .stat-value { color: var(--income-color); }
     .stat-card.expense .stat-value { color: var(--expense-color); }
     .stat-card.deduction .stat-value { color: var(--deduction-color); }
 
     /* Highlights Section */
-    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .section-title { font-size: 14px; font-weight: 800; letter-spacing: 0.5px; color: var(--text-sub); text-transform: uppercase; }
-    .refresh-btn { background: none; border: none; color: var(--primary); font-size: 13px; font-weight: 700; cursor: pointer; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .section-title { font-size: 13px; font-weight: 800; letter-spacing: 0.8px; color: var(--text-sub); text-transform: uppercase; }
+    .refresh-btn { background: none; border: none; color: var(--text-main); font-size: 13px; font-weight: 700; cursor: pointer; opacity: 0.8; }
 
-    .entry-list { display: flex; flex-direction: column; gap: 10px; }
-    .entry-item { background: var(--card-bg); border-radius: 16px; padding: 14px 16px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-    .entry-left { display: flex; align-items: center; gap: 12px; }
-    .entry-badge { width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .entry-list { display: flex; flex-direction: column; gap: 12px; }
+    .entry-item { 
+      background: var(--glass-card); 
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-radius: 20px; padding: 16px 18px; 
+      border: 1px solid var(--glass-border); 
+      display: flex; justify-content: space-between; align-items: center; 
+      box-shadow: var(--glass-shadow);
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .entry-item:active { transform: scale(0.97); }
+    .entry-left { display: flex; align-items: center; gap: 14px; }
+    .entry-badge { width: 40px; height: 40px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
     .entry-badge.income { background: var(--income-bg); color: var(--income-color); }
     .entry-badge.expense { background: var(--expense-bg); color: var(--expense-color); }
     .entry-badge.deduction { background: var(--deduction-bg); color: var(--deduction-color); }
-    .entry-title { font-size: 15px; font-weight: 600; color: var(--text-main); margin-bottom: 2px; }
+    .entry-title { font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 3px; }
     .entry-date { font-size: 12px; color: var(--text-sub); }
     .entry-right { text-align: right; }
-    .entry-amount { font-size: 15px; font-weight: 700; }
+    .entry-amount { font-size: 16px; font-weight: 800; }
     .entry-amount.income { color: var(--income-color); }
     .entry-amount.expense { color: var(--expense-color); }
     .entry-amount.deduction { color: var(--deduction-color); }
 
-    /* Bottom Action Bar */
-    .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); border-top: 1px solid var(--border-color); padding: 12px 20px 24px; display: flex; justify-content: center; z-index: 100; }
-    .add-btn { 
-      background: var(--lime-400); color: #1E293B; border: none; 
-      padding: 14px 36px; border-radius: 30px; font-size: 15px; font-weight: 800; 
-      cursor: pointer; display: flex; align-items: center; gap: 8px; 
-      box-shadow: 0 4px 20px rgba(163, 230, 53, 0.4); 
+    /* Liquid Glass Floating Bottom Action Bar */
+    .bottom-bar { 
+      position: fixed; bottom: 0; left: 0; right: 0; 
+      background: var(--glass-bg); 
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-top: 1px solid var(--glass-border); 
+      padding: 14px 20px 28px; display: flex; justify-content: center; z-index: 100; 
     }
+    .add-btn { 
+      background: linear-gradient(135deg, #A3E635 0%, #84CC16 100%); 
+      color: #1A2E05; border: 1px solid rgba(255,255,255,0.5); 
+      padding: 15px 42px; border-radius: 30px; font-size: 15px; font-weight: 800; 
+      cursor: pointer; display: flex; align-items: center; gap: 8px; 
+      box-shadow: 0 8px 25px rgba(163, 230, 53, 0.45); 
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .add-btn:active { transform: scale(0.92); }
 
-    /* Modal Form */
-    .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--modal-bg); z-index: 1000; align-items: flex-end; justify-content: center; }
+    /* Liquid Glass Modal */
+    .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--modal-bg); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 1000; align-items: flex-end; justify-content: center; }
     .modal.active { display: flex; }
-    .modal-content { background: var(--card-bg); width: 100%; max-width: 500px; border-top-left-radius: 24px; border-top-right-radius: 24px; padding: 24px; box-shadow: 0 -4px 20px rgba(0,0,0,0.2); animation: slideUp 0.25s ease-out; }
+    .modal-content { 
+      background: var(--glass-card); 
+      backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+      width: 100%; max-width: 500px; border-top-left-radius: 32px; border-top-right-radius: 32px; 
+      padding: 26px; border: 1px solid var(--glass-border);
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.3); animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+    }
     @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
     
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .modal-title { font-size: 18px; font-weight: 700; }
-    .close-btn { background: none; border: none; font-size: 20px; color: var(--text-sub); cursor: pointer; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
+    .modal-title { font-size: 19px; font-weight: 800; }
+    .close-btn { background: none; border: none; font-size: 22px; color: var(--text-sub); cursor: pointer; }
 
-    .form-group { margin-bottom: 16px; }
-    .form-label { display: block; font-size: 12px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; margin-bottom: 6px; }
-    .form-control { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-main); font-size: 15px; outline: none; }
-    .form-control:focus { border-color: var(--primary); }
+    .form-group { margin-bottom: 18px; }
+    .form-label { display: block; font-size: 11px; font-weight: 800; color: var(--text-sub); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .form-control { 
+      width: 100%; padding: 14px; border-radius: 16px; 
+      border: 1px solid var(--glass-border); background: var(--glass-bg); 
+      color: var(--text-main); font-size: 15px; font-weight: 600; outline: none; 
+    }
+    .form-control:focus { border-color: var(--lime-400); }
 
     .type-selector { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-    .type-btn { padding: 10px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-sub); font-size: 13px; font-weight: 600; cursor: pointer; text-align: center; }
+    .type-btn { padding: 12px; border-radius: 14px; border: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--text-sub); font-size: 13px; font-weight: 700; cursor: pointer; text-align: center; }
     .type-btn.active.income { background: var(--income-bg); color: var(--income-color); border-color: var(--income-color); }
     .type-btn.active.expense { background: var(--expense-bg); color: var(--expense-color); border-color: var(--expense-color); }
     .type-btn.active.deduction { background: var(--deduction-bg); color: var(--deduction-color); border-color: var(--deduction-color); }
 
-    .submit-btn { width: 100%; background: var(--text-main); color: var(--bg-color); border: none; padding: 14px; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 10px; }
-    .delete-btn { width: 100%; background: var(--expense-bg); color: var(--expense-color); border: 1px solid var(--expense-color); padding: 12px; border-radius: 14px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 8px; display: none; }
+    .submit-btn { width: 100%; background: var(--text-main); color: var(--bg-color); border: none; padding: 16px; border-radius: 18px; font-size: 16px; font-weight: 800; cursor: pointer; margin-top: 10px; }
+    .delete-btn { width: 100%; background: var(--expense-bg); color: var(--expense-color); border: 1px solid var(--expense-color); padding: 14px; border-radius: 18px; font-size: 14px; font-weight: 800; cursor: pointer; margin-top: 10px; display: none; }
 
-    .loading-state { text-align: center; padding: 40px 0; color: var(--text-sub); font-size: 14px; }
+    .loading-state { text-align: center; padding: 40px 0; color: var(--text-sub); font-size: 14px; font-weight: 600; }
   </style>
-</head>
-<body>
-
-  <header class="app-header">
-    <div class="header-left">
-      <div class="home-icon-box">
-        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-      </div>
-      <div class="app-title">OVERVIEW</div>
-    </div>
-    <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()">🌙⁺</button>
-  </header>
-
-  <main class="container">
-    <section class="year-current-bar">
-      <div class="year-nav-transparent">
-        <button class="year-nav-btn" id="prevYearBtn" onclick="changeYear(-1)">❮</button>
-        <span class="year-text-display" id="selectedYear">2026</span>
-        <button class="year-nav-btn" id="nextYearBtn" onclick="changeYear(1)">❯</button>
-      </div>
-
-      <button class="current-btn" onclick="resetToCurrent()">
-        <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
-        CURRENT
-      </button>
-    </section>
-
-    <section class="month-nav-container">
-      <button class="month-arrow-btn" id="prevMonthSetBtn" onclick="shiftMonthSet(-1)">❮</button>
-      <div class="month-grid" id="monthGrid"></div>
-      <button class="month-arrow-btn" id="nextMonthSetBtn" onclick="shiftMonthSet(1)">❯</button>
-    </section>
-
-    <section class="balance-card">
-      <div class="balance-label">BALANCE</div>
-      <div class="balance-amount" id="balanceAmount">฿0.00</div>
-    </section>
-
-    <section class="stats-grid">
-      <div class="stat-card income">
-        <div class="stat-icon">↙</div>
-        <div class="stat-label">INCOME</div>
-        <div class="stat-value" id="incomeAmount">฿0.00</div>
-      </div>
-      <div class="stat-card expense">
-        <div class="stat-icon">↗</div>
-        <div class="stat-label">EXPENSE</div>
-        <div class="stat-value" id="expenseAmount">฿0.00</div>
-      </div>
-      <div class="stat-card deduction">
-        <div class="stat-icon">−</div>
-        <div class="stat-label">DEDUCTION</div>
-        <div class="stat-value" id="deductionAmount">฿0.00</div>
-      </div>
-    </section>
-
-    <section>
-      <div class="section-header">
-        <div class="section-title">HIGHLIGHTS</div>
-        <button class="refresh-btn" onclick="fetchData()">Refresh 🔄</button>
-      </div>
-      <div id="entryList" class="entry-list">
-        <div class="loading-state">Loading data...</div>
-      </div>
-    </section>
-  </main>
-
-  <div class="bottom-bar">
-    <button class="add-btn" onclick="openModal('add')">
-      <span>＋</span> NEW ENTRY
-    </button>
-  </div>
-
-  <div class="modal" id="entryModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="modal-title" id="modalTitle">New Entry</div>
-        <button class="close-btn" onclick="closeModal()">✕</button>
-      </div>
-
-      <form id="recordForm" onsubmit="handleFormSubmit(event)">
-        <input type="hidden" id="editRowIndex">
-
-        <div class="form-group">
-          <label class="form-label">Type</label>
-          <div class="type-selector">
-            <div class="type-btn active income" onclick="selectType('Income')">Income</div>
-            <div class="type-btn expense" onclick="selectType('Expense')">Expense</div>
-            <div class="type-btn deduction" onclick="selectType('Deduction')">Deduction</div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Date</label>
-          <input type="date" class="form-control" id="formDate" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Item Name</label>
-          <input type="text" class="form-control" id="formTitle" placeholder="e.g. เงินเดือน / ค่ากาแฟ" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Amount</label>
-          <input type="number" step="any" class="form-control" id="formAmount" placeholder="0.00" required>
-        </div>
-
-        <button type="submit" class="submit-btn" id="submitBtn">Save Entry</button>
-        <button type="button" class="delete-btn" id="deleteBtn" onclick="handleDelete()">Delete Entry</button>
-      </form>
-    </div>
-  </div>
-
-  <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbw3YFTHRu7hmh2foAAcEBM68xsKbPIO0oTWczq-sXk6LXcS9IVI6qKjN-xKbqMbxmMf/exec";
-
-    const realCurrentYear = new Date().getFullYear();
-    const realCurrentMonth = new Date().getMonth() + 1; // 1-12
-
-    let selectedYear = realCurrentYear;
-    let selectedMonth = realCurrentMonth;
-    let currentMonthSet = realCurrentMonth <= 6 ? 1 : 2; // Set 1: Jan-Jun, Set 2: Jul-Dec
-
-    const monthSets = {
-      1: [{ name: 'JAN', m: 1 }, { name: 'FEB', m: 2 }, { name: 'MAR', m: 3 }, { name: 'APR', m: 4 }, { name: 'MAY', m: 5 }, { name: 'JUN', m: 6 }],
-      2: [{ name: 'JUL', m: 7 }, { name: 'AUG', m: 8 }, { name: 'SEP', m: 9 }, { name: 'OCT', m: 10 }, { name: 'NOV', m: 11 }, { name: 'DEC', m: 12 }]
-    };
-
-    let selectedType = 'Income';
-
-    // Init
-    document.addEventListener("DOMContentLoaded", () => {
-      updateYearUI();
-      renderMonthGrid();
-      fetchData();
-      
-      document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === 'visible') fetchData();
-      });
-    });
-
-    // Theme Toggle
-    function toggleTheme() {
-      const currentTheme = document.body.getAttribute('data-theme');
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      document.body.setAttribute('data-theme', newTheme);
-      document.getElementById('themeToggle').innerText = newTheme === 'dark' ? '🌙⁺' : '☀️';
-    }
-
-    // Year Controller with Limit at 2025
-    function updateYearUI() {
-      document.getElementById('selectedYear').innerText = selectedYear;
-      document.getElementById('prevYearBtn').disabled = (selectedYear <= 2025);
-    }
-
-    function changeYear(delta) {
-      if (selectedYear + delta < 2025) return;
-      selectedYear += delta;
-      updateYearUI();
-      fetchData();
-    }
-
-    // Month Controller
-    function renderMonthGrid() {
-      const grid = document.getElementById('monthGrid');
-      const months = monthSets[currentMonthSet];
-      
-      grid.innerHTML = months.map(item => `
-        <div class="month-chip ${item.m === selectedMonth ? 'active' : ''}" onclick="selectMonth(${item.m})">
-          ${item.name}
-        </div>
-      `).join('');
-
-      document.getElementById('prevMonthSetBtn').disabled = (currentMonthSet === 1);
-      document.getElementById('nextMonthSetBtn').disabled = (currentMonthSet === 2);
-    }
-
-    function shiftMonthSet(delta) {
-      const newSet = currentMonthSet + delta;
-      if (newSet >= 1 && newSet <= 2) {
-        currentMonthSet = newSet;
-        renderMonthGrid();
-      }
-    }
-
-    function selectMonth(m) {
-      selectedMonth = m;
-      renderMonthGrid();
-      fetchData();
-    }
-
-    // Reset to Current Date
-    function resetToCurrent() {
-      selectedYear = realCurrentYear;
-      selectedMonth = realCurrentMonth;
-      currentMonthSet = realCurrentMonth <= 6 ? 1 : 2;
-      
-      updateYearUI();
-      renderMonthGrid();
-      fetchData();
-    }
-
-    // Fetch Data from Apps Script API
-    async function fetchData() {
-      document.getElementById('entryList').innerHTML = `<div class="loading-state">Loading data...</div>`;
-      try {
-        const res = await fetch(`${API_URL}?action=getData&year=${selectedYear}&month=${selectedMonth}`);
-        const data = await res.json();
-
-        // Render Cards
-        document.getElementById('balanceAmount').innerText = '฿' + data.balance.toLocaleString('en-US', {minimumFractionDigits: 2});
-        document.getElementById('incomeAmount').innerText = '฿' + data.totalIncome.toLocaleString('en-US', {minimumFractionDigits: 2});
-        document.getElementById('expenseAmount').innerText = '฿' + data.totalExpense.toLocaleString('en-US', {minimumFractionDigits: 2});
-        document.getElementById('deductionAmount').innerText = '฿' + data.totalDeduction.toLocaleString('en-US', {minimumFractionDigits: 2});
-
-        // Render List
-        if (data.items.length === 0) {
-          document.getElementById('entryList').innerHTML = `<div class="loading-state">No transactions found.</div>`;
-          return;
-        }
-
-        document.getElementById('entryList').innerHTML = data.items.map(item => `
-          <div class="entry-item" onclick='openModal("edit", ${JSON.stringify(item)})'>
-            <div class="entry-left">
-              <div class="entry-badge ${item.type}">
-                ${item.type === 'income' ? '↙' : item.type === 'expense' ? '↗' : '−'}
-              </div>
-              <div>
-                <div class="entry-title">${item.title}</div>
-                <div class="entry-date">${item.date}</div>
-              </div>
-            </div>
-            <div class="entry-right">
-              <div class="entry-amount ${item.type}">
-                ${item.type === 'expense' || item.type === 'deduction' ? '-' : '+'}฿${item.amount.toLocaleString('en-US', {minimumFractionDigits: 2})}
-              </div>
-            </div>
-          </div>
-        `).join('');
-
-      } catch (err) {
-        document.getElementById('entryList').innerHTML = `<div class="loading-state">Error loading data.</div>`;
-      }
-    }
-
-    // Modal Controls
-    function selectType(type) {
-      selectedType = type;
-      document.querySelectorAll('.type-btn').forEach(btn => {
-        btn.classList.remove('active', 'income', 'expense', 'deduction');
-        if (btn.innerText.toLowerCase() === type.toLowerCase()) {
-          btn.classList.add('active', type.toLowerCase());
-        }
-      });
-    }
-
-    function openModal(mode, item = null) {
-      document.getElementById('entryModal').classList.add('active');
-      if (mode === 'add') {
-        document.getElementById('modalTitle').innerText = 'New Entry';
-        document.getElementById('editRowIndex').value = '';
-        document.getElementById('formDate').valueAsDate = new Date();
-        document.getElementById('formTitle').value = '';
-        document.getElementById('formAmount').value = '';
-        document.getElementById('deleteBtn').style.display = 'none';
-        selectType('Income');
-      } else if (mode === 'edit') {
-        document.getElementById('modalTitle').innerText = 'Edit Entry';
-        document.getElementById('editRowIndex').value = item.rowIndex;
-        document.getElementById('formDate').value = item.rawDate;
-        document.getElementById('formTitle').value = item.title;
-        document.getElementById('formAmount').value = item.amount;
-        document.getElementById('deleteBtn').style.display = 'block';
-        selectType(item.financialType);
-      }
-    }
-
-    function closeModal() {
-      document.getElementById('entryModal').classList.remove('active');
-    }
-
-    // Form Submissions
-    async function handleFormSubmit(e) {
-      e.preventDefault();
-      const rowIndex = document.getElementById('editRowIndex').value;
-      const action = rowIndex ? 'edit' : 'add';
-      const submitBtn = document.getElementById('submitBtn');
-      submitBtn.innerText = 'Saving...';
-      submitBtn.disabled = true;
-
-      const payload = {
-        action: action,
-        row: rowIndex ? parseInt(rowIndex) : null,
-        data: {
-          type: selectedType,
-          date: document.getElementById('formDate').value,
-          title: document.getElementById('formTitle').value,
-          amount: parseFloat(document.getElementById('formAmount').value)
-        }
-      };
-
-      try {
-        await fetch(API_URL, {
-          method: 'POST',
-          body: JSON.stringify(payload)
-        });
-        closeModal();
-        fetchData();
-      } catch (err) {
-        alert('Error saving entry.');
-      } finally {
-        submitBtn.innerText = 'Save Entry';
-        submitBtn.disabled = false;
-      }
-    }
-
-    async function handleDelete() {
-      if (!confirm('Are you sure you want to delete this entry?')) return;
-      const rowIndex = document.getElementById('editRowIndex').value;
-      
-      try {
-        await fetch(API_URL, {
-          method: 'POST',
-          body: JSON.stringify({ action: 'delete', row: parseInt(rowIndex) })
-        });
-        closeModal();
-        fetchData();
-      } catch (err) {
-        alert('Error deleting entry.');
-      }
-    }
-  </script>
-</body>
-</html>
