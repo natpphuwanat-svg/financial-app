@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Financial Overview</title>
+  
+  <!-- Web App & iOS App Icon Config -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Financial">
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="icon" type="image/png" href="icon.png">
+
+  <!-- Google Fonts: Inter & Noto Sans Thai -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-color: #f4f5f7;
+      --card-bg: #ffffff;
+      --text-main: #1a1d20;
+      --text-sub: #6c757d;
+      --border-color: #e9ecef;
+      --primary: #5c8d89;
+      --primary-light: #e8f3f1;
+      --income-color: #2b9348;
+      --income-bg: #e8f5e9;
+      --expense-color: #d90429;
+      --expense-bg: #ffebee;
+      --deduction-color: #e67e22;
+      --deduction-bg: #fff3e0;
+      --modal-bg: rgba(0, 0, 0, 0.5);
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --text-main: #f1f3f5;
+      --text-sub: #adb5bd;
+      --border-color: #2c2c2c;
+      --primary: #74b49b;
+      --primary-light: #1b2e2b;
+      --income-color: #4caf50;
+      --income-bg: #1b381e;
+      --expense-color: #f44336;
+      --expense-bg: #3c1919;
+      --deduction-color: #ff9800;
+      --deduction-bg: #3b2c14;
+      --modal-bg: rgba(0, 0, 0, 0.75);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', 'Noto Sans Thai', sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; padding-bottom: 90px; }
+
+    .app-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 20px 10px; }
+    .app-title { font-size: 22px; font-weight: 700; letter-spacing: 0.5px; }
+    .theme-toggle { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; color: var(--text-main); }
+
+    .container { padding: 0 16px; }
+
+    /* Year & Month Selector */
+    .filter-section { margin-bottom: 16px; }
+    .year-selector { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .year-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 6px 12px; border-radius: 20px; font-weight: 600; cursor: pointer; }
+    .current-year { font-size: 16px; font-weight: 700; }
+    
+    .month-bar { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+    .month-bar::-webkit-scrollbar { display: none; }
+    .month-chip { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-sub); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; white-space: nowrap; cursor: pointer; flex-shrink: 0; }
+    .month-chip.active { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
+
+    /* Main Balance Card */
+    .balance-card { background: var(--card-bg); border-radius: 20px; padding: 20px; border: 1px solid var(--border-color); margin-bottom: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+    .balance-label { font-size: 12px; font-weight: 700; color: var(--text-sub); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+    .balance-amount { font-size: 32px; font-weight: 700; color: var(--text-main); }
+
+    /* Sub Cards Grid */
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .stat-card { background: var(--card-bg); border-radius: 16px; padding: 14px 10px; border: 1px solid var(--border-color); text-align: center; }
+    .stat-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-size: 14px; font-weight: bold; }
+    .stat-card.income .stat-icon { background: var(--income-bg); color: var(--income-color); }
+    .stat-card.expense .stat-icon { background: var(--expense-bg); color: var(--expense-color); }
+    .stat-card.deduction .stat-icon { background: var(--deduction-bg); color: var(--deduction-color); }
+    .stat-label { font-size: 10px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; margin-bottom: 4px; }
+    .stat-value { font-size: 13px; font-weight: 700; }
+    .stat-card.income .stat-value { color: var(--income-color); }
+    .stat-card.expense .stat-value { color: var(--expense-color); }
+    .stat-card.deduction .stat-value { color: var(--deduction-color); }
+
+    /* Highlights Section */
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .section-title { font-size: 14px; font-weight: 700; letter-spacing: 0.5px; color: var(--text-sub); text-transform: uppercase; }
+    .refresh-btn { background: none; border: none; color: var(--primary); font-size: 13px; font-weight: 600; cursor: pointer; }
+
+    .entry-list { display: flex; flex-direction: column; gap: 10px; }
+    .entry-item { background: var(--card-bg); border-radius: 14px; padding: 14px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+    .entry-left { display: flex; align-items: center; gap: 12px; }
+    .entry-badge { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .entry-badge.income { background: var(--income-bg); color: var(--income-color); }
+    .entry-badge.expense { background: var(--expense-bg); color: var(--expense-color); }
+    .entry-badge.deduction { background: var(--deduction-bg); color: var(--deduction-color); }
+    .entry-title { font-size: 15px; font-weight: 600; color: var(--text-main); margin-bottom: 2px; }
+    .entry-date { font-size: 12px; color: var(--text-sub); }
+    .entry-right { text-align: right; }
+    .entry-amount { font-size: 15px; font-weight: 700; }
+    .entry-amount.income { color: var(--income-color); }
+    .entry-amount.expense { color: var(--expense-color); }
+    .entry-amount.deduction { color: var(--deduction-color); }
+
+    /* Bottom Action Bar */
+    .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); border-top: 1px solid var(--border-color); padding: 12px 20px 24px; display: flex; justify-content: center; z-index: 100; }
+    .add-btn { background: var(--text-main); color: var(--bg-color); border: none; padding: 12px 32px; border-radius: 30px; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
+
+    /* Modal Form */
+    .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--modal-bg); z-index: 1000; align-items: flex-end; justify-content: center; }
+    .modal.active { display: flex; }
+    .modal-content { background: var(--card-bg); width: 100%; max-width: 500px; border-top-left-radius: 24px; border-top-right-radius: 24px; padding: 24px; box-shadow: 0 -4px 20px rgba(0,0,0,0.2); animation: slideUp 0.25s ease-out; }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .modal-title { font-size: 18px; font-weight: 700; }
+    .close-btn { background: none; border: none; font-size: 20px; color: var(--text-sub); cursor: pointer; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 12px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; margin-bottom: 6px; }
+    .form-control { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-main); font-size: 15px; outline: none; }
+    .form-control:focus { border-color: var(--primary); }
+
+    .type-selector { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .type-btn { padding: 10px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-sub); font-size: 13px; font-weight: 600; cursor: pointer; text-align: center; }
+    .type-btn.active.income { background: var(--income-bg); color: var(--income-color); border-color: var(--income-color); }
+    .type-btn.active.expense { background: var(--expense-bg); color: var(--expense-color); border-color: var(--expense-color); }
+    .type-btn.active.deduction { background: var(--deduction-bg); color: var(--deduction-color); border-color: var(--deduction-color); }
+
+    .submit-btn { width: 100%; background: var(--text-main); color: var(--bg-color); border: none; padding: 14px; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+    .delete-btn { width: 100%; background: var(--expense-bg); color: var(--expense-color); border: 1px solid var(--expense-color); padding: 12px; border-radius: 14px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 8px; display: none; }
+
+    .loading-state { text-align: center; padding: 40px 0; color: var(--text-sub); font-size: 14px; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="app-title">OVERVIEW</div>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">☀️</button>
+  </header>
+
+  <main class="container">
+    <!-- Filter Section -->
+    <section class="filter-section">
+      <div class="year-selector">
+        <button class="year-btn" onclick="changeYear(-1)">❮</button>
+        <span class="current-year" id="selectedYear">2026</span>
+        <button class="year-btn" onclick="changeYear(1)">❯</button>
+      </div>
+      <div class="month-bar" id="monthBar"></div>
+    </section>
+
+    <!-- Main Balance Card -->
+    <section class="balance-card">
+      <div class="balance-label">BALANCE</div>
+      <div class="balance-amount" id="balanceAmount">฿0.00</div>
+    </section>
+
+    <!-- Stats Grid -->
+    <section class="stats-grid">
+      <div class="stat-card income">
+        <div class="stat-icon">↙</div>
+        <div class="stat-label">INCOME</div>
+        <div class="stat-value" id="incomeAmount">฿0.00</div>
+      </div>
+      <div class="stat-card expense">
+        <div class="stat-icon">↗</div>
+        <div class="stat-label">EXPENSE</div>
+        <div class="stat-value" id="expenseAmount">฿0.00</div>
+      </div>
+      <div class="stat-card deduction">
+        <div class="stat-icon">−</div>
+        <div class="stat-label">DEDUCTION</div>
+        <div class="stat-value" id="deductionAmount">฿0.00</div>
+      </div>
+    </section>
+
+    <!-- Highlights Section -->
+    <section>
+      <div class="section-header">
+        <div class="section-title">HIGHLIGHTS</div>
+        <button class="refresh-btn" onclick="fetchData()">Refresh 🔄</button>
+      </div>
+      <div id="entryList" class="entry-list">
+        <div class="loading-state">Loading data...</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bottom Bar -->
+  <div class="bottom-bar">
+    <button class="add-btn" onclick="openModal('add')">
+      <span>＋</span> NEW ENTRY
+    </button>
+  </div>
+
+  <!-- Form Modal -->
+  <div class="modal" id="entryModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="modalTitle">New Entry</div>
+        <button class="close-btn" onclick="closeModal()">✕</button>
+      </div>
+
+      <form id="recordForm" onsubmit="handleFormSubmit(event)">
+        <input type="hidden" id="editRowIndex">
+
+        <div class="form-group">
+          <label class="form-label">Type</label>
+          <div class="type-selector">
+            <div class="type-btn active income" onclick="selectType('Income')">Income</div>
+            <div class="type-btn expense" onclick="selectType('Expense')">Expense</div>
+            <div class="type-btn deduction" onclick="selectType('Deduction')">Deduction</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Date</label>
+          <input type="date" class="form-control" id="formDate" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Item Name</label>
+          <input type="text" class="form-control" id="formTitle" placeholder="e.g. เงินเดือน / ค่ากาแฟ" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Amount</label>
+          <input type="number" step="any" class="form-control" id="formAmount" placeholder="0.00" required>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">Save Entry</button>
+        <button type="button" class="delete-btn" id="deleteBtn" onclick="handleDelete()">Delete Entry</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbw3YFTHRu7hmh2foAAcEBM68xsKbPIO0oTWczq-sXk6LXcS9IVI6qKjN-xKbqMbxmMf/exec";
+
+    let currentYear = new Date().getFullYear();
+    let currentMonth = new Date().getMonth() + 1; // 1-12
+    let selectedType = 'Income';
+    let months = ['ALL', 'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+
+    // Init
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById('selectedYear').innerText = currentYear;
+      renderMonthBar();
+      fetchData();
+      
+      // Auto refresh when app comes back to foreground
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === 'visible') fetchData();
+      });
+    });
+
+    // Theme Toggle
+    function toggleTheme() {
+      const currentTheme = document.body.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.body.setAttribute('data-theme', newTheme);
+      document.getElementById('themeToggle').innerText = newTheme === 'dark' ? '🌙' : '☀️';
+    }
+
+    // Month & Year Filter
+    function renderMonthBar() {
+      const bar = document.getElementById('monthBar');
+      bar.innerHTML = months.map((m, idx) => {
+        const isActive = (m === 'ALL' && currentMonth === 'ALL') || (idx === currentMonth);
+        return `<div class="month-chip ${isActive ? 'active' : ''}" onclick="selectMonth(${idx === 0 ? "'ALL'" : idx})">${m}</div>`;
+      }).join('');
+    }
+
+    function selectMonth(m) {
+      currentMonth = m;
+      renderMonthBar();
+      fetchData();
+    }
+
+    function changeYear(delta) {
+      currentYear += delta;
+      document.getElementById('selectedYear').innerText = currentYear;
+      fetchData();
+    }
+
+    // Fetch Data from Apps Script
+    async function fetchData() {
+      document.getElementById('entryList').innerHTML = `<div class="loading-state">Loading data...</div>`;
+      try {
+        const res = await fetch(`${API_URL}?action=getData&year=${currentYear}&month=${currentMonth}`);
+        const data = await res.json();
+
+        // Render Cards
+        document.getElementById('balanceAmount').innerText = '฿' + data.balance.toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('incomeAmount').innerText = '฿' + data.totalIncome.toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('expenseAmount').innerText = '฿' + data.totalExpense.toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('deductionAmount').innerText = '฿' + data.totalDeduction.toLocaleString('en-US', {minimumFractionDigits: 2});
+
+        // Render List
+        if (data.items.length === 0) {
+          document.getElementById('entryList').innerHTML = `<div class="loading-state">No transactions found.</div>`;
+          return;
+        }
+
+        document.getElementById('entryList').innerHTML = data.items.map(item => `
+          <div class="entry-item" onclick='openModal("edit", ${JSON.stringify(item)})'>
+            <div class="entry-left">
+              <div class="entry-badge ${item.type}">
+                ${item.type === 'income' ? '↙' : item.type === 'expense' ? '↗' : '−'}
+              </div>
+              <div>
+                <div class="entry-title">${item.title}</div>
+                <div class="entry-date">${item.date}</div>
+              </div>
+            </div>
+            <div class="entry-right">
+              <div class="entry-amount ${item.type}">
+                ${item.type === 'expense' || item.type === 'deduction' ? '-' : '+'}฿${item.amount.toLocaleString('en-US', {minimumFractionDigits: 2})}
+              </div>
+            </div>
+          </div>
+        `).join('');
+
+      } catch (err) {
+        document.getElementById('entryList').innerHTML = `<div class="loading-state">Error loading data.</div>`;
+      }
+    }
+
+    // Modal Control
+    function selectType(type) {
+      selectedType = type;
+      document.querySelectorAll('.type-btn').forEach(btn => {
+        btn.classList.remove('active', 'income', 'expense', 'deduction');
+        if (btn.innerText.toLowerCase() === type.toLowerCase()) {
+          btn.classList.add('active', type.toLowerCase());
+        }
+      });
+    }
+
+    function openModal(mode, item = null) {
+      document.getElementById('entryModal').classList.add('active');
+      if (mode === 'add') {
+        document.getElementById('modalTitle').innerText = 'New Entry';
+        document.getElementById('editRowIndex').value = '';
+        document.getElementById('formDate').valueAsDate = new Date();
+        document.getElementById('formTitle').value = '';
+        document.getElementById('formAmount').value = '';
+        document.getElementById('deleteBtn').style.display = 'none';
+        selectType('Income');
+      } else if (mode === 'edit') {
+        document.getElementById('modalTitle').innerText = 'Edit Entry';
+        document.getElementById('editRowIndex').value = item.rowIndex;
+        document.getElementById('formDate').value = item.rawDate;
+        document.getElementById('formTitle').value = item.title;
+        document.getElementById('formAmount').value = item.amount;
+        document.getElementById('deleteBtn').style.display = 'block';
+        selectType(item.financialType);
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('entryModal').classList.remove('active');
+    }
+
+    // Form Handlers (Add / Edit / Delete)
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+      const rowIndex = document.getElementById('editRowIndex').value;
+      const action = rowIndex ? 'edit' : 'add';
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.innerText = 'Saving...';
+      submitBtn.disabled = true;
+
+      const payload = {
+        action: action,
+        row: rowIndex ? parseInt(rowIndex) : null,
+        data: {
+          type: selectedType,
+          date: document.getElementById('formDate').value,
+          title: document.getElementById('formTitle').value,
+          amount: parseFloat(document.getElementById('formAmount').value)
+        }
+      };
+
+      try {
+        await fetch(API_URL, {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
+        closeModal();
+        fetchData();
+      } catch (err) {
+        alert('Error saving entry.');
+      } finally {
+        submitBtn.innerText = 'Save Entry';
+        submitBtn.disabled = false;
+      }
+    }
+
+    async function handleDelete() {
+      if (!confirm('Are you sure you want to delete this entry?')) return;
+      const rowIndex = document.getElementById('editRowIndex').value;
+      
+      try {
+        await fetch(API_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'delete', row: parseInt(rowIndex) })
+        });
+        closeModal();
+        fetchData();
+      } catch (err) {
+        alert('Error deleting entry.');
+      }
+    }
+  </script>
+</body>
+</html>
