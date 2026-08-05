@@ -5,17 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Financial Overview</title>
   
-  <!-- Web App & iOS App Icon Config -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Financial">
   <link rel="apple-touch-icon" href="icon.png">
   <link rel="icon" type="image/png" href="icon.png">
 
-  <!-- Google Fonts: Inter & Noto Sans Thai -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -31,21 +29,20 @@
       --text-sub: #64748B;
       --border-color: #E2E8F0;
       
+      /* Header & Elements Light */
+      --icon-box-bg: #EAF7D9;
+      --icon-box-color: #4D7C0F;
+      --btn-pill-bg: #FFFFFF;
+      --btn-pill-border: #E2E8F0;
+      
       /* Functional Colors */
       --primary: var(--blue-grey);
-      --primary-light: #EBF2FA;
-      --accent-butter: var(--morning-butter);
-      
-      --income-color: #65A30D; /* สีเขียวเข้มเพื่อความชัดเจนบนพื้นหลังสว่าง */
+      --income-color: #65A30D;
       --income-bg: #ECFDF5;
-      --income-accent: var(--lime-400);
-
       --expense-color: #E11D48;
       --expense-bg: #FFF1F2;
-      
       --deduction-color: #D97706;
       --deduction-bg: #FFFBEB;
-      
       --modal-bg: rgba(15, 23, 42, 0.5);
     }
 
@@ -57,48 +54,94 @@
       --text-sub: #94A3B8;
       --border-color: #334155;
       
+      /* Header & Elements Dark */
+      --icon-box-bg: #27381A;
+      --icon-box-color: var(--lime-400);
+      --btn-pill-bg: #1E293B;
+      --btn-pill-border: #334155;
+      
       /* Functional Colors (Dark) */
       --primary: #8EB4E3;
-      --primary-light: #1E293B;
-      
-      --income-color: var(--lime-400); /* ไฮไลต์รายรับด้วยสี Lime-400 ชัดเจนในโหมดมืด */
+      --income-color: var(--lime-400);
       --income-bg: #142E15;
-
       --expense-color: #FB7185;
       --expense-bg: #3F1A24;
-      
       --deduction-color: #FBBF24;
       --deduction-bg: #3A2E12;
-      
       --modal-bg: rgba(0, 0, 0, 0.8);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', 'Noto Sans Thai', sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; padding-bottom: 90px; }
 
-    .app-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 20px 10px; }
-    .app-title { font-size: 22px; font-weight: 700; letter-spacing: 0.5px; }
-    .theme-toggle { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; color: var(--text-main); }
-
     .container { padding: 0 16px; }
 
-    /* Year & Month Selector */
-    .filter-section { margin-bottom: 16px; }
-    .year-selector { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-    .year-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 6px 12px; border-radius: 20px; font-weight: 600; cursor: pointer; }
-    .current-year { font-size: 16px; font-weight: 700; }
+    /* Custom Header Top Bar */
+    .app-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px 12px; }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .home-icon-box { 
+      width: 42px; height: 42px; border-radius: 14px; 
+      background: var(--icon-box-bg); color: var(--icon-box-color); 
+      display: flex; align-items: center; justify-content: center; 
+    }
+    .home-icon-box svg { width: 22px; height: 22px; fill: currentColor; }
+    .app-title { font-size: 20px; font-weight: 800; letter-spacing: 0.8px; }
     
-    .month-bar { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
-    .month-bar::-webkit-scrollbar { display: none; }
-    .month-chip { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-sub); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; white-space: nowrap; cursor: pointer; flex-shrink: 0; }
-    .month-chip.active { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
+    .theme-toggle-btn { 
+      background: var(--btn-pill-bg); border: 1px solid var(--btn-pill-border); 
+      border-radius: 50%; width: 40px; height: 40px; 
+      display: flex; align-items: center; justify-content: center; 
+      cursor: pointer; font-size: 18px; color: var(--text-main); 
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
 
-     /* Main Balance Card Styling */
-    .balance-card { background: linear-gradient(135deg, var(--blue-grey) 0%, #5B82B3 100%); border-radius: 24px; padding: 24px; border: none; margin-bottom: 16px; color: #FFFFFF; box-shadow: 0 10px 25px -5px rgba(114, 152, 199, 0.4); }
+    /* Year & Current Section */
+    .year-current-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .year-nav-transparent { display: flex; align-items: center; gap: 8px; background: transparent; }
+    .year-nav-btn { background: none; border: none; font-size: 16px; font-weight: 700; color: var(--text-main); cursor: pointer; padding: 4px 8px; }
+    .year-nav-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+    .year-text-display { font-size: 18px; font-weight: 800; letter-spacing: 0.5px; }
+
+    .current-btn { 
+      display: flex; align-items: center; gap: 6px; 
+      background: var(--btn-pill-bg); border: 1px solid var(--btn-pill-border); 
+      padding: 8px 14px; border-radius: 20px; 
+      font-size: 12px; font-weight: 800; color: var(--text-main); 
+      cursor: pointer; letter-spacing: 0.5px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+    .current-btn svg { width: 15px; height: 15px; fill: var(--lime-400); }
+
+    /* Month Selector Bar (Fit width, 2 Sets) */
+    .month-nav-container { display: flex; align-items: center; gap: 4px; margin-bottom: 20px; justify-content: space-between; }
+    .month-arrow-btn { background: none; border: none; color: var(--text-main); font-size: 15px; font-weight: 700; cursor: pointer; padding: 4px; }
+    .month-arrow-btn:disabled { opacity: 0.2; cursor: not-allowed; }
+
+    .month-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; flex-grow: 1; }
+    .month-chip { 
+      background: var(--btn-pill-bg); border: 1px solid var(--btn-pill-border); 
+      color: var(--text-sub); padding: 9px 0; border-radius: 20px; 
+      font-size: 12px; font-weight: 700; text-align: center; cursor: pointer; 
+      transition: all 0.2s ease;
+    }
+    .month-chip.active { 
+      border: 2px solid var(--lime-400); 
+      color: var(--text-main); 
+      font-weight: 800;
+      background: var(--btn-pill-bg);
+      box-shadow: 0 0 10px rgba(163, 230, 53, 0.25);
+    }
+
+    /* Balance Card */
+    .balance-card { 
+      background: linear-gradient(135deg, var(--blue-grey) 0%, #5B82B3 100%); 
+      border-radius: 24px; padding: 22px; border: none; margin-bottom: 16px; 
+      color: #FFFFFF; box-shadow: 0 10px 25px -5px rgba(114, 152, 199, 0.4); 
+    }
     .balance-label { font-size: 12px; font-weight: 700; color: #E2E8F0; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
-    .balance-amount { font-size: 34px; font-weight: 700; color: #FFFFFF; }
-    
-    /* Sub Cards Grid */
+    .balance-amount { font-size: 34px; font-weight: 800; color: #FFFFFF; }
+
+    /* Stats Grid */
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
     .stat-card { background: var(--card-bg); border-radius: 16px; padding: 14px 10px; border: 1px solid var(--border-color); text-align: center; }
     .stat-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-size: 14px; font-weight: bold; }
@@ -113,13 +156,13 @@
 
     /* Highlights Section */
     .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .section-title { font-size: 14px; font-weight: 700; letter-spacing: 0.5px; color: var(--text-sub); text-transform: uppercase; }
-    .refresh-btn { background: none; border: none; color: var(--primary); font-size: 13px; font-weight: 600; cursor: pointer; }
+    .section-title { font-size: 14px; font-weight: 800; letter-spacing: 0.5px; color: var(--text-sub); text-transform: uppercase; }
+    .refresh-btn { background: none; border: none; color: var(--primary); font-size: 13px; font-weight: 700; cursor: pointer; }
 
     .entry-list { display: flex; flex-direction: column; gap: 10px; }
-    .entry-item { background: var(--card-bg); border-radius: 14px; padding: 14px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+    .entry-item { background: var(--card-bg); border-radius: 16px; padding: 14px 16px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
     .entry-left { display: flex; align-items: center; gap: 12px; }
-    .entry-badge { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .entry-badge { width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
     .entry-badge.income { background: var(--income-bg); color: var(--income-color); }
     .entry-badge.expense { background: var(--expense-bg); color: var(--expense-color); }
     .entry-badge.deduction { background: var(--deduction-bg); color: var(--deduction-color); }
@@ -133,7 +176,12 @@
 
     /* Bottom Action Bar */
     .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); border-top: 1px solid var(--border-color); padding: 12px 20px 24px; display: flex; justify-content: center; z-index: 100; }
-    .add-btn { background: var(--lime-400); color: #1E293B; border: none; padding: 14px 36px; border-radius: 30px; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 20px rgba(163, 230, 53, 0.4); }
+    .add-btn { 
+      background: var(--lime-400); color: #1E293B; border: none; 
+      padding: 14px 36px; border-radius: 30px; font-size: 15px; font-weight: 800; 
+      cursor: pointer; display: flex; align-items: center; gap: 8px; 
+      box-shadow: 0 4px 20px rgba(163, 230, 53, 0.4); 
+    }
 
     /* Modal Form */
     .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--modal-bg); z-index: 1000; align-items: flex-end; justify-content: center; }
@@ -164,30 +212,41 @@
 </head>
 <body>
 
-  <!-- Header -->
   <header class="app-header">
-    <div class="app-title">OVERVIEW</div>
-    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">☀️</button>
+    <div class="header-left">
+      <div class="home-icon-box">
+        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      </div>
+      <div class="app-title">OVERVIEW</div>
+    </div>
+    <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()">🌙⁺</button>
   </header>
 
   <main class="container">
-    <!-- Filter Section -->
-    <section class="filter-section">
-      <div class="year-selector">
-        <button class="year-btn" onclick="changeYear(-1)">❮</button>
-        <span class="current-year" id="selectedYear">2026</span>
-        <button class="year-btn" onclick="changeYear(1)">❯</button>
+    <section class="year-current-bar">
+      <div class="year-nav-transparent">
+        <button class="year-nav-btn" id="prevYearBtn" onclick="changeYear(-1)">❮</button>
+        <span class="year-text-display" id="selectedYear">2026</span>
+        <button class="year-nav-btn" id="nextYearBtn" onclick="changeYear(1)">❯</button>
       </div>
-      <div class="month-bar" id="monthBar"></div>
+
+      <button class="current-btn" onclick="resetToCurrent()">
+        <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+        CURRENT
+      </button>
     </section>
 
-    <!-- Main Balance Card -->
+    <section class="month-nav-container">
+      <button class="month-arrow-btn" id="prevMonthSetBtn" onclick="shiftMonthSet(-1)">❮</button>
+      <div class="month-grid" id="monthGrid"></div>
+      <button class="month-arrow-btn" id="nextMonthSetBtn" onclick="shiftMonthSet(1)">❯</button>
+    </section>
+
     <section class="balance-card">
       <div class="balance-label">BALANCE</div>
       <div class="balance-amount" id="balanceAmount">฿0.00</div>
     </section>
 
-    <!-- Stats Grid -->
     <section class="stats-grid">
       <div class="stat-card income">
         <div class="stat-icon">↙</div>
@@ -206,7 +265,6 @@
       </div>
     </section>
 
-    <!-- Highlights Section -->
     <section>
       <div class="section-header">
         <div class="section-title">HIGHLIGHTS</div>
@@ -218,14 +276,12 @@
     </section>
   </main>
 
-  <!-- Bottom Bar -->
   <div class="bottom-bar">
     <button class="add-btn" onclick="openModal('add')">
       <span>＋</span> NEW ENTRY
     </button>
   </div>
 
-  <!-- Form Modal -->
   <div class="modal" id="entryModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -269,18 +325,26 @@
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbw3YFTHRu7hmh2foAAcEBM68xsKbPIO0oTWczq-sXk6LXcS9IVI6qKjN-xKbqMbxmMf/exec";
 
-    let currentYear = new Date().getFullYear();
-    let currentMonth = new Date().getMonth() + 1; // 1-12
+    const realCurrentYear = new Date().getFullYear();
+    const realCurrentMonth = new Date().getMonth() + 1; // 1-12
+
+    let selectedYear = realCurrentYear;
+    let selectedMonth = realCurrentMonth;
+    let currentMonthSet = realCurrentMonth <= 6 ? 1 : 2; // Set 1: Jan-Jun, Set 2: Jul-Dec
+
+    const monthSets = {
+      1: [{ name: 'JAN', m: 1 }, { name: 'FEB', m: 2 }, { name: 'MAR', m: 3 }, { name: 'APR', m: 4 }, { name: 'MAY', m: 5 }, { name: 'JUN', m: 6 }],
+      2: [{ name: 'JUL', m: 7 }, { name: 'AUG', m: 8 }, { name: 'SEP', m: 9 }, { name: 'OCT', m: 10 }, { name: 'NOV', m: 11 }, { name: 'DEC', m: 12 }]
+    };
+
     let selectedType = 'Income';
-    let months = ['ALL', 'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
     // Init
     document.addEventListener("DOMContentLoaded", () => {
-      document.getElementById('selectedYear').innerText = currentYear;
-      renderMonthBar();
+      updateYearUI();
+      renderMonthGrid();
       fetchData();
       
-      // Auto refresh when app comes back to foreground
       document.addEventListener("visibilitychange", () => {
         if (document.visibilityState === 'visible') fetchData();
       });
@@ -291,35 +355,67 @@
       const currentTheme = document.body.getAttribute('data-theme');
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
       document.body.setAttribute('data-theme', newTheme);
-      document.getElementById('themeToggle').innerText = newTheme === 'dark' ? '🌙' : '☀️';
+      document.getElementById('themeToggle').innerText = newTheme === 'dark' ? '🌙⁺' : '☀️';
     }
 
-    // Month & Year Filter
-    function renderMonthBar() {
-      const bar = document.getElementById('monthBar');
-      bar.innerHTML = months.map((m, idx) => {
-        const isActive = (m === 'ALL' && currentMonth === 'ALL') || (idx === currentMonth);
-        return `<div class="month-chip ${isActive ? 'active' : ''}" onclick="selectMonth(${idx === 0 ? "'ALL'" : idx})">${m}</div>`;
-      }).join('');
-    }
-
-    function selectMonth(m) {
-      currentMonth = m;
-      renderMonthBar();
-      fetchData();
+    // Year Controller with Limit at 2025
+    function updateYearUI() {
+      document.getElementById('selectedYear').innerText = selectedYear;
+      document.getElementById('prevYearBtn').disabled = (selectedYear <= 2025);
     }
 
     function changeYear(delta) {
-      currentYear += delta;
-      document.getElementById('selectedYear').innerText = currentYear;
+      if (selectedYear + delta < 2025) return;
+      selectedYear += delta;
+      updateYearUI();
       fetchData();
     }
 
-    // Fetch Data from Apps Script
+    // Month Controller
+    function renderMonthGrid() {
+      const grid = document.getElementById('monthGrid');
+      const months = monthSets[currentMonthSet];
+      
+      grid.innerHTML = months.map(item => `
+        <div class="month-chip ${item.m === selectedMonth ? 'active' : ''}" onclick="selectMonth(${item.m})">
+          ${item.name}
+        </div>
+      `).join('');
+
+      document.getElementById('prevMonthSetBtn').disabled = (currentMonthSet === 1);
+      document.getElementById('nextMonthSetBtn').disabled = (currentMonthSet === 2);
+    }
+
+    function shiftMonthSet(delta) {
+      const newSet = currentMonthSet + delta;
+      if (newSet >= 1 && newSet <= 2) {
+        currentMonthSet = newSet;
+        renderMonthGrid();
+      }
+    }
+
+    function selectMonth(m) {
+      selectedMonth = m;
+      renderMonthGrid();
+      fetchData();
+    }
+
+    // Reset to Current Date
+    function resetToCurrent() {
+      selectedYear = realCurrentYear;
+      selectedMonth = realCurrentMonth;
+      currentMonthSet = realCurrentMonth <= 6 ? 1 : 2;
+      
+      updateYearUI();
+      renderMonthGrid();
+      fetchData();
+    }
+
+    // Fetch Data from Apps Script API
     async function fetchData() {
       document.getElementById('entryList').innerHTML = `<div class="loading-state">Loading data...</div>`;
       try {
-        const res = await fetch(`${API_URL}?action=getData&year=${currentYear}&month=${currentMonth}`);
+        const res = await fetch(`${API_URL}?action=getData&year=${selectedYear}&month=${selectedMonth}`);
         const data = await res.json();
 
         // Render Cards
@@ -358,7 +454,7 @@
       }
     }
 
-    // Modal Control
+    // Modal Controls
     function selectType(type) {
       selectedType = type;
       document.querySelectorAll('.type-btn').forEach(btn => {
@@ -394,7 +490,7 @@
       document.getElementById('entryModal').classList.remove('active');
     }
 
-    // Form Handlers (Add / Edit / Delete)
+    // Form Submissions
     async function handleFormSubmit(e) {
       e.preventDefault();
       const rowIndex = document.getElementById('editRowIndex').value;
