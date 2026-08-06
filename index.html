@@ -130,28 +130,29 @@
 
     /* Year & Current Bar */
     .year-current-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .year-nav-transparent { display: flex; align-items: center; gap: 8px; }
+    .year-nav-transparent { display: flex; align-items: center; gap: 2px; }
     .year-nav-btn { 
       background: none; border: none; font-size: 16px; font-weight: 800; 
-      color: var(--text-main); cursor: pointer; padding: 6px 10px; 
+      color: var(--text-main); cursor: pointer; padding: 4px 6px; 
       transition: opacity 0.2s;
     }
     .year-nav-btn:disabled { opacity: 0.2; cursor: not-allowed; }
-    .year-text-display { font-size: 19px; font-weight: 800; letter-spacing: 0.5px; }
+    .year-text-display { font-size: 18px; font-weight: 800; letter-spacing: 0.3px;
+     display:flex; align-items:center; justify-content:center; line-height:1; }
 
     .current-btn { 
       display: flex; align-items: center; gap: 6px; 
       background: var(--btn-pill-bg); 
       backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--btn-pill-border); 
-      padding: 8px 16px; border-radius: 20px; 
-      font-size: 12px; font-weight: 800; color: var(--text-main); 
+      padding: 6px 12px; border-radius: 18px; 
+      font-size: 11px; font-weight: 800; color: var(--text-main); 
       cursor: pointer; letter-spacing: 0.5px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.04);
       transition: all 0.2s ease;
     }
     .current-btn:active { transform: scale(0.95); }
-    .current-btn i{ width:16px; height:16px; stroke:var(--lime-400); stroke-width:2;
+    .current-btn i{ width:14px; height:14px; stroke:var(--lime-400); stroke-width:2;
     }
 
     /* Liquid Month Selector */
