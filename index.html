@@ -110,7 +110,8 @@
       border: 1px solid var(--glass-border);
       box-shadow: 0 4px 15px rgba(163, 230, 53, 0.25);
     }
-    .home-icon-box svg { width: 22px; height: 22px; fill: currentColor; }
+    .home-icon-box svg,
+    .home-icon-box i{ width:22px; height:22px; stroke:currentColor; stroke-width:2.2; fill:none; }
     .app-title { font-size: 21px; font-weight: 800; letter-spacing: 0.5px; }
     
     .theme-toggle-btn { 
@@ -124,6 +125,8 @@
       transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .theme-toggle-btn:active { transform: scale(0.9); }
+    .theme-toggle-btn i{ width:22px; height:22px; stroke:currentColor; stroke-width:2;
+    }
 
     /* Year & Current Bar */
     .year-current-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
@@ -148,7 +151,8 @@
       transition: all 0.2s ease;
     }
     .current-btn:active { transform: scale(0.95); }
-    .current-btn svg { width: 15px; height: 15px; fill: var(--lime-400); }
+    .current-btn i{ width:16px; height:16px; stroke:var(--lime-400); stroke-width:2;
+    }
 
     /* Liquid Month Selector */
     .month-nav-container { display: flex; align-items: center; gap: 6px; margin-bottom: 22px; justify-content: space-between; }
@@ -292,38 +296,51 @@
     .delete-btn { width: 100%; background: var(--expense-bg); color: var(--expense-color); border: 1px solid var(--expense-color); padding: 14px; border-radius: 18px; font-size: 14px; font-weight: 800; cursor: pointer; margin-top: 10px; display: none; }
 
     .loading-state { text-align: center; padding: 40px 0; color: var(--text-sub); font-size: 14px; font-weight: 600; }
+    .year-nav-btn i,
+    .month-arrow-btn i{ width:18px; height:18px; stroke:currentColor; stroke-width:2.4; }
   </style>
+<script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
   <header class="app-header">
     <div class="header-left">
       <div class="home-icon-box">
-        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <i data-lucide="house"></i>
       </div>
       <div class="app-title">OVERVIEW</div>
     </div>
-    <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()">🌙⁺</button>
+    <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()">
+      <i data-lucide="moon-star"></i>
+  </button>
   </header>
 
   <main class="container">
     <section class="year-current-bar">
       <div class="year-nav-transparent">
-        <button class="year-nav-btn" id="prevYearBtn" onclick="changeYear(-1)">❮</button>
+        <button class="year-nav-btn" id="prevYearBtn" onclick="changeYear(-1)">
+          <i data-lucide="chevron-left"></i>
+        </button>
         <span class="year-text-display" id="selectedYear">2026</span>
-        <button class="year-nav-btn" id="nextYearBtn" onclick="changeYear(1)">❯</button>
+        <button class="year-nav-btn" id="nextYearBtn" onclick="changeYear(1)">
+          <i data-lucide="chevron-right"></i>
+        </button>
       </div>
 
       <button class="current-btn" onclick="resetToCurrent()">
-        <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+        <i data-lucide="calendar"></i>
         CURRENT
       </button>
     </section>
 
     <section class="month-nav-container">
-      <button class="month-arrow-btn" id="prevMonthSetBtn" onclick="shiftMonthSet(-1)">❮</button>
+      <button class="month-arrow-btn" id="prevMonthSetBtn" onclick="shiftMonthSet(-1)">
+        <i data-lucide="chevron-left"></i>
+      </button>
       <div class="month-grid" id="monthGrid"></div>
-      <button class="month-arrow-btn" id="nextMonthSetBtn" onclick="shiftMonthSet(1)">❯</button>
+      <button class="month-arrow-btn" id="nextMonthSetBtn" onclick="shiftMonthSet(1)">
+        <i data-lucide="chevron-right"></i>
+      </button>
     </section>
 
     <section class="balance-card">
@@ -439,8 +456,7 @@
       const currentTheme = document.body.getAttribute('data-theme');
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
       document.body.setAttribute('data-theme', newTheme);
-      document.getElementById('themeToggle').innerText = newTheme === 'dark' ? '🌙⁺' : '☀️';
-    }
+      const btn = document.getElementById("themeToggle"); btn.innerHTML = newTheme === "dark" ? '<i data-lucide="moon-star"></i>' : '<i data-lucide="sun"></i>'; lucide.createIcons(); }
 
     // Year Controller with Limit at 2025
     function updateYearUI() {
@@ -625,5 +641,7 @@
       }
     }
   </script>
+  <script> lucide.createIcons();
+</script>
 </body>
 </html>
