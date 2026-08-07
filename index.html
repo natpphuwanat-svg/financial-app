@@ -141,18 +141,18 @@
      display:flex; align-items:center; justify-content:center; line-height:1; transform:translateY(-1px); }
 
     .current-btn { 
-      display: flex; align-items: center; gap: 4px; 
+      display: flex; align-items: center; gap: 6px; 
       background: var(--btn-pill-bg); 
       backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--btn-pill-border); 
-      padding: 5px 10px; border-radius: 16px; 
+      padding: 7px 12px; min-height: 30px; border-radius: 18px; 
       font-size: 10px; font-weight: 800; color: var(--text-main); 
-      cursor: pointer; letter-spacing: 0.5px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      cursor: pointer; letter-spacing: 0.6px;
+      box-shadow: 0 5px 14px rgba(0,0,0,0.05);
       transition: all 0.2s ease;
     }
     .current-btn:active { transform: scale(0.95); }
-    .current-btn svg{ width:12px !important; height:12px !important; stroke:var(--lime-400); stroke-width:2; flex-shrink:0; }
+    .current-btn svg{ width:14px !important; height:14px !important; stroke:var(--lime-400); stroke-width:2.2; flex-shrink:0; }
 
     /* Liquid Month Selector */
     .month-nav-container { display: flex; align-items: center; gap: 6px; margin-bottom: 16px; justify-content: space-between; }
