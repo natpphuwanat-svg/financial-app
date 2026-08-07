@@ -442,6 +442,7 @@
 
     // Init
     document.addEventListener("DOMContentLoaded", () => {
+      applyTheme(getPreferredTheme());
       updateYearUI();
       renderMonthGrid();
       fetchData();
