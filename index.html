@@ -161,20 +161,18 @@
 
     .month-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; flex-grow: 1; }
     .month-chip { 
-      background: var(--btn-pill-bg); 
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--btn-pill-border); 
-      color: var(--text-sub); padding: 10px 0; border-radius: 18px; 
+      background: transparent; 
+      border: none;
+      color: var(--text-sub); padding: 10px 0; border-radius: 14px; 
       font-size: 12px; font-weight: 700; text-align: center; cursor: pointer; 
       transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .month-chip:active { transform: scale(0.92); }
+    .month-chip:active { transform: scale(0.97); opacity: 0.7; }
     .month-chip.active { 
-      border: 2px solid var(--lime-400); 
-      color: var(--text-main); 
+      background: var(--lime-400);
+      color: #1A2E05;
       font-weight: 800;
-      background: var(--glass-card);
-      box-shadow: 0 0 16px rgba(163, 230, 53, 0.35);
+      box-shadow: 0 6px 16px rgba(163, 230, 53, 0.35);
     }
 
     /* Liquid Glass Main Balance Card */
