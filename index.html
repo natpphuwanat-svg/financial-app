@@ -90,7 +90,7 @@
 
     body{
     background-color: var(--bg-color);
-    background-image:
+    background-image: none;
         radial-gradient(at 10% 10%, rgba(114,152,199,.12) 0px, transparent 45%),
         radial-gradient(at 90% 90%, rgba(163,230,53,.10) 0px, transparent 45%),
         radial-gradient(at 50% 50%, rgba(243,217,143,.06) 0px, transparent 45%);
@@ -111,6 +111,7 @@
 }
 
     .hero-section::before{
+      display : none;
       content: "";
       position: absolute;
       inset: 0;
