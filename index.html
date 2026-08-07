@@ -225,6 +225,12 @@
       background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
       pointer-events: none;
     }
+    .balance-wallet{
+     position: absolute; top: 20px; right: 20px; width: 42px; height: 42px;
+     display: flex; align-items: center; justify-content: center; border-radius: 14px;
+    background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+    .balance-wallet svg{ width: 22px; height: 22px; stroke: rgba(255,255,255,.95); stroke-width: 2; }
     .balance-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.85); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
     .balance-amount { font-size: 36px; font-weight: 800; color: #FFFFFF; text-shadow: 0 2px 10px rgba(0,0,0,0.1); }
 
@@ -378,6 +384,9 @@
     </section>
 
     <section class="balance-card">
+      <div class="balance-wallet">
+        <i data-lucide=wallet"></i>
+      </div>
       <div class="balance-label">BALANCE</div>
       <div class="balance-amount" id="balanceAmount">฿0.00</div>
     </section>
