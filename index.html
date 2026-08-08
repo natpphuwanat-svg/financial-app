@@ -638,7 +638,6 @@
       try {
         const res = await fetch(`${API_URL}?action=getData&year=${selectedYear}&month=${selectedMonth}`);
         const data = await res.json();
-        alert(JSON.stringify(data.highlights));
         const hasCurrentData = data.items && data.items.length > 0;
         if (requestId !== fetchRequestId) { return; }
         document.getElementById('balanceAmount').classList.remove('updating');
