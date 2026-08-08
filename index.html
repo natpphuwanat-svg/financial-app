@@ -624,6 +624,15 @@
         balanceChange.innerText = '';
         balanceChange.className = 'balance-change'; }
         document.getElementById('incomeAmount').innerText = '฿' + data.totalIncome.toLocaleString('en-US', {minimumFractionDigits: 2});
+        const incomeChange = document.getElementById('incomeChange');
+        if (data.previousIncome !== null && data.previousIncome !== 0) {
+        const percentage = ((data.totalIncome - data.previousIncome) / data.previousIncome) * 100;
+        const sign = percentage > 0 ? '+' : '';
+        const className = percentage > 0 ? 'positive' : 'negative';
+        incomeChange.innerText = `${sign}${percentage.toFixed(1)}% vs prev.`;
+        incomeChange.className = `stat-change ${className}`; } else {
+        incomeChange.innerText = '';
+        incomeChange.className = 'stat-change'; }
         document.getElementById('expenseAmount').innerText = '฿' + data.totalExpense.toLocaleString('en-US', {minimumFractionDigits: 2});
         document.getElementById('deductionAmount').innerText = '฿' + data.totalDeduction.toLocaleString('en-US', {minimumFractionDigits: 2});
 
