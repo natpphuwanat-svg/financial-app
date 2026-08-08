@@ -264,7 +264,7 @@
     .stat-card.income .stat-value { color: var(--income-color); }
     .stat-card.expense .stat-value { color: var(--expense-color); }
     .stat-card.deduction .stat-value { color: var(--deduction-color); }
-    .stat-change { margin-top: 4px; font-size: 10px; font-weight: 700; line-height: 1.2; white-space: nowrap; }
+    .stat-change { margin-top: 4px; font-size: 10px; font-weight: 700; line-height: 1.2; white-space: nowrap; min-height: 12px; }
     .stat-card.income .stat-change { color: var(--income-color); }
     .stat-card.expense .stat-change { color: var(--income-color); }
     .stat-card.deduction .stat-change { color: var(--deduction-color); }
@@ -649,10 +649,7 @@
         if (data.previousDeduction !== null && data.previousDeduction !== 0) {
         const percentage = ((data.totalDeduction - data.previousDeduction) / data.previousDeduction) * 100;
         const sign = percentage > 0 ? '+' : '';
-        deductionChange.innerText = `${sign}${percentage.toFixed(1)}% vs prev.`;
-        deductionChange.className = 'stat-change deduction'; } else {
-        deductionChange.innerText = '';
-        deductionChange.className = 'stat-change' }
+        
 
         // Render List
         if (data.items.length === 0) {
