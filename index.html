@@ -243,7 +243,11 @@
     .balance-amount { font-size: 38px; font-weight: 800; color: var(--text-main); text-shadow: none; line-height: 1.50; }
     .balance-change { margin-top: 8px; font-size: 14px; font-weight: 700; color: var(--text-sub); min-height: 16px; }
     .balance-change.positive { color: var(--income-color); }
-    .balance-change.negative { color: var(--expense-color) }
+    .balance-change.negative { color: var(--expense-color); }
+    .balance-change.updating { color: var(--text-sub); }
+    .balance-amount.updating,
+    .stat-value.updating,
+    .stat-change.updating { opacity: 0.60; }
 
     /* Stats Grid Glass Cards */
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 22px; }
