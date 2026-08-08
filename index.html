@@ -623,12 +623,31 @@
     // Fetch Data from Apps Script API
     async function fetchData() {
       const requestId = ++fetchRequestId;
+
+       // Updating state
+      document.getElementById('balanceAmount').classList.add('updating');
+      document.getElementById('balanceChange').classList.add('updating');
+      document.getElementById('balanceChange').innerText = '↻ updating';
+      document.getElementById('incomeAmount').classList.add('updating');
+      document.getElementById('incomeChange').classList.add('updating');
+      document.getElementById('expenseAmount').classList.add('updating');
+      document.getElementById('expenseChange').classList.add('updating');
+      document.getElementById('deductionAmount').classList.add('updating');
+      document.getElementById('deductionChange').classList.add('updating');
       document.getElementById('entryList').innerHTML = `<div class="loading-state">Loading data...</div>`;
       try {
         const res = await fetch(`${API_URL}?action=getData&year=${selectedYear}&month=${selectedMonth}`);
         const data = await res.json();
         const hasCurrentData = data.items && data.items.length > 0;
         if (requestId !== fetchRequestId) { return; }
+        document.getElementById('balanceAmount').classList.remove('updating');
+        document.getElementById('balanceChange').classList.remove('updating');
+        document.getElementById('incomeAmount').classList.remove('updating');
+        document.getElementById('incomeChange').classList.remove('updating');
+        document.getElementById('expenseAmount').classList.remove('updating');
+        document.getElementById('expenseChange').classList.remove('updating');
+        document.getElementById('deductionAmount').classList.remove('updating');
+        document.getElementById('deductionChange').classList.remove('updating');
 
         // Render Cards
         document.getElementById('balanceAmount').innerText = '฿' + data.balance.toLocaleString('en-US', {minimumFractionDigits: 2});
