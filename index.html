@@ -31,7 +31,7 @@
       
       --text-main: #1C273A;
       --text-sub: #64748B;
-      --balance-bg: linear-gradient(135deg, #A3E635 0%, #84CC16 100%);
+      --balance-bg: #E8ECE8;
 
       /* Header & Elements Light */
       --icon-box-bg: rgba(163, 230, 53, 0.25);
@@ -59,7 +59,7 @@
       
       --text-main: #F8FAFC;
       --text-sub: #94A3B8;
-      --balance-bg: linear-gradient(135deg, #84CC16 0%, #65A30D 100%);
+      --balance-bg: #151C25;
 
       /* Header & Elements Dark */
       --icon-box-bg: #202B14;
@@ -218,9 +218,9 @@
       background: var(--balance-bg);
       backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       border-radius: 28px; padding: 26px; 
-      border: 1px solid rgba(255, 255, 255, 0.15); 
-      margin-bottom: 18px; color: #FFFFFF; 
-      box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+      border: 1px solid var(--glass-border); 
+      margin-bottom: 18px; color: var(--text-main);
+      box-shadow: var(--glass-shadow);
       position: relative; overflow: hidden;
     }
     .balance-card::before {
@@ -232,11 +232,11 @@
     .balance-wallet{
      position: absolute; top: 20px; right: 20px; width: 42px; height: 42px;
      display: flex; align-items: center; justify-content: center; border-radius: 14px;
-    background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22);
-    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+     background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22);
+     backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
     .balance-wallet svg{ width: 22px; height: 22px; stroke: rgba(255,255,255,.95); stroke-width: 2; }
-    .balance-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.85); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
-    .balance-amount { font-size: 36px; font-weight: 800; color: #FFFFFF; text-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .balance-label { font-size: 12px; font-weight: 700; color: var(--text-sub); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+    .balance-amount { font-size: 36px; font-weight: 800; color: var(--lime-400); text-shadow: 0 2px 10px rgba(0,0,0,0.1); }
 
     /* Stats Grid Glass Cards */
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 22px; }
