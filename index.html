@@ -649,8 +649,11 @@
         if (data.previousDeduction !== null && data.previousDeduction !== 0) {
         const percentage = ((data.totalDeduction - data.previousDeduction) / data.previousDeduction) * 100;
         const sign = percentage > 0 ? '+' : '';
+        deductionChange.innerText = `${sign}${percentage.toFixed(1)}% vs prev.`;
+        deductionChange.className = 'stat-change deduction'; } else {
+        deductionChange.innerText = '';
+        deductionChange.className = 'stat-change'; }
         
-
         // Render List
         if (data.items.length === 0) {
           document.getElementById('entryList').innerHTML = `<div class="loading-state">No transactions found.</div>`;
