@@ -31,6 +31,7 @@
       
       --text-main: #1C273A;
       --text-sub: #64748B;
+      --balance-bg: linear-gradient(135deg, #A3E635 0%, #84CC16 100%);
 
       /* Header & Elements Light */
       --icon-box-bg: rgba(163, 230, 53, 0.25);
@@ -58,6 +59,7 @@
       
       --text-main: #F8FAFC;
       --text-sub: #94A3B8;
+      --balance-bg: linear-gradient(135deg, #84CC16 0%, #65A30D 100%);
 
       /* Header & Elements Dark */
       --icon-box-bg: #202B14;
@@ -213,7 +215,7 @@
     }
 
     .balance-card { 
-      background: #ff0000 !important;
+      background: var(--balance-bg);
       backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       border-radius: 28px; padding: 26px; 
       border: 1px solid rgba(255, 255, 255, 0.15); 
