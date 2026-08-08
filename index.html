@@ -623,12 +623,13 @@
       try {
         const res = await fetch(`${API_URL}?action=getData&year=${selectedYear}&month=${selectedMonth}`);
         const data = await res.json();
+        const hasCurrentData = data.items && data.items.length > 0;
         if (requestId !== fetchRequestId) { return; }
 
         // Render Cards
         document.getElementById('balanceAmount').innerText = '฿' + data.balance.toLocaleString('en-US', {minimumFractionDigits: 2});
         const balanceChange = document.getElementById('balanceChange');
-        if (data.previousBalance !== null && data.previousBalance !== 0) {
+        if (hasCurrentData && data.previousBalance !== null && data.previousBalance !== 0) {
         const percentage = ((data.balance - data.previousBalance) / data.previousBalance) * 100;
         const sign = percentage > 0 ? '+' : '';
         const className = percentage > 0 ? 'positive' : 'negative';
@@ -638,7 +639,7 @@
         balanceChange.className = 'balance-change'; }
         document.getElementById('incomeAmount').innerText = '฿' + data.totalIncome.toLocaleString('en-US', {minimumFractionDigits: 2});
         const incomeChange = document.getElementById('incomeChange');
-        if (data.previousIncome !== null && data.previousIncome !== 0) {
+        if (hasCurrentData && data.previousIncome !== null && data.previousIncome !== 0) {
         const percentage = ((data.totalIncome - data.previousIncome) / data.previousIncome) * 100;
         const sign = percentage > 0 ? '+' : '';
         incomeChange.innerText = `${sign}${percentage.toFixed(0)}% vs prev.`;
@@ -654,7 +655,7 @@
         else { expenseChange.innerText = 'no data'; expenseChange.className = 'stat-change'; }
         document.getElementById('deductionAmount').innerText = '฿' + data.totalDeduction.toLocaleString('en-US', {minimumFractionDigits: 2});
         const deductionChange = document.getElementById('deductionChange');
-        if (data.previousDeduction !== null && data.previousDeduction !== 0) {
+        if (hasCurrentData && data.previousDeduction !== null && data.previousDeduction !== 0) {
         const percentage = ((data.totalDeduction - data.previousDeduction) / data.previousDeduction) * 100;
         const sign = percentage > 0 ? '+' : '';
         deductionChange.innerText = `${sign}${percentage.toFixed(0)}% vs prev.`;
