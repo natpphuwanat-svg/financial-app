@@ -268,6 +268,9 @@
     .stat-card.income .stat-change { color: var(--income-color); }
     .stat-card.expense .stat-change { color: var(--income-color); }
     .stat-card.deduction .stat-change { color: var(--deduction-color); }
+    .stat-change.good { color: var(--income-color); }
+    .stat-change.warning { color: #D97706; }
+    .stat-change.bad { color: var(--expense-color); }
 
     /* Highlights Section */
     .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
@@ -633,6 +636,14 @@
         incomeChange.innerText = '';
         incomeChange.className = 'stat-change'; }
         document.getElementById('expenseAmount').innerText = '฿' + data.totalExpense.toLocaleString('en-US', {minimumFractionDigits: 2});
+        let expenseRatio = 0;
+        if (data.totalIncome > 0) { expenseRatio = (data.totalExpense / data.totalIncome) * 100; }
+        const expenseChange = document.getElementById('expenseChange');
+        if (data.totalIncome > 0) { let ratioClass = 'good'; if (expenseRatio > 60) { ratioClass = 'bad'; } else if (expenseRatio > 30) { ratioClass = 'warning'; }
+        expenseChange.innerText = `${expenseRatio.toFixed(0)}% of income`;
+        expenseChange.className = `stat-change ${ratioClass}`; } else {
+        expenseChange.innerText = '';
+        expenseChange.className = 'stat-change'; }
         document.getElementById('deductionAmount').innerText = '฿' + data.totalDeduction.toLocaleString('en-US', {minimumFractionDigits: 2});
         const deductionChange = document.getElementById('deductionChange');
         if (data.previousDeduction !== null && data.previousDeduction !== 0) {
