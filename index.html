@@ -651,7 +651,7 @@
         if (data.totalIncome > 0) { let ratioClass = 'good'; if (expenseRatio > 60) { ratioClass = 'bad'; } else if (expenseRatio > 30) { ratioClass = 'warning'; }
         expenseChange.innerText = `${expenseRatio.toFixed(0)}% of income`;
         expenseChange.className = `stat-change ${ratioClass}`; }
-        else { expenseChange.innerText = ''; expenseChange.className = 'stat-change'; }
+        else { expenseChange.innerText = 'no data'; expenseChange.className = 'stat-change'; }
         document.getElementById('deductionAmount').innerText = '฿' + data.totalDeduction.toLocaleString('en-US', {minimumFractionDigits: 2});
         const deductionChange = document.getElementById('deductionChange');
         if (data.previousDeduction !== null && data.previousDeduction !== 0) {
