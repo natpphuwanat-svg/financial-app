@@ -687,12 +687,12 @@
         else { deductionChange.innerText = 'no prev. data'; deductionChange.className = 'stat-change deduction'; }
         
         // Render List
-        if (data.items.length === 0) {
+        if (data.highlights.length === 0) {
           document.getElementById('entryList').innerHTML = `<div class="loading-state">No transactions found.</div>`;
           return;
         }
 
-        document.getElementById('entryList').innerHTML = data.items.map(item => `
+        document.getElementById('entryList').innerHTML = data.highlights.map(item => `
           <div class="entry-item" onclick='openModal("edit", ${JSON.stringify(item)})'>
             <div class="entry-left">
               <div class="entry-badge ${item.type}">
