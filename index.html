@@ -217,7 +217,7 @@
     .balance-card { 
       background: var(--balance-bg);
       backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border-radius: 28px; padding: 28px; min-height: 166px;
+      border-radius: 28px; padding: 28px; min-height: 166px; display: flex; flex-direction: column; justify-content: center;
       border: 1px solid var(--glass-border); 
       margin-bottom: 18px; color: var(--text-main);
       box-shadow: var(--glass-shadow);
@@ -238,9 +238,9 @@
     [data-theme="dark"] .balance-wallet{
      background: rgba(255, 255, 255, 0.14); border-color: rgba(255, 255, 255, 0.22); }
     [data-theme="dark"] .balance-wallet svg{ stroke: var(--lime-400); }
-    .balance-label { font-size: 12px; font-weight: 700; color: var(--text-main); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
-    .balance-amount { font-size: 36px; font-weight: 800; color: var(--text-main); text-shadow: none; line-height: 1.50; }
-    .balance-change { margin-top: 8px; font-size: 12px; font-weight: 700; color: var(--text-sub); min-height: 16px; }
+    .balance-label { font-size: 14px; font-weight: 700; color: var(--text-main); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+    .balance-amount { font-size: 38px; font-weight: 800; color: var(--text-main); text-shadow: none; line-height: 1.50; }
+    .balance-change { margin-top: 8px; font-size: 14px; font-weight: 700; color: var(--text-sub); min-height: 16px; }
     .balance-change.positive { color: var(--income-color); }
     .balance-change.negative { color: var(--expense-color) }
 
