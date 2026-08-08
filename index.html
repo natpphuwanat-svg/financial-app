@@ -630,7 +630,7 @@
         const className = percentage > 0 ? 'positive' : 'negative';
         balanceChange.innerText = `${sign}${percentage.toFixed(1)}% VS LAST MONTH`;
         balanceChange.className = `balance-change ${className}`; } else {
-        balanceChange.innerText = ''NO PRVE. DATA'';
+        balanceChange.innerText = 'NO PRVE. DATA';
         balanceChange.className = 'balance-change'; }
         document.getElementById('incomeAmount').innerText = '฿' + data.totalIncome.toLocaleString('en-US', {minimumFractionDigits: 2});
         const incomeChange = document.getElementById('incomeChange');
