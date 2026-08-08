@@ -247,11 +247,11 @@
     .balance-change.updating { color: var(--text-sub); }
     .balance-amount.updating,
     .stat-value.updating,
-    .stat-change.updating { opacity: 0.60; }
-    .balance-card.is-updating .balance-amount { opacity: 0.55; }
+    .stat-change.updating { opacity: 0.30; }
+    .balance-card.is-updating .balance-amount { opacity: 0.30; }
     .balance-card.is-updating .balance-change { opacity: 1; }
     .stats-grid.is-updating .stat-value,
-    .stats-grid.is-updating .stat-change { opacity: 0.55; }
+    .stats-grid.is-updating .stat-change { opacity: 0.30; }
 
     /* Stats Grid Glass Cards */
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 22px; }
@@ -627,7 +627,7 @@
        // Updating state
       document.getElementById('balanceAmount').classList.add('updating');
       document.getElementById('balanceChange').classList.add('updating');
-      document.getElementById('balanceChange').innerText = '↻ updating';
+      document.getElementById('balanceChange').innerText = 'updating...';
       document.getElementById('incomeAmount').classList.add('updating');
       document.getElementById('incomeChange').classList.add('updating');
       document.getElementById('expenseAmount').classList.add('updating');
