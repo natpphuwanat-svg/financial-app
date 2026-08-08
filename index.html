@@ -628,7 +628,7 @@
         const percentage = ((data.balance - data.previousBalance) / data.previousBalance) * 100;
         const sign = percentage > 0 ? '+' : '';
         const className = percentage > 0 ? 'positive' : 'negative';
-        balanceChange.innerText = `${sign}${percentage.toFixed(1)}% vs last month`;
+        balanceChange.innerText = `${sign}${percentage.toFixed(0)}% vs last month`;
         balanceChange.className = `balance-change ${className}`; } else {
         balanceChange.innerText = 'no prev. data';
         balanceChange.className = 'balance-change'; }
@@ -637,7 +637,7 @@
         if (data.previousIncome !== null && data.previousIncome !== 0) {
         const percentage = ((data.totalIncome - data.previousIncome) / data.previousIncome) * 100;
         const sign = percentage > 0 ? '+' : '';
-        incomeChange.innerText = `${sign}${percentage.toFixed(1)}% vs prev.`;
+        incomeChange.innerText = `${sign}${percentage.toFixed(0)}% vs prev.`;
         incomeChange.className = 'stat-change income'; }
         else { incomeChange.innerText = 'no prev. data'; incomeChange.className = 'stat-change income'; }
         document.getElementById('expenseAmount').innerText = '฿' + data.totalExpense.toLocaleString('en-US', {minimumFractionDigits: 2});
@@ -653,7 +653,7 @@
         if (data.previousDeduction !== null && data.previousDeduction !== 0) {
         const percentage = ((data.totalDeduction - data.previousDeduction) / data.previousDeduction) * 100;
         const sign = percentage > 0 ? '+' : '';
-        deductionChange.innerText = `${sign}${percentage.toFixed(1)}% vs prev.`;
+        deductionChange.innerText = `${sign}${percentage.toFixed(0)}% vs prev.`;
         deductionChange.className = 'stat-change deduction'; }
         else { deductionChange.innerText = 'no prev. data'; deductionChange.className = 'stat-change deduction'; }
         
