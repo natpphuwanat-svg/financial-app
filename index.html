@@ -248,6 +248,10 @@
     .balance-amount.updating,
     .stat-value.updating,
     .stat-change.updating { opacity: 0.60; }
+    .balance-card.is-updating .balance-amount { opacity: 0.55; }
+    .balance-card.is-updating .balance-change { opacity: 1; }
+    .stats-grid.is-updating .stat-value,
+    .stats-grid.is-updating .stat-change { opacity: 0.55; }
 
     /* Stats Grid Glass Cards */
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 22px; }
