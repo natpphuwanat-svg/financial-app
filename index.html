@@ -628,9 +628,9 @@
         const percentage = ((data.balance - data.previousBalance) / data.previousBalance) * 100;
         const sign = percentage > 0 ? '+' : '';
         const className = percentage > 0 ? 'positive' : 'negative';
-        balanceChange.innerText = `${sign}${percentage.toFixed(1)}% vs last month`;
+        balanceChange.innerText = `${sign}${percentage.toFixed(1)}% VS LAST MONTH`;
         balanceChange.className = `balance-change ${className}`; } else {
-        balanceChange.innerText = '';
+        balanceChange.innerText = ''NO PRVE. DATA'';
         balanceChange.className = 'balance-change'; }
         document.getElementById('incomeAmount').innerText = '฿' + data.totalIncome.toLocaleString('en-US', {minimumFractionDigits: 2});
         const incomeChange = document.getElementById('incomeChange');
