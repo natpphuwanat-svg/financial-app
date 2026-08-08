@@ -254,7 +254,8 @@
       border: 1px solid var(--glass-border); 
       text-align: left; box-shadow: var(--glass-shadow);
     }
-    .stat-icon { width: 32px; height: 32px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 0 8px; font-size: 15px; font-weight: bold; }
+    .stat-icon { width: 34px; height: 34px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 0 8px; font-size: 15px; font-weight: bold; }
+    .stat-icon svg { width: 18px; height: 18px; stroke-width: 2.2; }
     .stat-card.income .stat-icon { background: var(--income-bg); color: var(--income-color); }
     .stat-card.expense .stat-icon { background: var(--expense-bg); color: var(--expense-color); }
     .stat-card.deduction .stat-icon { background: var(--deduction-bg); color: var(--deduction-color); }
@@ -405,17 +406,20 @@
 
     <section class="stats-grid">
       <div class="stat-card income">
-        <div class="stat-icon">↙</div>
+        <div class="stat-icon">
+          <i data-lucide="circle-arrow-down"></i>
         <div class="stat-label">INCOME</div>
         <div class="stat-value" id="incomeAmount">฿0.00</div>
       </div>
       <div class="stat-card expense">
-        <div class="stat-icon">↗</div>
+        <div class="stat-icon">
+            <i data-lucide="circle-arrow-up"></i>
         <div class="stat-label">EXPENSE</div>
         <div class="stat-value" id="expenseAmount">฿0.00</div>
       </div>
       <div class="stat-card deduction">
-        <div class="stat-icon">−</div>
+        <div class="stat-icon">
+          <i data-lucide="receipt"></i>
         <div class="stat-label">DEDUCTION</div>
         <div class="stat-value" id="deductionAmount">฿0.00</div>
       </div>
