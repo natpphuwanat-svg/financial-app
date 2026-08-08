@@ -515,6 +515,7 @@
     };
 
     let selectedType = 'Income';
+    let fetchRequestId = 0;
 
     // Init
     document.addEventListener("DOMContentLoaded", () => {
@@ -613,10 +614,12 @@
 
     // Fetch Data from Apps Script API
     async function fetchData() {
+      const requestId = ++fetchRequestId;
       document.getElementById('entryList').innerHTML = `<div class="loading-state">Loading data...</div>`;
       try {
         const res = await fetch(`${API_URL}?action=getData&year=${selectedYear}&month=${selectedMonth}`);
         const data = await res.json();
+        if (requestId !== fetchRequestId) { return; }
 
         // Render Cards
         document.getElementById('balanceAmount').innerText = '฿' + data.balance.toLocaleString('en-US', {minimumFractionDigits: 2});
@@ -679,7 +682,8 @@
           </div>
         `).join('');
 
-      } catch (err) {
+      } catch (err) { 
+        if (requestId !== fetchRequestId) { return; }
         document.getElementById('entryList').innerHTML = `<div class="loading-state">Error loading data.</div>`;
       }
     }
