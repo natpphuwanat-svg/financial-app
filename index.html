@@ -363,9 +363,10 @@
     .loading-state { text-align: center; padding: 40px 0; color: var(--text-sub); font-size: 14px; font-weight: 600; }
     .year-nav-btn i,
     .month-arrow-btn i{ width:18px; height:18px; stroke:currentColor; stroke-width:2.4; }
-    .highlight-item { position: relative; padding: 15px 18px; min-height: 70px; }
+      
+    .highlight-item { position: relative; padding: 15px 18px; min-height: 70px; border-top: none !important; border-bottom: none !important;}
 /* Remove the old full-width divider */
-    .highlight-item + .highlight-item { border-top: none !important; }
+    .highlight-item + .highlight-item { border-top: none !important; border-bottom: none !important; }
 /* Custom divider */
     .highlight-item + .highlight-item::before { content: ""; position: absolute; top: 0; left: 18px; right: 18px; height: 1px; background: rgba(100, 116, 139, 0.055); }
 /* Entry text — approximately 5% smaller */
