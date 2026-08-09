@@ -286,7 +286,7 @@
     /* Highlights Section */
     .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
     .section-title { font-size: 13px; font-weight: 800; letter-spacing: 0.8px; color: var(--text-sub); text-transform: uppercase; }
-    .refresh-btn { background: none; border: none; color: var(--text-main); font-size: 13px; font-weight: 700; cursor: pointer; opacity: 0.8; }
+    .see-all-btn { background: none; border: none; color: var(--lime-400); font-size: 13px; font-weight: 800; cursor: pointer; padding: 4px 0; }
 
     .highlight-card {
      background: var(--glass-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
@@ -459,7 +459,7 @@
     <section>
       <div class="section-header">
         <div class="section-title">HIGHLIGHTS</div>
-        <button class="refresh-btn" onclick="fetchData()">Refresh 🔄</button>
+        <button class="see-all-btn" onclick">SEE ALL</button>
       </div>
       <div id="entryList" class="entry-list">
         <div class="loading-state">Loading data...</div>
