@@ -293,16 +293,17 @@
      border-radius: 20px; border: 1px solid var(--glass-border);
      box-shadow: var(--glass-shadow); overflow: hidden; }
     .highlight-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 18px; min-height: 70px; }
-    .highlight-item + .highlight-item { border-top: 1px solid var(--glass-border); }
+    .highlight-item + .highlight-item { position: relative; }
+    .highlight-item + .highlight-item::before { content: ""; position: absolute; top: 0; left: 18px; right: 18px; border-top: 1px solid rgba(100, 116, 139, 0.08) }
     .entry-left { display: flex; align-items: center; gap: 14px; }
     .entry-badge { width: 40px; height: 40px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
     .entry-badge.income { background: var(--income-bg); color: var(--income-color); }
     .entry-badge.expense { background: var(--expense-bg); color: var(--expense-color); }
     .entry-badge.deduction { background: var(--deduction-bg); color: var(--deduction-color); }
-    .entry-title { font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 3px; }
-    .entry-date { font-size: 12px; color: var(--text-sub); }
+    .entry-title { font-size: 14.25px; font-weight: 700; color: var(--text-main); margin-bottom: 3px; }
+    .entry-date { font-size: 11.4px; color: var(--text-sub); }
     .entry-right { text-align: right; }
-    .entry-amount { font-size: 16px; font-weight: 800; }
+    .entry-amount { font-size: 15.2px; font-weight: 800; }
     .entry-amount.income { color: var(--income-color); }
     .entry-amount.expense { color: var(--expense-color); }
     .entry-amount.deduction { color: var(--deduction-color); }
