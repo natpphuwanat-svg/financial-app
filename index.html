@@ -288,7 +288,12 @@
     .section-title { font-size: 13px; font-weight: 800; letter-spacing: 0.8px; color: var(--text-sub); text-transform: uppercase; }
     .refresh-btn { background: none; border: none; color: var(--text-main); font-size: 13px; font-weight: 700; cursor: pointer; opacity: 0.8; }
 
-    .entry-list { display: flex; flex-direction: column; gap: 12px; }
+    .highlight-card {
+     background: var(--glass-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+     border-radius: 20px; border: 1px solid var(--glass-border);
+     box-shadow: var(--glass-shadow); overflow: hidden; }
+    .highlight-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 18px; min-height: 70px; }
+    .highlight-item + .highlight-item { border-top: 1px solid var(--glass-border); }
     .entry-item { 
       background: var(--glass-card); 
       backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
@@ -692,23 +697,25 @@
         }
 
         document.getElementById('entryList').innerHTML = data.highlights.map(item => `
-          <div class="entry-item" onclick='openModal("edit", ${JSON.stringify(item)})'>
-            <div class="entry-left">
-              <div class="entry-badge ${item.type}">
-                ${item.type === 'income' ? '↙' : item.type === 'expense' ? '↗' : '−'}
-              </div>
-              <div>
-                <div class="entry-title">${item.title}</div>
-                <div class="entry-date">${item.date}</div>
-              </div>
-            </div>
-            <div class="entry-right">
-              <div class="entry-amount ${item.type}">
-                ${item.type === 'expense' || item.type === 'deduction' ? '-' : '+'}฿${item.amount.toLocaleString('en-US', {minimumFractionDigits: 2})}
-              </div>
-            </div>
-          </div>
-        `).join('');
+         <div class="highlight-item" onclick='openModal("edit", ${JSON.stringify(item)})'>
+          <div class="entry-left">
+        <div class="entry-badge ${item.type}">
+          <i data-lucide="circle"></i>
+       </div>
+
+      <div>
+        <div class="entry-title">${item.title}</div>
+        <div class="entry-date">${item.financialType.toUpperCase()}</div>
+      </div>
+    </div>
+   <div class="entry-right">
+      <div class="entry-amount ${item.type}">
+        ฿${item.amount.toLocaleString('en-US', {minimumFractionDigits: 2})}
+      </div>
+    </div>
+      </div>
+    `).join('');
+    lucide.createIcons();
 
       } catch (err) { 
         if (requestId !== fetchRequestId) { return; }
