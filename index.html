@@ -361,19 +361,108 @@
     .entry-badge { width: 42px; height: 42px; font-size: 16px; }
     .entry-badge svg { width: 20px; height: 20px; stroke-width: 2.2; }
    
-/* Liquid Glass Floating Bottom Navigation */
-    .floating-tab-bar { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 14px); transform: translateX(-50%); width: min(88%, 420px); height: 64px;
-     display: grid; grid-template-columns: repeat(3, 1fr); align-items: center; padding: 6px;
-/* Liquid Glass */
-     background: rgba(255, 255, 255, 0.42); backdrop-filter: blur(28px) saturate(180%); -webkit-backdrop-filter: blur(28px) saturate(180%);
-/* Glass edge */
-     border: 1px solid rgba(255, 255, 255, 0.65); border-radius: 32px;
-/* Soft floating shadow */
-     box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(15, 23, 42, 0.04); z-index: 900; }
+/* =========================================================
+   Floating Bottom Navigation — Step 4.2
+   ========================================================= */
 
-[data-theme="dark"]
-    .floating-tab-bar { background: rgba(25, 30, 43, 0.58); backdrop-filter: blur(28px) saturate(170%); -webkit-backdrop-filter: blur(28px) saturate(170%);
-     border-color: rgba(255, 255, 255, 0.12); box-shadow: 0 6px 22px rgba(0, 0, 0, 0.22), 0 2px 6px rgba(0, 0, 0, 0.12); }
+.floating-tab-bar {
+  position: fixed;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom) + 14px);
+  transform: translateX(-50%);
+
+  width: min(88%, 420px);
+  height: 64px;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+
+  padding: 6px;
+
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 32px;
+
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.12),
+    0 2px 8px rgba(15, 23, 42, 0.06);
+
+  z-index: 900;
+}
+
+[data-theme="dark"] .floating-tab-bar {
+  background: rgba(25, 30, 43, 0.82);
+  border-color: rgba(255, 255, 255, 0.10);
+
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.45),
+    0 2px 10px rgba(0, 0, 0, 0.25);
+}
+
+.floating-tab {
+  height: 52px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 3px;
+
+  border: none;
+  background: transparent;
+
+  color: var(--text-sub);
+
+  border-radius: 26px;
+
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.floating-tab svg {
+  width: 20px;
+  height: 20px;
+
+  stroke: currentColor;
+  stroke-width: 2;
+
+  transition: transform 0.2s ease;
+}
+
+.floating-tab.active {
+  color: var(--lime-400);
+}
+
+.floating-tab.active svg {
+  stroke-width: 2.2;
+}
+
+.floating-tab:active {
+  transform: scale(0.92);
+}
+
+@media (max-width: 360px) {
+  .floating-tab-bar {
+    width: 92%;
+  }
+
+  .floating-tab {
+    font-size: 9px;
+  }
+}
   </style>
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -468,6 +557,7 @@
   </main>
   </div>
 
+  <!-- Floating Bottom Navigation -->
   <nav class="floating-tab-bar" aria-label="Main navigation">
     <button class="floating-tab active" type="button">
       <i data-lucide="house"></i>
