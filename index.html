@@ -363,6 +363,17 @@
     .loading-state { text-align: center; padding: 40px 0; color: var(--text-sub); font-size: 14px; font-weight: 600; }
     .year-nav-btn i,
     .month-arrow-btn i{ width:18px; height:18px; stroke:currentColor; stroke-width:2.4; }
+    .highlight-item { position: relative; padding: 15px 18px; min-height: 70px; }
+/* Remove the old full-width divider */
+    .highlight-item + .highlight-item { border-top: none !important; }
+/* Custom divider */
+    .highlight-item + .highlight-item::before { content: ""; position: absolute; top: 0; left: 18px; right: 18px; height: 1px; background: rgba(100, 116, 139, 0.055); }
+/* Entry text — approximately 5% smaller */
+    .entry-title { font-size: 14px; }
+    .entry-date { font-size: 11px; }
+    .entry-amount { font-size: 15px; }
+/* Keep icon exactly the same size */
+    .entry-badge { width: 40px; height: 40px; font-size: 18px; }
   </style>
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
