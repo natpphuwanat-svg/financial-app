@@ -680,24 +680,32 @@
         deductionChange.className = 'stat-change deduction'; }
         else { deductionChange.innerText = 'no prev. data'; deductionChange.className = 'stat-change deduction'; }
         
-        // Render Highlights
-        const highlights = data.highlights || [];
-        if (highlights.length === 0) {
-          document.getElementById('entryList').innerHTML =
-            `<div class="loading-state">No highlights found.</div>`; return; }
-        document.getElementById('entryList').innerHTML = `
-        <div class="highlight-card">
-        ${highlights.map(item => `
-        <div class="highlight-item">
-        <div>
-          <div class="entry-title">${item.title}</div>
-          <div class="entry-date">${item.financialType.toUpperCase()}</div>
+    // Render Highlights
+       if (!data.highlights || data.highlights.length === 0) {
+       document.getElementById('entryList').innerHTML =
+       `<div class="loading-state">No highlights yet.</div>`;
+       return; }
+       document.getElementById('entryList').innerHTML = `
+      <div class="highlight-card">
+      ${data.highlights.map(item => `
+      <div class="highlight-item" onclick='openModal("edit", ${JSON.stringify(item)})'>
+        <div class="entry-left">
+          <div class="entry-badge ${item.type}">
+            ${item.type === 'income' ? '↙' : item.type === 'expense' ? '↗' : '−'}
+          </div>
+          <div>
+            <div class="entry-title">${item.title}</div>
+            <div class="entry-date">${item.type.toUpperCase()}</div>
+          </div>
+        </di>
+        <div class="entry-right">
+          <div class="entry-amount ${item.type}">
+            ฿${item.amount.toLocaleString('en-US', {
+              minimumFractionDigits: 2
+            })}
+          </div>
         </div>
-        <div class="entry-amount ${item.type}">
-          ฿${item.amount.toLocaleString('en-US', {
-            minimumFractionDigits: 2
-          })}
-        </div>
+
       </div>
     `).join('')}
   </div>
