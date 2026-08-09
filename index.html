@@ -680,31 +680,28 @@
         deductionChange.className = 'stat-change deduction'; }
         else { deductionChange.innerText = 'no prev. data'; deductionChange.className = 'stat-change deduction'; }
         
-        // Render List
-        if (data.highlights.length === 0) {
-          document.getElementById('entryList').innerHTML = `<div class="loading-state">No transactions found.</div>`;
-          return;
-        }
-
-        document.getElementById('entryList').innerHTML = data.highlights.map(item => `
-         <div class="highlight-item" onclick='openModal("edit", ${JSON.stringify(item)})'>
-          <div class="entry-left">
-        <div class="entry-badge ${item.type}">
-          <i data-lucide="circle"></i>
-       </div>
-
-      <div>
-        <div class="entry-title">${item.title}</div>
-        <div class="entry-date">${item.financialType.toUpperCase()}</div>
+        // Render Highlights
+        const highlights = data.highlights || [];
+        if (highlights.length === 0) {
+          document.getElementById('entryList').innerHTML =
+            `<div class="loading-state">No highlights found.</div>`; return; }
+        document.getElementById('entryList').innerHTML = `
+        <div class="highlight-card">
+        ${highlights.map(item => `
+        <div class="highlight-item">
+        <div>
+          <div class="entry-title">${item.title}</div>
+          <div class="entry-date">${item.financialType.toUpperCase()}</div>
+        </div>
+        <div class="entry-amount ${item.type}">
+          ฿${item.amount.toLocaleString('en-US', {
+            minimumFractionDigits: 2
+          })}
+        </div>
       </div>
-    </div>
-   <div class="entry-right">
-      <div class="entry-amount ${item.type}">
-        ฿${item.amount.toLocaleString('en-US', {minimumFractionDigits: 2})}
-      </div>
-    </div>
-      </div>
-    `).join('');
+    `).join('')}
+  </div>
+`;
     lucide.createIcons();
 
       } catch (err) { 
