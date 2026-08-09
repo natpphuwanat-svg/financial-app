@@ -702,7 +702,7 @@
       <div class="highlight-item" onclick='openModal("edit", ${JSON.stringify(item)})'>
         <div class="entry-left">
           <div class="entry-badge ${item.type}">
-            ${item.type === 'income' ? '↙' : item.type === 'expense' ? '↗' : '−'}
+            <i data-lucide="${item.icon}"></i>
           </div>
           <div>
             <div class="entry-title">${item.title}</div>
