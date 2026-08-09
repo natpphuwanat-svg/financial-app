@@ -362,18 +362,51 @@
     .entry-badge svg { width: 20px; height: 20px; stroke-width: 2.2; }
    
 /* Liquid Glass Floating Bottom Navigation */
-    .floating-tab-bar { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 14px); transform: translateX(-50%); width: min(88%, 420px); height: 64px;
-     display: grid; grid-template-columns: repeat(3, 1fr); align-items: center; padding: 6px;
-/* Liquid Glass */
-     background: rgba(255, 255, 255, 0.42); backdrop-filter: blur(28px) saturate(180%); -webkit-backdrop-filter: blur(28px) saturate(180%);
-/* Glass edge */
-     border: 1px solid rgba(255, 255, 255, 0.65); border-radius: 32px;
-/* Soft floating shadow */
-     box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(15, 23, 42, 0.04); z-index: 900; }
 
-[data-theme="dark"]
-    .floating-tab-bar { background: rgba(25, 30, 43, 0.58); backdrop-filter: blur(28px) saturate(170%); -webkit-backdrop-filter: blur(28px) saturate(170%);
-     border-color: rgba(255, 255, 255, 0.12); box-shadow: 0 6px 22px rgba(0, 0, 0, 0.22), 0 2px 6px rgba(0, 0, 0, 0.12); }
+.floating-tab-bar {
+  position: fixed;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom) + 14px);
+  transform: translateX(-50%);
+
+  width: min(88%, 420px);
+  height: 64px;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+
+  padding: 6px;
+
+  /* Liquid Glass */
+  background: rgba(255, 255, 255, 0.42);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+
+  /* Glass edge */
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 32px;
+
+  /* Soft floating shadow */
+  box-shadow:
+    0 6px 20px rgba(15, 23, 42, 0.08),
+    0 2px 6px rgba(15, 23, 42, 0.04);
+
+  z-index: 900;
+}
+
+[data-theme="dark"] .floating-tab-bar {
+  background: rgba(25, 30, 43, 0.58);
+
+  backdrop-filter: blur(28px) saturate(170%);
+  -webkit-backdrop-filter: blur(28px) saturate(170%);
+
+  border-color: rgba(255, 255, 255, 0.12);
+
+  box-shadow:
+    0 6px 22px rgba(0, 0, 0, 0.22),
+    0 2px 6px rgba(0, 0, 0, 0.12);
+}
   </style>
 <script src="https://unpkg.com/lucide@latest"></script>
 </head>
