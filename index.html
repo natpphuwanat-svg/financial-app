@@ -394,7 +394,8 @@ stroke: currentColor; stroke-width: 2.1;
 transition: transform 0.2s ease;
 }
 /* Active */
-.floating-tab.active { color: var(--lime-400); }
+.floating-tab.active { color: var(--lime-400);
+ background: rgba(163, 230, 53, 0.12); box-shadow: inset 0 0 0 1px rgba(163, 230, 53, 0.10); }
 .floating-tab.active svg { stroke-width: 2.3; }
 /* Press */
 .floating-tab:active { transform: scale(0.92); }
@@ -410,10 +411,11 @@ box-shadow:
 [data-theme="dark"] .floating-tab-bar::before {
 background: rgba(255, 255, 255, 0.05);
 }
-[data-theme="dark"] .floating-tab {
-color: #94A3B8; }
-[data-theme="dark"] .floating-tab.active {
-color: var(--lime-400); }
+[data-theme="dark"]
+.floating-tab { color: #94A3B8; }
+[data-theme="dark"]
+.floating-tab.active { color: var(--lime-400);
+ background: rgba(163, 230, 53, 0.10); box-shadow: inset 0 0 0 1px rgba(163, 230, 53, 0.08); }
 /* Small Screens */
 @media (max-width: 360px) {
 .floating-tab-bar { width: 88%; }
