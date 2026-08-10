@@ -377,7 +377,7 @@ z-index: 900;
 overflow: hidden; }
 /* Glass Highlight */
 .floating-tab-bar::before { content: ""; position: absolute; inset: 0; border-radius: inherit;
-background: rgba(255, 255, 255, 0.03);
+background: rgba(255, 255, 255, 0.08);
 pointer-events: none;
 }
 /* Navigation Buttons */
@@ -395,7 +395,7 @@ transition: transform 0.2s ease;
 }
 /* Active */
 .floating-tab.active { color: var(--lime-400);
-background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%); }
+background: rgba(255, 255, 255, 0.42); backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%); }
 .floating-tab.active svg { stroke-width: 2.3; }
 /* Press */
 .floating-tab:active { transform: scale(0.92); }
@@ -410,13 +410,13 @@ box-shadow:
 0 1px 4px rgba(0, 0, 0, 0.10);
 }
 [data-theme="dark"] .floating-tab-bar::before {
-background: rgba(255, 255, 255, 0.03);
+background: rgba(255, 255, 255, 0.08);
 }
 [data-theme="dark"]
 .floating-tab { color: #94A3B8; }
 [data-theme="dark"]
 .floating-tab.active { color: var(--lime-400);
- background: rgba(25, 30, 43, 0.98); backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%); }
+ background: rgba(25, 30, 43, 0.48); backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%); }
 /* Small Screens */
 @media (max-width: 360px) {
 .floating-tab-bar { width: 88%; }
