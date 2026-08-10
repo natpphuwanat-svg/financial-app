@@ -366,10 +366,10 @@
 bottom: calc(env(safe-area-inset-bottom) + 20px);
 transform: translateX(-50%); width: min(82%, 390px); height: 64px;
 display: grid; grid-template-columns: repeat(3, 1fr); align-items: center; padding: 6px;
-background: rgba(255, 255, 255, 0.76);
-backdrop-filter: blur(30px) saturate(190%);
--webkit-backdrop-filter: blur(30px) saturate(190%);
-border: 1px solid rgba(255, 255, 255, 0.82); border-radius: 32px;
+background: rgba(255, 255, 255, 0.52);
+backdrop-filter: blur(30px) saturate(180%);
+-webkit-backdrop-filter: blur(30px) saturate(180%);
+border: 1px solid rgba(255, 255, 255, 0.65); border-radius: 32px;
 box-shadow:
 0 4px 14px rgba(15, 23, 42, 0.07),
 0 1px 3px rgba(15, 23, 42, 0.04);
@@ -377,7 +377,7 @@ z-index: 900;
 overflow: hidden; }
 /* Glass Highlight */
 .floating-tab-bar::before { content: ""; position: absolute; inset: 0; border-radius: inherit;
-background: rgba(255, 255, 255, 0.32);
+background: rgba(255, 255, 255, 0.12);
 pointer-events: none;
 }
 /* Navigation Buttons */
@@ -400,15 +400,15 @@ transition: transform 0.2s ease;
 .floating-tab:active { transform: scale(0.92); }
 /* Dark Mode */
 [data-theme="dark"] .floating-tab-bar {
-background: rgba(42, 49, 65, 0.78);
+background: rgba(25, 30, 43, 0.58);
 backdrop-filter: blur(30px) saturate(180%); -webkit-backdrop-filter: blur(30px) saturate(180%);
-border-color: rgba(255, 255, 255, 0.15);
+border-color: rgba(255, 255, 255, 0.12);
 box-shadow:
 0 4px 16px rgba(0, 0, 0, 0.16),
 0 1px 4px rgba(0, 0, 0, 0.10);
 }
 [data-theme="dark"] .floating-tab-bar::before {
-background: rgba(255, 255, 255, 0.32);
+background: rgba(255, 255, 255, 0.05);
 }
 [data-theme="dark"] .floating-tab {
 color: #94A3B8; }
