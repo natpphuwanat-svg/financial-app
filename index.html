@@ -364,42 +364,72 @@
 /* Floating Bottom Navigation */
 .floating-tab-bar { position: fixed; left: 50%;
 bottom: calc(env(safe-area-inset-bottom) + 20px);
-transform: translateX(-50%); width: min(88%, 420px); height: 64px;
+transform: translateX(-50%); width: min(82%, 390px); height: 64px;
 display: grid; grid-template-columns: repeat(3, 1fr); align-items: center; padding: 6px;
 background: linear-gradient( 180deg, 
-rgba(255, 255, 255, 0.62) 0%,
-rgba(255, 255, 255, 0.38) 100% );
+rgba(255, 255, 255, 0.76) 0%,
+rgba(255, 255, 255, 0.64) 100% );
 backdrop-filter: blur(30px) saturate(190%);
 -webkit-backdrop-filter: blur(30px) saturate(190%);
-border: 1px solid rgba(255, 255, 255, 0.72); border-radius: 32px;
+border: 1px solid rgba(255, 255, 255, 0.82); border-radius: 32px;
 box-shadow:
-0 4px 14px rgba(15, 23, 42, 0.06),
+0 4px 14px rgba(15, 23, 42, 0.07),
 0 1px 3px rgba(15, 23, 42, 0.04);
 z-index: 900; }
+/* Glass Highlight */
+.floating-tab-bar::before { content: ""; position: absolute; inset: 0; border-radius: inherit;
+background: linear-gradient(
+180deg,
+rgba(255, 255, 255, 0.32) 0%,
+rgba(255, 255, 255, 0.08) 45%,
+transparent 70% );
+pointer-events: none;
+}
+/* Navigation Buttons */
+.floating-tab { position: relative; z-index: 1;
+height: 52px; width: 100%; display: flex;
+flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+border: none;
+background: transparent; color: var(--text-sub); border-radius: 26px; font-family: inherit; font-size: 11px;
+font-weight: 700; cursor: pointer; transition: color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+}
+/* Icon */
+.floating-tab svg { width: 21px; height: 21px;
+stroke: currentColor; stroke-width: 2.1;
+transition: transform 0.2s ease;
+}
+/* Active */
+.floating-tab.active { color: var(--lime-400); }
+.floating-tab.active svg { stroke-width: 2.3; }
+/* Press */
+.floating-tab:active { transform: scale(0.92); }
+/* Dark Mode */
 [data-theme="dark"] .floating-tab-bar {
-background: linear-gradient( 180deg,
-rgba(38, 45, 61, 0.68) 0%,
-rgba(25, 30, 43, 0.58) 100% );
-backdrop-filter: blur(30px) saturate(180%);
--webkit-backdrop-filter: blur(30px) saturate(180%);
-border-color: rgba(255, 255, 255, 0.13);
+background: linear-gradient(
+180deg,
+rgba(42, 49, 65, 0.78) 0%,
+rgba(28, 34, 48, 0.72) 100% );
+backdrop-filter: blur(30px) saturate(180%); -webkit-backdrop-filter: blur(30px) saturate(180%);
+border-color: rgba(255, 255, 255, 0.15);
 box-shadow:
 0 4px 16px rgba(0, 0, 0, 0.16),
 0 1px 4px rgba(0, 0, 0, 0.10);
 }
-.floating-tab { height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
-border: none;
-background: transparent;
-color: var(--text-sub);
-border-radius: 26px; font-family: inherit; font-size: 10px; font-weight: 700; cursor: pointer; transition:
-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease; }
-.floating-tab svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2; transition: transform 0.2s ease; }
-.floating-tab.active { color: var(--lime-400); }
-.floating-tab.active svg { stroke-width: 2.2; }
-.floating-tab:active { transform: scale(0.92); }
+[data-theme="dark"] .floating-tab-bar::before {
+background: linear-gradient(
+180deg,
+rgba(255, 255, 255, 0.10) 0%,
+rgba(255, 255, 255, 0.03) 45%,
+transparent 70% );
+}
+[data-theme="dark"] .floating-tab {
+color: #94A3B8; }
+[data-theme="dark"] .floating-tab.active {
+color: var(--lime-400); }
+/* Small Screens */
 @media (max-width: 360px) {
-.floating-tab-bar { width: 92%;}
-.floating-tab { font-size: 9px; }
+.floating-tab-bar { width: 88%; }
+.floating-tab { font-size: 10px; }
 }
   </style>
 <script src="https://unpkg.com/lucide@latest"></script>
