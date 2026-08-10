@@ -377,11 +377,7 @@ z-index: 900;
 overflow: hidden; }
 /* Glass Highlight */
 .floating-tab-bar::before { content: ""; position: absolute; inset: 0; border-radius: inherit;
-background: linear-gradient(
-180deg,
-rgba(255, 255, 255, 0.32) 0%,
-rgba(255, 255, 255, 0.08) 45%,
-transparent 70% );
+background: rgba(255, 255, 255, 0.32);
 pointer-events: none;
 }
 /* Navigation Buttons */
@@ -412,7 +408,7 @@ box-shadow:
 0 1px 4px rgba(0, 0, 0, 0.10);
 }
 [data-theme="dark"] .floating-tab-bar::before {
-background: rgba(255, 255, 255, 0.10);
+background: rgba(255, 255, 255, 0.32);
 }
 [data-theme="dark"] .floating-tab {
 color: #94A3B8; }
