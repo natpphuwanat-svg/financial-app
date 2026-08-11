@@ -795,7 +795,31 @@ background: rgba(255, 255, 255, 0.06);
         document.getElementById('entryList').innerHTML = `<div class="loading-state">Error loading data.</div>`;
       }
     }
-
+    
+    // Main Navigation
+    function switchTab(tab) {
+      const mainContent = document.getElementById('mainContent');
+      const placeholderView = document.getElementById('placeholderView');
+      const placeholderTitle = document.getElementById('placeholderTitle');
+      const tabs = document.querySelectorAll('.floating-tab');
+    tabs.forEach(button => {
+    button.classList.remove('active'); });
+   if (tab === 'overview') {
+    mainContent.style.display = '';
+    placeholderView.style.display = 'none';
+    tabs[0].classList.add('active'); }
+   if (tab === 'entries') {
+    mainContent.style.display = 'none';
+    placeholderView.style.display = '';
+    placeholderTitle.innerText = 'ENTRIES';
+    tabs[1].classList.add('active'); }
+   if (tab === 'insights') {
+    mainContent.style.display = 'none';
+    placeholderView.style.display = '';
+    placeholderTitle.innerText = 'INSIGHTS';
+    tabs[2].classList.add('active'); }
+   }
+    
     // Modal Controls
     function selectType(type) {
       selectedType = type;
