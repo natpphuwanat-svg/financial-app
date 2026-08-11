@@ -417,6 +417,12 @@ background: rgba(255, 255, 255, 0.06);
 [data-theme="dark"]
 .floating-tab.active { color: var(--blue-grey);
  background: rgba(203,213, 225, 0.15); backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%); }
+/* Compact Bottom Navigation on Scroll */
+.floating-tab-bar { transition:
+  transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+  width 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+  height 0.28s cubic-bezier(0.22, 1, 0.36, 1); }
+.floating-tab-bar.compact { transform: translateX(-50%) scale(0.92); }
 /* Small Screens */
 @media (max-width: 360px) {
 .floating-tab-bar { width: 88%; }
