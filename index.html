@@ -801,6 +801,22 @@ background: rgba(255, 255, 255, 0.06);
         document.getElementById('entryList').innerHTML = `<div class="loading-state">Error loading data.</div>`;
       }
     }
+    // Bottom Navigation Compact State
+    let scrollTicking = false;
+    function updateBottomNavOnScroll() {
+      const bottomNav = document.querySelector('.floating-tab-bar');
+      if (!bottomNav) return;
+      if (window.scrollY <= 0) {
+        bottomNav.classList.remove('compact'); } else {
+        bottomNav.classList.add('compact'); }
+    }
+    window.addEventListener('scroll', () => {
+      if (!scrollTicking) {
+    window.requestAnimationFrame(() => {
+      updateBottomNavOnScroll();
+      scrollTicking = false; });
+      scrollTicking = true; }
+    }, { passive: true });
     
     // Main Navigation
     function switchTab(tab) {
