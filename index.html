@@ -526,18 +526,18 @@ background: rgba(255, 255, 255, 0.06);
 
   <!-- Floating Bottom Navigation -->
   <nav class="floating-tab-bar" aria-label="Main navigation">
-    <button class="floating-tab active" type="button">
-      <i data-lucide="house"></i>
-      <span>Overview</span>
-    </button>
-    <button class="floating-tab" type="button">
-      <i data-lucide="list"></i>
-      <span>Entries</span>
-    </button>
-    <button class="floating-tab" type="button">
-      <i data-lucide="chart-no-axes-combined"></i>
-      <span>Insights</span>
-    </button>
+    <button class="floating-tab active" type="button" onclick="switchTab('overview')">
+  <i data-lucide="house"></i>
+  <span>Overview</span>
+</button>
+<button class="floating-tab" type="button" onclick="switchTab('entries')">
+  <i data-lucide="list"></i>
+  <span>Entries</span>
+</button>
+<button class="floating-tab" type="button" onclick="switchTab('insights')">
+  <i data-lucide="chart-no-axes-combined"></i>
+  <span>Insights</span>
+</button>
   </nav>
 
   <div class="modal" id="entryModal">
