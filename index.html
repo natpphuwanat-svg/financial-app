@@ -820,10 +820,11 @@ background: rgba(255, 255, 255, 0.06);
     
     // Main Navigation
     function switchTab(tab) {
-      const mainContent = document.getElementById('mainContent');
-      const placeholderView = document.getElementById('placeholderView');
-      const placeholderTitle = document.getElementById('placeholderTitle');
-      const tabs = document.querySelectorAll('.floating-tab');
+  const bottomNav = document.querySelector('.floating-tab-bar'); bottomNav.classList.remove('compact');
+  const mainContent = document.getElementById('mainContent');
+  const placeholderView = document.getElementById('placeholderView');
+  const placeholderTitle = document.getElementById('placeholderTitle');
+  const tabs = document.querySelectorAll('.floating-tab');
     tabs.forEach(button => {
     button.classList.remove('active'); });
    if (tab === 'overview') {
