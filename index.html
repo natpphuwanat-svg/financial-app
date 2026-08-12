@@ -526,7 +526,7 @@ background: rgba(255, 255, 255, 0.06);
     <section>
       <div class="section-header">
         <div class="section-title">HIGHLIGHTS</div>
-        <button class="see-all-btn" onclick">SEE ALL</button>
+        <button class="see-all-btn" type="button">SEE ALL</button>
       </div>
       <div id="entryList" class="entry-list">
         <div class="loading-state">Loading data...</div>
@@ -1191,20 +1191,21 @@ function getEntryIcon(title) {
       fetchData();
       return; }
    // EDIT Supabase
-    const { error } = await supabaseClient
-    .from('financial_entries')
-    .update({
+const { error } = await supabaseClient
+  .from('financial_entries')
+  .update({
     financial_type: selectedType,
     entry_date: document.getElementById('formDate').value,
     title: document.getElementById('formTitle').value,
     amount: parseFloat(document.getElementById('formAmount').value),
     icon: getEntryIcon(document.getElementById('formTitle').value.trim()
-  )
-   .eq('id', rowIndex);
-    if (error) {
-     throw error; }
-     closeModal();
-    fetchData();
+    )
+  })
+  .eq('id', rowIndex);
+  if (error) {
+  throw error; }
+      closeModal();
+      fetchData();
   } catch (err) {
     console.error('Save entry error:', err);
     alert('Error saving entry.');
