@@ -630,6 +630,7 @@ const supabaseClient = supabase.createClient(
       renderMonthGrid();
       fetchData();
       testSupabase();
+      openModal('add');
       
       document.addEventListener("visibilitychange", () => {
      if (document.visibilityState === 'visible') {
