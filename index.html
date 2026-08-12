@@ -813,116 +813,214 @@ const supabaseClient = supabase.createClient(
 }
     // Fetch Data from Apps Script API
     async function fetchData() {
-      const requestId = ++fetchRequestId;
+  const requestId = ++fetchRequestId;
 
-       // Updating state
-      document.getElementById('balanceAmount').classList.add('updating');
-      document.getElementById('balanceChange').classList.add('updating');
-      document.getElementById('balanceChange').innerText = 'updating...';
-      document.getElementById('incomeAmount').classList.add('updating');
-      document.getElementById('incomeChange').classList.add('updating');
-      document.getElementById('expenseAmount').classList.add('updating');
-      document.getElementById('expenseChange').classList.add('updating');
-      document.getElementById('deductionAmount').classList.add('updating');
-      document.getElementById('deductionChange').classList.add('updating');
-      document.getElementById('entryList').innerHTML = `<div class="loading-state">Loading data...</div>`;
-      try {
-        const res = await fetch(`${API_URL}?action=getData&year=${selectedYear}&month=${selectedMonth}`);
-        const data = await res.json();
-        const { data: supabaseEntries, error: supabaseError } =
-  await supabaseClient
-    .from('financial_entries')
-    .select('id, entry_date, financial_type, title, amount, icon')
-    .order('entry_date', { ascending: false });
-
-if (supabaseError) {
-  throw supabaseError;
-}
-        lastFetchTime = Date.now();
-        const hasCurrentData = data.items && data.items.length > 0;
-        if (requestId !== fetchRequestId) { return; }
-        document.getElementById('balanceAmount').classList.remove('updating');
-        document.getElementById('balanceChange').classList.remove('updating');
-        document.getElementById('incomeAmount').classList.remove('updating');
-        document.getElementById('incomeChange').classList.remove('updating');
-        document.getElementById('expenseAmount').classList.remove('updating');
-        document.getElementById('expenseChange').classList.remove('updating');
-        document.getElementById('deductionAmount').classList.remove('updating');
-        document.getElementById('deductionChange').classList.remove('updating');
-
-        // Render Cards
-        document.getElementById('balanceAmount').innerText = '฿' + data.balance.toLocaleString('en-US', {minimumFractionDigits: 2});
-        const balanceChange = document.getElementById('balanceChange');
-        if (hasCurrentData && data.previousBalance !== null && data.previousBalance !== 0) {
-        const percentage = ((data.balance - data.previousBalance) / data.previousBalance) * 100;
-        const sign = percentage > 0 ? '+' : '';
-        const className = percentage > 0 ? 'positive' : 'negative';
-        balanceChange.innerText = `${sign}${percentage.toFixed(0)}% vs last month`;
-        balanceChange.className = `balance-change ${className}`; } else {
-        balanceChange.innerText = 'no prev. data';
-        balanceChange.className = 'balance-change'; }
-        document.getElementById('incomeAmount').innerText = '฿' + data.totalIncome.toLocaleString('en-US', {minimumFractionDigits: 2});
-        const incomeChange = document.getElementById('incomeChange');
-        if (hasCurrentData && data.previousIncome !== null && data.previousIncome !== 0) {
-        const percentage = ((data.totalIncome - data.previousIncome) / data.previousIncome) * 100;
-        const sign = percentage > 0 ? '+' : '';
-        incomeChange.innerText = `${sign}${percentage.toFixed(0)}% vs prev.`;
-        incomeChange.className = 'stat-change income'; }
-        else { incomeChange.innerText = 'no prev. data'; incomeChange.className = 'stat-change income'; }
-        document.getElementById('expenseAmount').innerText = '฿' + data.totalExpense.toLocaleString('en-US', {minimumFractionDigits: 2});
-        let expenseRatio = 0;
-        if (data.totalIncome > 0) { expenseRatio = (data.totalExpense / data.totalIncome) * 100; }
-        const expenseChange = document.getElementById('expenseChange');
-        if (data.totalIncome > 0) { let ratioClass = 'good'; if (expenseRatio > 60) { ratioClass = 'bad'; } else if (expenseRatio > 30) { ratioClass = 'warning'; }
-        expenseChange.innerText = `${expenseRatio.toFixed(0)}% of income`;
-        expenseChange.className = `stat-change ${ratioClass}`; }
-        else { expenseChange.innerText = 'no data'; expenseChange.className = 'stat-change'; }
-        document.getElementById('deductionAmount').innerText = '฿' + data.totalDeduction.toLocaleString('en-US', {minimumFractionDigits: 2});
-        const deductionChange = document.getElementById('deductionChange');
-        if (hasCurrentData && data.previousDeduction !== null && data.previousDeduction !== 0) {
-        const percentage = ((data.totalDeduction - data.previousDeduction) / data.previousDeduction) * 100;
-        const sign = percentage > 0 ? '+' : '';
-        deductionChange.innerText = `${sign}${percentage.toFixed(0)}% vs prev.`;
-        deductionChange.className = 'stat-change deduction'; }
-        else { deductionChange.innerText = 'no prev. data'; deductionChange.className = 'stat-change deduction'; }
-        
-    // Render Highlights
-       if (!data.highlights || data.highlights.length === 0) {
-       document.getElementById('entryList').innerHTML =
-       `<div class="loading-state">No highlights yet.</div>`;
-       return; }
-       document.getElementById('entryList').innerHTML = `
+  // Updating state
+  document.getElementById('balanceAmount').classList.add('updating');
+  document.getElementById('balanceChange').classList.add('updating');
+  document.getElementById('balanceChange').innerText = 'updating...';
+  document.getElementById('incomeAmount').classList.add('updating');
+  document.getElementById('incomeChange').classList.add('updating');
+  document.getElementById('expenseAmount').classList.add('updating');
+  document.getElementById('expenseChange').classList.add('updating');
+  document.getElementById('deductionAmount').classList.add('updating');
+  document.getElementById('deductionChange').classList.add('updating');
+  document.getElementById('entryList').innerHTML = `<div class="loading-state">Loading data...</div>`;
+  try {
+    // 1. Current month range
+    const currentStart =
+      `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-01`;
+    const nextMonthDate = new Date(
+      selectedYear,
+      selectedMonth, 1 );
+    const nextMonthStart =
+      `${nextMonthDate.getFullYear()}-${String(
+        nextMonthDate.getMonth() + 1
+      ).padStart(2, '0')}-01`;
+    // 2. Previous month range
+    const previousMonthDate = new Date(
+      selectedYear,
+      selectedMonth - 2, 1);
+    const previousYear = previousMonthDate.getFullYear();
+    const previousMonth = previousMonthDate.getMonth() + 1;
+    const previousStart = `${previousYear}-${String(previousMonth).padStart(2, '0')}-01`;
+    // 3. Read current month from Supabase
+    const { data: currentEntries, error: currentError } =
+      await supabaseClient
+        .from('financial_entries')
+        .select('*')
+        .gte('entry_date', currentStart)
+        .lt('entry_date', nextMonthStart)
+        .order('entry_date', { ascending: false });
+    if (currentError) {
+      throw currentError; }
+    // 4. Read previous month from Supabase
+    const { data: previousEntries, error: previousError } =
+      await supabaseClient
+        .from('financial_entries')
+        .select('*')
+        .gte('entry_date', previousStart)
+        .lt('entry_date', currentStart)
+        .order('entry_date', { ascending: false });
+    if (previousError) {
+      throw previousError; }
+    // 5. Ignore old request
+    if (requestId !== fetchRequestId) { return; }
+    // 6. Calculate current totals
+    const entries = currentEntries || [];
+    const previous = previousEntries || [];
+    const totalIncome = entries
+      .filter(item => item.financial_type === 'Income')
+      .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+    const totalExpense = entries
+      .filter(item => item.financial_type === 'Expense')
+      .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+    const totalDeduction = entries
+      .filter(item => item.financial_type === 'Deduction')
+      .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+    const balance = totalIncome - totalExpense;
+    // 7. Calculate previous totals
+    const previousIncome = previous
+      .filter(item => item.financial_type === 'Income')
+      .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+    const previousExpense = previous
+      .filter(item => item.financial_type === 'Expense')
+      .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+    const previousDeduction = previous
+      .filter(item => item.financial_type === 'Deduction')
+      .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+    const previousBalance = previousIncome - previousExpense;
+    lastFetchTime = Date.now();
+    // 8. Remove updating state
+    document.getElementById('balanceAmount').classList.remove('updating');
+    document.getElementById('balanceChange').classList.remove('updating');
+    document.getElementById('incomeAmount').classList.remove('updating');
+    document.getElementById('incomeChange').classList.remove('updating');
+    document.getElementById('expenseAmount').classList.remove('updating');
+    document.getElementById('expenseChange').classList.remove('updating');
+    document.getElementById('deductionAmount').classList.remove('updating');
+    document.getElementById('deductionChange').classList.remove('updating');
+    // 9. Render Balance
+    document.getElementById('balanceAmount').innerText =
+      '฿' + balance.toLocaleString('en-US', {
+        minimumFractionDigits: 2 });
+    const balanceChange =
+      document.getElementById('balanceChange');
+    if (entries.length > 0 && previousBalance !== 0) {
+    const percentage =
+        ((balance - previousBalance) / previousBalance) * 100;
+    const sign = percentage > 0 ? '+' : '';
+    const className = percentage > 0 ? 'positive' : 'negative';
+    balanceChange.innerText = `${sign}${percentage.toFixed(0)}% vs last month`;
+    balanceChange.className = `balance-change ${className}`; } else {
+    balanceChange.innerText = 'no prev. data';
+    balanceChange.className = 'balance-change'; }
+    // 10. Render Income
+    document.getElementById('incomeAmount').innerText =
+      '฿' + totalIncome.toLocaleString('en-US', {
+        minimumFractionDigits: 2 });
+    const incomeChange =
+      document.getElementById('incomeChange');
+    if (entries.length > 0 && previousIncome !== 0) {
+    const percentage = ((totalIncome - previousIncome) / previousIncome) * 100;
+    const sign = percentage > 0 ? '+' : '';
+    incomeChange.innerText = `${sign}${percentage.toFixed(0)}% vs prev.`;
+    incomeChange.className = 'stat-change income'; } else {
+    incomeChange.innerText = 'no prev. data';
+    incomeChange.className = 'stat-change income'; }
+    // 11. Render Expense
+    document.getElementById('expenseAmount').innerText = 
+      '฿' + totalExpense.toLocaleString('en-US', {
+        minimumFractionDigits: 2 });
+    let expenseRatio = 0;
+    if (totalIncome > 0) {
+      expenseRatio =
+        (totalExpense / totalIncome) * 100; }
+    const expenseChange =
+      document.getElementById('expenseChange');
+    if (totalIncome > 0) {
+      let ratioClass = 'good';
+      if (expenseRatio > 60) {
+        ratioClass = 'bad';
+      } else if (expenseRatio > 30) {
+        ratioClass = 'warning'; }
+      expenseChange.innerText = `${expenseRatio.toFixed(0)}% of income`;
+      expenseChange.className = `stat-change ${ratioClass}`; } else {
+      expenseChange.innerText = 'no data';
+      expenseChange.className = 'stat-change'; }
+    // 12. Render Deduction
+    document.getElementById('deductionAmount').innerText =
+      '฿' + totalDeduction.toLocaleString('en-US', {
+        minimumFractionDigits: 2 });
+    const deductionChange =
+      document.getElementById('deductionChange');
+    if (entries.length > 0 && previousDeduction !== 0) {
+      const percentage =
+        ((totalDeduction - previousDeduction) /
+          previousDeduction) * 100;
+      const sign = percentage > 0 ? '+' : '';
+      deductionChange.innerText = `${sign}${percentage.toFixed(0)}% vs prev.`;
+      deductionChange.className = 'stat-change deduction'; } else {
+      deductionChange.innerText = 'no prev. data';
+      deductionChange.className = 'stat-change deduction'; }
+    // 13. Render Highlights
+    const highlights =
+      entries.slice(0, 4);
+    if (highlights.length === 0) {
+      document.getElementById('entryList').innerHTML =
+        `<div class="loading-state">No highlights yet.</div>`; return; }
+    document.getElementById('entryList').innerHTML = `
       <div class="highlight-card">
-      ${data.highlights.map(item => `
-      <div class="highlight-item" onclick='openModal("edit", ${JSON.stringify(item)})'>
-        <div class="entry-left">
-          <div class="entry-badge ${item.type}">
-            <i data-lucide="${item.icon}"></i>
+        ${highlights.map(item => `
+          <div class="highlight-item"
+               onclick='openModal("edit", ${JSON.stringify({
+                 rowIndex: item.id,
+                 rawDate: item.entry_date,
+                 title: item.title,
+                 amount: Number(item.amount),
+                 type: item.financial_type.toLowerCase(),
+                 financialType: item.financial_type,
+                 icon: item.icon
+               })})'>
+            <div class="entry-left">
+              <div class="entry-badge ${item.financial_type.toLowerCase()}">
+                <i data-lucide="${item.icon || 'circle'}"></i>
+              </div>
+              <div>
+                <div class="entry-title">
+                  ${item.title}
+                </div>
+                <div class="entry-date">
+                  ${item.financial_type.toUpperCase()}
+                </div>
+              </div>
+            </div>
+            <div class="entry-right">
+              <div class="entry-amount ${item.financial_type.toLowerCase()}">
+                ฿${Number(item.amount).toLocaleString('en-US', {
+                  minimumFractionDigits: 2
+                })}
+              </div>
+            </div>
           </div>
-          <div>
-            <div class="entry-title">${item.title}</div>
-            <div class="entry-date">${item.type.toUpperCase()}</div>
-          </div>
-        </div>
-        <div class="entry-right">
-          <div class="entry-amount ${item.type}">
-            ฿${item.amount.toLocaleString('en-US', {
-              minimumFractionDigits: 2
-            })}
-          </div>
-        </div>
-
+        `).join('')}
       </div>
-    `).join('')}
-  </div>
-`;
+    `;
     lucide.createIcons();
-
-      } catch (err) { 
-        if (requestId !== fetchRequestId) { return; }
-        document.getElementById('entryList').innerHTML = `<div class="loading-state">Error loading data.</div>`;
-      }
-    }
+    console.log('Supabase fetchData ✅');
+    console.log('Current entries:', entries);
+    console.log('Previous entries:', previous);
+  } catch (err) {
+    if (requestId !== fetchRequestId) { return; }
+    console.error('Supabase fetchData ERROR:', err);
+    document.getElementById('entryList').innerHTML = `
+      <div class="loading-state">
+        Error loading data.<br>
+        <small>${err?.message || err}</small>
+      </div>
+    `;
+  }
+}
     // Bottom Navigation Compact State
     let scrollTicking = false;
     function updateBottomNavOnScroll() {
