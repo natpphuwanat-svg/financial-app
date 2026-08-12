@@ -728,11 +728,16 @@ document.getElementById('entryList').innerHTML =
 const controller = new AbortController();
 const timeoutId = setTimeout(() => controller.abort(), 65000);
 
+console.log('REQUEST URL:', requestUrl);
+
 const res = await fetch(requestUrl, {
   signal: controller.signal
 });
 
 clearTimeout(timeoutId);
+
+console.log('RESPONSE STATUS:', res.status);
+console.log('RESPONSE URL:', res.url);
 
 document.getElementById('entryList').innerHTML =
   `<div class="loading-state">STEP B — Response received...</div>`;
