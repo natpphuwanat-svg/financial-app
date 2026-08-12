@@ -719,17 +719,21 @@ background: rgba(255, 255, 255, 0.06);
       document.getElementById('deductionChange').classList.add('updating');
       document.getElementById('entryList').innerHTML = `<div class="loading-state">Loading data...</div>`;
       try {
-  const requestUrl = `${API_URL}?action=getData&year=${selectedYear}&month=${selectedMonth}`;
+  const requestUrl =
+    `${API_URL}?action=getData&year=${selectedYear}&month=${selectedMonth}`;
 
   document.getElementById('entryList').innerHTML =
-    `<div class="loading-state">Connecting...</div>`;
+    `<div class="loading-state">STEP A — Starting request...</div>`;
 
   const res = await fetch(requestUrl);
 
   document.getElementById('entryList').innerHTML =
-    `<div class="loading-state">Connected. Reading data...</div>`;
+    `<div class="loading-state">STEP B — Response received...</div>`;
 
   const data = await res.json();
+
+  document.getElementById('entryList').innerHTML =
+    `<div class="loading-state">STEP C — JSON parsed...</div>`;
         lastFetchTime = Date.now();
         const hasCurrentData = data.items && data.items.length > 0;
         if (requestId !== fetchRequestId) { return; }
