@@ -718,43 +718,13 @@ background: rgba(255, 255, 255, 0.06);
       document.getElementById('deductionAmount').classList.add('updating');
       document.getElementById('deductionChange').classList.add('updating');
       document.getElementById('entryList').innerHTML = `<div class="loading-state">Loading data...</div>`;
-      try {
- const requestUrl =
-  `${API_URL}?action=getData&year=${encodeURIComponent(selectedYear)}&month=${encodeURIComponent(selectedMonth)}`;
-
-document.getElementById('entryList').innerHTML =
-  `<div class="loading-state">STEP A — Starting request...</div>`;
-
-const controller = new AbortController();
-const timeoutId = setTimeout(() => controller.abort(), 65000);
-
-console.log('REQUEST URL:', requestUrl);
-
-const res = await fetch(requestUrl, {
-  signal: controller.signal
-});
-
-clearTimeout(timeoutId);
-
-console.log('RESPONSE STATUS:', res.status);
-console.log('RESPONSE URL:', res.url);
-
-document.getElementById('entryList').innerHTML =
-  `<div class="loading-state">STEP B — Response received...</div>`;
-
-const responseText = await res.text();
-
-if (!res.ok) {
-  throw new Error(`HTTP ${res.status} — ${responseText.substring(0, 300)}`);
-}
-
-const data = JSON.parse(responseText);
-
-document.getElementById('entryList').innerHTML =
-  `<div class="loading-state">STEP C — JSON parsed...</div>`;
-        lastFetchTime = Date.now();
-        const hasCurrentData = data.items && data.items.length > 0;
-        if (requestId !== fetchRequestId) { return; }
+      try { const requestUrl = `${API_URL}?action=getData&year=${selectedYear}&month=${selectedMonth}`;
+      document.getElementById('entryList').innerHTML = `<div class="loading-state">Loading data...</div>`;
+      const res = await fetch(requestUrl);
+      const data = await res.json();
+      lastFetchTime = Date.now();
+      const hasCurrentData = data.items && data.items.length > 0;
+      if (requestId !== fetchRequestId) { return; }
         document.getElementById('balanceAmount').classList.remove('updating');
         document.getElementById('balanceChange').classList.remove('updating');
         document.getElementById('incomeAmount').classList.remove('updating');
