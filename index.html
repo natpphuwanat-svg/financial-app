@@ -711,7 +711,20 @@ const supabaseClient = supabase.createClient(
       renderMonthGrid();
       fetchData();
     }
-
+     // Test Supabase connection
+    async function testSupabase() {
+    try {
+    const { data, error } = await supabaseClient
+   .from('financial_entries')
+   .select('*')
+   .order('created_at', { ascending: false });
+    if (error) {
+    console.error('SUPABASE TEST ERROR:', error);
+    return; }
+    console.log('SUPABASE TEST SUCCESS:', data);
+    } catch (err) {
+    console.error('SUPABASE TEST ERROR:', err); }
+    }
     // Fetch Data from Apps Script API
     async function fetchData() {
       const requestId = ++fetchRequestId;
