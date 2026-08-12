@@ -1171,12 +1171,15 @@ function getEntryIcon(title) {
     submitBtn.innerText = 'Saving...';
     submitBtn.disabled = true;
     const entryData = {
+    const entryData = {
     financial_type: selectedType,
     entry_date: document.getElementById('formDate').value,
     title: document.getElementById('formTitle').value,
     amount: parseFloat(document.getElementById('formAmount').value),
-    icon: getEntryIcon(document.getElementById('formTitle').value.trim())
- ;}
+    icon: getEntryIcon(
+    document.getElementById('formTitle').value.trim()
+  )
+};
     try {
     // ADD Supabase
     if (!rowIndex) {
