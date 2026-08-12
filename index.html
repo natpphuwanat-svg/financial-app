@@ -954,9 +954,42 @@ background: rgba(255, 255, 255, 0.06);
       deductionChange.className = 'stat-change deduction'; } else {
       deductionChange.innerText = 'no prev. data';
       deductionChange.className = 'stat-change deduction'; }
-    // 13. Render Highlights
-    const highlights =
-      entries.slice(0, 4);
+    // 13. Select Highlights
+const highlightCandidates = []; entries.forEach(function(currentItem) {
+const previousItem = previous.find(function(item) { return ( item.financial_type === currentItem.financial_type && item.title === currentItem.title  );
+  });
+if (previous.length === 0 { highlightCandidates.push(currentItem); return; }
+if (!previousItem) { highlightCandidates.push(currentItem); return; }
+if ( Number(currentItem.amount) !== Number(previousItem.amount)) {
+highlightCandidates.push(currentItem); }
+});
+const groupedCandidates = {
+  income: [], expense: [], deduction: [] };
+highlightCandidates.forEach(function(item) {
+const type = item.financial_type.toLowerCase();
+if (type === 'income') { groupedCandidates.income.push(item); } 
+else if (type === 'expense') { groupedCandidates.expense.push(item); } 
+else if (type === 'deduction') { groupedCandidates.deduction.push(item); }
+});
+Object.keys(groupedCandidates).forEach(function(type) {
+groupedCandidates[type].sort(function(a, b) { return Number(b.amount) - Number(a.amount); });
+});
+const highlights = [];
+if (groupedCandidates.income.length > 0) { highlights.push(groupedCandidates.income[0]);
+}
+groupedCandidates.expense
+  .slice(0, 2)
+  .forEach(function(item) { highlights.push(item); });
+if (groupedCandidates.deduction.length > 0) { highlights.push(groupedCandidates.deduction[0]);
+}
+const selectedIds = new Set( highlights.map(function(item) { return item.id; }) );
+const remainingCandidates = highlightCandidates
+  .filter(function(item) { return ! selectedIds.has(item.id); })
+  .sort(function(a, b) { return Number(b.amount) - Number(a.amount); });
+remainingCandidates
+  .slice(0, 6 - highlights.length)
+  .forEach(function(item) { highlights.push(item);
+  });
     if (highlights.length === 0) {
       document.getElementById('entryList').innerHTML =
         `<div class="loading-state">No highlights yet.</div>`; return; }
