@@ -829,6 +829,15 @@ const supabaseClient = supabase.createClient(
       try {
         const res = await fetch(`${API_URL}?action=getData&year=${selectedYear}&month=${selectedMonth}`);
         const data = await res.json();
+        const { data: supabaseEntries, error: supabaseError } =
+  await supabaseClient
+    .from('financial_entries')
+    .select('id, entry_date, financial_type, title, amount, icon')
+    .order('entry_date', { ascending: false });
+
+if (supabaseError) {
+  throw supabaseError;
+}
         lastFetchTime = Date.now();
         const hasCurrentData = data.items && data.items.length > 0;
         if (requestId !== fetchRequestId) { return; }
