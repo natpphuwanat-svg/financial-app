@@ -1114,7 +1114,7 @@ const supabaseClient = supabase.createClient(
     amount: parseFloat(document.getElementById('formAmount').value),
     icon: selectedType === 'Income' ? 'wallet'
         : selectedType === 'Expense' ? 'wifi'
-        : selectedType === 'Deduction' ? 'alarm-clock' };
+        : 'alarm-clock' };
     try {
     // ADD → Supabase
     if (!rowIndex) {
