@@ -600,6 +600,8 @@ background: rgba(255, 255, 255, 0.06);
 
     let selectedType = 'Income';
     let fetchRequestId = 0;
+    let lastFetchTime = 0;
+    const REFRESH_THRESHOLD = 60 * 1000;
 
     // Init
     document.addEventListener("DOMContentLoaded", () => {
