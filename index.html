@@ -597,27 +597,21 @@ background: rgba(255, 255, 255, 0.06);
   </div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbx1iIObNf8KSPKNp3-4p6nZS9d-hGse7qMRj1W2UCqxjCn4w5nWhgSkaAgjYuN4-COz/exec";
     const SUPABASE_URL = "https://kbxnrlbybkbuxoyzdecp.supabase.co";
-const SUPABASE_KEY = "sb_publishable_CMkX-fP0wMfKoaYUcI-sUg_BR2ab8PM";
-
-const supabaseClient = supabase.createClient(
+    const SUPABASE_KEY = "sb_publishable_CMkX-fP0wMfKoaYUcI-sUg_BR2ab8PM";
+    const supabaseClient = supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
-
     const realCurrentYear = new Date().getFullYear();
     const realCurrentMonth = new Date().getMonth() + 1; // 1-12
-
     let selectedYear = realCurrentYear;
     let selectedMonth = realCurrentMonth;
     let currentMonthSet = realCurrentMonth <= 6 ? 1 : 2; // Set 1: Jan-Jun, Set 2: Jul-Dec
-
     const monthSets = {
       1: [{ name: 'JAN', m: 1 }, { name: 'FEB', m: 2 }, { name: 'MAR', m: 3 }, { name: 'APR', m: 4 }, { name: 'MAY', m: 5 }, { name: 'JUN', m: 6 }],
       2: [{ name: 'JUL', m: 7 }, { name: 'AUG', m: 8 }, { name: 'SEP', m: 9 }, { name: 'OCT', m: 10 }, { name: 'NOV', m: 11 }, { name: 'DEC', m: 12 }]
     };
-
     let selectedType = 'Income';
     let fetchRequestId = 0;
     let lastFetchTime = 0;
