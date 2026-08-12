@@ -611,9 +611,13 @@ background: rgba(255, 255, 255, 0.06);
       fetchData();
       
       document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === 'visible') fetchData();
-      });
-    });
+     if (document.visibilityState === 'visible') {
+     const elapsed = Date.now() - lastFetchTime;
+     if (elapsed >= REFRESH_THRESHOLD) {
+      fetchData();
+    }
+  }
+});
 
     // Theme Toggle
     function applyTheme(theme) {
