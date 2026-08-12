@@ -780,6 +780,37 @@ const supabaseClient = supabase.createClient(
     `;
   }
 }
+    async function testReadSupabase() {
+  const box = document.getElementById('supabaseTestBox');
+
+  box.innerText = 'กำลังอ่านข้อมูลจาก Supabase...';
+
+  const { data, error } = await supabase
+    .from('financial_entries')
+    .select('*')
+    .order('entry_date', { ascending: true });
+
+  if (error) {
+    box.innerText =
+      '❌ Supabase Read Error\n\n' + error.message;
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    box.innerText = '⚠️ Supabase connected แต่ไม่พบข้อมูล';
+    return;
+  }
+
+  box.innerText =
+    'Supabase Read Test ✅\n\n' +
+    'Found ' + data.length + ' record(s)\n\n' +
+    data.map(item =>
+      'Type: ' + item.financial_type + '\n' +
+      'Title: ' + item.title + '\n' +
+      'Amount: ' + item.amount + '\n' +
+      'Icon: ' + item.icon
+    ).join('\n\n----------------\n\n');
+}
     // Fetch Data from Apps Script API
     async function fetchData() {
       const requestId = ++fetchRequestId;
