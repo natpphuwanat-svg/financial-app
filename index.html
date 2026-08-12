@@ -725,7 +725,14 @@ background: rgba(255, 255, 255, 0.06);
   document.getElementById('entryList').innerHTML =
     `<div class="loading-state">STEP A — Starting request...</div>`;
 
-  const res = await fetch(requestUrl);
+  const controller = new AbortController();
+const timeoutId = setTimeout(() => controller.abort(), 65000);
+
+const res = await fetch(requestUrl, {
+  signal: controller.signal
+});
+
+clearTimeout(timeoutId);
 
   document.getElementById('entryList').innerHTML =
     `<div class="loading-state">STEP B — Response received...</div>`;
