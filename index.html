@@ -716,7 +716,6 @@ background: rgba(255, 255, 255, 0.06);
       document.getElementById('deductionChange').classList.add('updating');
       document.getElementById('entryList').innerHTML = `<div class="loading-state">Loading data...</div>`;
       try { const requestUrl = `${API_URL}?action=getData&year=${selectedYear}&month=${selectedMonth}`;
-      document.getElementById('entryList').innerHTML = `<div class="loading-state">Loading data...</div>`;
       const res = await fetch(requestUrl);
       const data = await res.json();
       lastFetchTime = Date.now();
