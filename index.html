@@ -715,16 +715,33 @@ const supabaseClient = supabase.createClient(
     async function testSupabase() {
     try {
     const { data, error } = await supabaseClient
-   .from('financial_entries')
-   .select('*')
-   .order('created_at', { ascending: false });
+      .from('financial_entries')
+      .select('*')
+      .order('created_at', { ascending: false });
     if (error) {
-    console.error('SUPABASE TEST ERROR:', error);
-    return; }
-    console.log('SUPABASE TEST SUCCESS:', data);
-    } catch (err) {
-    console.error('SUPABASE TEST ERROR:', err); }
-    }
+      document.getElementById('entryList').innerHTML = `
+        <div class="loading-state">
+          Supabase Error<br>
+          <small>${error.message}</small>
+        </div>
+      `;
+      return; }
+      document.getElementById('entryList').innerHTML = `
+      <div class="loading-state">
+        Supabase Connected ✅<br>
+        <small>Found ${data.length} record(s)</small>
+      </div>
+    `;
+
+  } catch (err) {
+    document.getElementById('entryList').innerHTML = `
+      <div class="loading-state">
+        Supabase Error<br>
+        <small>${err.message}</small>
+      </div>
+    `;
+  }
+}
     // Fetch Data from Apps Script API
     async function fetchData() {
       const requestId = ++fetchRequestId;
