@@ -1112,7 +1112,7 @@ const supabaseClient = supabase.createClient(
         : selectedType === 'Expense' ? 'wifi'
         : 'alarm-clock' };
     try {
-    // ADD → Supabase
+    // ADD Supabase
     if (!rowIndex) {
       const { error } = await supabaseClient
         .from('financial_entries')
@@ -1122,7 +1122,7 @@ const supabaseClient = supabase.createClient(
       closeModal();
       fetchData();
       return; }
-   // EDIT → Supabase
+   // EDIT Supabase
     const { error } = await supabaseClient
     .from('financial_entries')
     .update({
@@ -1147,19 +1147,22 @@ const supabaseClient = supabase.createClient(
   }
 }
     async function handleDelete() {
-      if (!confirm('Are you sure you want to delete this entry?')) return;
-      const rowIndex = document.getElementById('editRowIndex').value;     
-      try {
-        await fetch(API_URL, {
-          method: 'POST',
-          body: JSON.stringify({ action: 'delete', row: parseInt(rowIndex) })
-        });
-        closeModal();
-        fetchData();
-      } catch (err) {
-        alert('Error deleting entry.');
-      }
-    }
+  if (!confirm('Are you sure you want to delete this entry?')) return;
+  const rowIndex = document.getElementById('editRowIndex').value;
+  try {
+    const { error } = await supabaseClient
+      .from('financial_entries')
+      .delete()
+      .eq('id', rowIndex);
+  if (error) {
+      throw error; }
+    closeModal();
+    fetchData();
+  } catch (err) {
+    console.error('Delete entry error:', err);
+    alert('Error deleting entry.');
+  }
+}
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     media.addEventListener("change", (e) => {
       if (localStorage.getItem("themeManual") === "true") return;
