@@ -801,11 +801,11 @@ background: rgba(255, 255, 255, 0.06);
 `;
     lucide.createIcons();
 
-    } catch (err) { 
-       if (requestId !== fetchRequestId) { return; }
-       console.error('fetchData error:', err);
-       document.getElementById('entryList').innerHTML =
-      `<div class="loading-state">Error: ${err.message}</div>`; }
+   } catch (err) { 
+     if (requestId !== fetchRequestId) { return; }
+     console.error('fetchData ERROR:', err);
+     console.error('API URL:', `${API_URL}?action=getData&year=${selectedYear}&month=${selectedMonth}`);
+     document.getElementById('entryList').innerHTML = `<div class="loading-state">Error loading data.</div>`; }
     }
     // Bottom Navigation Compact State
     let scrollTicking = false;
