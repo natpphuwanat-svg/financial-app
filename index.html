@@ -1175,9 +1175,8 @@ function getEntryIcon(title) {
     entry_date: document.getElementById('formDate').value,
     title: document.getElementById('formTitle').value,
     amount: parseFloat(document.getElementById('formAmount').value),
-    icon: selectedType === 'Income' ? 'wallet'
-        : selectedType === 'Expense' ? 'wifi'
-        : 'alarm-clock' };
+    icon: getEntryIcon(document.getElementById('formTitle').value.trim())
+ ;}
     try {
     // ADD Supabase
     if (!rowIndex) {
