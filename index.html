@@ -1102,43 +1102,58 @@ const supabaseClient = supabase.createClient(
 
     // Form Submissions
     async function handleFormSubmit(e) {
-      e.preventDefault();
-      const rowIndex = document.getElementById('editRowIndex').value;
-      const action = rowIndex ? 'edit' : 'add';
-      const submitBtn = document.getElementById('submitBtn');
-      submitBtn.innerText = 'Saving...';
-      submitBtn.disabled = true;
-
-      const payload = {
-        action: action,
-        row: rowIndex ? parseInt(rowIndex) : null,
-        data: {
-          type: selectedType,
-          date: document.getElementById('formDate').value,
-          title: document.getElementById('formTitle').value,
-          amount: parseFloat(document.getElementById('formAmount').value)
-        }
-      };
-
-      try {
-        await fetch(API_URL, {
-          method: 'POST',
-          body: JSON.stringify(payload)
-        });
-        closeModal();
-        fetchData();
-      } catch (err) {
-        alert('Error saving entry.');
-      } finally {
-        submitBtn.innerText = 'Save Entry';
-        submitBtn.disabled = false;
+    e.preventDefault();
+    const rowIndex = document.getElementById('editRowIndex').value;
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.innerText = 'Saving...';
+    submitBtn.disabled = true;
+    const entryData = {
+    financial_type: selectedType,
+    entry_date: document.getElementById('formDate').value,
+    title: document.getElementById('formTitle').value,
+    amount: parseFloat(document.getElementById('formAmount').value),
+    icon: selectedType === 'Income' ? 'wallet'
+        : selectedType === 'Expense' ? 'wifi'
+        : selectedType === 'Deduction' ? 'alarm-clock' };
+    try {
+    // ADD → Supabase
+    if (!rowIndex) {
+      const { error } = await supabaseClient
+        .from('financial_entries')
+        .insert([entryData]);
+    if (error) {
+      throw error; }
+      closeModal();
+      fetchData();
+      return; }
+    // EDIT ยังใช้ระบบเดิมชั่วคราว
+    const payload = {
+      action: 'edit',
+      row: parseInt(rowIndex),
+      data: {
+        type: selectedType,
+        date: document.getElementById('formDate').value,
+        title: document.getElementById('formTitle').value,
+        amount: parseFloat(document.getElementById('formAmount').value)
       }
     }
-
+    await fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+    closeModal();
+    fetchData();
+  } catch (err) {
+    console.error('Save entry error:', err);
+    alert('Error saving entry.');
+  } finally {
+    submitBtn.innerText = 'Save Entry';
+    submitBtn.disabled = false;
+  }
+}
     async function handleDelete() {
       if (!confirm('Are you sure you want to delete this entry?')) return;
-      const rowIndex = document.getElementById('editRowIndex').value;
-      
+      const rowIndex = document.getElementById('editRowIndex').value;     
       try {
         await fetch(API_URL, {
           method: 'POST',
