@@ -720,6 +720,7 @@ background: rgba(255, 255, 255, 0.06);
       try {
         const res = await fetch(`${API_URL}?action=getData&year=${selectedYear}&month=${selectedMonth}`);
         const data = await res.json();
+        lastFetchTime = Date.now();
         const hasCurrentData = data.items && data.items.length > 0;
         if (requestId !== fetchRequestId) { return; }
         document.getElementById('balanceAmount').classList.remove('updating');
