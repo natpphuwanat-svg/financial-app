@@ -1129,6 +1129,40 @@ return Number(b.amount) - Number(a.amount); });
       document.getElementById('entryModal').classList.remove('active');
     }
 
+    const iconMap = {
+  // Income
+  "เงินเดือน": "briefcase-business",
+  "apple music": "music",
+  "ยอดขายทะลุเป้าหมาย": "trending-up",
+  "อื่นๆ": "ellipsis",
+
+  // Expense
+  "3BB": "wifi",
+  "แม่": "user-round",
+  "AIS Bill": "smartphone",
+  "ศรีสวัสดิ์": "motorbike",
+  "สยามชัย": "plug",
+  "แชร์": "repeat-2",
+  "Spay later": "shopping-bag",
+  "SEasy": "banknote",
+  "Tpay later": "shopping-cart",
+
+  // Deduction
+  "มาสาย": "clock-8",
+  "ลืมรูดบัตร": "scan-line",
+  "ออนไลน์ออกก่อนเกิน": "clock-alert",
+  "ออนไลน์ออกก่อน": "clock-arrow-right",
+  "ไม่สแกนนิ้ว": "fingerprint",
+  "ผิดกฎระเบียบ": "circle-alert",
+  "ลาป่วย": "pill",
+  "ออมทรัพย์": "landmark",
+  "ผ่อนสินค้า": "scan-barcode"
+};
+
+function getEntryIcon(title) {
+  return iconMap[title] || "circle-help";
+}
+
     // Form Submissions
     async function handleFormSubmit(e) {
     e.preventDefault();
