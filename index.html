@@ -801,10 +801,11 @@ background: rgba(255, 255, 255, 0.06);
 `;
     lucide.createIcons();
 
-      } catch (err) { 
-        if (requestId !== fetchRequestId) { return; }
-        document.getElementById('entryList').innerHTML = `<div class="loading-state">Error loading data.</div>`;
-      }
+    } catch (err) { 
+       if (requestId !== fetchRequestId) { return; }
+       console.error('fetchData error:', err);
+       document.getElementById('entryList').innerHTML =
+      `<div class="loading-state">Error: ${err.message}</div>`; }
     }
     // Bottom Navigation Compact State
     let scrollTicking = false;
