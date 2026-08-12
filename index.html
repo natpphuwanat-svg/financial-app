@@ -790,18 +790,15 @@ const supabaseClient = supabase.createClient(
     .from('financial_entries')
     .select('*')
     .order('entry_date', { ascending: true });
-
   if (error) {
     box.innerText =
       '❌ Supabase Read Error\n\n' + error.message;
     return;
   }
-
   if (!data || data.length === 0) {
     box.innerText = '⚠️ Supabase connected แต่ไม่พบข้อมูล';
     return;
   }
-
   box.innerText =
     'Supabase Read Test ✅\n\n' +
     'Found ' + data.length + ' record(s)\n\n' +
@@ -1126,22 +1123,21 @@ const supabaseClient = supabase.createClient(
       closeModal();
       fetchData();
       return; }
-    // EDIT ยังใช้ระบบเดิมชั่วคราว
-    const payload = {
-      action: 'edit',
-      row: parseInt(rowIndex),
-      data: {
-        type: selectedType,
-        date: document.getElementById('formDate').value,
-        title: document.getElementById('formTitle').value,
-        amount: parseFloat(document.getElementById('formAmount').value)
-      }
-    }
-    await fetch(API_URL, {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    });
-    closeModal();
+   // EDIT → Supabase
+    const { error } = await supabaseClient
+    .from('financial_entries')
+    .update({
+    financial_type: selectedType,
+    entry_date: document.getElementById('formDate').value,
+    title: document.getElementById('formTitle').value,
+    amount: parseFloat(document.getElementById('formAmount').value),
+    icon: selectedType === 'Income' ? 'wallet'
+        : selectedType === 'Expense' ? 'wifi'
+        : 'alarm-clock' })
+   .eq('id', rowIndex);
+    if (error) {
+     throw error; }
+     closeModal();
     fetchData();
   } catch (err) {
     console.error('Save entry error:', err);
