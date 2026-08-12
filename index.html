@@ -990,6 +990,12 @@ remainingCandidates
   .slice(0, 6 - highlights.length)
   .forEach(function(item) { highlights.push(item);
   });
+const typeOrder = { income: 1, expense: 2, deduction: 3 };
+highlights.sort(function(a, b) { const typeA = a.financial_type.toLowerCase();
+const typeB = b.financial_type.toLowerCase();
+if (typeOrder[typeA] !== typeOrder[typeB]) {
+return typeOrder[typeA] - typeOrder[typeB]; }
+return Number(b.amount) - Number(a.amount); });
     if (highlights.length === 0) {
       document.getElementById('entryList').innerHTML =
         `<div class="loading-state">No highlights yet.</div>`; return; }
