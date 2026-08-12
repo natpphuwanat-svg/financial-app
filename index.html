@@ -938,10 +938,7 @@ return Number(b.amount) - Number(a.amount); });
         `).join('')}
       </div>
     `;
-    lucide.createIcons();
-    console.log('Supabase fetchData ✅');
-    console.log('Current entries:', entries);
-    console.log('Previous entries:', previous);
+    lucide.createIcons();  
   } catch (err) {
     if (requestId !== fetchRequestId) { return; }
     console.error('Supabase fetchData ERROR:', err);
