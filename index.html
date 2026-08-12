@@ -737,11 +737,13 @@ clearTimeout(timeoutId);
 document.getElementById('entryList').innerHTML =
   `<div class="loading-state">STEP B — Response received...</div>`;
 
+const responseText = await res.text();
+
 if (!res.ok) {
-  throw new Error(`HTTP ${res.status}`);
+  throw new Error(`HTTP ${res.status} — ${responseText.substring(0, 300)}`);
 }
 
-const data = await res.json();
+const data = JSON.parse(responseText);
 
 document.getElementById('entryList').innerHTML =
   `<div class="loading-state">STEP C — JSON parsed...</div>`;
