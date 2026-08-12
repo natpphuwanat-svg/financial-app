@@ -958,7 +958,7 @@ background: rgba(255, 255, 255, 0.06);
 const highlightCandidates = []; entries.forEach(function(currentItem) {
 const previousItem = previous.find(function(item) { return ( item.financial_type === currentItem.financial_type && item.title === currentItem.title  );
   });
-if (previous.length === 0 { highlightCandidates.push(currentItem); return; }
+if (previous.length === 0) { highlightCandidates.push(currentItem); return; }
 if (!previousItem) { highlightCandidates.push(currentItem); return; }
 if ( Number(currentItem.amount) !== Number(previousItem.amount)) {
 highlightCandidates.push(currentItem); }
