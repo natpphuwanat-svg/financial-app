@@ -617,6 +617,7 @@ const supabaseClient = supabase.createClient(
       updateYearUI();
       renderMonthGrid();
       fetchData();
+      testSupabase();
       
       document.addEventListener("visibilitychange", () => {
      if (document.visibilityState === 'visible') {
