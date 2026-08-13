@@ -403,16 +403,17 @@ background: rgba(255, 255, 255, 0.06);
 /* Temporary Navigation Test Views */
 .placeholder-page { min-height: 60vh; display: flex; align-items: center; justify-content: center; }
 .placeholder-title { font-size: 24px; font-weight: 800; color: var(--text-main); letter-spacing: 0.5px; }
-.entries-filter-bar {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
-  margin-bottom: 20px; }
-.entries-filter-btn {
-  border: none; background: transparent; color: var(--text-sub); padding: 9px 4px;
-  border-radius: 12px; font-size: 10px; font-weight: 800; letter-spacing: 0.4px; cursor: pointer; }
-.entries-filter-btn.active { background: var(--text-main); color: var(--bg-color); }
-  </style>
+.entries-filter-bar { display: grid; grid-template-columns: repeat(4, 1fr);
+ width: 100%; gap: 4px; margin-bottom: 22px; }
+.entries-filter-btn { appearance: none; -webkit-appearance: none;
+ width: 100%; border: none; outline: none; background: transparent; color: var(--text-sub);
+ padding: 10px 4px; border-radius: 12px; font-family: inherit; font-size: 11px; font-weight: 800;
+ letter-spacing: 0.4px; text-align: center; cursor: pointer; -webkit-tap-highlight-color: transparent;
+ transition: background 0.2s ease, color 0.2s ease; }
+.entries-filter-btn:focus,
+.entries-filter-btn:focus-visible { outline: none; box-shadow: none; }
+.entries-filter-btn.active { background: var(--glass-card); color: var(--text-main); }
+</style>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
