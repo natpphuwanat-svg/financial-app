@@ -1178,6 +1178,11 @@ const { error } = await supabaseClient
     alert('Error deleting entry.');
   }
 }
+    function setEntryFilter(filter) {
+    document.querySelectorAll('.entries-filter-btn').forEach(btn => {
+    btn.classList.toggle( 'active', btn.dataset.filter === filter );
+  });
+}
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     media.addEventListener("change", (e) => {
       if (localStorage.getItem("themeManual") === "true") return;
