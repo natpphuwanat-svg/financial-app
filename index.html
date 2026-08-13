@@ -651,13 +651,16 @@ background: rgba(255, 255, 255, 0.06);
 }
 
     // Year Controller with Limit at 2025
-    function updateYearUI() {
-      document.getElementById('selectedYear').innerText = selectedYear;
-      document.getElementById('prevYearBtn').disabled = (selectedYear <= 2025);
-    }
-
-    function changeYear(delta) {
-      if (selectedYear + delta < 2025) return;
+  function updateYearUI() {
+  // Overview
+  document.getElementById('selectedYear').innerText = selectedYear;
+  document.getElementById('prevYearBtn').disabled = (selectedYear <= 2025);
+  // Entries
+  document.getElementById('entriesSelectedYear').innerText = selectedYear;
+  document.getElementById('entriesPrevYearBtn').disabled = (selectedYear <= 2025);
+}
+ function changeYear(delta) {
+  if (selectedYear + delta < 2025) return;
       selectedYear += delta;
       updateYearUI();
       fetchData();
