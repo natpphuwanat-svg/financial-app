@@ -403,18 +403,19 @@ background: rgba(255, 255, 255, 0.06);
 /* Temporary Navigation Test Views */
 .placeholder-page { min-height: 60vh; display: flex; align-items: center; justify-content: center; }
 .placeholder-title { font-size: 24px; font-weight: 800; color: var(--text-main); letter-spacing: 0.5px; }
-.entries-filter-bar { display: flex; width: 100%; margin-bottom: 22px; gap: 0; }
+.entries-filter { display: flex; width: 100%; margin-bottom: 22px; gap: 0; }
 .entries-filter-btn { position: relative; flex: 1; appearance: none; -webkit-appearance: none; border: none; outline: none;
-background: transparent; color: var(--text-sub); padding: 8px 2px 10px; font-family: inherit;
-font-size: 11px; font-weight: 800; letter-spacing: 0.3px;
-text-align: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+background: transparent; color: var(--text-sub); padding: 8px 2px 10px;
+font-family: inherit; font-size: 11px; font-weight: 800;
+letter-spacing: 0.3px; text-align: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .entries-filter-btn:focus,
 .entries-filter-btn:focus-visible { outline: none; box-shadow: none; }
-.entries-filter-btn.active::after { content: ""; position: absolute; left: 50%; bottom: 4px; width: 22px; height: 2px;
-border-radius: 2px; transform: translateX(-50%); background: var(--blue-grey); }
+.entries-filter-btn.active::after { content: ""; position: absolute; left: 50%; bottom: 5px;
+width: 22px; height: 2px; border-radius: 2px;
+transform: translateX(-50%); background: var(--blue-grey); }
 .entries-filter-btn.active[data-filter="income"]::after { background: var(--income-color); }
 .entries-filter-btn.active[data-filter="expense"]::after { background: var(--expense-color); }
-.entries-filter-btn.active[data-filter="deduction"]::after { background: var(--deduction-color); }
+.entries-filter-btn.active[data filter="deduction"]::after { background: var(--deduction-color); }
 </style>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
