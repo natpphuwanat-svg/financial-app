@@ -698,11 +698,13 @@ background: rgba(255, 255, 255, 0.06);
       }
     }
 
-    function selectMonth(m) {
-      selectedMonth = m;
-      renderMonthGrid();
-      fetchData();
-    }
+  function selectMonth(m) {
+  selectedMonth = m;
+  renderMonthGrid();
+  if (document.getElementById('mainContent').style.display !== 'none') {
+  fetchData();
+  }
+}
 
     // Reset to Current Date
     function resetToCurrent() {
