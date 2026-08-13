@@ -497,9 +497,32 @@ background: rgba(255, 255, 255, 0.06);
     </section>
   </main>
   <div id="placeholderView" style="display:none;">
-  <div class="placeholder-page">
-    <div class="placeholder-title" id="placeholderTitle"></div>
-  </div>
+  <main class="container" id="entriesContent">
+    <section class="year-current-bar">
+      <div class="year-nav-transparent">
+        <button class="year-nav-btn" id="entriesPrevYearBtn" onclick="changeYear(-1)">
+          <i data-lucide="chevron-left"></i>
+        </button>
+        <span class="year-text-display" id="entriesSelectedYear">2026</span>
+        <button class="year-nav-btn" id="entriesNextYearBtn" onclick="changeYear(1)">
+          <i data-lucide="chevron-right"></i>
+        </button>
+      </div>
+      <button class="current-btn" onclick="resetToCurrent()">
+        <i data-lucide="calendar"></i>
+        CURRENT
+      </button>
+    </section>
+    <section class="month-nav-container">
+      <button class="month-arrow-btn" id="entriesPrevMonthSetBtn" onclick="shiftMonthSet(-1)">
+        <i data-lucide="chevron-left"></i>
+      </button>
+      <div class="month-grid" id="entriesMonthGrid"></div>
+      <button class="month-arrow-btn" id="entriesNextMonthSetBtn" onclick="shiftMonthSet(1)">
+        <i data-lucide="chevron-right"></i>
+      </button>
+    </section>
+  </main>
 </div>
   </div>
 
