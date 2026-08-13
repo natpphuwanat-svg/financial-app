@@ -706,16 +706,17 @@ background: rgba(255, 255, 255, 0.06);
   }
 }
 
-    // Reset to Current Date
-    function resetToCurrent() {
-      selectedYear = realCurrentYear;
-      selectedMonth = realCurrentMonth;
-      currentMonthSet = realCurrentMonth <= 6 ? 1 : 2;
-      
-      updateYearUI();
-      renderMonthGrid();
-      fetchData();
-    }
+ // Reset to Current Date
+  function resetToCurrent() {
+  selectedYear = realCurrentYear;
+  selectedMonth = realCurrentMonth;
+  currentMonthSet = realCurrentMonth <= 6 ? 1 : 2;
+  updateYearUI();
+  renderMonthGrid();
+  if (document.getElementById('mainContent').style.display !== 'none') {
+  fetchData();
+  }
+}
     
   async function fetchData() {
   const requestId = ++fetchRequestId;
