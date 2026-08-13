@@ -661,10 +661,13 @@ background: rgba(255, 255, 255, 0.06);
 }
   function changeYear(delta) {
   if (selectedYear + delta < 2025) return;
-      selectedYear += delta;
-      updateYearUI();
-      fetchData();
-    }
+  selectedYear += delta;
+  updateYearUI();
+  renderMonthGrid();
+  if (document.getElementById('mainContent').style.display !== 'none') {
+  fetchData();
+  }
+}
 
   // Month Controller
   function renderMonthGrid() {
