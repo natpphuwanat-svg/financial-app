@@ -534,14 +534,14 @@ border-radius: 2px; transform: translateX(-50%); background: var(--blue-grey); }
       </button>
     </section>
     <div class="entries-filter" id="entriesFilter">
-  <button class="entries-filter-btn active" type="button" onclick="setEntryFilter('all')">
-    ALL
-  </button>
- <div class="entries-filter-bar">
-  <button class="entries-filter-btn active" data-filter="all">ALL</button>
-  <button class="entries-filter-btn" data-filter="income">INCOME</button>
-  <button class="entries-filter-btn" data-filter="expense">EXPENSE</button>
-  <button class="entries-filter-btn" data-filter="deduction">DEDUCTION</button>
+  <button class="entries-filter-btn active" type="button"
+   data-filter="all" onclick="setEntryFilter('all')">ALL</button>
+  <button class="entries-filter-btn" type="button"
+   data-filter="income" onclick="setEntryFilter('income')">INCOME</button>
+  <button class="entries-filter-btn" type="button"
+   data-filter="expense" onclick="setEntryFilter('expense')">EXPENSE</button>
+  <button class="entries-filter-btn" type="button"
+   data-filter="deduction" onclick="setEntryFilter('deduction')">DEDUCTION</button>
 </div>
   </main>
 </div>
