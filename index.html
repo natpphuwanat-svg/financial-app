@@ -522,6 +522,20 @@ background: rgba(255, 255, 255, 0.06);
         <i data-lucide="chevron-right"></i>
       </button>
     </section>
+    <div class="entries-filter" id="entriesFilter">
+  <button class="entries-filter-btn active" type="button" onclick="setEntryFilter('all')">
+    ALL
+  </button>
+  <button class="entries-filter-btn" type="button" onclick="setEntryFilter('income')">
+    INCOME
+  </button>
+  <button class="entries-filter-btn" type="button" onclick="setEntryFilter('expense')">
+    EXPENSE
+  </button>
+  <button class="entries-filter-btn" type="button" onclick="setEntryFilter('deduction')">
+    DEDUCTION
+  </button>
+</div>
   </main>
 </div>
   </div>
