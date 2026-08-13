@@ -954,10 +954,14 @@ return Number(b.amount) - Number(a.amount); });
     tabs.forEach(button => {
     button.classList.remove('active'); });
    if (tab === 'overview') {
+    headerIcon.setAttribute('data-lucide', 'house');
+    headerTitle.innerText = 'OVERVIEW';
     mainContent.style.display = '';
     placeholderView.style.display = 'none';
     tabs[0].classList.add('active'); }
    if (tab === 'entries') {
+    headerIcon.setAttribute('data-lucide', 'list');
+    headerTitle.innerText = 'ENTRIES';
     mainContent.style.display = 'none';
     placeholderView.style.display = '';
     placeholderTitle.innerText = 'ENTRIES';
@@ -967,6 +971,7 @@ return Number(b.amount) - Number(a.amount); });
     placeholderView.style.display = '';
     placeholderTitle.innerText = 'INSIGHTS';
     tabs[2].classList.add('active'); }
+    lucide.createIcons();
    }
     
     // Modal Controls
