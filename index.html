@@ -659,27 +659,33 @@ background: rgba(255, 255, 255, 0.06);
   document.getElementById('entriesSelectedYear').innerText = selectedYear;
   document.getElementById('entriesPrevYearBtn').disabled = (selectedYear <= 2025);
 }
- function changeYear(delta) {
+  function changeYear(delta) {
   if (selectedYear + delta < 2025) return;
       selectedYear += delta;
       updateYearUI();
       fetchData();
     }
 
-    // Month Controller
-    function renderMonthGrid() {
-      const grid = document.getElementById('monthGrid');
-      const months = monthSets[currentMonthSet];
-      
-      grid.innerHTML = months.map(item => `
-        <div class="month-chip ${item.m === selectedMonth ? 'active' : ''}" onclick="selectMonth(${item.m})">
-          ${item.name}
-        </div>
-      `).join('');
-
-      document.getElementById('prevMonthSetBtn').disabled = (currentMonthSet === 1);
-      document.getElementById('nextMonthSetBtn').disabled = (currentMonthSet === 2);
-    }
+  // Month Controller
+  function renderMonthGrid() {
+  const months = monthSets[currentMonthSet];
+  const monthHTML = months.map(item => `
+    <div class="month-chip ${item.m === selectedMonth ? 'active' : ''}"
+         onclick="selectMonth(${item.m})">
+      ${item.name}
+    </div>
+  `).join('');
+  // Overview
+  document.getElementById('monthGrid').innerHTML = monthHTML;
+  // Entries
+  document.getElementById('entriesMonthGrid').innerHTML = monthHTML;
+  // Overview arrows
+  document.getElementById('prevMonthSetBtn').disabled = (currentMonthSet === 1);
+  document.getElementById('nextMonthSetBtn').disabled = (currentMonthSet === 2);
+  // Entries arrows
+  document.getElementById('entriesPrevMonthSetBtn').disabled = (currentMonthSet === 1);
+  document.getElementById('entriesNextMonthSetBtn').disabled = (currentMonthSet === 2);
+}
 
     function shiftMonthSet(delta) {
       const newSet = currentMonthSet + delta;
