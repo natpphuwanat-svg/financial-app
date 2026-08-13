@@ -943,36 +943,41 @@ return Number(b.amount) - Number(a.amount); });
     }, { passive: true });
     
     // Main Navigation
-    function switchTab(tab) {
-  const bottomNav = document.querySelector('.floating-tab-bar'); bottomNav.classList.remove('compact');
+  function switchTab(tab) {
+  const bottomNav = document.querySelector('.floating-tab-bar');
+  bottomNav.classList.remove('compact');
   const mainContent = document.getElementById('mainContent');
   const placeholderView = document.getElementById('placeholderView');
   const placeholderTitle = document.getElementById('placeholderTitle');
-  const headerIcon = document.querySelector('.home-icon-box i');
-  const headerTitle = document.querySelector('.app-title'); 
+  const headerIconBox = document.querySelector('.home-icon-box');
+  const headerTitle = document.querySelector('.app-title');
   const tabs = document.querySelectorAll('.floating-tab');
-    tabs.forEach(button => {
-    button.classList.remove('active'); });
-   if (tab === 'overview') {
-    headerIcon.setAttribute('data-lucide', 'house');
+  tabs.forEach(button => {
+    button.classList.remove('active');
+  });
+  if (tab === 'overview') {
+    headerIconBox.innerHTML = '<i data-lucide="house"></i>';
     headerTitle.innerText = 'OVERVIEW';
     mainContent.style.display = '';
     placeholderView.style.display = 'none';
-    tabs[0].classList.add('active'); }
-   if (tab === 'entries') {
-    headerIcon.setAttribute('data-lucide', 'list');
+    tabs[0].classList.add('active');
+  }
+  if (tab === 'entries') {
+    headerIconBox.innerHTML = '<i data-lucide="list"></i>';
     headerTitle.innerText = 'ENTRIES';
     mainContent.style.display = 'none';
     placeholderView.style.display = '';
     placeholderTitle.innerText = 'ENTRIES';
-    tabs[1].classList.add('active'); }
-   if (tab === 'insights') {
+    tabs[1].classList.add('active');
+  }
+  if (tab === 'insights') {
     mainContent.style.display = 'none';
     placeholderView.style.display = '';
     placeholderTitle.innerText = 'INSIGHTS';
-    tabs[2].classList.add('active'); }
-    lucide.createIcons();
-   }
+    tabs[2].classList.add('active');
+  }
+  lucide.createIcons();
+}
     
     // Modal Controls
     function selectType(type) {
