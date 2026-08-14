@@ -822,7 +822,9 @@ bottom: -5px; height: 2px; border-radius: 2px; background: var(--blue-grey); }
     return;
   }
   const grouped = {
-    Income: [], Expense: [], Deduction: [] };
+    Income: [],
+    Expense: [],
+    Deduction: [] };
   entries.forEach(item => {
     if (grouped[item.financial_type]) {
       grouped[item.financial_type].push(item);
