@@ -433,6 +433,28 @@ bottom: -5px; height: 2px; border-radius: 2px; background: var(--blue-grey); }
 .entry-type {font-size: 10px; font-weight: 700; color: var(--text-sub); line-height: 1.2; letter-spacing: 0.3px; }
 .entry-right { flex-shrink: 0; margin-left: 12px; display: flex; align-items: center; }
 .entry-amount { font-size: 14px; font-weight: 800; white-space: nowrap; }
+.entries-loading { width: 100%; }
+.entries-skeleton-group { margin-bottom: 24px; }
+.entries-skeleton-header { display: flex; justify-content: space-between; align-items: center; margin: 0 2% 10px; }
+.skeleton-line { background: rgba(100, 116, 139, 0.12); border-radius: 6px; position: relative; overflow: hidden; }
+.skeleton-line::after { content: ""; position: absolute; inset: 0; transform: translateX(-100%);
+ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.22), transparent );
+ animation: skeletonShimmer 1.3s infinite; }
+.skeleton-header-title { width: 54px; height: 12px; }
+.skeleton-header-count { width: 62px; height: 12px;}
+.entries-skeleton-row { display: flex; align-items: center; justify-content: space-between; width: 96%; min-height: 68px; margin: 0 auto; padding: 10px 0; }
+.skeleton-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.skeleton-icon { width: 40px; height: 40px; border-radius: 13px; flex-shrink: 0; }
+.skeleton-info { display: flex; flex-direction: column; gap: 6px; }
+.skeleton-title { width: 110px; height: 12px; }
+.skeleton-type { width: 52px; height: 9px; }
+.skeleton-amount { width: 68px; height: 13px; }
+@keyframes skeletonShimmer { 100% { transform: translateX(100%); }
+}
+[data-theme="dark"] .skeleton-line {
+background: rgba(148, 163, 184, 0.10); }
+[data-theme="dark"] .skeleton-line::after {
+background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), transparent ); }
 </style>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
