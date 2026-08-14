@@ -637,6 +637,8 @@ bottom: -5px; height: 2px; border-radius: 2px; background: var(--blue-grey); }
     };
     let selectedType = 'Income';
     let fetchRequestId = 0;
+    let currentEntries = [];
+    let currentEntryFilter = 'all';
     let lastFetchTime = 0;
     const REFRESH_THRESHOLD = 60 * 1000;
 
@@ -810,8 +812,15 @@ bottom: -5px; height: 2px; border-radius: 2px; background: var(--blue-grey); }
     </div>
   `;
 }
-  function renderEntriesPage(entries) {
-  const total = entries.length;
+function renderEntriesPage(entries) {
+  currentEntries = entries || [];
+  let filteredEntries = currentEntries;
+  if (currentEntryFilter !== 'all') {
+    filteredEntries = currentEntries.filter(item =>
+      item.financial_type.toLowerCase() === currentEntryFilter
+    );
+  }
+  const total = filteredEntries.length;
   document.getElementById('entriesTotal').innerText =
     `${total} ${total === 1 ? 'ENTRY' : 'ENTRIES'}`;
   if (total === 0) {
@@ -822,8 +831,9 @@ bottom: -5px; height: 2px; border-radius: 2px; background: var(--blue-grey); }
   const grouped = {
     Income: [],
     Expense: [],
-    Deduction: [] };
-  entries.forEach(item => {
+    Deduction: []
+  };
+  filteredEntries.forEach(item => {
     if (grouped[item.financial_type]) {
       grouped[item.financial_type].push(item);
     }
@@ -1270,10 +1280,15 @@ const { error } = await supabaseClient
     alert('Error deleting entry.');
   }
 }
-    function setEntryFilter(filter) {
-    document.querySelectorAll('.entries-filter-btn').forEach(btn => {
-    btn.classList.toggle( 'active', btn.dataset.filter === filter );
+ function setEntryFilter(filter) {
+  currentEntryFilter = filter;
+  document.querySelectorAll('.entries-filter-btn').forEach(btn => {
+    btn.classList.toggle(
+      'active',
+      btn.dataset.filter === filter
+    );
   });
+  renderEntriesPage(currentEntries);
 }
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     media.addEventListener("change", (e) => {
