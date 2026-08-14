@@ -809,11 +809,14 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   const typeClass = type.toLowerCase();
   return `
     <div class="entry-group">
-      <div class="entry-group-header">
-        <div class="entry-group-title">${type.toUpperCase()}</div>
-        <div class="entry-group-count">
-          ${items.length} ${items.length === 1 ? 'ENTRY' : 'ENTRIES'}
-        </div>
+   <div class="entry-group-header">
+  <div class="entry-group-title"> ${type.toUpperCase()} (${items.length})
+  </div>
+  <div class="entry-group-count"> ฿${items.reduce((sum, item) => sum + Number(item.amount || 0), 0).toLocaleString('en-US', {
+      minimumFractionDigits: 2
+    })}
+  </div>
+    </div>
       </div>
       <div class="entry-group-divider"></div>
       <div class="entry-group-items">
