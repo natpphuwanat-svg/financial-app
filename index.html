@@ -421,9 +421,10 @@ bottom: -5px; height: 2px; border-radius: 2px; background: var(--blue-grey); }
 .entry-group-header { display: flex; align-items: center; justify-content: space-between; margin: 0 2% 10px; }
 .entry-group-title,
 .entry-group-count { font-size: 12px; font-weight: 800; letter-spacing: 0.5px; color: var(--text-sub); }
-.entry-group-divider { height: 1px; background: rgba(100, 116, 139, 0.12); margin-bottom: 2px; }
+.entry-group-divider { display: none; }
 .entry-group-items { width: 100%; }
 .entry-row { display: flex; align-items: center; justify-content: space-between; width: 96%; min-height: 68px; margin: 0 auto; padding: 10px 0; cursor: pointer; }
+.entry-row + .entry-row { border-top: 1px solid rgba(100, 116, 139, 0.08); }
 .entry-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .entry-badge { width: 40px; height: 40px; border-radius: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .entry-badge svg { width: 20px; height: 20px; stroke-width: 2.2; }
