@@ -812,6 +812,29 @@ bottom: -5px; height: 2px; border-radius: 2px; background: var(--blue-grey); }
     </div>
   `;
 }
+  function renderEntriesPage(entries) {
+  const total = entries.length;
+  document.getElementById('entriesTotal').innerText =
+    `${total} ${total === 1 ? 'ENTRY' : 'ENTRIES'}`;
+  if (total === 0) {
+    document.getElementById('entriesList').innerHTML =
+      `<div class="loading-state">No entries yet.</div>`;
+    return;
+  }
+  const grouped = {
+    Income: [], Expense: [], Deduction: [] };
+  entries.forEach(item => {
+    if (grouped[item.financial_type]) {
+      grouped[item.financial_type].push(item);
+    }
+  });
+  document.getElementById('entriesList').innerHTML = `
+    ${renderEntryGroup('Income', grouped.Income)}
+    ${renderEntryGroup('Expense', grouped.Expense)}
+    ${renderEntryGroup('Deduction', grouped.Deduction)}
+  `;
+  lucide.createIcons();
+}
   async function fetchData() {
   const requestId = ++fetchRequestId;
 
