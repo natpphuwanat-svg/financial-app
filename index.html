@@ -888,6 +888,54 @@ Object.keys(grouped).forEach(type => {
   `;
   lucide.createIcons();
 }
+  function renderEntriesLoading() {
+  document.getElementById('entriesList').innerHTML = `
+    <div class="entries-loading">
+      <div class="entries-skeleton-group">
+        <div class="entries-skeleton-header">
+          <div class="skeleton-line skeleton-header-title"></div>
+          <div class="skeleton-line skeleton-header-count"></div>
+        </div>
+        <div class="skeleton-line"
+             style="width:96%; height:1px; margin:0 auto 2px;">
+        </div>
+        ${[1, 2].map(() => `
+          <div class="entries-skeleton-row">
+            <div class="skeleton-left">
+              <div class="skeleton-line skeleton-icon"></div>
+              <div class="skeleton-info">
+                <div class="skeleton-line skeleton-title"></div>
+                <div class="skeleton-line skeleton-type"></div>
+              </div>
+            </div>
+            <div class="skeleton-line skeleton-amount"></div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="entries-skeleton-group">
+        <div class="entries-skeleton-header">
+          <div class="skeleton-line skeleton-header-title"></div>
+          <div class="skeleton-line skeleton-header-count"></div>
+        </div>
+        <div class="skeleton-line"
+             style="width:96%; height:1px; margin:0 auto 2px;">
+        </div>
+        ${[1, 2, 3].map(() => `
+          <div class="entries-skeleton-row">
+            <div class="skeleton-left">
+              <div class="skeleton-line skeleton-icon"></div>
+              <div class="skeleton-info">
+                <div class="skeleton-line skeleton-title"></div>
+                <div class="skeleton-line skeleton-type"></div>
+              </div>
+            </div>
+            <div class="skeleton-line skeleton-amount"></div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
   async function fetchData() {
   const requestId = ++fetchRequestId;
 
