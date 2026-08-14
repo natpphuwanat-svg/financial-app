@@ -995,6 +995,8 @@ Object.keys(grouped).forEach(type => {
     // 6. Calculate current totals
     const entries = currentEntries || [];
     const previous = previousEntries || [];
+    if (requestId !== fetchRequestId) {
+    return; }
     renderEntriesPage(entries);
     const totalIncome = entries
       .filter(item => item.financial_type === 'Income')
