@@ -871,9 +871,6 @@ function renderEntriesPage(entries) {
       item.financial_type.toLowerCase() === currentEntryFilter
     );
   }
-  const total = filteredEntries.length;
-  document.getElementById('entriesTotal').innerText =
-    `${total} ${total === 1 ? 'ENTRY' : 'ENTRIES'}`;
   if (total === 0) {
     document.getElementById('entriesList').innerHTML =
       `<div class="loading-state">No entries yet.</div>`;
