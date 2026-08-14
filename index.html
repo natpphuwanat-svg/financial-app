@@ -777,6 +777,41 @@ bottom: -5px; height: 2px; border-radius: 2px; background: var(--blue-grey); }
   `;
   lucide.createIcons();
 }
+  function renderEntryGroup(type, items) {
+  if (!items || items.length === 0) return '';
+  return `
+    <div class="entry-group">
+      <div class="entry-group-title">${type.toUpperCase()}</div>
+      ${items.map(item => `
+        <div class="entry-row"
+             onclick='openModal("edit", ${JSON.stringify({
+               rowIndex: item.id, rawDate: item.entry_date,
+               title: item.title, amount: Number(item.amount),
+               type: item.financial_type.toLowerCase(),
+               financialType: item.financial_type,
+               icon: item.icon
+             })})'>
+          <div class="entry-left">
+            <div class="entry-badge ${item.financial_type.toLowerCase()}">
+              <i data-lucide="${item.icon || 'circle'}"></i>
+            </div>
+            <div>
+              <div class="entry-title">${item.title}</div>
+              <div class="entry-date">${item.entry_date}</div>
+            </div>
+          </div>
+          <div class="entry-right">
+            <div class="entry-amount ${item.financial_type.toLowerCase()}">
+              ฿${Number(item.amount).toLocaleString('en-US', {
+                minimumFractionDigits: 2
+              })}
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
   async function fetchData() {
   const requestId = ++fetchRequestId;
 
