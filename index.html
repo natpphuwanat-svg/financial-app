@@ -834,12 +834,6 @@ bottom: -5px; height: 2px; border-radius: 2px; background: var(--blue-grey); }
     // 6. Calculate current totals
     const entries = currentEntries || [];
     const previous = previousEntries || [];
-    function renderEntriesPage(entries) {
-    const total = entries.length;
-    document.getElementById('entriesTotal').innerText =
-    `${total} ${total === 1 ? 'ENTRY' : 'ENTRIES'}`;
-    document.getElementById('entriesList').innerHTML =
-    `<div class="loading-state">No entries yet.</div>`; }
     const totalIncome = entries
       .filter(item => item.financial_type === 'Income')
       .reduce((sum, item) => sum + Number(item.amount || 0), 0);
