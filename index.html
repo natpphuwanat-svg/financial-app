@@ -950,6 +950,7 @@ Object.keys(grouped).forEach(type => {
   document.getElementById('deductionAmount').classList.add('updating');
   document.getElementById('deductionChange').classList.add('updating');
   document.getElementById('entryList').innerHTML = `<div class="loading-state">Loading data...</div>`;
+  renderEntriesLoading();
   try {
     // 1. Current month range
     const currentStart =
