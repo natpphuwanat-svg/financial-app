@@ -850,11 +850,14 @@ function renderEntriesPage(entries) {
     Expense: [],
     Deduction: []
   };
-  filteredEntries.forEach(item => {
-    if (grouped[item.financial_type]) {
-      grouped[item.financial_type].push(item);
-    }
-  });
+filteredEntries.forEach(item => {
+  if (grouped[item.financial_type]) {
+    grouped[item.financial_type].push(item);
+  }
+});
+Object.keys(grouped).forEach(type => {
+  grouped[type].sort((a, b) => Number(b.amount) - Number(a.amount));
+});
   document.getElementById('entriesList').innerHTML = `
     ${renderEntryGroup('Income', grouped.Income)}
     ${renderEntryGroup('Expense', grouped.Expense)}
