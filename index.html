@@ -416,8 +416,22 @@ bottom: -5px; height: 2px; border-radius: 2px; background: var(--blue-grey); }
 .entries-filter-btn.active[data-filter="income"] span::after {background: var(--income-color); }
 .entries-filter-btn.active[data-filter="expense"] span::after { background: var(--expense-color); }
 .entries-filter-btn.active[data-filter="deduction"] span::after { background: var(--deduction-color); }
-.entries-total { margin-left: 0; margin-top: 0; margin-bottom: 16px; padding-left: 2%;
-                font-size: 12px; font-weight: 800; letter-spacing: 0.5px; color: var(--text-sub); }
+.entries-total { margin-left: 0; margin-top: 0; margin-bottom: 16px; padding-left: 2%; font-size: 12px; font-weight: 800; letter-spacing: 0.5px; color: var(--text-sub); }
+.entry-group { margin-bottom: 24px; }
+.entry-group-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.entry-group-title,
+.entry-group-count { font-size: 12px; font-weight: 800; letter-spacing: 0.5px; color: var(--text-sub); }
+.entry-group-divider { height: 1px; background: rgba(100, 116, 139, 0.12); margin-bottom: 2px; }
+.entry-group-items { width: 100%; }
+.entry-row { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 68px; padding: 10px 2px; cursor: pointer; }
+.entry-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.entry-badge { width: 40px; height: 40px; border-radius: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.entry-badge svg { width: 20px; height: 20px; stroke-width: 2.2; }
+.entry-info { min-width: 0; 
+.entry-title { font-size: 14px; font-weight: 700; color: var(--text-main); line-height: 1.3; margin-bottom: 3px; }
+.entry-type {font-size: 10px; font-weight: 700; color: var(--text-sub); line-height: 1.2; letter-spacing: 0.3px; }
+.entry-right { flex-shrink: 0; margin-left: 12px; display: flex; align-items: center; }
+.entry-amount { font-size: 14px; font-weight: 800; white-space: nowrap; }
 </style>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -725,21 +739,18 @@ bottom: -5px; height: 2px; border-radius: 2px; background: var(--blue-grey); }
   document.getElementById('entriesPrevMonthSetBtn').disabled = (currentMonthSet === 1);
   document.getElementById('entriesNextMonthSetBtn').disabled = (currentMonthSet === 2);
 }
-
-    function shiftMonthSet(delta) {
-      const newSet = currentMonthSet + delta;
-      if (newSet >= 1 && newSet <= 2) {
-        currentMonthSet = newSet;
-        renderMonthGrid();
-      }
-    }
-
+ function shiftMonthSet(delta) {
+  const newSet = currentMonthSet + delta;
+  if (newSet >= 1 && newSet <= 2) {
+      currentMonthSet = newSet;
+     renderMonthGrid();
+   }
+ }
   function selectMonth(m) {
   selectedMonth = m;
   renderMonthGrid();
   fetchData();
  }
-
  // Reset to Current Datefunction resetToCurrent() {
   function resetToCurrent() {
   selectedYear = realCurrentYear;
@@ -774,36 +785,47 @@ bottom: -5px; height: 2px; border-radius: 2px; background: var(--blue-grey); }
 }
   function renderEntryGroup(type, items) {
   if (!items || items.length === 0) return '';
+  const typeClass = type.toLowerCase();
   return `
     <div class="entry-group">
-      <div class="entry-group-title">${type.toUpperCase()}</div>
-      ${items.map(item => `
-        <div class="entry-row"
-             onclick='openModal("edit", ${JSON.stringify({
-               rowIndex: item.id, rawDate: item.entry_date,
-               title: item.title, amount: Number(item.amount),
-               type: item.financial_type.toLowerCase(),
-               financialType: item.financial_type,
-               icon: item.icon
-             })})'>
-          <div class="entry-left">
-            <div class="entry-badge ${item.financial_type.toLowerCase()}">
-              <i data-lucide="${item.icon || 'circle'}"></i>
-            </div>
-            <div>
-              <div class="entry-title">${item.title}</div>
-              <div class="entry-date">${item.entry_date}</div>
-            </div>
-          </div>
-          <div class="entry-right">
-            <div class="entry-amount ${item.financial_type.toLowerCase()}">
-              ฿${Number(item.amount).toLocaleString('en-US', {
-                minimumFractionDigits: 2
-              })}
-            </div>
-          </div>
+      <div class="entry-group-header">
+        <div class="entry-group-title">${type.toUpperCase()}</div>
+        <div class="entry-group-count">
+          ${items.length} ${items.length === 1 ? 'ENTRY' : 'ENTRIES'}
         </div>
-      `).join('')}
+      </div>
+      <div class="entry-group-divider"></div>
+      <div class="entry-group-items">
+        ${items.map(item => `
+          <div class="entry-row"
+               onclick='openModal("edit", ${JSON.stringify({
+                 rowIndex: item.id,
+                 rawDate: item.entry_date,
+                 title: item.title,
+                 amount: Number(item.amount),
+                 type: item.financial_type.toLowerCase(),
+                 financialType: item.financial_type,
+                 icon: item.icon
+               })})'>
+            <div class="entry-left">
+              <div class="entry-badge ${typeClass}">
+                <i data-lucide="${item.icon || 'circle'}"></i>
+              </div>
+              <div class="entry-info">
+                <div class="entry-title">${item.title}</div>
+                <div class="entry-type">${type.toUpperCase()}</div>
+              </div>
+            </div>
+            <div class="entry-right">
+              <div class="entry-amount ${typeClass}">
+                ฿${Number(item.amount).toLocaleString('en-US', {
+                  minimumFractionDigits: 2
+                })}
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
     </div>
   `;
 }
