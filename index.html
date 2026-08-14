@@ -892,6 +892,7 @@ bottom: -5px; height: 2px; border-radius: 2px; background: var(--blue-grey); }
     // 6. Calculate current totals
     const entries = currentEntries || [];
     const previous = previousEntries || [];
+    renderEntriesPage(entries);
     const totalIncome = entries
       .filter(item => item.financial_type === 'Income')
       .reduce((sum, item) => sum + Number(item.amount || 0), 0);
