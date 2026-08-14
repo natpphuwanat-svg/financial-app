@@ -805,15 +805,23 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   `;
   lucide.createIcons();
 }
-  function renderEntryGroup(type, items) {
+function renderEntryGroup(type, items) {
   if (!items || items.length === 0) return '';
   const typeClass = type.toLowerCase();
+  const totalAmount = items.reduce(
+    (sum, item) => sum + Number(item.amount || 0),
+    0
+  );
   return `
     <div class="entry-group">
       <div class="entry-group-header">
-        <div class="entry-group-title">${type.toUpperCase()}</div>
+        <div class="entry-group-title">
+          ${type.toUpperCase()} (${items.length})
+        </div>
         <div class="entry-group-count">
-          ${items.length} ${items.length === 1 ? 'ENTRY' : 'ENTRIES'}
+          ฿${totalAmount.toLocaleString('en-US', {
+            minimumFractionDigits: 2
+          })}
         </div>
       </div>
       <div class="entry-group-divider"></div>
@@ -834,8 +842,12 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
                 <i data-lucide="${item.icon || 'circle'}"></i>
               </div>
               <div class="entry-info">
-                <div class="entry-title">${item.title}</div>
-                <div class="entry-type">${type.toUpperCase()}</div>
+                <div class="entry-title">
+                  ${item.title}
+                </div>
+                <div class="entry-type">
+                  ${type.toUpperCase()}
+                </div>
               </div>
             </div>
             <div class="entry-right">
