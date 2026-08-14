@@ -773,7 +773,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   renderMonthGrid();
   fetchData();
  }
- // Reset to Current Datefunction resetToCurrent()
+ // Reset to Current Datefunction resetToCurrent() {
   function resetToCurrent() {
   selectedYear = realCurrentYear;
   selectedMonth = realCurrentMonth;
@@ -782,6 +782,22 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   renderMonthGrid();
   fetchData();
 }
+  function renderEntriesPage(entries) {
+  const total = entries.length;
+  document.getElementById('entriesTotal').innerText =
+    `${total} ${total === 1 ? 'ENTRY' : 'ENTRIES'}`;
+  if (total === 0) {
+  document.getElementById('entriesList').innerHTML =
+      `<div class="loading-state">No entries yet.</div>`;
+  return; }
+  const grouped = {
+    Income: [],
+    Expense: [],
+    Deduction: [] };
+  entries.forEach(item => {
+  if (grouped[item.financial_type]) {
+      grouped[item.financial_type].push(item); }
+  });
   document.getElementById('entriesList').innerHTML = `
     ${renderEntryGroup('Income', grouped.Income)}
     ${renderEntryGroup('Expense', grouped.Expense)}
@@ -789,23 +805,15 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   `;
   lucide.createIcons();
 }
-function renderEntryGroup(type, items) {
+  function renderEntryGroup(type, items) {
   if (!items || items.length === 0) return '';
   const typeClass = type.toLowerCase();
-  const totalAmount = items.reduce(
-    (sum, item) => sum + Number(item.amount || 0),
-    0
-  );
   return `
     <div class="entry-group">
       <div class="entry-group-header">
-        <div class="entry-group-title">
-          ${type.toUpperCase()} (${items.length})
-        </div>
+        <div class="entry-group-title">${type.toUpperCase()}</div>
         <div class="entry-group-count">
-          ฿${totalAmount.toLocaleString('en-US', {
-            minimumFractionDigits: 2
-          })}
+          ${items.length} ${items.length === 1 ? 'ENTRY' : 'ENTRIES'}
         </div>
       </div>
       <div class="entry-group-divider"></div>
@@ -826,12 +834,8 @@ function renderEntryGroup(type, items) {
                 <i data-lucide="${item.icon || 'circle'}"></i>
               </div>
               <div class="entry-info">
-                <div class="entry-title">
-                  ${item.title}
-                </div>
-                <div class="entry-type">
-                  ${type.toUpperCase()}
-                </div>
+                <div class="entry-title">${item.title}</div>
+                <div class="entry-type">${type.toUpperCase()}</div>
               </div>
             </div>
             <div class="entry-right">
@@ -855,6 +859,9 @@ function renderEntriesPage(entries) {
       item.financial_type.toLowerCase() === currentEntryFilter
     );
   }
+  const total = filteredEntries.length;
+  document.getElementById('entriesTotal').innerText =
+    `${total} ${total === 1 ? 'ENTRY' : 'ENTRIES'}`;
   if (total === 0) {
     document.getElementById('entriesList').innerHTML =
       `<div class="loading-state">No entries yet.</div>`;
@@ -873,6 +880,13 @@ filteredEntries.forEach(item => {
 Object.keys(grouped).forEach(type => {
   grouped[type].sort((a, b) => Number(b.amount) - Number(a.amount));
 });
+  document.getElementById('entriesList').innerHTML = `
+    ${renderEntryGroup('Income', grouped.Income)}
+    ${renderEntryGroup('Expense', grouped.Expense)}
+    ${renderEntryGroup('Deduction', grouped.Deduction)}
+  `;
+  lucide.createIcons();
+}
   function renderEntriesLoading() {
   document.getElementById('entriesList').innerHTML = `
     <div class="entries-loading">
