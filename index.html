@@ -703,11 +703,8 @@ bottom: -5px; height: 2px; border-radius: 2px; background: var(--blue-grey); }
   selectedYear += delta;
   updateYearUI();
   renderMonthGrid();
-  if (document.getElementById('mainContent').style.display !== 'none') {
   fetchData();
-  }
 }
-
   // Month Controller
   function renderMonthGrid() {
   const months = monthSets[currentMonthSet];
@@ -743,16 +740,14 @@ bottom: -5px; height: 2px; border-radius: 2px; background: var(--blue-grey); }
   fetchData();
  }
 
- // Reset to Current Date
+ // Reset to Current Datefunction resetToCurrent() {
   function resetToCurrent() {
   selectedYear = realCurrentYear;
   selectedMonth = realCurrentMonth;
   currentMonthSet = realCurrentMonth <= 6 ? 1 : 2;
   updateYearUI();
   renderMonthGrid();
-  if (document.getElementById('mainContent').style.display !== 'none') {
   fetchData();
-  }
 }
   function renderEntriesPage(entries) {
   const total = entries.length;
