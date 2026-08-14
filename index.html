@@ -873,13 +873,6 @@ filteredEntries.forEach(item => {
 Object.keys(grouped).forEach(type => {
   grouped[type].sort((a, b) => Number(b.amount) - Number(a.amount));
 });
-  document.getElementById('entriesList').innerHTML = `
-    ${renderEntryGroup('Income', grouped.Income)}
-    ${renderEntryGroup('Expense', grouped.Expense)}
-    ${renderEntryGroup('Deduction', grouped.Deduction)}
-  `;
-  lucide.createIcons();
-}
   function renderEntriesLoading() {
   document.getElementById('entriesList').innerHTML = `
     <div class="entries-loading">
