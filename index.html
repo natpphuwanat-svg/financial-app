@@ -779,12 +779,17 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   document.getElementById('monthGrid').innerHTML = monthHTML;
   // Entries
   document.getElementById('entriesMonthGrid').innerHTML = monthHTML;
+  // Insights
+  document.getElementById('insightsMonthGrid').innerHTML = monthHTML;
   // Overview arrows
   document.getElementById('prevMonthSetBtn').disabled = (currentMonthSet === 1);
   document.getElementById('nextMonthSetBtn').disabled = (currentMonthSet === 2);
   // Entries arrows
   document.getElementById('entriesPrevMonthSetBtn').disabled = (currentMonthSet === 1);
   document.getElementById('entriesNextMonthSetBtn').disabled = (currentMonthSet === 2);
+  // Insights arrows
+  document.getElementById('insightsPrevMonthSetBtn').disabled = (currentMonthSet === 1);
+  document.getElementById('insightsNextMonthSetBtn').disabled = (currentMonthSet === 2);
 }
  function shiftMonthSet(delta) {
   const newSet = currentMonthSet + delta;
