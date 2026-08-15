@@ -417,9 +417,10 @@ text-align: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .entries-filter-btn.active[data-filter="expense"] span::after { background: var(--expense-color); }
 .entries-filter-btn.active[data-filter="deduction"] span::after { background: var(--deduction-color); }
 .entries-total { margin: 0 2% 19px; padding: 0; font-size: 12px; font-weight: 800; letter-spacing: 0.5px; color: var(--text-sub); }
-.entry-group { margin-bottom: 32px; }
+.entry-group { margin: 0 0 32px; padding: 0; }
+.entry-group-header { display: flex; align-items: center; justify-content: space-between; margin: 0 2% 6px; padding: 0; }
+.entry-group-items { width: 100%; margin: 0; padding: 0; }
 .entry-group:last-child { margin-bottom: 0; }
-.entry-group-header { display: flex; align-items: center; justify-content: space-between; margin: 0 2% 10px; }
 .entry-group-title,
 .entry-group-count { font-size: 12px; font-weight: 800; letter-spacing: 0.5px; color: var(--text-sub); }
 .entry-group-divider { display: none; }
