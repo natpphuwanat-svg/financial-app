@@ -1180,12 +1180,12 @@ Object.keys(grouped).forEach(type => {
       deductionChange.innerText = `${sign}${percentage.toFixed(0)}% vs prev.`;
       deductionChange.className = 'stat-change deduction'; } else {
       deductionChange.innerText = 'no prev. data';
-      deductionChange.className = 'stat-change deduction'; }
-      const incomeMoM = formatMoM(totalIncome, previousIncome);
-      const expenseMoM = formatMoM(totalExpense, previousExpense);
-      const balanceMoM = formatMoM(balance, previousBalance);
-      const deductionMoM = formatMoM(totalDeduction, previousDeduction);
+      deductionChange.className = 'stat-change deduction'; }     
     // 13.Insights — Monthly Summary
+    const incomeMoM = formatMoM(totalIncome, previousIncome);
+    const expenseMoM = formatMoM(totalExpense, previousExpense);
+    const balanceMoM = formatMoM(balance, previousBalance);
+    const deductionMoM = formatMoM(totalDeduction, previousDeduction);
     document.getElementById('insightsIncome').innerText =
       '฿' + totalIncome.toLocaleString('en-US', {
        minimumFractionDigits: 2 });
