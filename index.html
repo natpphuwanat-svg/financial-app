@@ -755,6 +755,9 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   // Entries
   document.getElementById('entriesSelectedYear').innerText = selectedYear;
   document.getElementById('entriesPrevYearBtn').disabled = (selectedYear <= 2025);
+  // Insights
+  document.getElementById('insightsSelectedYear').innerText = selectedYear;
+  document.getElementById('insightsPrevYearBtn').disabled = (selectedYear <= 2025);
 }
   function changeYear(delta) {
   if (selectedYear + delta < 2025) return;
