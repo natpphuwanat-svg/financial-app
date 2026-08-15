@@ -1100,6 +1100,14 @@ Object.keys(grouped).forEach(type => {
       .filter(item => item.financial_type === 'Deduction')
       .reduce((sum, item) => sum + Number(item.amount || 0), 0);
     const previousBalance = previousIncome - previousExpense;
+    function calculateMoM(current, previous) {
+    if (previous === 0) return null;
+    return ((current - previous) / previous) * 100; }
+    function formatMoM(current, previous) {
+    const change = calculateMoM(current, previous);
+    if (change === null) return '—';
+    const sign = change > 0 ? '+' : '';
+    return `${sign}${change.toFixed(1)}% vs last month`; }
     lastFetchTime = Date.now();
     // 8. Remove updating state
     document.getElementById('balanceAmount').classList.remove('updating');
@@ -1173,6 +1181,10 @@ Object.keys(grouped).forEach(type => {
       deductionChange.className = 'stat-change deduction'; } else {
       deductionChange.innerText = 'no prev. data';
       deductionChange.className = 'stat-change deduction'; }
+      const incomeMoM = formatMoM(totalIncome, previousIncome);
+      const expenseMoM = formatMoM(totalExpense, previousExpense);
+      const balanceMoM = formatMoM(balance, previousBalance);
+      const deductionMoM = formatMoM(totalDeduction, previousDeduction);
     // 13.Insights — Monthly Summary
     document.getElementById('insightsIncome').innerText =
       '฿' + totalIncome.toLocaleString('en-US', {
