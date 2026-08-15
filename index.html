@@ -585,7 +585,42 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   </main>
 </div>
   </div>
-
+  <!-- Insights Page -->
+<div id="insightsView" style="display:none;">
+  <main class="container" id="insightsContent">
+    <section class="year-current-bar">
+      <div class="year-nav-transparent">
+        <button class="year-nav-btn" id="insightsPrevYearBtn" onclick="changeYear(-1)">
+          <i data-lucide="chevron-left"></i>
+        </button>
+        <span class="year-text-display" id="insightsSelectedYear">2026</span>
+        <button class="year-nav-btn" id="insightsNextYearBtn" onclick="changeYear(1)">
+          <i data-lucide="chevron-right"></i>
+        </button>
+      </div>
+      <button class="current-btn" onclick="resetToCurrent()">
+        <i data-lucide="calendar"></i>
+        CURRENT
+      </button>
+    </section>
+    <section class="month-nav-container">
+      <button class="month-arrow-btn"
+              id="insightsPrevMonthSetBtn"
+              onclick="shiftMonthSet(-1)">
+        <i data-lucide="chevron-left"></i>
+      </button>
+      <div class="month-grid" id="insightsMonthGrid"></div>
+      <button class="month-arrow-btn"
+              id="insightsNextMonthSetBtn"
+              onclick="shiftMonthSet(1)">
+        <i data-lucide="chevron-right"></i>
+      </button>
+    </section>
+    <div class="placeholder-page">
+      <div class="placeholder-title">INSIGHTS</div>
+    </div>
+  </main>
+</div>
   <!-- Floating Bottom Navigation -->
   <nav class="floating-tab-bar" aria-label="Main navigation">
     <button class="floating-tab active" type="button" onclick="switchTab('overview')">
