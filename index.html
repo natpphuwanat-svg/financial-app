@@ -442,7 +442,22 @@ text-align: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 [data-theme="dark"] .skeleton-line {
 background: rgba(148, 163, 184, 0.10); }
 [data-theme="dark"] .skeleton-line::after {
-background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), transparent ); } 
+background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), transparent ); }
+.insights-section { margin-bottom: 28px; }
+.insights-section-title { font-size: 13px; font-weight: 800; letter-spacing: 0.8px; color: var(--text-sub); text-transform: uppercase; margin-bottom: 14px; }
+.monthly-summary-card { background: var(--glass-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); overflow: hidden; }
+.monthly-summary-row { display: flex; align-items: center; justify-content: space-between; min-height: 58px; padding: 12px 18px; }
+.monthly-summary-row + .monthly-summary-row { position: relative; }
+.monthly-summary-row + .monthly-summary-row::before { content: ""; position: absolute; top: 0; left: 18px; right: 18px; height: 1px; background: rgba(100, 116, 139, 0.06); }
+[data-theme="dark"] .monthly-summary-row + .monthly-summary-row::before {
+ background: rgba(148, 163, 184, 0.10); }
+.monthly-summary-label { font-size: 12px; font-weight: 700; color: var(--text-sub); letter-spacing: 0.3px; }
+.monthly-summary-value { font-size: 15px; font-weight: 800; white-space: nowrap; }
+.monthly-summary-value.income { color: var(--income-color); }
+.monthly-summary-value.expense { color: var(--expense-color); }
+.monthly-summary-value.balance { color: var(--text-main); }
+.monthly-summary-value.savings { color: var(--blue-grey); }
+.monthly-summary-row.savings-row { min-height: 64px; }
 </style>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -615,9 +630,37 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         <i data-lucide="chevron-right"></i>
       </button>
     </section>
-    <div class="placeholder-page">
-      <div class="placeholder-title">INSIGHTS</div>
+   <section class="insights-section">
+  <div class="insights-section-title">
+    MONTHLY SUMMARY
+  </div>
+  <div class="monthly-summary-card">
+    <div class="monthly-summary-row">
+      <div class="monthly-summary-label">Income</div>
+      <div class="monthly-summary-value income" id="insightsIncome">
+        ฿0.00
+      </div>
     </div>
+    <div class="monthly-summary-row">
+      <div class="monthly-summary-label">Expense</div>
+      <div class="monthly-summary-value expense" id="insightsExpense">
+        ฿0.00
+      </div>
+    </div>
+    <div class="monthly-summary-row">
+      <div class="monthly-summary-label">Balance</div>
+      <div class="monthly-summary-value balance" id="insightsBalance">
+        ฿0.00
+      </div>
+    </div>
+    <div class="monthly-summary-row savings-row">
+      <div class="monthly-summary-label">Savings Rate</div>
+      <div class="monthly-summary-value savings" id="insightsSavingsRate">
+        0%
+      </div>
+    </div>
+  </div>
+</section>
   </main>
  </div>
 </div>
@@ -1036,6 +1079,9 @@ Object.keys(grouped).forEach(type => {
       .filter(item => item.financial_type === 'Deduction')
       .reduce((sum, item) => sum + Number(item.amount || 0), 0);
     const balance = totalIncome - totalExpense;
+    const savingsRate = totalIncome > 0
+      ? (balance / totalIncome) * 100
+      : 0;
     // 7. Calculate previous totals
     const previousIncome = previous
       .filter(item => item.financial_type === 'Income')
@@ -1120,7 +1166,21 @@ Object.keys(grouped).forEach(type => {
       deductionChange.className = 'stat-change deduction'; } else {
       deductionChange.innerText = 'no prev. data';
       deductionChange.className = 'stat-change deduction'; }
-    // 13. Select Highlights
+    // 13.Insights — Monthly Summary
+    document.getElementById('insightsIncome').innerText =
+      '฿' + totalIncome.toLocaleString('en-US', {
+       minimumFractionDigits: 2 });
+    document.getElementById('insightsExpense').innerText =
+      '฿' + totalExpense.toLocaleString('en-US', {
+       minimumFractionDigits: 2 });
+    document.getElementById('insightsBalance').innerText =
+      '฿' + balance.toLocaleString('en-US', {
+       minimumFractionDigits: 2 });
+    document.getElementById('insightsSavingsRate').innerText =
+      totalIncome > 0
+      ? `${savingsRate.toFixed(1)}%`
+      : '—';
+    // 14. Select Highlights
 const highlightCandidates = []; entries.forEach(function(currentItem) {
 const previousItem = previous.find(function(item) { return ( item.financial_type === currentItem.financial_type && item.title === currentItem.title  );
   });
