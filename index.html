@@ -309,34 +309,26 @@
       color: var(--text-main); font-size: 15px; font-weight: 600; outline: none; 
     }
     .form-control:focus { border-color: var(--lime-400); }
-
     .type-selector { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
     .type-btn { padding: 12px; border-radius: 14px; border: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--text-sub); font-size: 13px; font-weight: 700; cursor: pointer; text-align: center; }
     .type-btn.active.income { background: var(--income-bg); color: var(--income-color); border-color: var(--income-color); }
     .type-btn.active.expense { background: var(--expense-bg); color: var(--expense-color); border-color: var(--expense-color); }
     .type-btn.active.deduction { background: var(--deduction-bg); color: var(--deduction-color); border-color: var(--deduction-color); }
-
     .submit-btn { width: 100%; background: var(--text-main); color: var(--bg-color); border: none; padding: 16px; border-radius: 18px; font-size: 16px; font-weight: 800; cursor: pointer; margin-top: 10px; }
     .delete-btn { width: 100%; background: var(--expense-bg); color: var(--expense-color); border: 1px solid var(--expense-color); padding: 14px; border-radius: 18px; font-size: 14px; font-weight: 800; cursor: pointer; margin-top: 10px; display: none; }
-
     .loading-state { text-align: center; padding: 40px 0; color: var(--text-sub); font-size: 14px; font-weight: 600; }
     .year-nav-btn i,
     .month-arrow-btn i{ width:18px; height:18px; stroke:currentColor; stroke-width:2.4; }
-      
     .highlight-item { position: relative; padding: 15px 18px; min-height: 70px; border-top: none !important; border-bottom: none !important;}
-/* Remove the old full-width divider */
     .highlight-item + .highlight-item { border-top: none !important; border-bottom: none !important; }
-/* Custom divider */
-    .highlight-item + .highlight-item::before { content: ""; position: absolute; top: 0; left: 18px; right: 18px; height: 1px; background: rgba(100, 116, 139, 0.055); }
-/* Entry text — approximately 5% smaller */
+    .highlight-item + .highlight-item::before { content: ""; position: absolute; top: 0; left: 18px; right: 18px; height: 1px; background: rgba(100, 116, 139, 0.06); }
+    [data-theme="dark"] .highlight-item + .highlight-item::before { background: rgba(148, 163, 184, 0.10); }
     .entry-title { font-size: 13px; }
     .entry-date { font-size: 10px; text-transform: lowercase; }
     .entry-amount { font-size: 14px; }
-/* Keep icon exactly the same size */
     .entry-badge { width: 42px; height: 42px; font-size: 16px; }
     .entry-badge svg { width: 20px; height: 20px; stroke-width: 2.2; }
    
-/* Floating Bottom Navigation */
 .floating-tab-bar { position: fixed; left: 50%;
 bottom: calc(env(safe-area-inset-bottom) + 20px);
 transform: translateX(-50%); width: min(70%, 390px); height: 64px;
@@ -350,31 +342,22 @@ box-shadow:
 0 1px 3px rgba(15, 23, 42, 0.04);
 z-index: 900;
 overflow: hidden; }
-/* Glass Highlight */
 .floating-tab-bar::before { content: ""; position: absolute; inset: 0; border-radius: inherit;
 background: rgba(255, 255, 255, 0.06);
-pointer-events: none;
-}
-/* Navigation Buttons */
+pointer-events: none; }
 .floating-tab { position: relative; z-index: 1;
 height: 52px; width: 100%; align-self: center; display: flex;
 flex-direction: column; align-items: center; justify-content: center; gap: 3px;
 border: none;
 background: transparent; color: var(--text-sub); border-radius: 26px; font-family: inherit; font-size: 11px;
-font-weight: 700; cursor: pointer; transition: color 0.28s ease, transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s ease, background 0.28s ease;
-}
-/* Icon */
+font-weight: 700; cursor: pointer; transition: color 0.28s ease, transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s ease, background 0.28s ease; }
 .floating-tab svg { width: 23px; height: 23px;
 stroke: currentColor; stroke-width: 2.1;
-transition: transform 0.2s ease;
-}
-/* Active */
+transition: transform 0.2s ease; }
 .floating-tab.active { color: var(--blue-grey);
 background: rgba(195,205, 215, 0.25); backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%); }
 .floating-tab.active svg { stroke-width: 2.3; }
-/* Press */
 .floating-tab:active { transform: scale(0.92); }
-/* Dark Mode */
 [data-theme="dark"]
 .floating-tab-bar {
 background: rgba(25, 30, 43, 0.48);
@@ -392,15 +375,12 @@ background: rgba(255, 255, 255, 0.06);
 [data-theme="dark"]
 .floating-tab.active { color: var(--blue-grey);
  background: rgba(203,213, 225, 0.15); backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%); }
-/* Compact Bottom Navigation on Scroll */
 .floating-tab-bar { transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1); }
 .floating-tab-bar.compact { transform: translateX(-50%) scale(0.90); }
-/* Small Screens */
 @media (max-width: 360px) {
 .floating-tab-bar { width: 88%; }
 .floating-tab { font-size: 10px; }
 }
-/* Temporary Navigation Test Views */
 .placeholder-page { min-height: 60vh; display: flex; align-items: center; justify-content: center; }
 .placeholder-title { font-size: 24px; font-weight: 800; color: var(--text-main); letter-spacing: 0.3px; }
 .entries-filter { display: flex; width: 100%; margin-bottom: 22px; gap: 0; }
@@ -427,7 +407,8 @@ text-align: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .entry-group-divider { display: none; }
 .entry-group-items { width: 100%; }
 .entry-row { position: relative; display: flex; align-items: center; justify-content: space-between; width: 96%; min-height: 64px; margin: 0 auto; padding: 10px 0; cursor: pointer; }
-.entry-row + .entry-row::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: rgba(100, 116, 139, 0.08); }
+.entry-row + .entry-row::before { content: ""; position: absolute;  top: 0; left: 0; right: 0; height: 1px; background: rgba(100, 116, 139, 0.085); }
+[data-theme="dark"] .entry-row + .entry-row::before { background: rgba(148, 163, 184, 0.11); }
 .entry-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .entry-badge { width: 40px; height: 40px; border-radius: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .entry-badge svg { width: 20px; height: 20px; stroke-width: 2.2; }
