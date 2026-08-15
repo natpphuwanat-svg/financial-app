@@ -1237,6 +1237,7 @@ return Number(b.amount) - Number(a.amount); });
   bottomNav.classList.remove('compact');
   const mainContent = document.getElementById('mainContent');
   const placeholderView = document.getElementById('placeholderView');
+  const insightsView = document.getElementById('insightsView');
   const headerIconBox = document.querySelector('.home-icon-box');
   const headerTitle = document.querySelector('.app-title');
   const tabs = document.querySelectorAll('.floating-tab');
@@ -1258,10 +1259,13 @@ return Number(b.amount) - Number(a.amount); });
     tabs[1].classList.add('active');
   }
   if (tab === 'insights') {
+    headerIconBox.innerHTML = '<i data-lucide="chart-no-axes-combined"></i>';
+    headerTitle.innerText = 'INSIGHTS';
     mainContent.style.display = 'none';
-    placeholderView.style.display = '';
+    placeholderView.style.display = 'none';
+    insightsView.style.display = '';
     tabs[2].classList.add('active');
-  }
+}
   lucide.createIcons();
 }
     
