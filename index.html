@@ -456,6 +456,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .monthly-summary-value.income { color: var(--income-color); }
 .monthly-summary-value.expense { color: var(--expense-color); }
 .monthly-summary-value.balance { color: var(--text-main); }
+.monthly-summary-value.deduction { color: var(--deduction-color); }
 .monthly-summary-value.savings { color: var(--blue-grey); }
 .monthly-summary-row.savings-row { min-height: 64px; }
 </style>
@@ -653,6 +654,12 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         ฿0.00
       </div>
     </div>
+    <div class="monthly-summary-row">
+  <div class="monthly-summary-label">Deduction</div>
+  <div class="monthly-summary-value deduction" id="insightsDeduction">
+    ฿0.00
+  </div>
+</div>
     <div class="monthly-summary-row savings-row">
       <div class="monthly-summary-label">Savings Rate</div>
       <div class="monthly-summary-value savings" id="insightsSavingsRate">
@@ -1175,6 +1182,9 @@ Object.keys(grouped).forEach(type => {
        minimumFractionDigits: 2 });
     document.getElementById('insightsBalance').innerText =
       '฿' + balance.toLocaleString('en-US', {
+       minimumFractionDigits: 2 });
+    document.getElementById('insightsDeduction').innerText =
+      '฿' + totalDeduction.toLocaleString('en-US', {
        minimumFractionDigits: 2 });
     document.getElementById('insightsSavingsRate').innerText =
       totalIncome > 0
