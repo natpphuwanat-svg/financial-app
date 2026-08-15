@@ -322,6 +322,10 @@
     .highlight-item { position: relative; padding: 15px 18px; min-height: 70px; border-top: none !important; border-bottom: none !important;}
     .highlight-item + .highlight-item { border-top: none !important; border-bottom: none !important; }
     .highlight-item + .highlight-item::before { content: ""; position: absolute; top: 0; left: 18px; right: 18px; height: 1px; background: rgba(100, 116, 139, 0.06); }
+    .highlight-item .entry-left { min-width: 0; flex: 1; }
+    .highlight-item .entry-left > div:last-child { min-width: 0; flex: 1; }
+    .highlight-item .entry-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .highlight-item .entry-right { flex-shrink: 0; margin-left: 14px; }
     [data-theme="dark"] .highlight-item + .highlight-item::before { background: rgba(148, 163, 184, 0.10); }
     .entry-title { font-size: 13px; }
     .entry-date { font-size: 10px; text-transform: lowercase; }
