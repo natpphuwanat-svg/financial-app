@@ -442,9 +442,7 @@ text-align: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 [data-theme="dark"] .skeleton-line {
 background: rgba(148, 163, 184, 0.10); }
 [data-theme="dark"] .skeleton-line::after {
-background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), transparent ); }
-#insightsView { margin: 0; padding: 0; }
-#insightsContent { padding-top: 0; }  
+background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), transparent ); } 
 </style>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -586,7 +584,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 </div>
   </main>
 </div>
-  </div>
   <!-- Insights Page -->
 <div id="insightsView" style="display:none;">
   <main class="container" id="insightsContent">
@@ -622,6 +619,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       <div class="placeholder-title">INSIGHTS</div>
     </div>
   </main>
+ </div>
 </div>
   <!-- Floating Bottom Navigation -->
   <nav class="floating-tab-bar" aria-label="Main navigation">
