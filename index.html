@@ -1365,6 +1365,7 @@ return Number(b.amount) - Number(a.amount); });
     headerTitle.innerText = 'OVERVIEW';
     mainContent.style.display = '';
     placeholderView.style.display = 'none';
+    insightsView.style.display = 'none';
     tabs[0].classList.add('active');
   }
   if (tab === 'entries') {
@@ -1372,6 +1373,7 @@ return Number(b.amount) - Number(a.amount); });
     headerTitle.innerText = 'ENTRIES';
     mainContent.style.display = 'none';
     placeholderView.style.display = '';
+    insightsView.style.display = 'none';
     tabs[1].classList.add('active');
   }
   if (tab === 'insights') {
