@@ -1275,52 +1275,51 @@ Object.keys(grouped).forEach(type => {
    totalIncome > 0
     ? `${Math.round(savingsRate)}%`
     : 'N/A';
-function renderMoM(elementId, currentValue, previousValue, isFuture) {
+function renderMoM(
+  elementId,
+  currentValue,
+  previousValue,
+  hasCurrentData,
+  hasPreviousData,
+  isFuture
+) {
   const element = document.getElementById(elementId);
-  const currentHasData =
-    currentValue !== null &&
-    currentValue !== undefined &&
-    isFinite(currentValue) &&
-    currentValue !== 0;
-  const previousHasData =
-    previousValue !== null &&
-    previousValue !== undefined &&
-    isFinite(previousValue) &&
-    previousValue !== 0;
-  // เดือนอนาคตที่ยังไม่มีข้อมูล
-  if (isFuture && !currentHasData) {
+  // Future month
+  if (isFuture && !hasCurrentData) {
     element.innerText = 'upcoming';
     element.className = 'monthly-summary-mom neutral';
     return; }
-  // เดือนนี้ไม่มีข้อมูล
-  if (!currentHasData) {
+  // Current month has no entries
+  if (!hasCurrentData) {
     element.innerText = 'no data';
     element.className = 'monthly-summary-mom neutral';
     return; }
-  // เดือนก่อนหน้าไม่มีข้อมูล
-  if (!previousHasData) {
-    element.innerText = 'no prev. data';
+  // Previous month has no entries
+  if (!hasPreviousData) {
+    element.innerText = 'no prev. last month';
+    element.className = 'monthly-summary-mom neutral';
+    return; }
+  // Previous value = 0
+  // Cannot calculate percentage change
+  if (previousValue === 0) {
+    element.innerText = 'no prev. last month';
     element.className = 'monthly-summary-mom neutral';
     return; }
   const difference = currentValue - previousValue;
-  const percent =
-    previousValue !== 0
-      ? Math.round((difference / Math.abs(previousValue)) * 100)
-      : 0;
-  // ต่างกันไม่เกิน ฿500 = ถือว่าเท่าเดิม
-  if (Math.abs(difference) <= 500) {
-    element.innerText =
-      `→ ${Math.abs(percent)}% vs last month`;
-    element.className = 'monthly-summary-mom neutral';
-    return; }
+  const percent = Math.round(
+    (difference / Math.abs(previousValue)) * 100 );
   if (difference > 0) {
     element.innerText =
       `↑ ${Math.abs(percent)}% vs last month`;
     element.className = 'monthly-summary-mom up';
-  } else {
+  } else if (difference < 0) {
     element.innerText =
       `↓ ${Math.abs(percent)}% vs last month`;
     element.className = 'monthly-summary-mom down';
+  } else {
+    element.innerText =
+      '→ 0% vs last month';
+    element.className = 'monthly-summary-mom neutral';
   }
 }
 function renderSavingsRateMoM(currentRate, previousRate, isFuture) {
