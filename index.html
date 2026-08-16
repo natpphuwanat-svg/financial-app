@@ -892,7 +892,30 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   updateYearUI();
   renderMonthGrid();
   fetchData();
- }
+}
+  function renderEntriesPage(entries) {
+  const total = entries.length;
+  document.getElementById('entriesTotal').innerText =
+    `${total} ${total === 1 ? 'ENTRY' : 'ENTRIES'}`;
+  if (total === 0) {
+  document.getElementById('entriesList').innerHTML =
+      `<div class="loading-state">No entries yet.</div>`;
+  return; }
+  const grouped = {
+    Income: [],
+    Expense: [],
+    Deduction: [] };
+  entries.forEach(item => {
+  if (grouped[item.financial_type]) {
+      grouped[item.financial_type].push(item); }
+  });
+  document.getElementById('entriesList').innerHTML = `
+    ${renderEntryGroup('Income', grouped.Income)}
+    ${renderEntryGroup('Expense', grouped.Expense)}
+    ${renderEntryGroup('Deduction', grouped.Deduction)}
+  `;
+  lucide.createIcons();
+}
   function renderEntryGroup(type, items) {
   if (!items || items.length === 0) return '';
   const typeClass = type.toLowerCase();
@@ -942,21 +965,31 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   `;
 }
 function renderEntriesPage(entries) {
-  const total = entries.length;
-  document.getElementById('entriesTotal').innerText =
-    `${total} ${total === 1 ? 'ENTRY' : 'ENTRIES'}`;
-  if (total === 0) {
-  document.getElementById('entriesList').innerHTML =
+  currentEntries = entries || [];
+  let filteredEntries = currentEntries;
+  if (currentEntryFilter !== 'all') {
+    filteredEntries = currentEntries.filter(item =>
+      item.financial_type.toLowerCase() === currentEntryFilter
+    );
+  }
+  if (filteredEntries.length === 0) {
+    document.getElementById('entriesList').innerHTML =
       `<div class="loading-state">No entries yet.</div>`;
-  return; }
+    return;
+  }
   const grouped = {
     Income: [],
     Expense: [],
-    Deduction: [] };
-  entries.forEach(item => {
+    Deduction: []
+  };
+filteredEntries.forEach(item => {
   if (grouped[item.financial_type]) {
-      grouped[item.financial_type].push(item); }
-  });
+    grouped[item.financial_type].push(item);
+  }
+});
+Object.keys(grouped).forEach(type => {
+  grouped[type].sort((a, b) => Number(b.amount) - Number(a.amount));
+});
   document.getElementById('entriesList').innerHTML = `
     ${renderEntryGroup('Income', grouped.Income)}
     ${renderEntryGroup('Expense', grouped.Expense)}
