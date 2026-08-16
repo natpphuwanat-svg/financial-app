@@ -463,6 +463,9 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .monthly-summary-row.savings-row .monthly-summary-value.savings { font-size: 17px; font-weight: 900; }
 .monthly-summary-value-group { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
 .monthly-summary-mom { font-size: 9px; font-weight: 700; letter-spacing: 0.2px; color: var(--text-sub); white-space: nowrap; }
+.monthly-summary-mom.positive { color: #16a34a; }
+.monthly-summary-mom.negative { color: #ef4444; }
+.monthly-summary-mom.neutral { color: var(--text-sub); }
 </style>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1227,20 +1230,39 @@ Object.keys(grouped).forEach(type => {
    totalIncome > 0
     ? `${savingsRate.toFixed(1)}%`
     : '—';
-function renderMoM(elementId, value, currentValue, previousValue) {
+function renderMoM(elementId, currentValue, previousValue, isFuture) {
   const element = document.getElementById(elementId);
-  if (
-    previousValue === null ||
-    previousValue === undefined ||
-    !isFinite(previousValue)
-  ) {
-    element.innerText = 'no prev. data';
+  const currentHasData =
+    currentValue !== null &&
+    currentValue !== undefined &&
+    isFinite(currentValue) &&
+    currentValue !== 0;
+  const previousHasData =
+    previousValue !== null &&
+    previousValue !== undefined &&
+    isFinite(previousValue) &&
+    previousValue !== 0;
+  // เดือนอนาคตที่ยังไม่มีข้อมูล
+  if (isFuture && !currentHasData) {
+    element.innerText = 'UPCOMING';
+    element.className = 'monthly-summary-mom neutral';
+    return; }
+  // เดือนนี้ไม่มีข้อมูล
+  if (!currentHasData) {
+    element.innerText = 'NO DATA';
+    element.className = 'monthly-summary-mom neutral';
+    return; }
+  // เดือนก่อนหน้าไม่มีข้อมูล
+  if (!previousHasData) {
+    element.innerText = 'NO PREV. DATA';
     element.className = 'monthly-summary-mom neutral';
     return; }
   const difference = currentValue - previousValue;
-  const percent = previousValue !== 0
-    ? Math.round((difference / Math.abs(previousValue)) * 100)
-    : 0;
+  const percent =
+    previousValue !== 0
+      ? Math.round((difference / Math.abs(previousValue)) * 100)
+      : 0;
+  // ต่างกันไม่เกิน ฿500 = ถือว่าเท่าเดิม
   if (Math.abs(difference) <= 500) {
     element.innerText =
       `→ ${Math.abs(percent)}% vs last month`;
@@ -1256,10 +1278,13 @@ function renderMoM(elementId, value, currentValue, previousValue) {
     element.className = 'monthly-summary-mom down';
   }
 }
- renderMoM( 'insightsIncomeMoM', totalIncome, totalIncome, previousIncome );
- renderMoM( 'insightsExpenseMoM', totalExpense, totalExpense, previousExpense );
- renderMoM( 'insightsDeductionMoM', totalDeduction, totalDeduction, previousDeduction );
- renderMoM( 'insightsBalanceMoM', balance, balance, previousBalance );
+const isFuture =
+  selectedYear > realCurrentYear ||
+  (selectedYear === realCurrentYear && selectedMonth > realCurrentMonth);
+renderMoM( 'insightsIncomeMoM', totalIncome, previousIncome, isFuture );
+renderMoM( 'insightsExpenseMoM', totalExpense, previousExpense, isFuture );
+renderMoM( 'insightsDeductionMoM', totalDeduction, previousDeduction, isFuture );
+renderMoM( 'insightsBalanceMoM', balance, previousBalance, isFuture );
     // 14. Select Highlights
 const highlightCandidates = []; entries.forEach(function(currentItem) {
 const previousItem = previous.find(function(item) { return ( item.financial_type === currentItem.financial_type && item.title === currentItem.title  );
