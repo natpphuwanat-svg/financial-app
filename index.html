@@ -1285,7 +1285,7 @@ Object.keys(grouped).forEach(type => {
      minimumFractionDigits: 2 });
  document.getElementById('insightsSavingsRate').innerText =
    totalIncome > 0
-    ? `${savingsRate.toFixed(1)}%`
+    ? `${Math.round(savingsRate)}%`
     : 'N/A';
 function renderMoM(elementId, currentValue, previousValue, isFuture) {
   const element = document.getElementById(elementId);
