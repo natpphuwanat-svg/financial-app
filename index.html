@@ -1325,43 +1325,47 @@ function renderMoM(
   }
 }
 function renderSavingsRateMoM(currentRate, previousRate, isFuture) {
-  const element = document.getElementById('insightsSavingsRateMoM');
-  // เดือนอนาคตที่ยังไม่มีข้อมูล
+  const element =
+    document.getElementById('insightsSavingsRateMoM');
+  // Future month with no current data
   if (isFuture && totalIncome <= 0) {
     element.innerText = 'upcoming';
     element.className = 'monthly-summary-mom neutral';
     return; }
-  // เดือนนี้ไม่มี Income → Savings Rate คำนวณไม่ได้
+  // Current month has no Income
   if (totalIncome <= 0) {
     element.innerText = 'no data';
     element.className = 'monthly-summary-mom neutral';
     return; }
-  // เดือนก่อนหน้าไม่มี Income
+  // Previous month has no Savings Rate data
   if (previousRate === null) {
     element.innerText = 'no prev. last month';
     element.className = 'monthly-summary-mom neutral';
     return; }
-  // Savings Rate เดือนก่อน = 0%
-  // ไม่สามารถคำนวณ % change ได้
+  // Previous month Savings Rate is 0%
+  // Cannot calculate percentage change
   if (previousRate === 0) {
     element.innerText = 'no prev. last month';
     element.className = 'monthly-summary-mom neutral';
     return; }
   const difference = currentRate - previousRate;
-  const percentChange = (difference / Math.abs(previousRate)) * 100;
+  const percentChange =
+    (difference / Math.abs(previousRate)) * 100;
   if (difference > 0) {
-  element.innerText =
-    `↑ ${Math.round(Math.abs(percentChange))}% vs last month`;
-  element.className = 'monthly-summary-mom up';
+    element.innerText =
+      `↑ ${Math.round(Math.abs(percentChange))}% vs last month`;
+    element.className =
+      'monthly-summary-mom up';
   } else if (difference < 0) {
-  element.innerText =
-    `↓ ${Math.round(Math.abs(percentChange))}% vs last month`;
-  element.className = 'monthly-summary-mom down';
+    element.innerText =
+      `↓ ${Math.round(Math.abs(percentChange))}% vs last month`;
+    element.className =
+      'monthly-summary-mom down';
   } else {
-  element.innerText =
-    `→ 0% vs last month`;
-  element.className = 'monthly-summary-mom neutral';
-  }
+    element.innerText =
+      `→ 0% vs last month`;
+    element.className =
+      'monthly-summary-mom neutral'; }
 }
 renderMoM( 'insightsIncomeMoM', totalIncome, previousIncome, hasCurrentIncomeData, hasPreviousIncomeData, isFuture );
 renderMoM( 'insightsExpenseMoM', totalExpense, previousExpense, hasCurrentExpenseData, hasPreviousExpenseData, isFuture );
