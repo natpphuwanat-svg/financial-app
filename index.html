@@ -1361,10 +1361,10 @@ function renderSavingsRateMoM(currentRate, previousRate, isFuture) {
   element.className = 'monthly-summary-mom neutral';
   }
 }
-renderMoM( 'insightsIncomeMoM', totalIncome, previousIncome, isFuture );
-renderMoM( 'insightsExpenseMoM', totalExpense, previousExpense, isFuture );
-renderMoM( 'insightsDeductionMoM', totalDeduction, previousDeduction, isFuture );
-renderMoM( 'insightsBalanceMoM', balance, previousBalance, isFuture );
+renderMoM( 'insightsIncomeMoM', totalIncome, previousIncome, hasCurrentIncomeData, hasPreviousIncomeData, isFuture );
+renderMoM( 'insightsExpenseMoM', totalExpense, previousExpense, hasCurrentExpenseData, hasPreviousExpenseData, isFuture );
+renderMoM( 'insightsDeductionMoM', totalDeduction, previousDeduction, hasCurrentDeductionData, hasPreviousDeductionData, isFuture );
+renderMoM( 'insightsBalanceMoM', balance, previousBalance, hasCurrentBalanceData, hasPreviousBalanceData, isFuture );
 renderSavingsRateMoM( savingsRate, previousSavingsRate, isFuture );
     // 14. Select Highlights
 const highlightCandidates = []; entries.forEach(function(currentItem) {
