@@ -1244,7 +1244,7 @@ function renderMoM(elementId, currentValue, previousValue, isFuture) {
     previousValue !== 0;
   // เดือนอนาคตที่ยังไม่มีข้อมูล
   if (isFuture && !currentHasData) {
-    element.innerText = 'UPCOMING';
+    element.innerText = 'upcoming';
     element.className = 'monthly-summary-mom neutral';
     return; }
   // เดือนนี้ไม่มีข้อมูล
@@ -1254,7 +1254,7 @@ function renderMoM(elementId, currentValue, previousValue, isFuture) {
     return; }
   // เดือนก่อนหน้าไม่มีข้อมูล
   if (!previousHasData) {
-    element.innerText = 'NO PREV. DATA';
+    element.innerText = 'no prev. data';
     element.className = 'monthly-summary-mom neutral';
     return; }
   const difference = currentValue - previousValue;
