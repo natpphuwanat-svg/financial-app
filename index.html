@@ -1126,18 +1126,15 @@ Object.keys(grouped).forEach(type => {
     function calculateMoM(current, previous) {
       if (previous === 0) return null;
       return ((current - previous) / previous) * 100; }
+    function formatMoM(current, previous) {
+      const change = calculateMoM(current, previous);
+      if (change === null) return '—';
+      const sign = change > 0 ? '+' : '';
+      return `${sign}${change.toFixed(1)}% vs last month`; }
     const incomeMoM = calculateMoM(totalIncome, previousIncome);
     const expenseMoM = calculateMoM(totalExpense, previousExpense);
     const balanceMoM = calculateMoM(balance, previousBalance);
     const deductionMoM = calculateMoM(totalDeduction, previousDeduction);
-    function calculateMoM(current, previous) {
-    if (previous === 0) return null;
-    return ((current - previous) / previous) * 100; }
-    function formatMoM(current, previous) {
-    const change = calculateMoM(current, previous);
-    if (change === null) return '—';
-    const sign = change > 0 ? '+' : '';
-    return `${sign}${change.toFixed(1)}% vs last month`; }
     lastFetchTime = Date.now();
     // 8. Remove updating state
     document.getElementById('balanceAmount').classList.remove('updating');
