@@ -1361,17 +1361,17 @@ function renderSavingsRateMoM(currentRate, previousRate, isFuture) {
   const difference = currentRate - previousRate;
   const percentChange = (difference / Math.abs(previousRate)) * 100;
   if (difference > 0) {
-    element.innerText =
-      `↑ ${Math.abs(percentChange).toFixed(1)}% vs last month`;
-    element.className = 'monthly-summary-mom up';
+  element.innerText =
+    `↑ ${Math.round(Math.abs(percentChange))}% vs last month`;
+  element.className = 'monthly-summary-mom up';
   } else if (difference < 0) {
-    element.innerText =
-      `↓ ${Math.abs(percentChange).toFixed(1)}% vs last month`;
-    element.className = 'monthly-summary-mom down';
+  element.innerText =
+    `↓ ${Math.round(Math.abs(percentChange))}% vs last month`;
+  element.className = 'monthly-summary-mom down';
   } else {
-    element.innerText =
-      `→ 0.0% vs last month`;
-    element.className = 'monthly-summary-mom neutral';
+  element.innerText =
+    `→ 0% vs last month`;
+  element.className = 'monthly-summary-mom neutral';
   }
 }
 renderMoM( 'insightsIncomeMoM', totalIncome, previousIncome, isFuture );
