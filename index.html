@@ -1231,7 +1231,7 @@ Object.keys(grouped).forEach(type => {
     element.innerText = '—';
     return; }
   const sign = value > 0 ? '+' : '';
-  element.innerText = `${sign}${value.toFixed(1)}% vs last month`; }
+  element.innerText = `${sign}${Math.round(value)}% vs last month`; }
 renderMoM('insightsIncomeMoM', incomeMoM);
 renderMoM('insightsExpenseMoM', expenseMoM);
 renderMoM('insightsBalanceMoM', balanceMoM);
