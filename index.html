@@ -1210,34 +1210,56 @@ Object.keys(grouped).forEach(type => {
       deductionChange.className = 'stat-change deduction'; } else {
       deductionChange.innerText = 'no prev. data';
       deductionChange.className = 'stat-change deduction'; }     
-    // 13.Insights — Monthly Summary
-    document.getElementById('insightsIncome').innerText =
-      '฿' + totalIncome.toLocaleString('en-US', {
-       minimumFractionDigits: 2 });
-    document.getElementById('insightsExpense').innerText =
-      '฿' + totalExpense.toLocaleString('en-US', {
-       minimumFractionDigits: 2 });
-    document.getElementById('insightsBalance').innerText =
-      '฿' + balance.toLocaleString('en-US', {
-       minimumFractionDigits: 2 });
-    document.getElementById('insightsDeduction').innerText =
-      '฿' + totalDeduction.toLocaleString('en-US', {
-       minimumFractionDigits: 2 });
-    document.getElementById('insightsSavingsRate').innerText =
-      totalIncome > 0
-      ? `${savingsRate.toFixed(1)}%`
-      : '—';
-  function renderMoM(elementId, value) {
+  // 13. Insights — Monthly Summary
+  document.getElementById('insightsIncome').innerText =
+    '฿' + totalIncome.toLocaleString('en-US', {
+      minimumFractionDigits: 2 });
+  document.getElementById('insightsExpense').innerText =
+    '฿' + totalExpense.toLocaleString('en-US', {
+      minimumFractionDigits: 2 });
+ document.getElementById('insightsDeduction').innerText =
+    '฿' + totalDeduction.toLocaleString('en-US', {
+      minimumFractionDigits: 2 });
+ document.getElementById('insightsBalance').innerText =
+   '฿' + balance.toLocaleString('en-US', {
+     minimumFractionDigits: 2 });
+ document.getElementById('insightsSavingsRate').innerText =
+   totalIncome > 0
+    ? `${savingsRate.toFixed(1)}%`
+    : '—';
+function renderMoM(elementId, value, currentValue, previousValue) {
   const element = document.getElementById(elementId);
-  if (value === null || !isFinite(value)) {
-    element.innerText = '—';
+  if (
+    previousValue === null ||
+    previousValue === undefined ||
+    !isFinite(previousValue)
+  ) {
+    element.innerText = 'no prev. data';
+    element.className = 'monthly-summary-mom neutral';
     return; }
-  const sign = value > 0 ? '+' : '';
-  element.innerText = `${sign}${Math.round(value)}% vs last month`; }
-renderMoM('insightsIncomeMoM', incomeMoM);
-renderMoM('insightsExpenseMoM', expenseMoM);
-renderMoM('insightsBalanceMoM', balanceMoM);
-renderMoM('insightsDeductionMoM', deductionMoM);
+  const difference = currentValue - previousValue;
+  const percent = previousValue !== 0
+    ? Math.round((difference / Math.abs(previousValue)) * 100)
+    : 0;
+  if (Math.abs(difference) <= 500) {
+    element.innerText =
+      `→ ${Math.abs(percent)}% vs last month`;
+    element.className = 'monthly-summary-mom neutral';
+    return; }
+  if (difference > 0) {
+    element.innerText =
+      `↑ ${Math.abs(percent)}% vs last month`;
+    element.className = 'monthly-summary-mom up';
+  } else {
+    element.innerText =
+      `↓ ${Math.abs(percent)}% vs last month`;
+    element.className = 'monthly-summary-mom down';
+  }
+}
+ renderMoM( 'insightsIncomeMoM', totalIncome, totalIncome, previousIncome );
+ renderMoM( 'insightsExpenseMoM', totalExpense, totalExpense, previousExpense );
+ renderMoM( 'insightsDeductionMoM', totalDeduction, totalDeduction, previousDeduction );
+ renderMoM( 'insightsBalanceMoM', balance, balance, previousBalance );
     // 14. Select Highlights
 const highlightCandidates = []; entries.forEach(function(currentItem) {
 const previousItem = previous.find(function(item) { return ( item.financial_type === currentItem.financial_type && item.title === currentItem.title  );
