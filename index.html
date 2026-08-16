@@ -1131,6 +1131,9 @@ Object.keys(grouped).forEach(type => {
       .filter(item => item.financial_type === 'Deduction')
       .reduce((sum, item) => sum + Number(item.amount || 0), 0);
     const previousBalance = previousIncome - previousExpense;
+    const previousSavingsRate = previousIncome > 0
+      ? (previousBalance / previousIncome) * 100
+      : null;
     // Insights — MoM Percentage
     function calculateMoM(current, previous) {
       if (previous === 0) return null;
