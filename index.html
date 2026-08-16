@@ -1306,7 +1306,7 @@ function renderMoM(elementId, currentValue, previousValue, isFuture) {
     return; }
   // เดือนนี้ไม่มีข้อมูล
   if (!currentHasData) {
-    element.innerText = 'NO DATA';
+    element.innerText = 'no data';
     element.className = 'monthly-summary-mom neutral';
     return; }
   // เดือนก่อนหน้าไม่มีข้อมูล
@@ -1344,7 +1344,7 @@ function renderSavingsRateMoM(currentRate, previousRate, isFuture) {
     return; }
   // เดือนนี้ไม่มี Income → Savings Rate คำนวณไม่ได้
   if (totalIncome <= 0) {
-    element.innerText = 'NO DATA';
+    element.innerText = 'no data';
     element.className = 'monthly-summary-mom neutral';
     return; }
   // เดือนก่อนหน้าไม่มี Income
