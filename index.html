@@ -1135,6 +1135,18 @@ Object.keys(grouped).forEach(type => {
       ? (previousBalance / previousIncome) * 100
       : null;
     // Insights — MoM Percentage
+    function calculateMoM(current, previous) {
+      if (previous === 0) return null;
+      return ((current - previous) / previous) * 100; }
+    function formatMoM(current, previous) {
+      const change = calculateMoM(current, previous);
+      if (change === null) return '—';
+      const sign = change > 0 ? '+' : '';
+      return `${sign}${change.toFixed(1)}% vs last month`; }
+    const incomeMoM = calculateMoM(totalIncome, previousIncome);
+    const expenseMoM = calculateMoM(totalExpense, previousExpense);
+    const balanceMoM = calculateMoM(balance, previousBalance);
+    const deductionMoM = calculateMoM(totalDeduction, previousDeduction);
     const isFuture = selectedYear > realCurrentYear ||
     (selectedYear === realCurrentYear && selectedMonth > realCurrentMonth);
     lastFetchTime = Date.now();
@@ -1147,119 +1159,117 @@ Object.keys(grouped).forEach(type => {
     document.getElementById('expenseChange').classList.remove('updating');
     document.getElementById('deductionAmount').classList.remove('updating');
     document.getElementById('deductionChange').classList.remove('updating');
-  // 9. Render Balance
-document.getElementById('balanceAmount').innerText =
-  '฿' + balance.toLocaleString('en-US', {
-    minimumFractionDigits: 2 });
-const balanceChange =
-  document.getElementById('balanceChange');
-const hasCurrentBalanceData = entries.length > 0;
-const hasPreviousBalanceData = previous.length > 0;
-if (isFuture && !hasCurrentBalanceData) {
-  balanceChange.innerText = 'upcoming';
-  balanceChange.className = 'balance-change';
-} else if (!hasCurrentBalanceData) {
-  balanceChange.innerText = 'no data';
-  balanceChange.className = 'balance-change';
-} else if (!hasPreviousBalanceData || previousBalance === 0) {
-  balanceChange.innerText = 'no prev. last month';
-  balanceChange.className = 'balance-change';
-} else {
-  const percentage =
-    ((balance - previousBalance) / previousBalance) * 100;
-  const sign = percentage > 0 ? '+' : '';
-  const className =
-    percentage > 0 ? 'positive' : 'negative';
-  balanceChange.innerText =
-    `${sign}${percentage.toFixed(0)}% vs last month`;
-  balanceChange.className =
-    `balance-change ${className}`; }
-// 10. Render Income
-document.getElementById('incomeAmount').innerText =
-  '฿' + totalIncome.toLocaleString('en-US', {
-    minimumFractionDigits: 2 });
-const incomeChange =
-  document.getElementById('incomeChange');
-const hasCurrentIncomeData =
-  entries.some(item => item.financial_type === 'Income');
-const hasPreviousIncomeData =
-  previous.some(item => item.financial_type === 'Income');
-if (isFuture && !hasCurrentIncomeData) {
-  incomeChange.innerText = 'upcoming';
-  incomeChange.className = 'stat-change income';
-} else if (!hasCurrentIncomeData) {
-  incomeChange.innerText = 'no data';
-  incomeChange.className = 'stat-change income';
-} else if (!hasPreviousIncomeData || previousIncome === 0) {
-  incomeChange.innerText = 'no prev. last month';
-  incomeChange.className = 'stat-change income';
-} else {
-  const percentage =
-    ((totalIncome - previousIncome) / previousIncome) * 100;
-  const sign = percentage > 0 ? '+' : '';
-  incomeChange.innerText =
-    `${sign}${percentage.toFixed(0)}% vs prev.`;
-  incomeChange.className =
-    'stat-change income'; }
-// 11. Render Expense
-document.getElementById('expenseAmount').innerText =
-  '฿' + totalExpense.toLocaleString('en-US', {
-    minimumFractionDigits: 2 });
-let expenseRatio = 0;
-if (totalIncome > 0) {
-  expenseRatio =
-    (totalExpense / totalIncome) * 100; }
-const expenseChange =
-  document.getElementById('expenseChange');
-const hasCurrentExpenseData =
-  entries.some(item => item.financial_type === 'Expense');
-if (isFuture && !hasCurrentExpenseData) {
-  expenseChange.innerText = 'upcoming';
-  expenseChange.className = 'stat-change';
-} else if (!hasCurrentExpenseData) {
-  expenseChange.innerText = 'no data';
-  expenseChange.className = 'stat-change';
-} else if (totalIncome <= 0) {
-  expenseChange.innerText = 'N/A';
-  expenseChange.className = 'stat-change';
-} else {
-  let ratioClass = 'good';
-  if (expenseRatio > 60) {
-    ratioClass = 'bad';
-  } else if (expenseRatio > 30) {
-    ratioClass = 'warning'; }
-  expenseChange.innerText =
-    `${expenseRatio.toFixed(0)}% of income`;
-  expenseChange.className =
-    `stat-change ${ratioClass}`; }
-// 12. Render Deduction
-document.getElementById('deductionAmount').innerText =
-  '฿' + totalDeduction.toLocaleString('en-US', {
-    minimumFractionDigits: 2 });
-const deductionChange =
-  document.getElementById('deductionChange');
-const hasCurrentDeductionData =
-  entries.some(item => item.financial_type === 'Deduction');
-const hasPreviousDeductionData =
-  previous.some(item => item.financial_type === 'Deduction');
-if (isFuture && !hasCurrentDeductionData) {
-  deductionChange.innerText = 'upcoming';
-  deductionChange.className = 'stat-change deduction';
-} else if (!hasCurrentDeductionData) {
-  deductionChange.innerText = 'no data';
-  deductionChange.className = 'stat-change deduction';
-} else if (!hasPreviousDeductionData || previousDeduction === 0) {
-  deductionChange.innerText = 'no prev. last month';
-  deductionChange.className = 'stat-change deduction';
-} else {
-  const percentage =
-    ((totalDeduction - previousDeduction) /
-      previousDeduction) * 100;
-  const sign = percentage > 0 ? '+' : '';
-  deductionChange.innerText =
-    `${sign}${percentage.toFixed(0)}% vs prev.`;
-  deductionChange.className =
-    'stat-change deduction'; }
+    // 9. Render Balance
+    document.getElementById('balanceAmount').innerText =
+      '฿' + balance.toLocaleString('en-US', {
+        minimumFractionDigits: 2 });
+    const balanceChange =
+      document.getElementById('balanceChange');
+    const hasCurrentBalanceData = entries.length > 0;
+    const hasPreviousBalanceData = previous.length > 0;
+    if (isFuture && !hasCurrentBalanceData) {
+      balanceChange.innerText = 'upcoming';
+      balanceChange.className = 'balance-change';
+    } else if (!hasCurrentBalanceData) {
+      balanceChange.innerText = 'no data';
+      balanceChange.className = 'balance-change';
+    } else if (!hasPreviousBalanceData || previousBalance === 0) {
+      balanceChange.innerText = 'no prev. last month';
+      balanceChange.className = 'balance-change';
+    } else {
+    const percentage =
+      ((balance - previousBalance) / previousBalance) * 100;
+    const sign = percentage > 0 ? '+' : '';
+    const className = percentage > 0 ? 'positive' : 'negative';
+      balanceChange.innerText =
+        `${sign}${percentage.toFixed(0)}% vs last month`;
+      balanceChange.className =
+        `balance-change ${className}`; }
+    // 10. Render Income
+    document.getElementById('incomeAmount').innerText =
+      '฿' + totalIncome.toLocaleString('en-US', {
+        minimumFractionDigits: 2 });
+    const incomeChange =
+      document.getElementById('incomeChange');
+    const hasCurrentIncomeData =
+      entries.some(item => item.financial_type === 'Income');
+    const hasPreviousIncomeData =
+      previous.some(item => item.financial_type === 'Income');
+    if (isFuture && !hasCurrentIncomeData) {
+      incomeChange.innerText = 'upcoming';
+      incomeChange.className = 'stat-change income';
+    } else if (!hasCurrentIncomeData) {
+      incomeChange.innerText = 'no data';
+      incomeChange.className = 'stat-change income';
+    } else if (!hasPreviousIncomeData || previousIncome === 0) {
+      incomeChange.innerText = 'no prev. last month';
+      incomeChange.className = 'stat-change income';
+    } else {
+    const percentage =
+      ((totalIncome - previousIncome) / previousIncome) * 100;
+    const sign = percentage > 0 ? '+' : '';
+      incomeChange.innerText =
+        `${sign}${percentage.toFixed(0)}% vs prev.`;
+      incomeChange.className = 'stat-change income'; }
+    // 11. Render Expense
+    document.getElementById('expenseAmount').innerText =
+      '฿' + totalExpense.toLocaleString('en-US', {
+        minimumFractionDigits: 2 });
+    let expenseRatio = 0;
+    if (totalIncome > 0) {
+      expenseRatio =
+        (totalExpense / totalIncome) * 100; }
+    const expenseChange =
+      document.getElementById('expenseChange');
+    const hasCurrentExpenseData =
+      entries.some(item => item.financial_type === 'Expense');
+    if (isFuture && !hasCurrentExpenseData) {
+      expenseChange.innerText = 'upcoming';
+      expenseChange.className = 'stat-change';
+    } else if (!hasCurrentExpenseData) {
+      expenseChange.innerText = 'no data';
+      expenseChange.className = 'stat-change';
+    } else if (totalIncome <= 0) {
+      expenseChange.innerText = 'N/A';
+      expenseChange.className = 'stat-change';
+    } else {
+      let ratioClass = 'good';
+      if (expenseRatio > 60) {
+        ratioClass = 'bad';
+      } else if (expenseRatio > 30) {
+        ratioClass = 'warning';}
+      expenseChange.innerText =
+        `${expenseRatio.toFixed(0)}% of income`;
+      expenseChange.className =
+        `stat-change ${ratioClass}`;}
+    // 12. Render Deduction
+    document.getElementById('deductionAmount').innerText =
+      '฿' + totalDeduction.toLocaleString('en-US', {
+        minimumFractionDigits: 2 });
+    const deductionChange =
+      document.getElementById('deductionChange');
+    const hasCurrentDeductionData =
+      entries.some(item => item.financial_type === 'Deduction');
+    const hasPreviousDeductionData =
+      previous.some(item => item.financial_type === 'Deduction');
+    if (isFuture && !hasCurrentDeductionData) {
+      deductionChange.innerText = 'upcoming';
+      deductionChange.className = 'stat-change deduction';
+    } else if (!hasCurrentDeductionData) {
+      deductionChange.innerText = 'no data';
+      deductionChange.className = 'stat-change deduction';
+    } else if (!hasPreviousDeductionData || previousDeduction === 0) {
+      deductionChange.innerText = 'no prev. last month';
+      deductionChange.className = 'stat-change deduction';
+    } else {
+    const percentage =
+      ((totalDeduction - previousDeduction) /
+       previousDeduction) * 100;
+    const sign = percentage > 0 ? '+' : '';
+      deductionChange.innerText =
+        `${sign}${percentage.toFixed(0)}% vs prev.`;
+      deductionChange.className =
+        'stat-change deduction'; }
   // 13. Insights — Monthly Summary
   document.getElementById('insightsIncome').innerText =
     '฿' + totalIncome.toLocaleString('en-US', {
@@ -1277,100 +1287,97 @@ if (isFuture && !hasCurrentDeductionData) {
    totalIncome > 0
     ? `${Math.round(savingsRate)}%`
     : 'N/A';
-function renderMoM(
-  elementId,
-  currentValue,
-  previousValue,
-  hasCurrentData,
-  hasPreviousData,
-  isFuture
-) {
+function renderMoM(elementId, currentValue, previousValue, isFuture) {
   const element = document.getElementById(elementId);
-  // Future month
-  if (isFuture && !hasCurrentData) {
+  const currentHasData =
+    currentValue !== null &&
+    currentValue !== undefined &&
+    isFinite(currentValue) &&
+    currentValue !== 0;
+  const previousHasData =
+    previousValue !== null &&
+    previousValue !== undefined &&
+    isFinite(previousValue) &&
+    previousValue !== 0;
+  // เดือนอนาคตที่ยังไม่มีข้อมูล
+  if (isFuture && !currentHasData) {
     element.innerText = 'upcoming';
     element.className = 'monthly-summary-mom neutral';
     return; }
-  // Current month has no entries
-  if (!hasCurrentData) {
+  // เดือนนี้ไม่มีข้อมูล
+  if (!currentHasData) {
     element.innerText = 'no data';
     element.className = 'monthly-summary-mom neutral';
     return; }
-  // Previous month has no entries
-  if (!hasPreviousData) {
-    element.innerText = 'no prev. last month';
-    element.className = 'monthly-summary-mom neutral';
-    return; }
-  // Previous value = 0
-  // Cannot calculate percentage change
-  if (previousValue === 0) {
-    element.innerText = 'no prev. last month';
+  // เดือนก่อนหน้าไม่มีข้อมูล
+  if (!previousHasData) {
+    element.innerText = 'no prev. data';
     element.className = 'monthly-summary-mom neutral';
     return; }
   const difference = currentValue - previousValue;
-  const percent = Math.round(
-    (difference / Math.abs(previousValue)) * 100 );
+  const percent =
+    previousValue !== 0
+      ? Math.round((difference / Math.abs(previousValue)) * 100)
+      : 0;
+  // ต่างกันไม่เกิน ฿500 = ถือว่าเท่าเดิม
+  if (Math.abs(difference) <= 500) {
+    element.innerText =
+      `→ ${Math.abs(percent)}% vs last month`;
+    element.className = 'monthly-summary-mom neutral';
+    return; }
   if (difference > 0) {
     element.innerText =
       `↑ ${Math.abs(percent)}% vs last month`;
     element.className = 'monthly-summary-mom up';
-  } else if (difference < 0) {
+  } else {
     element.innerText =
       `↓ ${Math.abs(percent)}% vs last month`;
     element.className = 'monthly-summary-mom down';
-  } else {
-    element.innerText =
-      '→ 0% vs last month';
-    element.className = 'monthly-summary-mom neutral';
   }
 }
 function renderSavingsRateMoM(currentRate, previousRate, isFuture) {
-  const element =
-    document.getElementById('insightsSavingsRateMoM');
-  // Future month with no current data
+  const element = document.getElementById('insightsSavingsRateMoM');
+  // เดือนอนาคตที่ยังไม่มีข้อมูล
   if (isFuture && totalIncome <= 0) {
     element.innerText = 'upcoming';
     element.className = 'monthly-summary-mom neutral';
     return; }
-  // Current month has no Income
+  // เดือนนี้ไม่มี Income → Savings Rate คำนวณไม่ได้
   if (totalIncome <= 0) {
     element.innerText = 'no data';
     element.className = 'monthly-summary-mom neutral';
     return; }
-  // Previous month has no Savings Rate data
+  // เดือนก่อนหน้าไม่มี Income
   if (previousRate === null) {
     element.innerText = 'no prev. last month';
     element.className = 'monthly-summary-mom neutral';
     return; }
-  // Previous month Savings Rate is 0%
-  // Cannot calculate percentage change
+  // Savings Rate เดือนก่อน = 0%
+  // ไม่สามารถคำนวณ % change ได้
   if (previousRate === 0) {
     element.innerText = 'no prev. last month';
     element.className = 'monthly-summary-mom neutral';
     return; }
   const difference = currentRate - previousRate;
-  const percentChange =
-    (difference / Math.abs(previousRate)) * 100;
+  const percentChange = (difference / Math.abs(previousRate)) * 100;
   if (difference > 0) {
-    element.innerText =
-      `↑ ${Math.round(Math.abs(percentChange))}% vs last month`;
-    element.className =
-      'monthly-summary-mom up';
+  element.innerText =
+    `↑ ${Math.round(Math.abs(percentChange))}% vs last month`;
+  element.className = 'monthly-summary-mom up';
   } else if (difference < 0) {
-    element.innerText =
-      `↓ ${Math.round(Math.abs(percentChange))}% vs last month`;
-    element.className =
-      'monthly-summary-mom down';
+  element.innerText =
+    `↓ ${Math.round(Math.abs(percentChange))}% vs last month`;
+  element.className = 'monthly-summary-mom down';
   } else {
-    element.innerText =
-      `→ 0% vs last month`;
-    element.className =
-      'monthly-summary-mom neutral'; }
+  element.innerText =
+    `→ 0% vs last month`;
+  element.className = 'monthly-summary-mom neutral';
+  }
 }
-renderMoM( 'insightsIncomeMoM', totalIncome, previousIncome, hasCurrentIncomeData, hasPreviousIncomeData, isFuture );
-renderMoM( 'insightsExpenseMoM', totalExpense, previousExpense, hasCurrentExpenseData, hasPreviousExpenseData, isFuture );
-renderMoM( 'insightsDeductionMoM', totalDeduction, previousDeduction, hasCurrentDeductionData, hasPreviousDeductionData, isFuture );
-renderMoM( 'insightsBalanceMoM', balance, previousBalance, hasCurrentBalanceData, hasPreviousBalanceData, isFuture );
+renderMoM( 'insightsIncomeMoM', totalIncome, previousIncome, isFuture );
+renderMoM( 'insightsExpenseMoM', totalExpense, previousExpense, isFuture );
+renderMoM( 'insightsDeductionMoM', totalDeduction, previousDeduction, isFuture );
+renderMoM( 'insightsBalanceMoM', balance, previousBalance, isFuture );
 renderSavingsRateMoM( savingsRate, previousSavingsRate, isFuture );
     // 14. Select Highlights
 const highlightCandidates = []; entries.forEach(function(currentItem) {
