@@ -459,6 +459,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .monthly-summary-value.deduction { color: var(--deduction-color); }
 .monthly-summary-value.savings { color: var(--blue-grey); }
 .monthly-summary-row.savings-row { min-height: 64px; }
+.monthly-summary-value-group { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.monthly-summary-mom { font-size: 9px; font-weight: 700; letter-spacing: 0.2px; color: var(--text-sub); white-space: nowrap; }
 </style>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -647,25 +649,40 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     —
   </div>
 </div>
+</div>
+ <div class="monthly-summary-row">
+  <div class="monthly-summary-label">Expense</div>
+  <div class="monthly-summary-value-group">
+    <div class="monthly-summary-value expense" id="insightsExpense">
+      ฿0.00
     </div>
-    <div class="monthly-summary-row">
-      <div class="monthly-summary-label">Expense</div>
-      <div class="monthly-summary-value expense" id="insightsExpense">
-        ฿0.00
-      </div>
+    <div class="monthly-summary-mom" id="insightsExpenseMoM">
+      —
     </div>
-    <div class="monthly-summary-row">
-      <div class="monthly-summary-label">Balance</div>
-      <div class="monthly-summary-value balance" id="insightsBalance">
-        ฿0.00
-      </div>
-    </div>
-    <div class="monthly-summary-row">
-  <div class="monthly-summary-label">Deduction</div>
-  <div class="monthly-summary-value deduction" id="insightsDeduction">
-    ฿0.00
   </div>
 </div>
+<div class="monthly-summary-row">
+  <div class="monthly-summary-label">Balance</div>
+  <div class="monthly-summary-value-group">
+    <div class="monthly-summary-value balance" id="insightsBalance">
+      ฿0.00
+    </div>
+    <div class="monthly-summary-mom" id="insightsBalanceMoM">
+      —
+    </div>
+  </div>
+</div>
+  <div class="monthly-summary-row">
+  <div class="monthly-summary-label">Deduction</div>
+  <div class="monthly-summary-value-group">
+    <div class="monthly-summary-value deduction" id="insightsDeduction">
+      ฿0.00
+    </div>
+    <div class="monthly-summary-mom" id="insightsDeductionMoM">
+      —
+    </div>
+  </div>
+</div>>
     <div class="monthly-summary-row savings-row">
       <div class="monthly-summary-label">Savings Rate</div>
       <div class="monthly-summary-value savings" id="insightsSavingsRate">
@@ -1105,6 +1122,14 @@ Object.keys(grouped).forEach(type => {
       .filter(item => item.financial_type === 'Deduction')
       .reduce((sum, item) => sum + Number(item.amount || 0), 0);
     const previousBalance = previousIncome - previousExpense;
+    // Insights — MoM Percentage
+    function calculateMoM(current, previous) {
+      if (previous === 0) return null;
+      return ((current - previous) / previous) * 100; }
+    const incomeMoM = calculateMoM(totalIncome, previousIncome);
+    const expenseMoM = calculateMoM(totalExpense, previousExpense);
+    const balanceMoM = calculateMoM(balance, previousBalance);
+    const deductionMoM = calculateMoM(totalDeduction, previousDeduction);
     function calculateMoM(current, previous) {
     if (previous === 0) return null;
     return ((current - previous) / previous) * 100; }
@@ -1207,6 +1232,17 @@ Object.keys(grouped).forEach(type => {
       totalIncome > 0
       ? `${savingsRate.toFixed(1)}%`
       : '—';
+  function renderMoM(elementId, value) {
+  const element = document.getElementById(elementId);
+  if (value === null || !isFinite(value)) {
+    element.innerText = '—';
+    return; }
+  const sign = value > 0 ? '+' : '';
+  element.innerText = `${sign}${value.toFixed(1)}% vs last month`; }
+renderMoM('insightsIncomeMoM', incomeMoM);
+renderMoM('insightsExpenseMoM', expenseMoM);
+renderMoM('insightsBalanceMoM', balanceMoM);
+renderMoM('insightsDeductionMoM', deductionMoM);
     // 14. Select Highlights
 const highlightCandidates = []; entries.forEach(function(currentItem) {
 const previousItem = previous.find(function(item) { return ( item.financial_type === currentItem.financial_type && item.title === currentItem.title  );
