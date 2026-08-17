@@ -1327,12 +1327,49 @@ Object.keys(grouped).forEach(type => {
     const expenseBreakdown = buildExpenseBreakdown(entries);
     renderExpenseDonut(expenseBreakdown);
     const expenseLegend = document.getElementById('expenseLegend');
-    if (expenseLegend) { expenseLegend.innerHTML = expenseBreakdown.items.map(item => `
-    <div class="expense-legend-item">
-    <span class="expense-legend-dot"></span>
-    <span>${item.title}</span>
-    </div>
-    `).join(''); }
+
+if (expenseLegend) {
+  if (!expenseBreakdown.items.length) {
+    expenseLegend.innerHTML = `
+      <div class="expense-empty-state">
+        <div class="expense-empty-title">
+          <span class="expense-legend-dot"></span>
+          <span>NO EXPENSE</span>
+        </div>
+        <div class="expense-empty-subtitle">
+          No expenses this month
+        </div>
+      </div>
+    `;
+  } else {
+    expenseLegend.innerHTML = expenseBreakdown.items.map((item, index) => {
+      const percentage = expenseBreakdown.totalExpense > 0
+        ? Math.round((item.amount / expenseBreakdown.totalExpense) * 100)
+        : 0;
+
+      return `
+        <div class="expense-legend-item">
+          <span
+            class="expense-legend-dot"
+            style="background: var(--expense-chart-${index + 1});"
+          ></span>
+
+          <span class="expense-legend-name">
+            ${item.title}
+          </span>
+
+          <span class="expense-legend-amount">
+            ฿${item.amount.toLocaleString('en-US')}
+          </span>
+
+          <span class="expense-legend-percent">
+            ${percentage}%
+          </span>
+        </div>
+      `;
+    }).join('');
+  }
+}
     const previous = previousEntries || [];
     if (requestId !== fetchRequestId) {
     return; }
