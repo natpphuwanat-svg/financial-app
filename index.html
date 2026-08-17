@@ -476,7 +476,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   max-width: 100%;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 132px 150px;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
   gap: 18px;
 }
@@ -488,7 +488,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .expense-donut-area {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   min-height: 150px;
 }
 
@@ -508,6 +508,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 
 .expense-breakdown-info {
   min-width: 0;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .expense-legend {
@@ -548,8 +550,12 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   gap: 18px;
 }
 
-.expense-type-block {
-  min-width: 0;
+.expense-type-block:first-child {
+  text-align: right;
+}
+
+.expense-type-block:last-child {
+  text-align: left;
 }
 
 .expense-type-label {
