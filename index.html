@@ -47,6 +47,14 @@
       --deduction-color: #D97706;
       --deduction-bg: rgba(217, 119, 6, 0.16);
       --modal-bg: rgba(15, 23, 42, 0.35);
+    
+      /* Donut Chart */
+      --expense-chart-1: #A3E635;
+      --expense-chart-2: #7298C7;
+      --expense-chart-3: #F3D98F;
+      --expense-chart-4: #C084FC;
+      --expense-chart-5: #FB7185;
+      --expense-chart-6: #94A3B8;
     }
 
     [data-theme="dark"] {
@@ -504,6 +512,16 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   font-size: 9px;
   font-weight: 800;
   letter-spacing: 0.5px;
+}
+.expense-donut {
+  width: 132px;
+  height: 132px;
+  display: block;
+  overflow: visible;
+}
+
+.expense-donut-segment {
+  transition: opacity 0.2s ease;
 }
 
 .expense-breakdown-info {
