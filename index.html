@@ -1219,9 +1219,53 @@ Object.keys(grouped).forEach(type => {
     (sum, item) => sum + item.amount, 0 );
   const breakdown = [...topFive];
   if (otherAmount > 0) { breakdown.push({
-      title: 'Other', amount: otherAmount, isOther: true, children: otherEntries });
-  }
-  return { totalExpense, items: breakdown };
+      title: 'Other', amount: otherAmount, isOther: true, children: otherEntries }); }
+  return { totalExpense, items: breakdown }; }
+  function renderExpenseDonut(breakdown) {
+  const donutArea = document.querySelector('.expense-donut-area');
+  if (!donutArea) return;
+  const { totalExpense, items } = breakdown;
+  // Empty state
+  if (!items.length || totalExpense <= 0) {
+    donutArea.innerHTML = `
+      <div class="expense-donut-placeholder">
+        <span>NO EXPENSE</span>
+      </div>
+    `;
+  return; }
+  const radius = 48;
+  const circumference = 2 * Math.PI * radius;
+  let offset = 0;
+  const segments = items.map((item, index) => {
+    const percentage = item.amount / totalExpense;
+    const segmentLength = percentage * circumference;
+    const segment = `
+      <circle
+        class="expense-donut-segment"
+        cx="60"
+        cy="60"
+        r="${radius}"
+        fill="none"
+        stroke="var(--expense-chart-${index + 1})"
+        stroke-width="18"
+        stroke-dasharray="${segmentLength} ${circumference - segmentLength}"
+        stroke-dashoffset="${-offset}"
+        transform="rotate(-90 60 60)"
+      ></circle>
+    `;
+    offset += segmentLength;
+    return segment;
+  }).join('');
+  donutArea.innerHTML = `
+    <svg
+      class="expense-donut"
+      viewBox="0 0 120 120"
+      role="img"
+      aria-label="Expense breakdown"
+    >
+      ${segments}
+    </svg>
+  `;
   }
   async function fetchData() {
   const requestId = ++fetchRequestId;
