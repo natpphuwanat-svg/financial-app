@@ -1262,6 +1262,7 @@ Object.keys(grouped).forEach(type => {
     if (requestId !== fetchRequestId) { return; }
     // 6. Calculate current totals
     const entries = currentEntries || [];
+    const expenseBreakdown = buildExpenseBreakdown(entries);
     const previous = previousEntries || [];
     if (requestId !== fetchRequestId) {
     return; }
