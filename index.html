@@ -1263,6 +1263,13 @@ Object.keys(grouped).forEach(type => {
     // 6. Calculate current totals
     const entries = currentEntries || [];
     const expenseBreakdown = buildExpenseBreakdown(entries);
+    const expenseLegend = document.getElementById('expenseLegend');
+    if (expenseLegend) { expenseLegend.innerHTML = expenseBreakdown.items.map(item => `
+    <div class="expense-legend-item">
+    <span class="expense-legend-dot"></span>
+    <span>${item.title}</span>
+    </div>
+    `).join(''); }
     const previous = previousEntries || [];
     if (requestId !== fetchRequestId) {
     return; }
