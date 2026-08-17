@@ -1319,12 +1319,16 @@ function renderMoM(elementId, currentValue, previousValue, isFuture) {
     previousValue !== 0
       ? Math.round((difference / Math.abs(previousValue)) * 100)
       : 0;
-  // ต่างกันไม่เกิน ฿500 = ถือว่าเท่าเดิม
-  if (Math.abs(difference) <= 500) {
-    element.innerText =
-      `→ ${Math.abs(percent)}% vs last month`;
-    element.className = 'monthly-summary-mom neutral';
-    return; }
+  // ต่างกันไม่เกิน ฿500 = ถือว่าเท่าเดิม Deduction ต่างกันไม่เกิน 100 = ถือว่าเท่าเดิม
+  const threshold =
+  elementId === 'insightsDeductionMoM'
+    ? 100
+    : 500;
+  if (Math.abs(difference) <= threshold) {
+  element.innerText =
+    `→ ${Math.abs(percent)}% vs last month`;
+  element.className = 'monthly-summary-mom neutral';
+  return; }
   if (difference > 0) {
     element.innerText =
       `↑ ${Math.abs(percent)}% vs last month`;
