@@ -369,9 +369,11 @@ backdrop-filter: blur(30px) saturate(180%); -webkit-backdrop-filter: blur(30px) 
 border-color: rgba(255, 255, 255, 0.20);
 box-shadow:
 0 4px 16px rgba(0, 0, 0, 0.16),
-0 1px 4px rgba(0, 0, 0, 0.10); }
+0 1px 4px rgba(0, 0, 0, 0.10);
+}
 [data-theme="dark"] .floating-tab-bar::before {
-background: rgba(255, 255, 255, 0.06); }
+background: rgba(255, 255, 255, 0.06);
+}
 [data-theme="dark"]
 .floating-tab { color: #94A3B8; }
 [data-theme="dark"]
@@ -381,7 +383,8 @@ background: rgba(255, 255, 255, 0.06); }
 .floating-tab-bar.compact { transform: translateX(-50%) scale(0.90); }
 @media (max-width: 360px) {
 .floating-tab-bar { width: 88%; }
-.floating-tab { font-size: 10px; } } 
+.floating-tab { font-size: 10px; }
+}
 .placeholder-page { min-height: 60vh; display: flex; align-items: center; justify-content: center; }
 .placeholder-title { font-size: 24px; font-weight: 800; color: var(--text-main); letter-spacing: 0.3px; }
 .entries-filter { display: flex; width: 100%; margin-bottom: 22px; gap: 0; }
@@ -434,35 +437,28 @@ text-align: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .skeleton-title { width: 110px; height: 12px; }
 .skeleton-type { width: 52px; height: 9px; }
 .skeleton-amount { width: 68px; height: 13px; }
-@keyframes skeletonShimmer { 100% { transform: translateX(100%); } }
+@keyframes skeletonShimmer { 100% { transform: translateX(100%); }
+}
 [data-theme="dark"] .skeleton-line {
 background: rgba(148, 163, 184, 0.10); }
 [data-theme="dark"] .skeleton-line::after {
 background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), transparent ); }
 .insights-section { margin-bottom: 28px; }
 .insights-section-title { font-size: 13px; font-weight: 800; letter-spacing: 0.8px; color: var(--text-sub); text-transform: uppercase; margin-bottom: 14px; }
-.monthly-summary-card { background: var(--glass-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 20px; border: 1px solid var(--glass-border);
- box-shadow: var(--glass-shadow); overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; }
-.monthly-summary-row { display: flex; align-items: center; justify-content: space-between; min-height: 68px; padding: 12px 18px; }
-.monthly-summary-row:nth-child(1),
-.monthly-summary-row:nth-child(3) { border-right: 1px solid rgba(100, 116, 139, 0.06); }
-.monthly-summary-row:nth-child(1),
-.monthly-summary-row:nth-child(2),
-.monthly-summary-row:nth-child(3),
-.monthly-summary-row:nth-child(4) { border-bottom: 1px solid rgba(100, 116, 139, 0.06); }
-[data-theme="dark"] .monthly-summary-row:nth-child(1),
-[data-theme="dark"] .monthly-summary-row:nth-child(2),
-[data-theme="dark"] .monthly-summary-row:nth-child(3),
-[data-theme="dark"] .monthly-summary-row:nth-child(4) { border-bottom-color: rgba(148, 163, 184, 0.10); }
-[data-theme="dark"] .monthly-summary-row:nth-child(1),
-[data-theme="dark"] .monthly-summary-row:nth-child(3) { border-right-color: rgba(148, 163, 184, 0.10); }
+.monthly-summary-card { background: var(--glass-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); overflow: hidden; }
+.monthly-summary-row { display: flex; align-items: center; justify-content: space-between; min-height: 58px; padding: 12px 18px; }
+.monthly-summary-row + .monthly-summary-row { position: relative; }
+.monthly-summary-row + .monthly-summary-row::before { content: ""; position: absolute; top: 0; left: 18px; right: 18px; height: 1px; background: rgba(100, 116, 139, 0.06); }
+[data-theme="dark"] .monthly-summary-row + .monthly-summary-row::before {
+ background: rgba(148, 163, 184, 0.10); }
 .monthly-summary-label { font-size: 12px; font-weight: 700; color: var(--text-sub); letter-spacing: 0.3px; }
 .monthly-summary-value { font-size: 15px; font-weight: 800; white-space: nowrap; }
 .monthly-summary-value.income { color: var(--income-color); }
 .monthly-summary-value.expense { color: var(--expense-color); }
 .monthly-summary-value.balance { color: var(--text-main); }
 .monthly-summary-value.deduction { color: var(--deduction-color); }
-.monthly-summary-row.savings-row { grid-column: 1 / -1; min-height: 64px; background: rgba(114, 152, 199, 0.06); border-right: none !important; border-bottom: none !important; }
+.monthly-summary-value.savings { color: var(--blue-grey); }
+.monthly-summary-row.savings-row { min-height: 64px; background: rgba(114, 152, 199, 0.06); }
 [data-theme="dark"] .monthly-summary-row.savings-row { background: rgba(114, 152, 199, 0.10); }
 .monthly-summary-row.savings-row .monthly-summary-value.savings { font-size: 17px; font-weight: 900; }
 .monthly-summary-value-group { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
@@ -470,20 +466,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .monthly-summary-mom.positive { color: #16a34a; }
 .monthly-summary-mom.negative { color: #ef4444; }
 .monthly-summary-mom.neutral { color: var(--text-sub); }
-.expense-breakdown-section { margin-bottom: 28px; }
-.expense-breakdown-layout { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 18px; }
-.expense-donut-area { display: flex; align-items: center; justify-content: center; min-height: 150px; }
-.expense-donut-placeholder { width: 132px; height: 132px; border-radius: 50%; border: 18px solid rgba(100, 116, 139, 0.14);
- display: flex; align-items: center; justify-content: center; color: var(--text-sub); font-size: 9px; font-weight: 800; letter-spacing: 0.5px; }
-.expense-breakdown-info { min-width: 0; }
-.expense-legend { display: flex; flex-direction: column; gap: 9px; }
-.expense-legend-item { display: flex; align-items: center; gap: 8px; color: var(--text-sub); font-size: 11px; font-weight: 700; line-height: 1.2; }
-.expense-legend-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-sub); flex-shrink: 0; }
-.expense-selected-detail { display: none; margin-top: 14px; }
-.expense-type-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 22px; }
-.expense-type-block { min-width: 0; }
-.expense-type-label { font-size: 10px; font-weight: 800; letter-spacing: 0.7px; color: var(--text-sub); margin-bottom: 5px; }
-.expense-type-value { font-size: 16px; font-weight: 800; color: var(--text-main); }
 </style>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -717,62 +699,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     </div>
   </div>
 </div>
-</section>
-<section class="insights-section expense-breakdown-section">
-  <div class="insights-section-title">
-    EXPENSE BREAKDOWN
-  </div>
-  <div class="expense-breakdown-layout">
-    <!-- Donut -->
-    <div class="expense-donut-area">
-      <div class="expense-donut-placeholder">
-        <span>EXPENSE</span>
-      </div>
-    </div>
-    <!-- Legend / Selected Detail -->
-    <div class="expense-breakdown-info">
-      <div class="expense-legend" id="expenseLegend">
-        <div class="expense-legend-item">
-          <span class="expense-legend-dot"></span>
-          <span>Food</span>
-        </div>
-        <div class="expense-legend-item">
-          <span class="expense-legend-dot"></span>
-          <span>Transport</span>
-        </div>
-        <div class="expense-legend-item">
-          <span class="expense-legend-dot"></span>
-          <span>Bills</span>
-        </div>
-        <div class="expense-legend-item">
-          <span class="expense-legend-dot"></span>
-          <span>Shopping</span>
-        </div>
-        <div class="expense-legend-item">
-          <span class="expense-legend-dot"></span>
-          <span>Other</span>
-        </div>
-      </div>
-      <!-- จะใช้ใน Step 2 -->
-      <div class="expense-selected-detail" id="expenseSelectedDetail">
-      </div>
-    </div>
-  </div>
-  <!-- Fixed / Variable -->
-  <div class="expense-type-summary">
-    <div class="expense-type-block">
-      <div class="expense-type-label">FIXED</div>
-      <div class="expense-type-value" id="fixedExpenseAmount">
-        ฿0.00
-      </div>
-    </div>
-    <div class="expense-type-block">
-      <div class="expense-type-label">VARIABLE</div>
-      <div class="expense-type-value" id="variableExpenseAmount">
-        ฿0.00
-      </div>
-    </div>
-  </div>
 </section>
   </main>
  </div>
@@ -1393,16 +1319,12 @@ function renderMoM(elementId, currentValue, previousValue, isFuture) {
     previousValue !== 0
       ? Math.round((difference / Math.abs(previousValue)) * 100)
       : 0;
-  // ต่างกันไม่เกิน ฿500 = ถือว่าเท่าเดิม Deduction ต่างกันไม่เกิน 100 = ถือว่าเท่าเดิม
-  const threshold =
-  elementId === 'insightsDeductionMoM'
-    ? 100
-    : 500;
-  if (Math.abs(difference) <= threshold) {
-  element.innerText =
-    `→ ${Math.abs(percent)}% vs last month`;
-  element.className = 'monthly-summary-mom neutral';
-  return; }
+  // ต่างกันไม่เกิน ฿500 = ถือว่าเท่าเดิม
+  if (Math.abs(difference) <= 500) {
+    element.innerText =
+      `→ ${Math.abs(percent)}% vs last month`;
+    element.className = 'monthly-summary-mom neutral';
+    return; }
   if (difference > 0) {
     element.innerText =
       `↑ ${Math.abs(percent)}% vs last month`;
