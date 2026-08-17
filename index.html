@@ -472,13 +472,20 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
 
 .expense-breakdown-layout {
+  width: 100%;
+  max-width: 340px;
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: 150px 150px;
+  grid-template-columns: 130px 150px;
   justify-content: center;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
 }
-
+.expense-breakdown-section .insights-section-title {
+  max-width: 340px;
+  margin-left: auto;
+  margin-right: auto;
+}
 .expense-donut-area {
   display: flex;
   align-items: center;
