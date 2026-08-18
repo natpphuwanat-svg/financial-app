@@ -1397,11 +1397,23 @@ Object.keys(grouped).forEach(type => {
     </div>
   `;
   detail.style.display = 'block'; }
+  function explodeExpenseSegment(segment) {
+  const angle =
+    Number(segment.dataset.angle);
+  const distance = 8;
+  const x =
+    Math.cos(angle) * distance;
+  const y =
+    Math.sin(angle) * distance;
+  segment.style.transform =
+    `translate(${x}px, ${y}px)`;
+}
   function setupExpenseDonutInteraction(breakdown) {
-  const donut = document.querySelector('.expense-donut');
-  if (!donut) return;
-  const segments = donut.querySelectorAll('.expense-donut-segment');
-  segments.forEach(segment => {
+  const pie = document.querySelector('.expense-donut');
+  if (!pie) return;
+  const segments =
+    pie.querySelectorAll('.expense-pie-segment');
+    segments.forEach(segment => {
     segment.addEventListener('click', () => {
       const index = Number(segment.dataset.index);
       const selectedItem = breakdown.items[index];
@@ -1415,7 +1427,7 @@ Object.keys(grouped).forEach(type => {
       );
     });
   });
- }
+}
   async function fetchData() {
   const requestId = ++fetchRequestId;
   // Updating state
