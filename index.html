@@ -1374,7 +1374,51 @@ Object.keys(grouped).forEach(type => {
       ${segments}
     </svg>
   `;
- }
+  }
+  function renderExpenseLegend(items, totalExpense) {
+  const legend =
+    document.getElementById('expenseLegend');
+  if (!legend) return;
+  legend.innerHTML = items.map((item, index) => `
+    <div class="expense-legend-item">
+      <span
+        class="expense-legend-dot"
+        style="background: var(--expense-chart-${index + 1});"
+      ></span>
+
+      <span class="expense-legend-name">
+        ${item.title}
+      </span>
+    </div>
+  `).join('');
+  }
+  function renderExpenseSelectedLegend(item, totalExpense) {
+  const legend =
+    document.getElementById('expenseLegend');
+  if (!legend) return;
+  const percentage = totalExpense > 0
+    ? Math.round(
+        (item.amount / totalExpense) * 100 ) : 0;
+  const index =
+    item.__breakdownIndex ?? 0;
+  legend.innerHTML = `
+    <div class="expense-selected-state">
+      <div class="expense-selected-title">
+        <span
+          class="expense-legend-dot"
+          style="background: var(--expense-chart-${index + 1});"
+        ></span>
+        <span>${item.title}</span>
+      </div>
+      <div class="expense-selected-amount">
+        ฿${item.amount.toLocaleString('en-US')}
+      </div>
+      <div class="expense-selected-percent">
+        ${percentage}%
+      </div>
+    </div>
+  `;
+  }
   function renderExpenseSelectedInfo(item, totalExpense) {
   const detail = document.querySelector('.expense-selected-detail');
   if (!detail) return;
