@@ -1408,27 +1408,37 @@ Object.keys(grouped).forEach(type => {
   segment.style.transform =
     `translate(${x}px, ${y}px)`;
 }
-  function setupExpensePieInteraction(breakdown) {
-  const pie = document.querySelector('.expense-pie');
-  if (!pie) return;
+  function setupExpenseDonutInteraction(breakdown) {
+  const pie = document.querySelector('.expense-donut');
+  const legend = document.getElementById('expenseLegend');
+  if (!pie || !legend) return;
   const segments =
     pie.querySelectorAll('.expense-pie-segment');
     segments.forEach(segment => {
     segment.addEventListener('click', () => {
       const index = Number(segment.dataset.index);
       const selectedItem = breakdown.items[index];
-      segments.forEach(item => {
+      const isAlreadySelected =
+        segment.classList.contains('selected');
+    segments.forEach(item => {
       item.classList.remove('selected');
-      item.style.transform = ''; });
-      segment.classList.add('selected');
-      explodeExpenseSegment(segment);
-      renderExpenseSelectedInfo(
-        selectedItem,
-        breakdown.totalExpense
-      );
-    });
-  });
-}
+      item.style.transform = '';
+      });
+    if (isAlreadySelected) {
+        renderExpenseLegend(
+          breakdown.items,
+          breakdown.totalExpense
+        );
+        return; }
+    segment.classList.add('selected');
+    explodeExpenseSegment(segment);
+    renderExpenseSelectedLegend(
+      selectedItem,
+      breakdown.totalExpense
+       );
+     });
+   });
+  }
   async function fetchData() {
   const requestId = ++fetchRequestId;
   // Updating state
