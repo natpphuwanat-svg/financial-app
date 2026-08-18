@@ -634,11 +634,12 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   height: 150px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   justify-content: center;
+  align-items: flex-start;
 }
 
 .expense-selected-title {
+  width: 100%;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -646,6 +647,10 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   font-weight: 800;
   line-height: 1.2;
   color: var(--text-main);
+}
+.expense-selected-amount,
+.expense-selected-percent {
+  margin-left: 16px;
 }
 
 .expense-selected-amount {
