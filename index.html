@@ -523,6 +523,18 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .expense-donut-segment {
   transition: opacity 0.2s ease;
 }
+.expense-donut-segment {
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.expense-donut-segment.selected {
+  transform: scale(1.08);
+}
 
 .expense-breakdown-info {
   min-width: 0;
@@ -612,6 +624,26 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .expense-selected-detail {
   display: none;
   margin-top: 14px;
+}
+
+.expense-selected-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.expense-selected-amount {
+  margin-top: 3px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.expense-selected-percent {
+  margin-top: 2px;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-sub);
 }
 
 .expense-type-summary {
@@ -1323,6 +1355,47 @@ Object.keys(grouped).forEach(type => {
     </svg>
   `;
   }
+  function renderExpenseSelectedInfo(item, totalExpense) {
+  const detail = document.querySelector('.expense-selected-detail');
+  if (!detail) return;
+  if (!item) {
+    detail.style.display = 'none';
+    detail.innerHTML = '';
+    return; }
+  const percentage = totalExpense > 0
+    ? Math.round((item.amount / totalExpense) * 100)
+    : 0;
+  detail.innerHTML = `
+    <div class="expense-selected-title">
+      ${item.title}
+    </div>
+    <div class="expense-selected-amount">
+      ฿${item.amount.toLocaleString('en-US')}
+    </div>
+    <div class="expense-selected-percent">
+      ${percentage}%
+    </div>
+  `;
+  detail.style.display = 'block'; }
+  function setupExpenseDonutInteraction(breakdown) {
+  const donut = document.querySelector('.expense-donut');
+  if (!donut) return;
+  const segments = donut.querySelectorAll('.expense-donut-segment');
+  segments.forEach(segment => {
+    segment.addEventListener('click', () => {
+      const index = Number(segment.dataset.index);
+      const selectedItem = breakdown.items[index];
+      segments.forEach(item => {
+        item.classList.remove('selected');
+      });
+      segment.classList.add('selected');
+      renderExpenseSelectedInfo(
+        selectedItem,
+        breakdown.totalExpense
+      );
+    });
+  });
+ }
   async function fetchData() {
   const requestId = ++fetchRequestId;
   // Updating state
@@ -1382,6 +1455,7 @@ Object.keys(grouped).forEach(type => {
     const entries = currentEntries || [];
     const expenseBreakdown = buildExpenseBreakdown(entries);
     renderExpenseDonut(expenseBreakdown);
+    setupExpenseDonutInteraction(expenseBreakdown);
     const expenseLegend = document.getElementById('expenseLegend');
     if (expenseLegend) {
     if (!expenseBreakdown.items.length) {
