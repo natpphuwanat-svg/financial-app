@@ -1418,9 +1418,10 @@ Object.keys(grouped).forEach(type => {
       const index = Number(segment.dataset.index);
       const selectedItem = breakdown.items[index];
       segments.forEach(item => {
-        item.classList.remove('selected');
-      });
+      item.classList.remove('selected');
+      item.style.transform = ''; });
       segment.classList.add('selected');
+      explodeExpenseSegment(segment);
       renderExpenseSelectedInfo(
         selectedItem,
         breakdown.totalExpense
