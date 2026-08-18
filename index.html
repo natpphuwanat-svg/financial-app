@@ -1312,8 +1312,6 @@ Object.keys(grouped).forEach(type => {
     (sum, item) => sum + item.amount, 0 );
   const breakdown = [...topFive];
   if (otherAmount > 0) { breakdown.push({
-      title: 'Other', amount: otherAmount, isOther: true, children: otherEntries }); }
-  if (otherAmount > 0) { breakdown.push({
     title: 'Other', amount: otherAmount, isOther: true, children: otherEntries, __breakdownIndex: 5 }); }
   return { totalExpense, items: breakdown }; }
   function renderExpensePie(breakdown) {
@@ -1459,8 +1457,8 @@ Object.keys(grouped).forEach(type => {
   segment.style.transform =
     `translate(${x}px, ${y}px)`;
 }
-  function setupExpenseDonutInteraction(breakdown) {
-  const pie = document.querySelector('.expense-donut');
+  function setupExpensePieInteraction(breakdown) {
+  const pie = document.querySelector('.expense-pie');
   const legend = document.getElementById('expenseLegend');
   if (!pie || !legend) return;
   const segments =
