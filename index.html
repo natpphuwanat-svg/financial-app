@@ -533,7 +533,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .expense-legend {
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 10px;
 }
 
 .expense-legend-item {
@@ -544,11 +544,19 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   align-items: center;
 }
 
+.expense-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  grid-row: 1;
+}
 .expense-legend-name {
+  min-width: 0;
   font-size: 11px;
   font-weight: 700;
+  line-height: 1.2;
   color: var(--text-sub);
-  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -559,6 +567,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   grid-column: 2;
   font-size: 9px;
   font-weight: 700;
+    line-height: 1.2;
   color: var(--text-sub);
 }
 
@@ -567,7 +576,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
 
 .expense-legend-percent {
-  display: inline;
   margin-left: 4px;
 }
 
