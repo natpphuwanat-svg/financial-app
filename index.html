@@ -1295,19 +1295,20 @@ Object.keys(grouped).forEach(type => {
     const percentage = item.amount / totalExpense;
     const segmentLength = percentage * circumference;
     const segment = `
-      <circle
-        class="expense-donut-segment"
-        cx="60"
-        cy="60"
-        r="${radius}"
-        fill="none"
-        stroke="var(--expense-chart-${index + 1})"
-        stroke-width="18"
-        stroke-dasharray="${segmentLength} ${circumference - segmentLength}"
-        stroke-dashoffset="${-offset}"
-        transform="rotate(-90 60 60)"
-      ></circle>
-    `;
+  <circle
+    class="expense-donut-segment"
+    data-index="${index}"
+    cx="60"
+    cy="60"
+    r="${radius}"
+    fill="none"
+    stroke="var(--expense-chart-${index + 1})"
+    stroke-width="18"
+    stroke-dasharray="${segmentLength} ${circumference - segmentLength}"
+    stroke-dashoffset="${-offset}"
+    transform="rotate(-90 60 60)"
+  ></circle>
+`;
     offset += segmentLength;
     return segment;
   }).join('');
