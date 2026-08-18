@@ -1491,30 +1491,20 @@ Object.keys(grouped).forEach(type => {
       </div>
     `;
     } else {
-    expenseLegend.innerHTML = expenseBreakdown.items.map((item, index) => {
-      const percentage = expenseBreakdown.totalExpense > 0
-        ? Math.round((item.amount / expenseBreakdown.totalExpense) * 100)
-        : 0;
-      return `
-        <div class="expense-legend-item">
-          <span
-            class="expense-legend-dot"
-            style="background: var(--expense-chart-${index + 1});"
-          ></span>
-          <span class="expense-legend-name">
-            ${item.title}
-          </span>
-          <span class="expense-legend-amount">
-            ฿${item.amount.toLocaleString('en-US')}
-          </span>
-          <span class="expense-legend-percent">
-            ${percentage}%
-          </span>
-        </div>
-      `;
-    }).join('');
-     }
-   }
+  expenseLegend.innerHTML =
+    expenseBreakdown.items.map((item, index) => `
+      <div class="expense-legend-item">
+        <span
+          class="expense-legend-dot"
+          style="background: var(--expense-chart-${index + 1});"
+        ></span>
+
+        <span class="expense-legend-name">
+          ${item.title}
+        </span>
+      </div>
+    `).join('');
+    }
     const previous = previousEntries || [];
     if (requestId !== fetchRequestId) {
     return; }
