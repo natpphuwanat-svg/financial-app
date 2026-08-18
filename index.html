@@ -1301,7 +1301,12 @@ Object.keys(grouped).forEach(type => {
     .sort((a, b) => b.amount - a.amount);
   const totalExpense = expenseEntries.reduce(
     (sum, item) => sum + item.amount, 0 );
-  const topFive = expenseEntries.slice(0, 5);
+  const topFive = expenseEntries
+  .slice(0, 5)
+  .map((item, index) => ({
+    ...item,
+    __breakdownIndex: index
+  }));
   const otherEntries = expenseEntries.slice(5);
   const otherAmount = otherEntries.reduce(
     (sum, item) => sum + item.amount, 0 );
