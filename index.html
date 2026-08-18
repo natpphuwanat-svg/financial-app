@@ -485,7 +485,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  align-items: center;
+  align-items: start;
   gap: 18px;
 }
 .expense-breakdown-section .insights-section-title {
@@ -493,14 +493,14 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   max-width: 100%;
   margin: 0 auto 14px;
 }
-.expense-donut-area {
+.expense-pie-area {
+  height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 150px;
 }
 
-.expense-donut-placeholder {
+.expense-pie-placeholder {
   width: 132px;
   height: 132px;
   border-radius: 50%;
@@ -513,17 +513,17 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   font-weight: 800;
   letter-spacing: 0.5px;
 }
-.expense-donut {
+.expense-pie {
   width: 132px;
   height: 132px;
   display: block;
   overflow: visible;
 }
 
-.expense-donut-segment {
+.expense-pie-segment {
   transition: opacity 0.2s ease;
 }
-.expense-donut-segment {
+.expense-pie-segment {
   cursor: pointer;
   transition:
     transform 0.2s ease,
@@ -532,7 +532,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   transform-origin: center;
 }
 
-.expense-donut-segment.selected {
+.expense-pie-segment.selected {
   transform: scale(1.08);
 }
 
