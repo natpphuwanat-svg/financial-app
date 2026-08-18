@@ -1459,7 +1459,11 @@ Object.keys(grouped).forEach(type => {
           class="expense-legend-dot"
           style="background: var(--expense-chart-${index + 1});"
         ></span>
-        <span>${item.title}</span>
+        <span
+          class="expense-selected-name"
+          style="color: var(--expense-chart-${index + 1});"
+        > ${item.title}
+      </span>
       </div>
       <div class="expense-selected-amount">
         ฿${item.amount.toLocaleString('en-US')}
