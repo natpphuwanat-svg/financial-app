@@ -1388,6 +1388,26 @@ Object.keys(grouped).forEach(type => {
     0
   );
   if (total <= 0) return;
+  if (items.length === 1) {
+  pieArea.innerHTML = `
+    <svg
+      class="expense-pie expense-other-pie"
+      viewBox="0 0 120 120"
+      role="img"
+      aria-label="Other expense breakdown"
+    >
+      <circle
+        class="expense-pie-segment expense-other-segment"
+        data-index="0"
+        data-angle="0"
+        cx="60"
+        cy="60"
+        r="52"
+        fill="var(--expense-chart-1)"
+      ></circle>
+    </svg>
+  `;
+  return; }
   const cx = 60;
   const cy = 60;
   const radius = 52;
