@@ -633,7 +633,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
 .expense-selected-state {
   width: 110px;
-  height: 150px;
+  min-height: 150px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -674,6 +674,36 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   line-height: 1.2;
   color: var(--text-sub);
 
+}
+.expense-other-list {
+  margin-top: 14px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.expense-other-item {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 8px;
+  align-items: center;
+  font-size: 10px;
+}
+
+.expense-other-name {
+  color: var(--text-main);
+  font-weight: 700;
+}
+
+.expense-other-amount {
+  color: var(--text-main);
+  font-weight: 700;
+}
+
+.expense-other-percent {
+  color: var(--text-sub);
+  font-weight: 700;
 }
 
 .expense-type-summary {
@@ -1438,7 +1468,6 @@ Object.keys(grouped).forEach(type => {
         class="expense-legend-dot"
         style="background: var(--expense-chart-${index + 1});"
       ></span>
-
       <span class="expense-legend-name">
         ${item.title}
       </span>
@@ -1454,6 +1483,34 @@ Object.keys(grouped).forEach(type => {
         (item.amount / totalExpense) * 100 ) : 0;
   const index =
     item.__breakdownIndex ?? 0;
+  let otherHtml = '';
+  if (item.isOther && item.children?.length) {
+   otherHtml = `
+    <div class="expense-other-list">
+      ${item.children.map(child => {
+        const childPercent =
+          totalExpense > 0
+            ? Math.round(
+                (child.amount / totalExpense) * 100
+              )
+            : 0;
+        return `
+          <div class="expense-other-item">
+            <span class="expense-other-name">
+              ${child.title}
+            </span>
+            <span class="expense-other-amount">
+              ฿${child.amount.toLocaleString('en-US')}
+            </span>
+            <span class="expense-other-percent">
+              ${childPercent}%
+            </span>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
   legend.innerHTML = `
     <div class="expense-selected-state">
       <div class="expense-selected-title">
@@ -1473,6 +1530,7 @@ Object.keys(grouped).forEach(type => {
       <div class="expense-selected-percent">
         ${percentage}%
       </div>
+      ${otherHtml}
     </div>
   `;
   }
