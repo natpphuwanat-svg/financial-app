@@ -521,15 +521,16 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
 
 .expense-pie-segment {
-  transition: opacity 0.2s ease;
-}
-.expense-pie-segment {
   cursor: pointer;
   transition:
-    transform 0.2s ease,
-    opacity 0.2s ease;
+    transform 0.22s ease,
+    opacity 0.22s ease;
   transform-box: fill-box;
   transform-origin: center;
+}
+
+.expense-pie-segment:hover {
+  opacity: 0.92;
 }
 
 .expense-pie-segment.selected {
