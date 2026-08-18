@@ -1313,6 +1313,8 @@ Object.keys(grouped).forEach(type => {
   const breakdown = [...topFive];
   if (otherAmount > 0) { breakdown.push({
       title: 'Other', amount: otherAmount, isOther: true, children: otherEntries }); }
+  if (otherAmount > 0) { breakdown.push({
+    title: 'Other', amount: otherAmount, isOther: true, children: otherEntries, __breakdownIndex: 5 }); }
   return { totalExpense, items: breakdown }; }
   function renderExpensePie(breakdown) {
   const pieArea = document.querySelector('.expense-pie-area');
