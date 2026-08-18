@@ -1373,6 +1373,9 @@ Object.keys(grouped).forEach(type => {
   if (otherAmount > 0) { breakdown.push({
     title: 'Other', amount: otherAmount, isOther: true, children: otherEntries, __breakdownIndex: 5 }); }
   return { totalExpense, items: breakdown }; }
+  let expenseOtherDrilldown = false;
+  let expenseOtherItems = [];
+  let expenseOtherTotal = 0;
   function renderExpensePie(breakdown) {
   const pieArea = document.querySelector('.expense-pie-area');
   if (!pieArea) return;
@@ -1458,6 +1461,81 @@ Object.keys(grouped).forEach(type => {
     </svg>
   `;
   }
+  function renderExpenseOtherPie(items) {
+  const pieArea = document.querySelector('.expense-pie-area');
+  if (!pieArea) return;
+
+  if (!items || !items.length) {
+    return;
+  }
+
+  const total = items.reduce(
+    (sum, item) => sum + Number(item.amount || 0),
+    0
+  );
+
+  if (total <= 0) return;
+
+  const cx = 60;
+  const cy = 60;
+  const radius = 52;
+
+  let currentAngle = -Math.PI / 2;
+
+  function polarToCartesian(angle) {
+    return {
+      x: cx + radius * Math.cos(angle),
+      y: cy + radius * Math.sin(angle)
+    };
+  }
+  function createSlicePath(startAngle, endAngle) {
+    const start = polarToCartesian(startAngle);
+    const end = polarToCartesian(endAngle);
+    const largeArcFlag =
+      endAngle - startAngle > Math.PI ? 1 : 0;
+    return [
+      `M ${cx} ${cy}`,
+      `L ${start.x} ${start.y}`,
+      `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`,
+      'Z'
+    ].join(' ');
+   }
+    const segments = items.map((item, index) => {
+    const percentage =
+      Number(item.amount || 0) / total;
+    const startAngle = currentAngle;
+    const endAngle =
+      currentAngle +
+      percentage * Math.PI * 2;
+    const midAngle =
+      startAngle +
+      (endAngle - startAngle) / 2;
+    currentAngle = endAngle;
+    const path = createSlicePath(
+      startAngle,
+      endAngle
+    );
+    return `
+      <path
+        class="expense-pie-segment expense-other-segment"
+        data-index="${index}"
+        data-angle="${midAngle}"
+        d="${path}"
+        fill="var(--expense-chart-${index + 1})"
+      ></path>
+    `;
+  }).join('');
+  pieArea.innerHTML = `
+    <svg
+      class="expense-pie expense-other-pie"
+      viewBox="0 0 120 120"
+      role="img"
+      aria-label="Other expense breakdown"
+    >
+      ${segments}
+    </svg>
+  `;
+ }
   function renderExpenseLegend(items, totalExpense) {
   const legend =
     document.getElementById('expenseLegend');
