@@ -630,8 +630,9 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   margin-top: 14px;
 }
 .expense-selected-state {
-  width: 100%;
+  width: 110px;
   height: 150px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -639,7 +640,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
 
 .expense-selected-title {
-  width: 100%;
+  width: 110px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -647,14 +648,12 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   font-weight: 800;
   line-height: 1.2;
   color: var(--text-main);
-}
-.expense-selected-amount,
-.expense-selected-percent {
-  margin-left: 16px;
+  white-space: nowrap;
 }
 
 .expense-selected-amount {
   margin-top: 6px;
+  margin-left: 16px;
   font-size: 16px;
   font-weight: 900;
   line-height: 1.2;
@@ -663,6 +662,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 
 .expense-selected-percent {
   margin-top: 3px;
+  margin-left: 16px;
   font-size: 11px;
   font-weight: 700;
   line-height: 1.2;
