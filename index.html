@@ -1312,39 +1312,58 @@ Object.keys(grouped).forEach(type => {
   const donutArea = document.querySelector('.expense-donut-area');
   if (!donutArea) return;
   const { totalExpense, items } = breakdown;
-  // Empty state
   if (!items.length || totalExpense <= 0) {
     donutArea.innerHTML = `
       <div class="expense-donut-placeholder">
         <span>NO EXPENSE</span>
       </div>
     `;
-  return; }
-  const radius = 48;
-  const circumference = 2 * Math.PI * radius;
-  let offset = 0;
+    return; }
+  const cx = 60;
+  const cy = 60;
+  const radius = 52;
+  let currentAngle = -Math.PI / 2;
+  function polarToCartesian(angle) {
+    return {
+      x: cx + radius * Math.cos(angle),
+      y: cy + radius * Math.sin(angle)
+    };
+  }
+  function createSlicePath(startAngle, endAngle) {
+    const start = polarToCartesian(startAngle);
+    const end = polarToCartesian(endAngle);
+    const largeArcFlag =
+      endAngle - startAngle > Math.PI ? 1 : 0;
+    return [
+      `M ${cx} ${cy}`,
+      `L ${start.x} ${start.y}`,
+      `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`,
+      'Z'
+    ].join(' ');
+  }
   const segments = items.map((item, index) => {
     const percentage = item.amount / totalExpense;
-    const segmentLength = percentage * circumference;
-    const segment = `
-  <circle
-    class="expense-donut-segment"
-    data-index="${index}"
-    cx="60"
-    cy="60"
-    r="${radius}"
-    fill="none"
-    stroke="var(--expense-chart-${index + 1})"
-    stroke-width="18"
-    stroke-dasharray="${segmentLength} ${circumference - segmentLength}"
-    stroke-dashoffset="${-offset}"
-    transform="rotate(-90 60 60)"
-  ></circle>
-`;
-    offset += segmentLength;
-    return segment;
+    const startAngle = currentAngle;
+    const endAngle =
+      currentAngle + percentage * Math.PI * 2;
+    const midAngle =
+      startAngle + (endAngle - startAngle) / 2;
+    currentAngle = endAngle;
+    const path = createSlicePath(
+      startAngle,
+      endAngle
+    );
+    return `
+      <path
+        class="expense-pie-segment"
+        data-index="${index}"
+        data-angle="${midAngle}"
+        d="${path}"
+        fill="var(--expense-chart-${index + 1})"
+      ></path>
+    `;
   }).join('');
-  donutArea.innerHTML = `
+  pieArea.innerHTML = `
     <svg
       class="expense-donut"
       viewBox="0 0 120 120"
@@ -1354,7 +1373,7 @@ Object.keys(grouped).forEach(type => {
       ${segments}
     </svg>
   `;
-  }
+ }
   function renderExpenseSelectedInfo(item, totalExpense) {
   const detail = document.querySelector('.expense-selected-detail');
   if (!detail) return;
