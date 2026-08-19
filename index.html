@@ -1071,132 +1071,32 @@ Object.keys(grouped).forEach(type => {
   let expenseOtherDrilldown = false;
   let expenseOtherItems = [];
   let expenseOtherTotal = 0;
-  function renderExpensePie(breakdown) {
-  const pieArea = document.querySelector('.expense-pie-area');
-  if (!pieArea) return;
-  const { totalExpense, items } = breakdown;
-  if (!items.length || totalExpense <= 0) {
-    pieArea.innerHTML = `
-      <div class="expense-pie-placeholder">
-        <span>NO EXPENSE</span>
-      </div>
-    `;
-    return; }
-  if (items.length === 1) {
-    pieArea.innerHTML = `
-      <svg
-        class="expense-pie"
-        viewBox="0 0 120 120"
-        role="img"
-        aria-label="Expense breakdown" >
-        <circle
-          class="expense-pie-segment"
-          data-index="0"
-          data-angle="0"
-          cx="60"
-          cy="60"
-          r="52"
-          fill="var(--expense-chart-1)"
-        ></circle>
-      </svg>
-    `;
-    return; }
+  function buildExpensePieSvg(
+  items,
+  total,
+  ariaLabel,
+  pieClass = '',
+  segmentClass = 'expense-pie-segment'
+) {
   const cx = 60;
   const cy = 60;
   const radius = 52;
   let currentAngle = -Math.PI / 2;
-  function polarToCartesian(angle) {
+  function polarToCartesian(angle, distance) {
     return {
-      x: cx + radius * Math.cos(angle),
-      y: cy + radius * Math.sin(angle)
+      x: cx + distance * Math.cos(angle),
+      y: cy + distance * Math.sin(angle)
     };
   }
   function createSlicePath(startAngle, endAngle) {
-    const start = polarToCartesian(startAngle);
-    const end = polarToCartesian(endAngle);
-    const largeArcFlag =
-      endAngle - startAngle > Math.PI ? 1 : 0;
-    return [
-      `M ${cx} ${cy}`,
-      `L ${start.x} ${start.y}`,
-      `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`,
-      'Z'
-    ].join(' '); }
-  const segments = items.map((item, index) => {
-    const percentage = item.amount / totalExpense;
-    const startAngle = currentAngle;
-    const endAngle =
-      currentAngle + percentage * Math.PI * 2;
-    const midAngle =
-      startAngle + (endAngle - startAngle) / 2;
-    currentAngle = endAngle;
-    const path = createSlicePath(
+    const start = polarToCartesian(
       startAngle,
-      endAngle
+      radius
     );
-    return `
-      <path
-        class="expense-pie-segment"
-        data-index="${index}"
-        data-angle="${midAngle}"
-        d="${path}"
-        fill="var(--expense-chart-${index + 1})"
-      ></path>
-    `;
-  }).join('');
-  pieArea.innerHTML = `
-    <svg
-      class="expense-pie"
-      viewBox="0 0 120 120"
-      role="img"
-      aria-label="Expense breakdown"
-    >
-      ${segments}
-    </svg>
-  `; }
-  function renderExpenseOtherPie(items) {
-  const pieArea = document.querySelector('.expense-pie-area');
-  if (!pieArea) return;
-  if (!items || !items.length) {
-    return; }
-  const total = items.reduce(
-    (sum, item) => sum + Number(item.amount || 0),
-    0
-  );
-  if (total <= 0) return;
-  if (items.length === 1) {
-  pieArea.innerHTML = `
-    <svg
-      class="expense-pie expense-other-pie"
-      viewBox="0 0 120 120"
-      role="img"
-      aria-label="Other expense breakdown"
-    >
-      <circle
-        class="expense-pie-segment expense-other-segment"
-        data-index="0"
-        data-angle="0"
-        cx="60"
-        cy="60"
-        r="52"
-        fill="var(--expense-chart-1)"
-      ></circle>
-    </svg>
-  `;
-  return; }
-  const cx = 60;
-  const cy = 60;
-  const radius = 52;
-  let currentAngle = -Math.PI / 2;
-  function polarToCartesian(angle) {
-    return {
-      x: cx + radius * Math.cos(angle),
-      y: cy + radius * Math.sin(angle)
-    };
-  }
-  function createSlicePath(startAngle, endAngle) {
-    const start = polarToCartesian(startAngle);
-    const end = polarToCartesian(endAngle);
+    const end = polarToCartesian(
+      endAngle,
+      radius
+    );
     const largeArcFlag =
       endAngle - startAngle > Math.PI ? 1 : 0;
     return [
@@ -1204,10 +1104,16 @@ Object.keys(grouped).forEach(type => {
       `L ${start.x} ${start.y}`,
       `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`,
       'Z'
-    ].join(' '); }
-    const segments = items.map((item, index) => {
+    ].join(' ');
+  }
+  const segments = [];
+  const labels = [];
+  items.forEach((item, index) => {
+    const amount = Number(item.amount || 0);
     const percentage =
-      Number(item.amount || 0) / total;
+      total > 0
+        ? amount / total
+        : 0;
     const startAngle = currentAngle;
     const endAngle =
       currentAngle +
@@ -1216,30 +1122,104 @@ Object.keys(grouped).forEach(type => {
       startAngle +
       (endAngle - startAngle) / 2;
     currentAngle = endAngle;
-    const path = createSlicePath(
-      startAngle,
-      endAngle
-    );
-    return `
+    /*
+     * Pie segment
+     */
+    segments.push(`
       <path
-        class="expense-pie-segment expense-other-segment"
+        class="${segmentClass}"
         data-index="${index}"
         data-angle="${midAngle}"
-        d="${path}"
+        d="${createSlicePath(
+          startAngle,
+          endAngle
+        )}"
         fill="var(--expense-chart-${index + 1})"
       ></path>
-    `;
-  }).join('');
-  pieArea.innerHTML = `
+    `);
+    const percentValue =
+      Math.round(percentage * 100);
+    if (percentValue >= 5) {
+      const labelRadius = 34;
+      const labelPosition =
+        polarToCartesian(
+          midAngle,
+          labelRadius
+        );
+      labels.push(`
+        <text
+          class="expense-pie-percent"
+          x="${labelPosition.x}"
+          y="${labelPosition.y}"
+        >
+          ${percentValue}%
+        </text>
+      `);
+    }
+  });
+  return `
     <svg
-      class="expense-pie expense-other-pie"
+      class="expense-pie ${pieClass}"
       viewBox="0 0 120 120"
       role="img"
-      aria-label="Other expense breakdown"
+      aria-label="${ariaLabel}"
     >
-      ${segments}
+      ${segments.join('')}
+      ${labels.join('')}
     </svg>
-  `; }
+  `;
+}
+function renderExpensePie(breakdown) {
+  const pieArea =
+    document.querySelector('.expense-pie-area');
+  if (!pieArea) return;
+  const {
+    totalExpense,
+    items
+  } = breakdown;
+  if (
+    !items.length ||
+    totalExpense <= 0
+  ) {
+    pieArea.innerHTML = `
+      <div class="expense-pie-placeholder">
+        <span>NO EXPENSE</span>
+      </div>
+    `;
+    return; }
+  pieArea.innerHTML =
+    buildExpensePieSvg(
+      items,
+      totalExpense,
+      'Expense breakdown'
+    );
+ }
+ function renderExpenseOtherPie(items) {
+  const pieArea =
+    document.querySelector('.expense-pie-area');
+  if (!pieArea) return;
+  if (
+    !items ||
+    !items.length
+  ) {
+    return; }
+  const total =
+    items.reduce(
+      (sum, item) =>
+        sum +
+        Number(item.amount || 0),
+      0
+    );
+  if (total <= 0) return;
+  pieArea.innerHTML =
+    buildExpensePieSvg(
+      items,
+      total,
+      'Other expense breakdown',
+      'expense-other-pie',
+      'expense-pie-segment expense-other-segment'
+    );
+ }
   function renderExpenseLegend(items, totalExpense) {
   const legend = document.getElementById('expenseLegend');
   if (!legend) return;
