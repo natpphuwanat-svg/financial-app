@@ -1787,20 +1787,9 @@ Object.keys(grouped).forEach(type => {
       </div>
     `;
     } else {
-  expenseLegend.innerHTML =
-    expenseBreakdown.items.map((item, index) => `
-      <div class="expense-legend-item">
-        <span
-          class="expense-legend-dot"
-          style="background: var(--expense-chart-${index + 1});"
-        ></span>
-
-        <span class="expense-legend-name">
-          ${item.title}
-        </span>
-      </div>
-    `).join('');
-    }
+      renderExpenseLegend(
+        expenseBreakdown.items,
+        expenseBreakdown.totalExpense ); }
     }
     const previous = previousEntries || [];
     if (requestId !== fetchRequestId) {
