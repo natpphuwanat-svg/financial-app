@@ -1678,6 +1678,9 @@ Object.keys(grouped).forEach(type => {
       const selectedItem =
         breakdown.items[index];
       if (selectedItem?.isOther) {
+        document
+          .querySelector('.expense-breakdown-layout')
+          ?.classList.add('expense-other-mode');
         expenseOtherDrilldown = true;
         expenseOtherItems =
         selectedItem.children || [];
