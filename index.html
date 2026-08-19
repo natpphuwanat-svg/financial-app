@@ -1778,18 +1778,6 @@ Object.keys(grouped).forEach(type => {
         setupExpensePieInteraction({
           items: expenseOtherItems,
           totalExpense: expenseOtherTotal });
-        const backButton =
-          document.getElementById('expensePieBack');
-        if (backButton) {
-          backButton.addEventListener('click', () => {
-            expenseOtherDrilldown = false;
-        renderExpensePie(breakdown);
-        renderExpenseLegend(
-          breakdown.items,
-          breakdown.totalExpense );
-        setupExpensePieInteraction(breakdown); 
-       });
-      }
       return;}
       const isAlreadySelected =
       segment.classList.contains('selected');
