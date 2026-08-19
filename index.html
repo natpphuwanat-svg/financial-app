@@ -1544,41 +1544,21 @@ Object.keys(grouped).forEach(type => {
     </svg>
   `; }
   function renderExpenseLegend(items, totalExpense) {
-  const legend =
-    document.getElementById('expenseLegend');
+  const legend = document.getElementById('expenseLegend');
   if (!legend) return;
-  legend.innerHTML = items.map((item, index) => `
-    <div class="expense-legend-item">
-    <span
-      class="expense-legend-icon"
-      style="color: var(--expense-chart-${index + 1});"
-   >
-    <i data-lucide="${item.icon || 'receipt'}"></i>
-  </span>
-  <span class="expense-legend-name">
-  ${item.title}
-  </span>
-    </div>
-  `).join('');
-  if (typeof lucide !== 'undefined') {
-  lucide.createIcons(); }
-  }
-  function renderExpenseOtherLegend(items, total) {
-  const legend =
-    document.getElementById('expenseLegend');
-  if (!legend) return;
-  if (!items || !items.length || total <= 0) {
-    legend.innerHTML = '';
-    return; }
   legend.innerHTML = items.map((item, index) => {
-    const amount =
-      Number(item.amount || 0);
-    const percentage =
-      Math.round((amount / total) * 100);
-    const icon =
-      item.icon || 'receipt';
+    const amount = Number(item.amount || 0);
+    const percentage = totalExpense > 0
+      ? Math.round((amount / totalExpense) * 100)
+      : 0;
+    const icon = item.isOther
+      ? 'layers-2'
+      : (item.icon || 'receipt');
     return `
-      <div class="expense-legend-item expense-other-legend-item">
+      <div
+        class="expense-legend-item"
+        data-index="${index}"
+      >
         <span
           class="expense-legend-icon"
           style="color: var(--expense-chart-${index + 1});"
@@ -1588,18 +1568,54 @@ Object.keys(grouped).forEach(type => {
         <span class="expense-legend-name">
           ${item.title}
         </span>
-        <span class="expense-other-legend-amount">
-          ฿${amount.toLocaleString('en-US')}
-        </span>
-        <span class="expense-other-legend-percent">
-          ${percentage}%
+        <span class="expense-legend-amount">
+          ฿${amount.toLocaleString('en-US', {
+            minimumFractionDigits: 2
+          })}
+          <span class="expense-legend-percent">
+            (${percentage}%)
+          </span>
         </span>
       </div>
     `;
   }).join('');
   if (typeof lucide !== 'undefined') {
-    lucide.createIcons();
-   }
+    lucide.createIcons(); }
+  }
+  function renderExpenseOtherLegend(items, total) {
+  const legend = document.getElementById('expenseLegend');
+  if (!legend) return;
+  if (!items || !items.length || total <= 0) {
+    legend.innerHTML = '';
+    return; }
+  legend.innerHTML = items.map((item, index) => {
+    const amount = Number(item.amount || 0);
+    const percentage = Math.round((amount / total) * 100);
+    const icon = item.icon || 'receipt';
+    return `
+      <div class="expense-legend-item">
+        <span
+          class="expense-legend-icon"
+          style="color: var(--expense-chart-${index + 1});"
+        >
+          <i data-lucide="${icon}"></i>
+        </span>
+        <span class="expense-legend-name">
+          ${item.title}
+        </span>
+        <span class="expense-legend-amount">
+          ฿${amount.toLocaleString('en-US', {
+            minimumFractionDigits: 2
+          })}
+          <span class="expense-legend-percent">
+            (${percentage}%)
+          </span>
+        </span>
+      </div>
+    `;
+  }).join('');
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons(); }
   }
   function renderExpenseSelectedLegend(item, totalExpense) {
   const legend =
