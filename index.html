@@ -1753,6 +1753,10 @@ Object.keys(grouped).forEach(type => {
           .querySelector('.expense-breakdown-layout')
           ?.classList.add('expense-other-mode');
         expenseOtherDrilldown = true;
+        const backButton =
+          document.getElementById('expensePieBack');
+        if (backButton) {
+          backButton.hidden = false; }
         expenseOtherItems =
         selectedItem.children || [];
         expenseOtherTotal =
