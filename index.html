@@ -1382,6 +1382,7 @@ Object.keys(grouped).forEach(type => {
   let expenseOtherDrilldown = false;
   let expenseOtherItems = [];
   let expenseOtherTotal = 0;
+  let expenseMainBreakdown = null;
   function renderExpensePie(breakdown) {
   const pieArea = document.querySelector('.expense-pie-area');
   if (!pieArea) return;
