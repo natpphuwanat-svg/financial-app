@@ -547,7 +547,58 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .expense-legend-percent {
   margin-left: 4px;
 }
+.expense-other-legend-item {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 8px;
+  row-gap: 3px;
+  align-items: center;
+}
 
+.expense-other-legend-item .expense-legend-icon {
+  grid-column: 1;
+  grid-row: 1;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.expense-other-legend-item .expense-legend-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.expense-other-legend-item .expense-legend-name {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-sub);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.expense-other-legend-amount {
+  grid-column: 2;
+  grid-row: 2;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.expense-other-legend-percent {
+  grid-column: 2;
+  grid-row: 2;
+  margin-left: 65px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-sub);
+}
 .expense-empty-state {
   display: flex;
   flex-direction: column;
@@ -1470,15 +1521,20 @@ Object.keys(grouped).forEach(type => {
   if (!legend) return;
   legend.innerHTML = items.map((item, index) => `
     <div class="expense-legend-item">
-      <span
-        class="expense-legend-dot"
-        style="background: var(--expense-chart-${index + 1});"
-      ></span>
-      <span class="expense-legend-name">
-        ${item.title}
-      </span>
+    <span
+      class="expense-legend-icon"
+      style="color: var(--expense-chart-${index + 1});"
+   >
+    <i data-lucide="${item.icon || 'receipt'}"></i>
+  </span>
+  <span class="expense-legend-name">
+  ${item.title}
+  </span>
     </div>
-  `).join(''); }
+  `).join('');
+  if (typeof lucide !== 'undefined') {
+  lucide.createIcons(); }
+  }
   function renderExpenseOtherLegend(items, total) {
   const legend =
     document.getElementById('expenseLegend');
