@@ -1567,15 +1567,22 @@ Object.keys(grouped).forEach(type => {
    `;
   }).join('');
   pieArea.innerHTML = `
-    <svg
-      class="expense-pie expense-other-pie"
-      viewBox="0 0 120 120"
-      role="img"
-      aria-label="Other expense breakdown"
-    >
-      ${segments}
-    </svg>
-  `; }
+  <button
+    type="button"
+    class="expense-pie-back"
+    id="expensePieBack"
+  >
+    ← BACK
+  </button>
+  <svg
+    class="expense-pie expense-other-pie"
+    viewBox="0 0 120 120"
+    role="img"
+    aria-label="Other expense breakdown"
+  >
+    ${segments}
+  </svg>
+`;
   function renderExpenseLegend(items, totalExpense) {
   const legend = document.getElementById('expenseLegend');
   if (!legend) return;
