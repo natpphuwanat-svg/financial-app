@@ -1219,19 +1219,69 @@ function renderExpensePie(breakdown) {
       'expense-other-pie',
       'expense-pie-segment expense-other-segment'
     );
- }
+  }
+  function formatExpenseAmount(amount) {
+  return Number(amount || 0).toLocaleString('en-US', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2 });
+  }
+  function getExpenseIcon(item) {
+  if (item?.isOther) {
+  return 'layers-2'; }
+  return item?.icon || 'receipt'; }
   function renderExpenseLegend(items, totalExpense) {
-  const legend = document.getElementById('expenseLegend');
+  const legend =
+    document.getElementById('expenseLegend');
   if (!legend) return;
-  legend.innerHTML = items.map((item, index) => {
-    const amount = Number(item.amount || 0);
-    const percentage = totalExpense > 0
-      ? Math.round((amount / totalExpense) * 100)
-      : 0;
-    const icon = item.isOther
-      ? 'layers-2'
-      : (item.icon || 'receipt');
-    return `
+  legend.innerHTML = items.map((item, index) => `
+    <div
+      class="expense-legend-item"
+      data-index="${index}"
+    >
+      <span
+        class="expense-legend-icon"
+        style="color: var(--expense-chart-${index + 1});"
+      >
+        <i data-lucide="${getExpenseIcon(item)}"></i>
+      </span>
+      <span class="expense-legend-name">
+        ${item.title}
+      </span>
+      <span class="expense-legend-amount">
+        ฿${formatExpenseAmount(item.amount)}
+      </span>
+    </div>
+  `).join('');
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons(); }
+  }
+  function renderExpenseOtherLegend(items, total) {
+  const legend =
+    document.getElementById('expenseLegend');
+  if (!legend) return;
+  if (
+    !items ||
+    !items.length ||
+    total <= 0
+  ) {
+    legend.innerHTML = '';
+    return;
+  }
+  legend.innerHTML = `
+    <div class="expense-drilldown-header">
+      <span class="expense-drilldown-title">
+        OTHER
+      </span>
+      <button
+        type="button"
+        class="expense-drilldown-back"
+        onclick="exitExpenseOtherDrilldown()"
+      >
+        <i data-lucide="chevron-left"></i>
+        BACK
+      </button>
+    </div>
+    ${items.map((item, index) => `
       <div
         class="expense-legend-item"
         data-index="${index}"
@@ -1240,57 +1290,17 @@ function renderExpensePie(breakdown) {
           class="expense-legend-icon"
           style="color: var(--expense-chart-${index + 1});"
         >
-          <i data-lucide="${icon}"></i>
+          <i data-lucide="${getExpenseIcon(item)}"></i>
         </span>
         <span class="expense-legend-name">
           ${item.title}
         </span>
         <span class="expense-legend-amount">
-          ฿${amount.toLocaleString('en-US', {
-            minimumFractionDigits: 2
-          })}
-          <span class="expense-legend-percent">
-            (${percentage}%)
-          </span>
+          ฿${formatExpenseAmount(item.amount)}
         </span>
       </div>
-    `;
-  }).join('');
-  if (typeof lucide !== 'undefined') {
-    lucide.createIcons(); }
-  }
-  function renderExpenseOtherLegend(items, total) {
-  const legend = document.getElementById('expenseLegend');
-  if (!legend) return;
-  if (!items || !items.length || total <= 0) {
-    legend.innerHTML = '';
-    return; }
-  legend.innerHTML = items.map((item, index) => {
-    const amount = Number(item.amount || 0);
-    const percentage = Math.round((amount / total) * 100);
-    const icon = item.icon || 'receipt';
-    return `
-      <div class="expense-legend-item">
-        <span
-          class="expense-legend-icon"
-          style="color: var(--expense-chart-${index + 1});"
-        >
-          <i data-lucide="${icon}"></i>
-        </span>
-        <span class="expense-legend-name">
-          ${item.title}
-        </span>
-        <span class="expense-legend-amount">
-          ฿${amount.toLocaleString('en-US', {
-            minimumFractionDigits: 2
-          })}
-          <span class="expense-legend-percent">
-            (${percentage}%)
-          </span>
-        </span>
-      </div>
-    `;
-  }).join('');
+    `).join('')}
+  `;
   if (typeof lucide !== 'undefined') {
     lucide.createIcons(); }
   }
