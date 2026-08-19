@@ -21,20 +21,24 @@
       --morning-butter: #F3D98F;
       --blue-grey: #7298C7;
       --lime-400: #A3E635;
+
       /* Light Glass Base */
       --bg-color: #F5F5F7;
       --glass-bg: rgba(255, 255, 255, 0.55);
       --glass-card: rgba(255, 255, 255, 0.15);
       --glass-border: rgba(15, 23, 42, 0.08);
       --glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.08);
+      
       --text-main: #1C273A;
       --text-sub: #64748B;
       --balance-bg: rgba(255, 255, 255, 0.30);
+
       /* Header & Elements Light */
       --icon-box-bg: rgba(163, 230, 53, 0.25);
       --icon-box-color: #4D7C0F;
       --btn-pill-bg: rgba(255, 255, 255, 0.6);
       --btn-pill-border: rgba(255, 255, 255, 0.9);
+      
       /* Functional Colors */
       --income-color: #3BB143;
       --income-bg: rgba(59, 177, 67, 0.16);
@@ -43,13 +47,8 @@
       --deduction-color: #D97706;
       --deduction-bg: rgba(217, 119, 6, 0.16);
       --modal-bg: rgba(15, 23, 42, 0.35);
-      /* Pie Chart */
-      --expense-chart-1: #A3E635;
-      --expense-chart-2: #7298C7;
-      --expense-chart-3: #F3D98F;
-      --expense-chart-4: #C084FC;
-      --expense-chart-5: #FB7185;
-      --expense-chart-6: #94A3B8; }
+    }
+
     [data-theme="dark"] {
       /* Dark Base */
       --bg-color: #0b0f19;
@@ -57,14 +56,17 @@
       --glass-card: rgba(31, 38, 55, 0.50);
       --glass-border: rgba(255, 255, 255, 0.08);
       --glass-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
+      
       --text-main: #F8FAFC;
       --text-sub: #94A3B8;
       --balance-bg: rgba(31, 38, 55, 0.70);
+
       /* Header & Elements Dark */
       --icon-box-bg: #202B14;
       --icon-box-color: var(--lime-400);
       --btn-pill-bg: rgba(30, 41, 59, 0.6);
       --btn-pill-border: rgba(255, 255, 255, 0.12);
+      
       /* Functional Colors (Dark) */
       --income-color: #3BB143;
       --income-bg: rgba(59, 177, 67, 0.16);
@@ -72,17 +74,21 @@
       --expense-bg: rgba(244, 63, 94, 0.16);
       --deduction-color: #D97706;
       --deduction-bg: rgba(217, 119, 6, 0.16);
-      --modal-bg: rgba(0, 0, 0, 0.65); }
+      --modal-bg: rgba(0, 0, 0, 0.65);
+    }
+
     * { 
       box-sizing: border-box; margin: 0; padding: 0; 
       font-family: 'Inter', 'Noto Sans Thai', -apple-system, BlinkMacSystemFont, sans-serif; 
-      -webkit-tap-highlight-color: transparent; }
+      -webkit-tap-highlight-color: transparent; 
+    }
 
     html,
     body{
     margin: 0;
     min-height: 100%;
-    background-color: var(--bg-color); }
+    background-color: var(--bg-color);
+}
 
     body{
     background-color: var(--bg-color);
@@ -93,34 +99,41 @@
     overflow-x: hidden;
     color: var(--text-main);
     min-height: 100vh;
-    padding-bottom: 100px; }
+    padding-bottom: 100px;
+}
 
     .container { padding:8px 20px 24px; }
     .hero-section{
       position: relative;
       overflow: hidden;
-      padding-bottom: 24px; }
+      padding-bottom: 24px;
+}
 
     .hero-section > *{
       position: relative;
-      z-index: 1; }
+      z-index: 1;
+}
       
     .app-header { 
       display: flex; justify-content: space-between; align-items: center; 
       padding-top:calc(env(safe-area-inset-top) + 16px);
       padding-right:20px;
       padding-left:20px;
-      padding-bottom:8px; }
+      padding-bottom:8px;
+    }
     .header-left { display: flex; align-items: center; gap: 12px; }
+
     .home-icon-box { 
       width: 42px; height: 42px; border-radius: 15px; 
       background: var(--icon-box-bg); color: var(--icon-box-color); 
       display: flex; align-items: center; justify-content: center; 
       backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
       border: 0.5px solid rgba(163, 230, 53, 0.18);
-      box-shadow:  0 4px 12px rgba(0, 0, 0, 0.08); }
+      box-shadow:  0 4px 12px rgba(0, 0, 0, 0.08);
+    }
     .home-icon-box svg{ width:20px; height:20px; stroke:currentColor; stroke-width:2.2; fill:none; }
     .app-title { font-size: 20px; font-weight: 800; letter-spacing: 0.3px; }
+    
     .theme-toggle-btn { 
       background: var(--btn-pill-bg); 
       backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
@@ -129,9 +142,12 @@
       display: flex; align-items: center; justify-content: center; 
       cursor: pointer; font-size: 16px; color: var(--text-main); 
       box-shadow: 0 6px 16px rgba(0,0,0,0.06);
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
     .theme-toggle-btn:active { transform: scale(0.9); }
-    .theme-toggle-btn svg{ width:20px; height:20px; stroke:currentColor; stroke-width:2; }
+    .theme-toggle-btn svg{ width:20px; height:20px; stroke:currentColor; stroke-width:2;
+    }
+
     /* Year & Current Bar */
     .year-current-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
     .year-nav-transparent { display: flex; align-items: center; gap: 0px; }
@@ -151,28 +167,34 @@
       font-size: 11px; font-weight: 800; color: var(--text-main); 
       cursor: pointer; letter-spacing: 0.6px;
       box-shadow: 0 5px 14px rgba(0,0,0,0.05);
-      transition: all 0.2s ease; }
+      transition: all 0.2s ease;
+    }
     .current-btn:active { transform: scale(0.95); }
     .current-btn svg{ width:14px !important; height:14px !important; stroke:var(--lime-400); stroke-width:2.2; flex-shrink:0; }
+
     /* Liquid Month Selector */
     .month-nav-container { display: flex; align-items: center; gap: 6px; margin-bottom: 16px; justify-content: space-between; }
     .month-arrow-btn { background: none; border: none; color: var(--text-sub); width: 28px; height: 28px; display:flex; align-items: center;
                       justify-content: center; padding: 0; cursor: pointer; }
     .month-arrow-btn:disabled { opacity: 0.2; cursor: not-allowed; }
     .month-arrow-btn svg { width: 16px; height: 16px; stroke-width: 2.2; }
+
     .month-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; flex-grow: 1; }
     .month-chip { 
       background: transparent; 
       border: none;
       color: var(--text-sub); padding: 10px 0; border-radius: 14px; 
       font-size: 12px; font-weight: 700; text-align: center; cursor: pointer; 
-      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
     .month-chip:active { transform: scale(0.97); opacity: 0.7; }
     .month-chip.active { 
       background: var(--lime-400);
       color: #1A2E05;
       font-weight: 800;
-      box-shadow: 0 4px 10px rgba(163, 230, 53, 0.18); }
+      box-shadow: 0 4px 10px rgba(163, 230, 53, 0.18);
+    }
+
     .balance-card { 
       background: var(--balance-bg);
       backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -181,7 +203,8 @@
       border: 1px solid var(--glass-border); 
       margin-bottom: 18px; color: var(--text-main);
       box-shadow: var(--glass-shadow);
-      position: relative; overflow: hidden; }
+      position: relative; overflow: hidden;
+    }
     .balance-wallet{
      position: absolute; top: 20px; right: 20px; width: 42px; height: 42px;
      display: flex; align-items: center; justify-content: center; border-radius: 14px;
@@ -204,6 +227,7 @@
     .balance-card.is-updating .balance-change { opacity: 1; }
     .stats-grid.is-updating .stat-value,
     .stats-grid.is-updating .stat-change { opacity: 0.45; }
+
     /* Stats Grid Glass Cards */
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 22px; }
     .stat-card { 
@@ -211,7 +235,8 @@
       backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
       border-radius: 20px; padding: 16px 10px; 
       border: 1px solid var(--glass-border); 
-      text-align: left; box-shadow: var(--glass-shadow); }
+      text-align: left; box-shadow: var(--glass-shadow);
+    }
     .stat-icon { width: 34px; height: 34px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 0 8px; font-size: 15px; font-weight: bold; }
     .stat-icon svg { width: 18px; height: 18px; stroke-width: 2.2; }
     .stat-card.income .stat-icon { background: var(--income-bg); color: var(--income-color); }
@@ -232,11 +257,13 @@
     .stat-card.expense .stat-change.good { color: var(--income-color); }
     .stat-card.expense .stat-change.warning { color: #D97706; }
     .stat-card.expense .stat-change.bad { color: var(--expense-color); }
+
     /* Highlights Section */
     .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
     .section-title { font-size: 13px; font-weight: 800; letter-spacing: 0.8px; color: var(--text-sub); text-transform: uppercase; }
     .see-all-btn { background: none; border: none; color: #84CC16; /* Lime 500 — Light */; font-size: 13px; font-weight: 800; cursor: pointer; padding: 4px 0; }
      [data-theme="dark"] .see-all-btn { color: var(--lime-400); }
+
     .highlight-card {
      background: var(--glass-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
      border-radius: 20px; border: 1px solid var(--glass-border);
@@ -254,6 +281,10 @@
     .entry-amount.income { color: var(--income-color); }
     .entry-amount.expense { color: var(--expense-color); }
     .entry-amount.deduction { color: var(--deduction-color); }
+
+    /* Liquid Glass Floating Bottom Action Bar */
+
+
     /* Liquid Glass Modal */
     .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--modal-bg); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 1000; align-items: flex-end; justify-content: center; }
     .modal.active { display: flex; }
@@ -262,17 +293,21 @@
       backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
       width: 100%; max-width: 500px; border-top-left-radius: 32px; border-top-right-radius: 32px; 
       padding: 26px; border: 1px solid var(--glass-border);
-      box-shadow: 0 -10px 40px rgba(0,0,0,0.3); animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.3); animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+    }
     @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    
     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
     .modal-title { font-size: 19px; font-weight: 800; }
     .close-btn { background: none; border: none; font-size: 22px; color: var(--text-sub); cursor: pointer; }
+
     .form-group { margin-bottom: 18px; }
     .form-label { display: block; font-size: 11px; font-weight: 800; color: var(--text-sub); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
     .form-control { 
       width: 100%; padding: 14px; border-radius: 16px; 
       border: 1px solid var(--glass-border); background: var(--glass-bg); 
-      color: var(--text-main); font-size: 15px; font-weight: 600; outline: none; }
+      color: var(--text-main); font-size: 15px; font-weight: 600; outline: none; 
+    }
     .form-control:focus { border-color: var(--lime-400); }
     .type-selector { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
     .type-btn { padding: 12px; border-radius: 14px; border: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--text-sub); font-size: 13px; font-weight: 700; cursor: pointer; text-align: center; }
@@ -334,9 +369,11 @@ backdrop-filter: blur(30px) saturate(180%); -webkit-backdrop-filter: blur(30px) 
 border-color: rgba(255, 255, 255, 0.20);
 box-shadow:
 0 4px 16px rgba(0, 0, 0, 0.16),
-0 1px 4px rgba(0, 0, 0, 0.10); }
+0 1px 4px rgba(0, 0, 0, 0.10);
+}
 [data-theme="dark"] .floating-tab-bar::before {
-background: rgba(255, 255, 255, 0.06); }
+background: rgba(255, 255, 255, 0.06);
+}
 [data-theme="dark"]
 .floating-tab { color: #94A3B8; }
 [data-theme="dark"]
@@ -346,7 +383,8 @@ background: rgba(255, 255, 255, 0.06); }
 .floating-tab-bar.compact { transform: translateX(-50%) scale(0.90); }
 @media (max-width: 360px) {
 .floating-tab-bar { width: 88%; }
-.floating-tab { font-size: 10px; } }
+.floating-tab { font-size: 10px; }
+}
 .placeholder-page { min-height: 60vh; display: flex; align-items: center; justify-content: center; }
 .placeholder-title { font-size: 24px; font-weight: 800; color: var(--text-main); letter-spacing: 0.3px; }
 .entries-filter { display: flex; width: 100%; margin-bottom: 22px; gap: 0; }
@@ -399,7 +437,8 @@ text-align: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .skeleton-title { width: 110px; height: 12px; }
 .skeleton-type { width: 52px; height: 9px; }
 .skeleton-amount { width: 68px; height: 13px; }
-@keyframes skeletonShimmer { 100% { transform: translateX(100%); } }
+@keyframes skeletonShimmer { 100% { transform: translateX(100%); }
+}
 [data-theme="dark"] .skeleton-line {
 background: rgba(148, 163, 184, 0.10); }
 [data-theme="dark"] .skeleton-line::after {
@@ -427,345 +466,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .monthly-summary-mom.positive { color: #16a34a; }
 .monthly-summary-mom.negative { color: #ef4444; }
 .monthly-summary-mom.neutral { color: var(--text-sub); }
-/* Expense Breakdown */
-.expense-breakdown-section {
-  margin-bottom: 28px;
-}
-
-.expense-breakdown-layout {
-  width: 300px;
-  max-width: 100%;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: start;
-  gap: 18px;
-}
-.expense-breakdown-section .insights-section-title {
-  width: 300px;
-  max-width: 100%;
-  margin: 0 auto 14px;
-}
-.expense-pie-area {
-  height: 150px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.expense-pie-placeholder {
-  width: 132px;
-  height: 132px;
-  border-radius: 50%;
-  background: rgba(100, 116, 139, 0.14);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-sub);
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  text-align: center;
-}
-.expense-pie {
-  width: 132px;
-  height: 132px;
-  display: block;
-  overflow: visible;
-}
-
-.expense-pie-segment {
-  cursor: pointer;
-  transition:
-    transform 0.22s ease,
-    opacity 0.22s ease;
-  transform-box: fill-box;
-  transform-origin: center;
-}
-
-.expense-pie-segment:hover {
-  opacity: 0.92;
-}
-
-.expense-pie-segment.selected {
-  transform: scale(1.08);
-}
-
-.expense-breakdown-info {
-  min-width: 0;
-  height: 150px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.expense-legend {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.expense-legend-item {
-  display: grid;
-  grid-template-columns: 22px minmax(0, 1fr);
-  grid-template-rows: auto auto;
-  column-gap: 8px;
-  row-gap: 2px;
-  align-items: center;
-  cursor: pointer;
-}
-
-.expense-legend-icon {
-  grid-column: 1;
-  grid-row: 1;
-  width: 22px;
-  height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.expense-legend-icon svg {
-  width: 18px;
-  height: 18px;
-  stroke-width: 2.2;
-}
-
-.expense-legend-name {
-  grid-column: 2;
-  grid-row: 1;
-  min-width: 0;
-  font-size: 11px;
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--text-main);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.expense-legend-amount {
-  grid-column: 2;
-  grid-row: 2;
-  font-size: 10px;
-  font-weight: 800;
-  line-height: 1.2;
-  color: var(--text-main);
-}
-
-.expense-legend-percent {
-  margin-left: 4px;
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--text-sub);
-}
-.expense-other-legend-item {
-  display: grid;
-  grid-template-columns: 22px 1fr;
-  grid-template-rows: auto auto;
-  column-gap: 8px;
-  row-gap: 3px;
-  align-items: center;
-}
-
-.expense-other-legend-item .expense-legend-icon {
-  grid-column: 1;
-  grid-row: 1;
-  width: 22px;
-  height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.expense-other-legend-item .expense-legend-icon svg {
-  width: 18px;
-  height: 18px;
-}
-
-.expense-other-legend-item .expense-legend-name {
-  grid-column: 2;
-  grid-row: 1;
-  min-width: 0;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-sub);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.expense-other-legend-amount {
-  grid-column: 2;
-  grid-row: 2;
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--text-main);
-}
-
-.expense-other-legend-percent {
-  grid-column: 2;
-  grid-row: 2;
-  margin-left: 65px;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-sub);
-}
-.expense-breakdown-layout.expense-other-mode {
-  align-items: flex-start;
-}
-
-.expense-breakdown-layout.expense-other-mode
-.expense-breakdown-info {
-  height: auto;
-  min-height: 150px;
-  align-items: flex-start;
-}
-
-.expense-breakdown-layout.expense-other-mode
-.expense-legend {
-  gap: 12px;
-}
-.expense-empty-state {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.expense-empty-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--text-sub);
-}
-
-.expense-empty-subtitle {
-  margin-left: 16px;
-  font-size: 9px;
-  font-weight: 600;
-  color: var(--text-sub);
-}
-
-.expense-legend-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--text-sub);
-  flex-shrink: 0;
-}
-
-.expense-selected-detail {
-  display: none;
-  margin-top: 14px;
-}
-.expense-selected-state {
-  width: 110px;
-  min-height: 150px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-}
-.expense-selected-name {
-  font-size: 13px;
-  font-weight: 800;
-  line-height: 1.2;
-  white-space: nowrap;
-}
-.expense-selected-title {
-  width: 110px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 800;
-  line-height: 1.2;
-  color: var(--text-main);
-  white-space: nowrap;
-}
-.expense-selected-amount {
-  margin-top: 11px;
-  margin-left: 16px;
-  font-size: 16px;
-  font-weight: 900;
-  line-height: 1.2;
-  color: var(--text-main);
-
-}
-.expense-selected-percent {
-  margin-top: 9px;
-  margin-left: 16px;
-  font-size: 13px;
-  font-weight: 800;
-  line-height: 1.2;
-  color: var(--text-sub);
-
-}
-.expense-other-list {
-  margin-top: 14px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.expense-other-item {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 8px;
-  align-items: center;
-  font-size: 10px;
-}
-
-.expense-other-name {
-  color: var(--text-main);
-  font-weight: 700;
-}
-
-.expense-other-amount {
-  color: var(--text-main);
-  font-weight: 700;
-}
-
-.expense-other-percent {
-  color: var(--text-sub);
-  font-weight: 700;
-}
-
-.expense-type-summary {
-  width: 300px;
-  max-width: 100%;
-  margin: 22px auto 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
-}
-
-.expense-type-block:first-child {
-  text-align: center;
-}
-
-.expense-type-block:last-child {
-  text-align: center;
-}
-
-.expense-type-label {
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.7px;
-  color: var(--text-sub);
-  margin-bottom: 5px;
-}
-
-.expense-type-value {
-  font-size: 16px;
-  font-weight: 800;
-  color: var(--text-main);
-}
 </style>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -783,6 +483,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       <i data-lucide="moon-star"></i>
   </button>
   </header>
+  
   <main class="container" id="mainContent">
     <section class="year-current-bar">
       <div class="year-nav-transparent">
@@ -794,11 +495,13 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
           <i data-lucide="chevron-right"></i>
         </button>
       </div>
+
       <button class="current-btn" onclick="resetToCurrent()">
         <i data-lucide="calendar"></i>
         CURRENT
       </button>
     </section>
+
     <section class="month-nav-container">
       <button class="month-arrow-btn" id="prevMonthSetBtn" onclick="shiftMonthSet(-1)">
         <i data-lucide="chevron-left"></i>
@@ -808,6 +511,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         <i data-lucide="chevron-right"></i>
       </button>
     </section>
+
     <section class="balance-card">
       <div class="balance-wallet">
         <i data-lucide="wallet"></i>
@@ -816,6 +520,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       <div class="balance-amount" id="balanceAmount">฿0.00</div>
       <div class="balance-change" id="balanceChange"></div>
     </section>
+
     <section class="stats-grid">
       <div class="stat-card income">
         <div class="stat-icon">
@@ -842,6 +547,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         <div class="stat-change" id="deductionChange"></div>
       </div>
     </section>
+
     <section>
       <div class="section-header">
         <div class="section-title">HIGHLIGHTS</div>
@@ -994,49 +700,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   </div>
 </div>
 </section>
-<section class="insights-section expense-breakdown-section">
-  <div class="insights-section-title">
-    EXPENSE BREAKDOWN
-  </div>
-  <div class="expense-breakdown-layout">
-    <!-- Pie -->
-    <div class="expense-pie-area">
-  <button
-    type="button"
-    class="expense-pie-back"
-    id="expensePieBack"
-    hidden
-  >
-    ← BACK
-  </button>
-  <div class="expense-pie-placeholder">
-    <span>EXPENSE</span>
-  </div>
-</div>
-    <!-- Legend / Selected Detail -->
-    <div class="expense-breakdown-info">
-      <div class="expense-legend" id="expenseLegend"></div>
-      <!-- จะใช้ใน Step 2 -->
-      <div class="expense-selected-detail" id="expenseSelectedDetail">
-      </div>
-    </div>
-  </div>
-  <!-- Fixed / Variable -->
-  <div class="expense-type-summary">
-    <div class="expense-type-block">
-      <div class="expense-type-label">FIXED</div>
-      <div class="expense-type-value" id="fixedExpenseAmount">
-        ฿0.00
-      </div>
-    </div>
-    <div class="expense-type-block">
-      <div class="expense-type-label">VARIABLE</div>
-      <div class="expense-type-value" id="variableExpenseAmount">
-        ฿0.00
-      </div>
-    </div>
-  </div>
-</section>
   </main>
  </div>
   <!-- Floating Bottom Navigation -->
@@ -1054,14 +717,17 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   <span>Insights</span>
 </button>
   </nav>
+
   <div class="modal" id="entryModal">
     <div class="modal-content">
       <div class="modal-header">
         <div class="modal-title" id="modalTitle">New Entry</div>
         <button class="close-btn" onclick="closeModal()">✕</button>
       </div>
+
       <form id="recordForm" onsubmit="handleFormSubmit(event)">
         <input type="hidden" id="editRowIndex">
+
         <div class="form-group">
           <label class="form-label">Type</label>
           <div class="type-selector">
@@ -1070,23 +736,28 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
             <div class="type-btn deduction" onclick="selectType('Deduction')">Deduction</div>
           </div>
         </div>
+
         <div class="form-group">
           <label class="form-label">Date</label>
           <input type="date" class="form-control" id="formDate" required>
         </div>
+
         <div class="form-group">
           <label class="form-label">Item Name</label>
           <input type="text" class="form-control" id="formTitle" placeholder="e.g. เงินเดือน / ค่ากาแฟ" required>
         </div>
+
         <div class="form-group">
           <label class="form-label">Amount</label>
           <input type="number" step="any" class="form-control" id="formAmount" placeholder="0.00" required>
         </div>
+
         <button type="submit" class="submit-btn" id="submitBtn">Save Entry</button>
         <button type="button" class="delete-btn" id="deleteBtn" onclick="handleDelete()">Delete Entry</button>
       </form>
     </div>
   </div>
+
   <script>
     const SUPABASE_URL = "https://kbxnrlbybkbuxoyzdecp.supabase.co";
     const SUPABASE_KEY = "sb_publishable_CMkX-fP0wMfKoaYUcI-sUg_BR2ab8PM";
@@ -1109,21 +780,24 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     let currentEntryFilter = 'all';
     let lastFetchTime = 0;
     const REFRESH_THRESHOLD = 60 * 1000;
+
     // Init
     document.addEventListener("DOMContentLoaded", () => {
       applyTheme(getPreferredTheme());
       updateYearUI();
       renderMonthGrid();
       fetchData();
+      
       document.addEventListener("visibilitychange", () => {
      if (document.visibilityState === 'visible') {
      const elapsed = Date.now() - lastFetchTime;
      if (elapsed >= REFRESH_THRESHOLD) {
       fetchData();
-     }
     }
-   });
-  });
+  }
+});
+});
+
     // Theme Toggle
     function applyTheme(theme) {
       document.body.setAttribute('data-theme', theme);
@@ -1132,14 +806,17 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         theme === "dark"
           ? '<i data-lucide="sun"></i>'
           : '<i data-lucide="moon-star"></i>';
-      lucide.createIcons(); }
+      lucide.createIcons();
+}
    function getPreferredTheme() {
      const manual = localStorage.getItem("themeManual");
      if (manual === "true") {
-         return localStorage.getItem("theme") || "light"; }
+         return localStorage.getItem("theme") || "light";
+     }
      return window.matchMedia("(prefers-color-scheme: dark)").matches
          ? "dark"
-         : "light"; }
+         : "light";
+}
    function toggleTheme() {
      const current =
        document.body.getAttribute("data-theme") || "light";
@@ -1148,7 +825,9 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
        : "dark";
      applyTheme(next);
      localStorage.setItem("theme", next);
-     localStorage.setItem("themeManual", "true"); }
+     localStorage.setItem("themeManual", "true");
+}
+
     // Year Controller with Limit at 2025
   function updateYearUI() {
   // Overview
@@ -1159,13 +838,15 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   document.getElementById('entriesPrevYearBtn').disabled = (selectedYear <= 2025);
   // Insights
   document.getElementById('insightsSelectedYear').innerText = selectedYear;
-  document.getElementById('insightsPrevYearBtn').disabled = (selectedYear <= 2025); }
+  document.getElementById('insightsPrevYearBtn').disabled = (selectedYear <= 2025);
+}
   function changeYear(delta) {
   if (selectedYear + delta < 2025) return;
   selectedYear += delta;
   updateYearUI();
   renderMonthGrid();
-  fetchData(); }
+  fetchData();
+}
   // Month Controller
   function renderMonthGrid() {
   const months = monthSets[currentMonthSet];
@@ -1189,7 +870,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   document.getElementById('entriesNextMonthSetBtn').disabled = (currentMonthSet === 2);
   // Insights arrows
   document.getElementById('insightsPrevMonthSetBtn').disabled = (currentMonthSet === 1);
-  document.getElementById('insightsNextMonthSetBtn').disabled = (currentMonthSet === 2); }
+  document.getElementById('insightsNextMonthSetBtn').disabled = (currentMonthSet === 2);
+}
  function shiftMonthSet(delta) {
   const newSet = currentMonthSet + delta;
   if (newSet >= 1 && newSet <= 2) {
@@ -1200,7 +882,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   function selectMonth(m) {
   selectedMonth = m;
   renderMonthGrid();
-  fetchData(); }
+  fetchData();
+ }
  // Reset to Current Datefunction resetToCurrent() {
   function resetToCurrent() {
   selectedYear = realCurrentYear;
@@ -1208,7 +891,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   currentMonthSet = realCurrentMonth <= 6 ? 1 : 2;
   updateYearUI();
   renderMonthGrid();
-  fetchData(); }
+  fetchData();
+}
   function renderEntriesPage(entries) {
   const total = entries.length;
   document.getElementById('entriesTotal').innerText =
@@ -1230,7 +914,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     ${renderEntryGroup('Expense', grouped.Expense)}
     ${renderEntryGroup('Deduction', grouped.Deduction)}
   `;
-  lucide.createIcons(); }
+  lucide.createIcons();
+}
   function renderEntryGroup(type, items) {
   if (!items || items.length === 0) return '';
   const typeClass = type.toLowerCase();
@@ -1285,15 +970,18 @@ function renderEntriesPage(entries) {
   if (currentEntryFilter !== 'all') {
     filteredEntries = currentEntries.filter(item =>
       item.financial_type.toLowerCase() === currentEntryFilter
-    ); }
+    );
+  }
   if (filteredEntries.length === 0) {
     document.getElementById('entriesList').innerHTML =
       `<div class="loading-state">No entries yet.</div>`;
-    return; }
+    return;
+  }
   const grouped = {
     Income: [],
     Expense: [],
-    Deduction: [] };
+    Deduction: []
+  };
 filteredEntries.forEach(item => {
   if (grouped[item.financial_type]) {
     grouped[item.financial_type].push(item);
@@ -1307,7 +995,8 @@ Object.keys(grouped).forEach(type => {
     ${renderEntryGroup('Expense', grouped.Expense)}
     ${renderEntryGroup('Deduction', grouped.Deduction)}
   `;
-  lucide.createIcons(); }
+  lucide.createIcons();
+}
   function renderEntriesLoading() {
   document.getElementById('entriesList').innerHTML = `
     <div class="entries-loading">
@@ -1355,454 +1044,10 @@ Object.keys(grouped).forEach(type => {
       </div>
     </div>
   `;
- }
-  function buildExpenseBreakdown(entries) {
-  const expenseEntries = entries
-    .filter(item => item.financial_type === 'Expense')
-    .map(item => ({
-      ...item,
-      amount: Number(item.amount || 0) }))
-    .filter(item => item.amount > 0)
-    .sort((a, b) => b.amount - a.amount);
-  const totalExpense = expenseEntries.reduce(
-    (sum, item) => sum + item.amount, 0 );
-  const topFive = expenseEntries
-  .slice(0, 5)
-  .map((item, index) => ({
-    ...item,
-    __breakdownIndex: index
-  }));
-  const otherEntries = expenseEntries.slice(5);
-  const otherAmount = otherEntries.reduce(
-    (sum, item) => sum + item.amount, 0 );
-  const breakdown = [...topFive];
-  if (otherAmount > 0) { breakdown.push({
-    title: 'Other', amount: otherAmount, isOther: true, children: otherEntries, __breakdownIndex: 5 }); }
-  return { totalExpense, items: breakdown }; }
-  let expenseOtherDrilldown = false;
-  let expenseOtherItems = [];
-  let expenseOtherTotal = 0;
-  let expenseMainBreakdown = null;
-  function renderExpensePie(breakdown) {
-  const pieArea = document.querySelector('.expense-pie-area');
-  if (!pieArea) return;
-  const { totalExpense, items } = breakdown;
-  if (!items.length || totalExpense <= 0) {
-    pieArea.innerHTML = `
-      <div class="expense-pie-placeholder">
-        <span>NO EXPENSE</span>
-      </div>
-    `;
-    return; }
-  if (items.length === 1) {
-    pieArea.innerHTML = `
-      <svg
-        class="expense-pie"
-        viewBox="0 0 120 120"
-        role="img"
-        aria-label="Expense breakdown" >
-        <circle
-          class="expense-pie-segment"
-          data-index="0"
-          data-angle="0"
-          cx="60"
-          cy="60"
-          r="52"
-          fill="var(--expense-chart-1)"
-        ></circle>
-      </svg>
-    `;
-    return; }
-  const cx = 60;
-  const cy = 60;
-  const radius = 52;
-  let currentAngle = -Math.PI / 2;
-  function polarToCartesian(angle) {
-    return {
-      x: cx + radius * Math.cos(angle),
-      y: cy + radius * Math.sin(angle)
-    };
-  }
-  function createSlicePath(startAngle, endAngle) {
-    const start = polarToCartesian(startAngle);
-    const end = polarToCartesian(endAngle);
-    const largeArcFlag =
-      endAngle - startAngle > Math.PI ? 1 : 0;
-    return [
-      `M ${cx} ${cy}`,
-      `L ${start.x} ${start.y}`,
-      `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`,
-      'Z'
-    ].join(' '); }
-  const segments = items.map((item, index) => {
-    const percentage = item.amount / totalExpense;
-    const startAngle = currentAngle;
-    const endAngle =
-      currentAngle + percentage * Math.PI * 2;
-    const midAngle =
-      startAngle + (endAngle - startAngle) / 2;
-    currentAngle = endAngle;
-    const path = createSlicePath(
-      startAngle,
-      endAngle
-    );
-    
-  const labelRadius = 34;
-    const labelX = cx + labelRadius * Math.cos(midAngle);
-    const labelY = cy + labelRadius * Math.sin(midAngle);
-    return `
-  <path
-    class="expense-pie-segment"
-    data-index="${index}"
-    data-angle="${midAngle}"
-    d="${path}"
-    fill="var(--expense-chart-${index + 1})"
-  ></path>
-  <text
-    class="expense-pie-percent"
-    x="${labelX}"
-    y="${labelY}"
-    text-anchor="middle"
-    dominant-baseline="middle"
-  >
-    ${Math.round(percentage * 100)}%
-  </text>
-`;
-  }).join('');
-  pieArea.innerHTML = `
-    <svg
-      class="expense-pie"
-      viewBox="0 0 120 120"
-      role="img"
-      aria-label="Expense breakdown"
-    >
-      ${segments}
-    </svg>
-  `; }
-  function renderExpenseOtherPie(items) {
-  const pieArea = document.querySelector('.expense-pie-area');
-  if (!pieArea) return;
-  if (!items || !items.length) {
-    return; }
-  const total = items.reduce(
-    (sum, item) => sum + Number(item.amount || 0),
-    0
-  );
-  if (total <= 0) return;
-  if (items.length === 1) {
-  pieArea.innerHTML = `
-    <svg
-      class="expense-pie expense-other-pie"
-      viewBox="0 0 120 120"
-      role="img"
-      aria-label="Other expense breakdown"
-    >
-      <circle
-        class="expense-pie-segment expense-other-segment"
-        data-index="0"
-        data-angle="0"
-        cx="60"
-        cy="60"
-        r="52"
-        fill="var(--expense-chart-1)"
-      ></circle>
-    </svg>
-  `;
-  return; }
-  const cx = 60;
-  const cy = 60;
-  const radius = 52;
-  let currentAngle = -Math.PI / 2;
-  function polarToCartesian(angle) {
-    return {
-      x: cx + radius * Math.cos(angle),
-      y: cy + radius * Math.sin(angle)
-    };
-  }
-  function createSlicePath(startAngle, endAngle) {
-    const start = polarToCartesian(startAngle);
-    const end = polarToCartesian(endAngle);
-    const largeArcFlag =
-      endAngle - startAngle > Math.PI ? 1 : 0;
-    return [
-      `M ${cx} ${cy}`,
-      `L ${start.x} ${start.y}`,
-      `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`,
-      'Z'
-    ].join(' '); }
-    const segments = items.map((item, index) => {
-    const percentage =
-      Number(item.amount || 0) / total;
-    const startAngle = currentAngle;
-    const endAngle =
-      currentAngle +
-      percentage * Math.PI * 2;
-    const midAngle =
-      startAngle +
-      (endAngle - startAngle) / 2;
-    currentAngle = endAngle;
-    const path = createSlicePath(
-      startAngle,
-      endAngle
-    );
-    const labelRadius = 34;
-      const labelX = cx + labelRadius * Math.cos(midAngle);
-      const labelY = cy + labelRadius * Math.sin(midAngle);
-      return `
-      <path
-      class="expense-pie-segment expense-other-segment"
-      data-index="${index}"
-      data-angle="${midAngle}"
-      d="${path}"
-      fill="var(--expense-chart-${index + 1})"
-    ></path>
-    <text
-      class="expense-pie-percent"
-      x="${labelX}"
-      y="${labelY}"
-      text-anchor="middle"
-      dominant-baseline="middle"
-    >
-      ${Math.round(percentage * 100)}%
-    </text>
-   `;
-  }).join('');
-  pieArea.innerHTML = `
-  <button
-    type="button"
-    class="expense-pie-back"
-    id="expensePieBack"
-  >
-    ← BACK
-  </button>
-  <svg
-    class="expense-pie expense-other-pie"
-    viewBox="0 0 120 120"
-    role="img"
-    aria-label="Other expense breakdown"
-  >
-    ${segments}
-  </svg>
-`; }
-  function renderExpenseLegend(items, totalExpense) {
-  const legend = document.getElementById('expenseLegend');
-  if (!legend) return;
-  legend.innerHTML = items.map((item, index) => {
-    const amount = Number(item.amount || 0);
-    const icon = item.isOther
-      ? 'layers-2'
-      : (item.icon || 'receipt');
-    return `
-      <div
-        class="expense-legend-item"
-        data-index="${index}"
-      >
-        <span
-          class="expense-legend-icon"
-          style="color: var(--expense-chart-${index + 1});"
-        >
-          <i data-lucide="${icon}"></i>
-        </span>
-        <span class="expense-legend-name">
-          ${item.title}
-        </span>
-        <span class="expense-legend-amount">
-          ฿${amount.toLocaleString('en-US', {
-            minimumFractionDigits: 2
-          })}
-        </span>
-      </div>
-    `;
-  }).join('');
-  if (typeof lucide !== 'undefined') {
-    lucide.createIcons(); }
-  }
-  function renderExpenseOtherLegend(items, total) {
-  const legend = document.getElementById('expenseLegend');
-  if (!legend) return;
-  if (!items || !items.length || total <= 0) {
-    legend.innerHTML = '';
-    return; }
-  legend.innerHTML = items.map((item, index) => {
-    const amount = Number(item.amount || 0);
-    const icon = item.icon || 'receipt';
-    return `
-      <div class="expense-legend-item">
-        <span
-          class="expense-legend-icon"
-          style="color: var(--expense-chart-${index + 1});"
-        >
-          <i data-lucide="${icon}"></i>
-        </span>
-        <span class="expense-legend-name">
-          ${item.title}
-        </span>
-        <span class="expense-legend-amount">
-          ฿${amount.toLocaleString('en-US', {
-            minimumFractionDigits: 2
-          })}
-        </span>
-      </div>
-    `;
-  }).join('');
-  if (typeof lucide !== 'undefined') {
-    lucide.createIcons(); } 
-  }
-  function renderExpenseSelectedLegend(item, totalExpense) {
-  const legend =
-    document.getElementById('expenseLegend');
-  if (!legend) return;
-  const percentage = totalExpense > 0
-    ? Math.round(
-        (item.amount / totalExpense) * 100 ) : 0;
-  const index =
-    item.__breakdownIndex ?? 0;
-  let otherHtml = '';
-  if (item.isOther && item.children?.length) {
-   otherHtml = `
-    <div class="expense-other-list">
-      ${item.children.map(child => {
-        const childPercent =
-          totalExpense > 0
-            ? Math.round(
-                (child.amount / totalExpense) * 100
-              )
-            : 0;
-        return `
-          <div class="expense-other-item">
-            <span class="expense-other-name">
-              ${child.title}
-            </span>
-            <span class="expense-other-amount">
-              ฿${child.amount.toLocaleString('en-US')}
-            </span>
-            <span class="expense-other-percent">
-              ${childPercent}%
-            </span>
-          </div>
-        `;
-      }).join('')}
-    </div>
-  `;
 }
-  legend.innerHTML = `
-    <div class="expense-selected-state">
-      <div class="expense-selected-title">
-        <span
-        class="expense-legend-icon"
-        style="color: var(--expense-chart-${index + 1});"
-        >
-        <i data-lucide="${item.isOther ? 'layers-2' : (item.icon || 'receipt')}"></i>
-        </span>
-        <span
-          class="expense-selected-name"
-          style="color: var(--expense-chart-${index + 1});"
-        > ${item.title}
-      </span>
-      </div>
-      <div class="expense-selected-amount">
-        ฿${item.amount.toLocaleString('en-US')}
-      </div>
-      <div class="expense-selected-percent">
-        ${percentage}%
-      </div>
-      ${otherHtml}
-    </div>
-  `;
-  if (typeof lucide !== 'undefined') {
-  lucide.createIcons(); }
-  }
-  function renderExpenseSelectedInfo(item, totalExpense) {
-  const detail = document.querySelector('.expense-selected-detail');
-  if (!detail) return;
-  if (!item) {
-    detail.style.display = 'none';
-    detail.innerHTML = '';
-    return; }
-  const percentage = totalExpense > 0
-    ? Math.round((item.amount / totalExpense) * 100)
-    : 0;
-  detail.innerHTML = `
-    <div class="expense-selected-title">
-      ${item.title}
-    </div>
-    <div class="expense-selected-amount">
-      ฿${item.amount.toLocaleString('en-US')}
-    </div>
-    <div class="expense-selected-percent">
-      ${percentage}%
-    </div>
-  `;
-  detail.style.display = 'block'; }
-  function explodeExpenseSegment(segment) {
-  const angle =
-    Number(segment.dataset.angle);
-  const distance = 8;
-  const x =
-    Math.cos(angle) * distance;
-  const y =
-    Math.sin(angle) * distance;
-  segment.style.transform =
-    `translate(${x}px, ${y}px)`; }
-  function setupExpensePieInteraction(breakdown) {
-  const pie = document.querySelector('.expense-pie');
-  const legend = document.getElementById('expenseLegend');
-  if (!pie || !legend) return;
-  const segments =
-    pie.querySelectorAll('.expense-pie-segment');
-  segments.forEach(segment => {
-    segment.addEventListener('click', () => {
-      const index =
-        Number(segment.dataset.index);
-      const selectedItem =
-        breakdown.items[index];
-      if (selectedItem?.isOther) {
-        document
-          .querySelector('.expense-breakdown-layout')
-          ?.classList.add('expense-other-mode');
-        expenseOtherDrilldown = true;
-        const backButton =
-          document.getElementById('expensePieBack');
-        if (backButton) {
-          backButton.hidden = false; }
-        expenseOtherItems =
-        selectedItem.children || [];
-        expenseOtherTotal =
-        expenseOtherItems.reduce(
-          (sum, item) =>
-          sum + Number(item.amount || 0), 0 );
-        renderExpenseOtherPie(
-          expenseOtherItems );
-        renderExpenseOtherLegend(
-          expenseOtherItems,
-          expenseOtherTotal );
-        setupExpensePieInteraction({
-          items: expenseOtherItems,
-          totalExpense: expenseOtherTotal });
-      return;}
-      const isAlreadySelected =
-      segment.classList.contains('selected');
-      segments.forEach(item => {
-        item.classList.remove('selected');
-        item.style.transform = '';
-      });
-      if (isAlreadySelected) {
-        renderExpenseLegend(
-          breakdown.items,
-          breakdown.totalExpense
-        );
-        return; }
-      segment.classList.add('selected');
-      explodeExpenseSegment(segment);
-      renderExpenseSelectedLegend(
-        selectedItem,
-        breakdown.totalExpense
-      );
-    });
-   });
-  }
   async function fetchData() {
   const requestId = ++fetchRequestId;
+
   // Updating state
   document.getElementById('balanceAmount').classList.add('updating');
   document.getElementById('balanceChange').classList.add('updating');
@@ -1858,47 +1103,23 @@ Object.keys(grouped).forEach(type => {
     if (requestId !== fetchRequestId) { return; }
     // 6. Calculate current totals
     const entries = currentEntries || [];
-    const expenseBreakdown = buildExpenseBreakdown(entries);
-    renderExpensePie(expenseBreakdown);
-    setupExpensePieInteraction(expenseBreakdown);
-    const expenseLegend = document.getElementById('expenseLegend');
-    if (expenseLegend) {
-      if (!expenseBreakdown.items.length) {
-        expenseLegend.innerHTML = `
-        <div class="expense-empty-title">
-        <span class="expense-legend-icon">
-        <i data-lucide="receipt"></i>
-        </span>
-        <span>NO EXPENSE</span>
-      </div>
-      <div class="expense-empty-subtitle">
-        No expenses this month
-      </div>
-    `;
-    if (typeof lucide !== 'undefined') {
-      lucide.createIcons(); }
-      } else {
-        renderExpenseLegend(
-          expenseBreakdown.items,
-          expenseBreakdown.totalExpense ); }
-    }
     const previous = previousEntries || [];
     if (requestId !== fetchRequestId) {
-      return; }
-      renderEntriesPage(entries);
-   const totalIncome = entries
-  .filter(item => item.financial_type === 'Income')
-  .reduce((sum, item) => sum + Number(item.amount || 0), 0);
-  const totalExpense = entries
-  .filter(item => item.financial_type === 'Expense')
-  .reduce((sum, item) => sum + Number(item.amount || 0), 0);
-  const totalDeduction = entries
-  .filter(item => item.financial_type === 'Deduction')
-  .reduce((sum, item) => sum + Number(item.amount || 0), 0);
-  const balance = totalIncome - totalExpense;
-  const savingsRate = totalIncome > 0
-  ? (balance / totalIncome) * 100
-  : 0;
+    return; }
+    renderEntriesPage(entries);
+    const totalIncome = entries
+      .filter(item => item.financial_type === 'Income')
+      .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+    const totalExpense = entries
+      .filter(item => item.financial_type === 'Expense')
+      .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+    const totalDeduction = entries
+      .filter(item => item.financial_type === 'Deduction')
+      .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+    const balance = totalIncome - totalExpense;
+    const savingsRate = totalIncome > 0
+      ? (balance / totalIncome) * 100
+      : 0;
     // 7. Calculate previous totals
     const previousIncome = previous
       .filter(item => item.financial_type === 'Income')
@@ -2179,11 +1400,13 @@ Object.keys(groupedCandidates).forEach(function(type) {
 groupedCandidates[type].sort(function(a, b) { return Number(b.amount) - Number(a.amount); });
 });
 const highlights = [];
-if (groupedCandidates.income.length > 0) { highlights.push(groupedCandidates.income[0]); }
+if (groupedCandidates.income.length > 0) { highlights.push(groupedCandidates.income[0]);
+}
 groupedCandidates.expense
   .slice(0, 2)
   .forEach(function(item) { highlights.push(item); });
-if (groupedCandidates.deduction.length > 0) { highlights.push(groupedCandidates.deduction[0]); }
+if (groupedCandidates.deduction.length > 0) { highlights.push(groupedCandidates.deduction[0]);
+}
 const selectedIds = new Set( highlights.map(function(item) { return item.id; }) );
 const remainingCandidates = highlightCandidates
   .filter(function(item) { return ! selectedIds.has(item.id); })
@@ -2248,8 +1471,8 @@ return Number(b.amount) - Number(a.amount); });
         <small>${err?.message || err}</small>
       </div>
     `;
-    }
-   }
+  }
+}
     // Bottom Navigation Compact State
     let scrollTicking = false;
     function updateBottomNavOnScroll() {
@@ -2266,6 +1489,7 @@ return Number(b.amount) - Number(a.amount); });
       scrollTicking = false; });
       scrollTicking = true; }
     }, { passive: true });
+    
     // Main Navigation
   function switchTab(tab) {
   const bottomNav = document.querySelector('.floating-tab-bar');
@@ -2285,22 +1509,27 @@ return Number(b.amount) - Number(a.amount); });
     mainContent.style.display = '';
     placeholderView.style.display = 'none';
     insightsView.style.display = 'none';
-    tabs[0].classList.add('active'); }
+    tabs[0].classList.add('active');
+  }
   if (tab === 'entries') {
     headerIconBox.innerHTML = '<i data-lucide="list"></i>';
     headerTitle.innerText = 'ENTRIES';
     mainContent.style.display = 'none';
     placeholderView.style.display = '';
     insightsView.style.display = 'none';
-    tabs[1].classList.add('active'); }
+    tabs[1].classList.add('active');
+  }
   if (tab === 'insights') {
     headerIconBox.innerHTML = '<i data-lucide="chart-no-axes-combined"></i>';
     headerTitle.innerText = 'INSIGHTS';
     mainContent.style.display = 'none';
     placeholderView.style.display = 'none';
     insightsView.style.display = '';
-    tabs[2].classList.add('active'); }
-  lucide.createIcons(); }
+    tabs[2].classList.add('active');
+}
+  lucide.createIcons();
+}
+    
     // Modal Controls
     function selectType(type) {
       selectedType = type;
@@ -2311,6 +1540,7 @@ return Number(b.amount) - Number(a.amount); });
         }
       });
     }
+
     function openModal(mode, item = null) {
       document.getElementById('entryModal').classList.add('active');
       if (mode === 'add') {
@@ -2328,15 +1558,21 @@ return Number(b.amount) - Number(a.amount); });
         document.getElementById('formTitle').value = item.title;
         document.getElementById('formAmount').value = item.amount;
         document.getElementById('deleteBtn').style.display = 'block';
-        selectType(item.financialType); } }
+        selectType(item.financialType);
+      }
+    }
+
     function closeModal() {
-      document.getElementById('entryModal').classList.remove('active'); }
+      document.getElementById('entryModal').classList.remove('active');
+    }
+
     const iconMap = {
   // Income
   "เงินเดือน": "briefcase-business",
   "apple music": "music",
   "ยอดขายทะลุเป้าหมาย": "trending-up",
   "อื่นๆ": "ellipsis",
+
   // Expense
   "3BB": "wifi",
   "แม่": "user-round",
@@ -2347,6 +1583,7 @@ return Number(b.amount) - Number(a.amount); });
   "Spay later": "shopping-bag",
   "SEasy": "banknote",
   "Tpay later": "shopping-cart",
+
   // Deduction
   "มาสาย": "clock-8",
   "ลืมรูดบัตร": "scan-line",
@@ -2356,9 +1593,13 @@ return Number(b.amount) - Number(a.amount); });
   "ผิดกฎระเบียบ": "circle-alert",
   "ลาป่วย": "pill",
   "ออมทรัพย์": "landmark",
-  "ผ่อนสินค้า": "scan-barcode" };
+  "ผ่อนสินค้า": "scan-barcode"
+};
+
 function getEntryIcon(title) {
-  return iconMap[title] || "circle-help"; }
+  return iconMap[title] || "circle-help";
+}
+
     // Form Submissions
     async function handleFormSubmit(e) {
     e.preventDefault();
@@ -2373,7 +1614,8 @@ function getEntryIcon(title) {
     amount: parseFloat(document.getElementById('formAmount').value),
     icon: getEntryIcon(
     document.getElementById('formTitle').value.trim()
-    ) };
+  )
+};
     try {
     // ADD Supabase
     if (!rowIndex) {
@@ -2394,7 +1636,8 @@ const { error } = await supabaseClient
     title: document.getElementById('formTitle').value,
     amount: parseFloat(document.getElementById('formAmount').value),
     icon: getEntryIcon(document.getElementById('formTitle').value.trim()
-    ) })
+    )
+  })
   .eq('id', rowIndex);
   if (error) {
   throw error; }
@@ -2405,8 +1648,9 @@ const { error } = await supabaseClient
     alert('Error saving entry.');
   } finally {
     submitBtn.innerText = 'Save Entry';
-    submitBtn.disabled = false; }
-    }
+    submitBtn.disabled = false;
+  }
+}
     async function handleDelete() {
   if (!confirm('Are you sure you want to delete this entry?')) return;
   const rowIndex = document.getElementById('editRowIndex').value;
@@ -2421,8 +1665,9 @@ const { error } = await supabaseClient
     fetchData();
   } catch (err) {
     console.error('Delete entry error:', err);
-    alert('Error deleting entry.'); }
-    }
+    alert('Error deleting entry.');
+  }
+}
  function setEntryFilter(filter) {
   currentEntryFilter = filter;
   document.querySelectorAll('.entries-filter-btn').forEach(btn => {
@@ -2431,11 +1676,13 @@ const { error } = await supabaseClient
       btn.dataset.filter === filter
     );
   });
-  renderEntriesPage(currentEntries); }
+  renderEntriesPage(currentEntries);
+}
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     media.addEventListener("change", (e) => {
       if (localStorage.getItem("themeManual") === "true") return;
-      applyTheme(e.matches ? "dark" : "light"); });
+      applyTheme(e.matches ? "dark" : "light");
+});
   </script>
   <script> lucide.createIcons();
 </script>
