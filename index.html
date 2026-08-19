@@ -433,6 +433,309 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
 
 .expense-breakdown-layout {
+  width: 300px;
+  max-width: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  gap: 18px;
+}
+.expense-breakdown-section .insights-section-title {
+  width: 300px;
+  max-width: 100%;
+  margin: 0 auto 14px;
+}
+.expense-pie-area {
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.expense-pie-placeholder {
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  background: rgba(100, 116, 139, 0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-sub);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+.expense-pie {
+  width: 132px;
+  height: 132px;
+  display: block;
+  overflow: visible;
+}
+
+.expense-pie-segment {
+  cursor: pointer;
+  transition:
+    transform 0.22s ease,
+    opacity 0.22s ease;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.expense-pie-segment:hover {
+  opacity: 0.92;
+}
+
+.expense-pie-segment.selected {
+  transform: scale(1.08);
+}
+
+.expense-breakdown-info {
+  min-width: 0;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.expense-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.expense-legend-item {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: 8px;
+  row-gap: 2px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.expense-legend-icon {
+  grid-column: 1;
+  grid-row: 1;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.expense-legend-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2.2;
+}
+
+.expense-legend-name {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-main);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.expense-legend-amount {
+  grid-column: 2;
+  grid-row: 2;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--text-main);
+}
+
+.expense-legend-percent {
+  margin-left: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-sub);
+}
+.expense-other-legend-item {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 8px;
+  row-gap: 3px;
+  align-items: center;
+}
+
+.expense-other-legend-item .expense-legend-icon {
+  grid-column: 1;
+  grid-row: 1;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.expense-other-legend-item .expense-legend-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.expense-other-legend-item .expense-legend-name {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-sub);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.expense-other-legend-amount {
+  grid-column: 2;
+  grid-row: 2;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.expense-other-legend-percent {
+  grid-column: 2;
+  grid-row: 2;
+  margin-left: 65px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-sub);
+}
+.expense-breakdown-layout.expense-other-mode {
+  align-items: flex-start;
+}
+
+.expense-breakdown-layout.expense-other-mode
+.expense-breakdown-info {
+  height: auto;
+  min-height: 150px;
+  align-items: flex-start;
+}
+
+.expense-breakdown-layout.expense-other-mode
+.expense-legend {
+  gap: 12px;
+}
+.expense-empty-state {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.expense-empty-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-sub);
+}
+
+.expense-empty-subtitle {
+  margin-left: 16px;
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-sub);
+}
+
+.expense-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-sub);
+  flex-shrink: 0;
+}
+
+.expense-selected-detail {
+  display: none;
+  margin-top: 14px;
+}
+.expense-selected-state {
+  width: 110px;
+  min-height: 150px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+.expense-selected-name {
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.expense-selected-title {
+  width: 110px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--text-main);
+  white-space: nowrap;
+}
+.expense-selected-amount {
+  margin-top: 11px;
+  margin-left: 16px;
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1.2;
+  color: var(--text-main);
+
+}
+.expense-selected-percent {
+  margin-top: 9px;
+  margin-left: 16px;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--text-sub);
+
+}
+.expense-other-list {
+  margin-top: 14px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.expense-other-item {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 8px;
+  align-items: center;
+  font-size: 10px;
+}
+
+.expense-other-name {
+  color: var(--text-main);
+  font-weight: 700;
+}
+
+.expense-other-amount {
+  color: var(--text-main);
+  font-weight: 700;
+}
+
+.expense-other-percent {
+  color: var(--text-sub);
+  font-weight: 700;
+}
+
 .expense-type-summary {
   width: 300px;
   max-width: 100%;
@@ -1071,32 +1374,49 @@ Object.keys(grouped).forEach(type => {
   let expenseOtherDrilldown = false;
   let expenseOtherItems = [];
   let expenseOtherTotal = 0;
-  function buildExpensePieSvg(
-  items,
-  total,
-  ariaLabel,
-  pieClass = '',
-  segmentClass = 'expense-pie-segment'
-) {
+  function renderExpensePie(breakdown) {
+  const pieArea = document.querySelector('.expense-pie-area');
+  if (!pieArea) return;
+  const { totalExpense, items } = breakdown;
+  if (!items.length || totalExpense <= 0) {
+    pieArea.innerHTML = `
+      <div class="expense-pie-placeholder">
+        <span>NO EXPENSE</span>
+      </div>
+    `;
+    return; }
+  if (items.length === 1) {
+    pieArea.innerHTML = `
+      <svg
+        class="expense-pie"
+        viewBox="0 0 120 120"
+        role="img"
+        aria-label="Expense breakdown" >
+        <circle
+          class="expense-pie-segment"
+          data-index="0"
+          data-angle="0"
+          cx="60"
+          cy="60"
+          r="52"
+          fill="var(--expense-chart-1)"
+        ></circle>
+      </svg>
+    `;
+    return; }
   const cx = 60;
   const cy = 60;
   const radius = 52;
   let currentAngle = -Math.PI / 2;
-  function polarToCartesian(angle, distance) {
+  function polarToCartesian(angle) {
     return {
-      x: cx + distance * Math.cos(angle),
-      y: cy + distance * Math.sin(angle)
+      x: cx + radius * Math.cos(angle),
+      y: cy + radius * Math.sin(angle)
     };
   }
   function createSlicePath(startAngle, endAngle) {
-    const start = polarToCartesian(
-      startAngle,
-      radius
-    );
-    const end = polarToCartesian(
-      endAngle,
-      radius
-    );
+    const start = polarToCartesian(startAngle);
+    const end = polarToCartesian(endAngle);
     const largeArcFlag =
       endAngle - startAngle > Math.PI ? 1 : 0;
     return [
@@ -1104,16 +1424,93 @@ Object.keys(grouped).forEach(type => {
       `L ${start.x} ${start.y}`,
       `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`,
       'Z'
-    ].join(' ');
+    ].join(' '); }
+  const segments = items.map((item, index) => {
+    const percentage = item.amount / totalExpense;
+    const startAngle = currentAngle;
+    const endAngle =
+      currentAngle + percentage * Math.PI * 2;
+    const midAngle =
+      startAngle + (endAngle - startAngle) / 2;
+    currentAngle = endAngle;
+    const path = createSlicePath(
+      startAngle,
+      endAngle
+    );
+    return `
+      <path
+        class="expense-pie-segment"
+        data-index="${index}"
+        data-angle="${midAngle}"
+        d="${path}"
+        fill="var(--expense-chart-${index + 1})"
+      ></path>
+    `;
+  }).join('');
+  pieArea.innerHTML = `
+    <svg
+      class="expense-pie"
+      viewBox="0 0 120 120"
+      role="img"
+      aria-label="Expense breakdown"
+    >
+      ${segments}
+    </svg>
+  `; }
+  function renderExpenseOtherPie(items) {
+  const pieArea = document.querySelector('.expense-pie-area');
+  if (!pieArea) return;
+  if (!items || !items.length) {
+    return; }
+  const total = items.reduce(
+    (sum, item) => sum + Number(item.amount || 0),
+    0
+  );
+  if (total <= 0) return;
+  if (items.length === 1) {
+  pieArea.innerHTML = `
+    <svg
+      class="expense-pie expense-other-pie"
+      viewBox="0 0 120 120"
+      role="img"
+      aria-label="Other expense breakdown"
+    >
+      <circle
+        class="expense-pie-segment expense-other-segment"
+        data-index="0"
+        data-angle="0"
+        cx="60"
+        cy="60"
+        r="52"
+        fill="var(--expense-chart-1)"
+      ></circle>
+    </svg>
+  `;
+  return; }
+  const cx = 60;
+  const cy = 60;
+  const radius = 52;
+  let currentAngle = -Math.PI / 2;
+  function polarToCartesian(angle) {
+    return {
+      x: cx + radius * Math.cos(angle),
+      y: cy + radius * Math.sin(angle)
+    };
   }
-  const segments = [];
-  const labels = [];
-  items.forEach((item, index) => {
-    const amount = Number(item.amount || 0);
+  function createSlicePath(startAngle, endAngle) {
+    const start = polarToCartesian(startAngle);
+    const end = polarToCartesian(endAngle);
+    const largeArcFlag =
+      endAngle - startAngle > Math.PI ? 1 : 0;
+    return [
+      `M ${cx} ${cy}`,
+      `L ${start.x} ${start.y}`,
+      `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`,
+      'Z'
+    ].join(' '); }
+    const segments = items.map((item, index) => {
     const percentage =
-      total > 0
-        ? amount / total
-        : 0;
+      Number(item.amount || 0) / total;
     const startAngle = currentAngle;
     const endAngle =
       currentAngle +
@@ -1122,166 +1519,42 @@ Object.keys(grouped).forEach(type => {
       startAngle +
       (endAngle - startAngle) / 2;
     currentAngle = endAngle;
-    /*
-     * Pie segment
-     */
-    segments.push(`
+    const path = createSlicePath(
+      startAngle,
+      endAngle
+    );
+    return `
       <path
-        class="${segmentClass}"
+        class="expense-pie-segment expense-other-segment"
         data-index="${index}"
         data-angle="${midAngle}"
-        d="${createSlicePath(
-          startAngle,
-          endAngle
-        )}"
+        d="${path}"
         fill="var(--expense-chart-${index + 1})"
       ></path>
-    `);
-    const percentValue =
-      Math.round(percentage * 100);
-    if (percentValue >= 5) {
-      const labelRadius = 34;
-      const labelPosition =
-        polarToCartesian(
-          midAngle,
-          labelRadius
-        );
-      labels.push(`
-        <text
-          class="expense-pie-percent"
-          x="${labelPosition.x}"
-          y="${labelPosition.y}"
-        >
-          ${percentValue}%
-        </text>
-      `);
-    }
-  });
-  return `
+    `;
+  }).join('');
+  pieArea.innerHTML = `
     <svg
-      class="expense-pie ${pieClass}"
+      class="expense-pie expense-other-pie"
       viewBox="0 0 120 120"
       role="img"
-      aria-label="${ariaLabel}"
+      aria-label="Other expense breakdown"
     >
-      ${segments.join('')}
-      ${labels.join('')}
+      ${segments}
     </svg>
-  `;
-}
-function renderExpensePie(breakdown) {
-  const pieArea =
-    document.querySelector('.expense-pie-area');
-  if (!pieArea) return;
-  const {
-    totalExpense,
-    items
-  } = breakdown;
-  if (
-    !items.length ||
-    totalExpense <= 0
-  ) {
-    pieArea.innerHTML = `
-      <div class="expense-pie-placeholder">
-        <span>NO EXPENSE</span>
-      </div>
-    `;
-    return; }
-  pieArea.innerHTML =
-    buildExpensePieSvg(
-      items,
-      totalExpense,
-      'Expense breakdown'
-    );
- }
- function renderExpenseOtherPie(items) {
-  const pieArea =
-    document.querySelector('.expense-pie-area');
-  if (!pieArea) return;
-  if (
-    !items ||
-    !items.length
-  ) {
-    return; }
-  const total =
-    items.reduce(
-      (sum, item) =>
-        sum +
-        Number(item.amount || 0),
-      0
-    );
-  if (total <= 0) return;
-  pieArea.innerHTML =
-    buildExpensePieSvg(
-      items,
-      total,
-      'Other expense breakdown',
-      'expense-other-pie',
-      'expense-pie-segment expense-other-segment'
-    );
-  }
-  function formatExpenseAmount(amount) {
-  return Number(amount || 0).toLocaleString('en-US', {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2 });
-  }
-  function getExpenseIcon(item) {
-  if (item?.isOther) {
-  return 'layers-2'; }
-  return item?.icon || 'receipt'; }
+  `; }
   function renderExpenseLegend(items, totalExpense) {
-  const legend =
-    document.getElementById('expenseLegend');
+  const legend = document.getElementById('expenseLegend');
   if (!legend) return;
-  legend.innerHTML = items.map((item, index) => `
-    <div
-      class="expense-legend-item"
-      data-index="${index}"
-    >
-      <span
-        class="expense-legend-icon"
-        style="color: var(--expense-chart-${index + 1});"
-      >
-        <i data-lucide="${getExpenseIcon(item)}"></i>
-      </span>
-      <span class="expense-legend-name">
-        ${item.title}
-      </span>
-      <span class="expense-legend-amount">
-        ฿${formatExpenseAmount(item.amount)}
-      </span>
-    </div>
-  `).join('');
-  if (typeof lucide !== 'undefined') {
-    lucide.createIcons(); }
-  }
-  function renderExpenseOtherLegend(items, total) {
-  const legend =
-    document.getElementById('expenseLegend');
-  if (!legend) return;
-  if (
-    !items ||
-    !items.length ||
-    total <= 0
-  ) {
-    legend.innerHTML = '';
-    return;
-  }
-  legend.innerHTML = `
-    <div class="expense-drilldown-header">
-      <span class="expense-drilldown-title">
-        OTHER
-      </span>
-      <button
-        type="button"
-        class="expense-drilldown-back"
-        onclick="exitExpenseOtherDrilldown()"
-      >
-        <i data-lucide="chevron-left"></i>
-        BACK
-      </button>
-    </div>
-    ${items.map((item, index) => `
+  legend.innerHTML = items.map((item, index) => {
+    const amount = Number(item.amount || 0);
+    const percentage = totalExpense > 0
+      ? Math.round((amount / totalExpense) * 100)
+      : 0;
+    const icon = item.isOther
+      ? 'layers-2'
+      : (item.icon || 'receipt');
+    return `
       <div
         class="expense-legend-item"
         data-index="${index}"
@@ -1290,17 +1563,57 @@ function renderExpensePie(breakdown) {
           class="expense-legend-icon"
           style="color: var(--expense-chart-${index + 1});"
         >
-          <i data-lucide="${getExpenseIcon(item)}"></i>
+          <i data-lucide="${icon}"></i>
         </span>
         <span class="expense-legend-name">
           ${item.title}
         </span>
         <span class="expense-legend-amount">
-          ฿${formatExpenseAmount(item.amount)}
+          ฿${amount.toLocaleString('en-US', {
+            minimumFractionDigits: 2
+          })}
+          <span class="expense-legend-percent">
+            (${percentage}%)
+          </span>
         </span>
       </div>
-    `).join('')}
-  `;
+    `;
+  }).join('');
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons(); }
+  }
+  function renderExpenseOtherLegend(items, total) {
+  const legend = document.getElementById('expenseLegend');
+  if (!legend) return;
+  if (!items || !items.length || total <= 0) {
+    legend.innerHTML = '';
+    return; }
+  legend.innerHTML = items.map((item, index) => {
+    const amount = Number(item.amount || 0);
+    const percentage = Math.round((amount / total) * 100);
+    const icon = item.icon || 'receipt';
+    return `
+      <div class="expense-legend-item">
+        <span
+          class="expense-legend-icon"
+          style="color: var(--expense-chart-${index + 1});"
+        >
+          <i data-lucide="${icon}"></i>
+        </span>
+        <span class="expense-legend-name">
+          ${item.title}
+        </span>
+        <span class="expense-legend-amount">
+          ฿${amount.toLocaleString('en-US', {
+            minimumFractionDigits: 2
+          })}
+          <span class="expense-legend-percent">
+            (${percentage}%)
+          </span>
+        </span>
+      </div>
+    `;
+  }).join('');
   if (typeof lucide !== 'undefined') {
     lucide.createIcons(); }
   }
