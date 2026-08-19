@@ -507,45 +507,58 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 
 .expense-legend-item {
   display: grid;
-  grid-template-columns: 8px minmax(0, 1fr);
+  grid-template-columns: 22px minmax(0, 1fr);
+  grid-template-rows: auto auto;
   column-gap: 8px;
   row-gap: 2px;
   align-items: center;
+  cursor: pointer;
 }
 
-.expense-legend-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
+.expense-legend-icon {
+  grid-column: 1;
   grid-row: 1;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
+
+.expense-legend-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2.2;
+}
+
 .expense-legend-name {
+  grid-column: 2;
+  grid-row: 1;
   min-width: 0;
   font-size: 11px;
   font-weight: 700;
   line-height: 1.2;
-  color: var(--text-sub);
+  color: var(--text-main);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.expense-legend-amount,
-.expense-legend-percent {
-  grid-column: 2;
-  font-size: 9px;
-  font-weight: 700;
-    line-height: 1.2;
-  color: var(--text-sub);
-}
-
 .expense-legend-amount {
-  display: inline;
+  grid-column: 2;
+  grid-row: 2;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--text-main);
 }
 
 .expense-legend-percent {
   margin-left: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-sub);
 }
 .expense-other-legend-item {
   display: grid;
