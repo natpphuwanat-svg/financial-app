@@ -1479,6 +1479,44 @@ Object.keys(grouped).forEach(type => {
       </span>
     </div>
   `).join(''); }
+  function renderExpenseOtherLegend(items, total) {
+  const legend =
+    document.getElementById('expenseLegend');
+  if (!legend) return;
+  if (!items || !items.length || total <= 0) {
+    legend.innerHTML = '';
+    return; }
+  legend.innerHTML = items.map((item, index) => {
+    const amount =
+      Number(item.amount || 0);
+    const percentage =
+      Math.round((amount / total) * 100);
+    const icon =
+      item.icon || 'receipt';
+    return `
+      <div class="expense-legend-item expense-other-legend-item">
+        <span
+          class="expense-legend-icon"
+          style="color: var(--expense-chart-${index + 1});"
+        >
+          <i data-lucide="${icon}"></i>
+        </span>
+        <span class="expense-legend-name">
+          ${item.title}
+        </span>
+        <span class="expense-other-legend-amount">
+          ฿${amount.toLocaleString('en-US')}
+        </span>
+        <span class="expense-other-legend-percent">
+          ${percentage}%
+        </span>
+      </div>
+    `;
+  }).join('');
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+   }
+  }
   function renderExpenseSelectedLegend(item, totalExpense) {
   const legend =
     document.getElementById('expenseLegend');
@@ -1589,14 +1627,14 @@ Object.keys(grouped).forEach(type => {
         selectedItem.children || [];
         expenseOtherTotal =
         expenseOtherItems.reduce(
-            (sum, item) =>
-              sum + Number(item.amount || 0),
-            0
-          );
+          (sum, item) =>
+          sum + Number(item.amount || 0), 0 );
         renderExpenseOtherPie(
-          expenseOtherItems
-        );
-      return; }
+          expenseOtherItems );
+        renderExpenseOtherLegend(
+          expenseOtherItems,
+          expenseOtherTotal );
+      return;}
       const isAlreadySelected =
       segment.classList.contains('selected');
       segments.forEach(item => {
