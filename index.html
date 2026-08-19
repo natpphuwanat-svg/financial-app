@@ -1536,15 +1536,27 @@ Object.keys(grouped).forEach(type => {
       startAngle,
       endAngle
     );
-    return `
+    const labelRadius = 34;
+      const labelX = cx + labelRadius * Math.cos(midAngle);
+      const labelY = cy + labelRadius * Math.sin(midAngle);
+      return `
       <path
-        class="expense-pie-segment expense-other-segment"
-        data-index="${index}"
-        data-angle="${midAngle}"
-        d="${path}"
-        fill="var(--expense-chart-${index + 1})"
-      ></path>
-    `;
+      class="expense-pie-segment expense-other-segment"
+      data-index="${index}"
+      data-angle="${midAngle}"
+      d="${path}"
+      fill="var(--expense-chart-${index + 1})"
+    ></path>
+    <text
+      class="expense-pie-percent"
+      x="${labelX}"
+      y="${labelY}"
+      text-anchor="middle"
+      dominant-baseline="middle"
+    >
+      ${Math.round(percentage * 100)}%
+    </text>
+   `;
   }).join('');
   pieArea.innerHTML = `
     <svg
