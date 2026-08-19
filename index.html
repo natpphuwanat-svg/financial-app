@@ -1658,9 +1658,11 @@ Object.keys(grouped).forEach(type => {
     <div class="expense-selected-state">
       <div class="expense-selected-title">
         <span
-          class="expense-legend-dot"
-          style="background: var(--expense-chart-${index + 1});"
-        ></span>
+        class="expense-legend-icon"
+        style="color: var(--expense-chart-${index + 1});"
+        >
+        <i data-lucide="${item.isOther ? 'layers-2' : (item.icon || 'receipt')}"></i>
+        </span>
         <span
           class="expense-selected-name"
           style="color: var(--expense-chart-${index + 1});"
@@ -1676,6 +1678,8 @@ Object.keys(grouped).forEach(type => {
       ${otherHtml}
     </div>
   `;
+  if (typeof lucide !== 'undefined') {
+  lucide.createIcons(); }
   }
   function renderExpenseSelectedInfo(item, totalExpense) {
   const detail = document.querySelector('.expense-selected-detail');
@@ -1821,40 +1825,42 @@ Object.keys(grouped).forEach(type => {
     setupExpensePieInteraction(expenseBreakdown);
     const expenseLegend = document.getElementById('expenseLegend');
     if (expenseLegend) {
-    if (!expenseBreakdown.items.length) {
-    expenseLegend.innerHTML = `
-      <div class="expense-empty-state">
+      if (!expenseBreakdown.items.length) {
+        expenseLegend.innerHTML = `
         <div class="expense-empty-title">
-          <span class="expense-legend-dot"></span>
-          <span>NO EXPENSE</span>
-        </div>
-        <div class="expense-empty-subtitle">
-          No expenses this month
-        </div>
+        <span class="expense-legend-icon">
+        <i data-lucide="receipt"></i>
+        </span>
+        <span>NO EXPENSE</span>
+      </div>
+      <div class="expense-empty-subtitle">
+        No expenses this month
       </div>
     `;
-    } else {
-      renderExpenseLegend(
-        expenseBreakdown.items,
-        expenseBreakdown.totalExpense ); }
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons(); }
+      } else {
+        renderExpenseLegend(
+          expenseBreakdown.items,
+          expenseBreakdown.totalExpense ); }
     }
     const previous = previousEntries || [];
     if (requestId !== fetchRequestId) {
-    return; }
-    renderEntriesPage(entries);
-    const totalIncome = entries
-      .filter(item => item.financial_type === 'Income')
-      .reduce((sum, item) => sum + Number(item.amount || 0), 0);
-    const totalExpense = entries
-      .filter(item => item.financial_type === 'Expense')
-      .reduce((sum, item) => sum + Number(item.amount || 0), 0);
-    const totalDeduction = entries
-      .filter(item => item.financial_type === 'Deduction')
-      .reduce((sum, item) => sum + Number(item.amount || 0), 0);
-    const balance = totalIncome - totalExpense;
-    const savingsRate = totalIncome > 0
-      ? (balance / totalIncome) * 100
-      : 0;
+      return; }
+      renderEntriesPage(entries);
+   const totalIncome = entries
+  .filter(item => item.financial_type === 'Income')
+  .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+  const totalExpense = entries
+  .filter(item => item.financial_type === 'Expense')
+  .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+  const totalDeduction = entries
+  .filter(item => item.financial_type === 'Deduction')
+  .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+  const balance = totalIncome - totalExpense;
+  const savingsRate = totalIncome > 0
+  ? (balance / totalIncome) * 100
+  : 0;
     // 7. Calculate previous totals
     const previousIncome = previous
       .filter(item => item.financial_type === 'Income')
