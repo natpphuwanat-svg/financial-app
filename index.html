@@ -1548,9 +1548,6 @@ Object.keys(grouped).forEach(type => {
   if (!legend) return;
   legend.innerHTML = items.map((item, index) => {
     const amount = Number(item.amount || 0);
-    const percentage = totalExpense > 0
-      ? Math.round((amount / totalExpense) * 100)
-      : 0;
     const icon = item.isOther
       ? 'layers-2'
       : (item.icon || 'receipt');
@@ -1572,9 +1569,6 @@ Object.keys(grouped).forEach(type => {
           ฿${amount.toLocaleString('en-US', {
             minimumFractionDigits: 2
           })}
-          <span class="expense-legend-percent">
-            (${percentage}%)
-          </span>
         </span>
       </div>
     `;
@@ -1590,7 +1584,6 @@ Object.keys(grouped).forEach(type => {
     return; }
   legend.innerHTML = items.map((item, index) => {
     const amount = Number(item.amount || 0);
-    const percentage = Math.round((amount / total) * 100);
     const icon = item.icon || 'receipt';
     return `
       <div class="expense-legend-item">
@@ -1607,15 +1600,12 @@ Object.keys(grouped).forEach(type => {
           ฿${amount.toLocaleString('en-US', {
             minimumFractionDigits: 2
           })}
-          <span class="expense-legend-percent">
-            (${percentage}%)
-          </span>
         </span>
       </div>
     `;
   }).join('');
   if (typeof lucide !== 'undefined') {
-    lucide.createIcons(); }
+    lucide.createIcons(); } 
   }
   function renderExpenseSelectedLegend(item, totalExpense) {
   const legend =
