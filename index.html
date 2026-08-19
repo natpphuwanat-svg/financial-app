@@ -1756,6 +1756,9 @@ Object.keys(grouped).forEach(type => {
         renderExpenseOtherLegend(
           expenseOtherItems,
           expenseOtherTotal );
+        setupExpensePieInteraction({
+          items: expenseOtherItems,
+          totalExpense: expenseOtherTotal });
       return;}
       const isAlreadySelected =
       segment.classList.contains('selected');
