@@ -1500,46 +1500,35 @@ return Number(b.amount) - Number(a.amount); });
       scrollTicking = true; }
     }, { passive: true });
     
-    // Main Navigation
-  function switchTab(tab) {
-  const bottomNav = document.querySelector('.floating-tab-bar');
-  bottomNav.classList.remove('compact');
-  const mainContent = document.getElementById('mainContent');
-  const placeholderView = document.getElementById('placeholderView');
-  const insightsView = document.getElementById('insightsView');
-  const headerIconBox = document.querySelector('.home-icon-box');
-  const headerTitle = document.querySelector('.app-title');
-  const tabs = document.querySelectorAll('.floating-tab');
-  tabs.forEach(button => {
-    button.classList.remove('active');
-  });
-  if (tab === 'overview') {
-    headerIconBox.innerHTML = '<i data-lucide="house"></i>';
-    headerTitle.innerText = 'OVERVIEW';
-    mainContent.style.display = '';
-    placeholderView.style.display = 'none';
-    insightsView.style.display = 'none';
-    tabs[0].classList.add('active');
-  }
-  if (tab === 'entries') {
-    headerIconBox.innerHTML = '<i data-lucide="list"></i>';
-    headerTitle.innerText = 'ENTRIES';
-    mainContent.style.display = 'none';
-    placeholderView.style.display = '';
-    insightsView.style.display = 'none';
-    tabs[1].classList.add('active');
-  }
-  if (tab === 'insights') {
-    headerIconBox.innerHTML = '<i data-lucide="chart-no-axes-combined"></i>';
-    headerTitle.innerText = 'INSIGHTS';
-    mainContent.style.display = 'none';
-    placeholderView.style.display = 'none';
-    insightsView.style.display = '';
-    tabs[2].classList.add('active');
-}
-  lucide.createIcons();
-}
-    
+      // Main Navigation
+    function switchTab(tab) {
+    const bottomNav = document.querySelector('.floating-tab-bar');
+    bottomNav.classList.remove('compact');
+    const heroSection = document.querySelector('.hero-section');
+    const placeholderView = document.getElementById('placeholderView');
+    const insightsView = document.getElementById('insightsView');
+    const tabs = document.querySelectorAll('.floating-tab');
+    tabs.forEach(button => {
+      button.classList.remove('active');
+    });
+
+    if (tab === 'overview') {
+      heroSection.style.display = '';
+      placeholderView.style.display = 'none';
+      insightsView.style.display = 'none';
+      tabs[0].classList.add('active'); }
+    if (tab === 'entries') {
+      heroSection.style.display = 'none';
+      placeholderView.style.display = '';
+      insightsView.style.display = 'none';
+      tabs[1].classList.add('active'); }
+    if (tab === 'insights') {
+      heroSection.style.display = 'none';
+      placeholderView.style.display = 'none';
+      insightsView.style.display = '';
+      tabs[2].classList.add('active'); }
+    lucide.createIcons(); }
+
     // Modal Controls
     function selectType(type) {
       selectedType = type;
