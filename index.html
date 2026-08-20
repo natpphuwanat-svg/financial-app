@@ -1163,6 +1163,51 @@ Object.keys(grouped).forEach(type => {
     </div>
   `;
 }
+  function renderExpenseBreakdown(entries) {
+  const container = document.getElementById('expenseBreakdownList');
+  const expenses = (entries || [])
+    .filter(item => item.financial_type === 'Expense')
+    .sort((a, b) => Number(b.amount) - Number(a.amount));
+  if (expenses.length === 0) {
+    container.innerHTML = '';
+    return; }
+  const totalExpense = expenses.reduce(
+    (sum, item) => sum + Number(item.amount || 0),
+    0
+  );
+  container.innerHTML = expenses.map(item => {
+    const amount = Number(item.amount || 0);
+    const percent = totalExpense > 0
+      ? (amount / totalExpense) * 100
+      : 0;
+    return `
+      <div class="expense-breakdown-item">
+        <div class="expense-breakdown-header">
+          <div class="expense-breakdown-icon">
+            <i data-lucide="${item.icon || 'circle'}"></i>
+          </div>
+          <div class="expense-breakdown-name">
+            ${item.title}
+          </div>
+          <div class="expense-breakdown-amount">
+            ฿${amount.toLocaleString('en-US', {
+              minimumFractionDigits: 2
+            })}
+          </div>
+          <div class="expense-breakdown-percent">
+            ${Math.round(percent)}%
+          </div>
+        </div>
+        <div class="expense-breakdown-track">
+          <div
+            class="expense-breakdown-bar"
+            style="width: ${percent}%;"
+          ></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+  lucide.createIcons(); }
   async function fetchData() {
   const requestId = ++fetchRequestId;
 
