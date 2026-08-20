@@ -1276,6 +1276,7 @@ Object.keys(grouped).forEach(type => {
     const totalExpense = entries
       .filter(item => item.financial_type === 'Expense')
       .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+    renderExpenseBreakdown(entries);
     const totalDeduction = entries
       .filter(item => item.financial_type === 'Deduction')
       .reduce((sum, item) => sum + Number(item.amount || 0), 0);
