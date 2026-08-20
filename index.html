@@ -1180,6 +1180,7 @@ Object.keys(grouped).forEach(type => {
       ? (amount / totalExpense) * 100
       : 0;
     return `
+      <div class="expense-breakdown-item">
       <div class="expense-breakdown-header">
   <div class="expense-breakdown-icon">
     <i data-lucide="${item.icon || 'circle'}"></i>
