@@ -1181,30 +1181,29 @@ Object.keys(grouped).forEach(type => {
       ? (amount / totalExpense) * 100
       : 0;
     return `
-      <div class="expense-breakdown-item">
-        <div class="expense-breakdown-header">
-          <div class="expense-breakdown-icon">
-            <i data-lucide="${item.icon || 'circle'}"></i>
-          </div>
-          <div class="expense-breakdown-name">
-            ${item.title}
-          </div>
-          <div class="expense-breakdown-amount">
-            ฿${amount.toLocaleString('en-US', {
-              minimumFractionDigits: 2
-            })}
-          </div>
-          <div class="expense-breakdown-percent">
-            ${Math.round(percent)}%
-          </div>
-        </div>
-        <div class="expense-breakdown-track">
-          <div
-            class="expense-breakdown-bar"
-            style="width: ${percent}%;"
-          ></div>
-        </div>
+      <div class="expense-breakdown-header">
+  <div class="expense-breakdown-icon">
+    <i data-lucide="${item.icon || 'circle'}"></i>
+  </div>
+  <div class="expense-breakdown-name">
+    ${item.title}
+    <span class="expense-breakdown-percent">
+      (${Math.round(percent)}%)
+    </span>
+  </div>
+  <div class="expense-breakdown-amount">
+    ฿${amount.toLocaleString('en-US', {
+      minimumFractionDigits: 2
+    })}
+  </div>
+</div>
+  <div class="expense-breakdown-track">
+    <div
+      class="expense-breakdown-bar"
+       style="width: ${percent}%;"
+      ></div>
       </div>
+    </div>
     `;
   }).join('');
   lucide.createIcons(); }
