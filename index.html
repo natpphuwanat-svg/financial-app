@@ -559,149 +559,159 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     </section>
   </main>
 </div>
+    <!-- Entries Page -->
   <div id="placeholderView" style="display:none;">
-  <main class="container" id="entriesContent">
-    <section class="year-current-bar">
-      <div class="year-nav-transparent">
-        <button class="year-nav-btn" id="entriesPrevYearBtn" onclick="changeYear(-1)">
+    <header class="app-header">
+      <div class="header-left">
+        <div class="home-icon-box">
+          <i data-lucide="list"></i>
+        </div>
+        <div class="app-title">ENTRIES</div>
+      </div>
+    </header>
+    <main class="container" id="entriesContent">
+      <section class="year-current-bar">
+        <div class="year-nav-transparent">
+          <button class="year-nav-btn" id="entriesPrevYearBtn" onclick="changeYear(-1)">
+            <i data-lucide="chevron-left"></i>
+          </button>
+          <span class="year-text-display" id="entriesSelectedYear">2026</span>
+          <button class="year-nav-btn" id="entriesNextYearBtn" onclick="changeYear(1)">
+            <i data-lucide="chevron-right"></i>
+          </button>
+        </div>
+        <button class="current-btn" onclick="resetToCurrent()">
+          <i data-lucide="calendar"></i>
+          CURRENT
+        </button>
+      </section>
+      <section class="month-nav-container">
+        <button class="month-arrow-btn" id="entriesPrevMonthSetBtn" onclick="shiftMonthSet(-1)">
           <i data-lucide="chevron-left"></i>
         </button>
-        <span class="year-text-display" id="entriesSelectedYear">2026</span>
-        <button class="year-nav-btn" id="entriesNextYearBtn" onclick="changeYear(1)">
+        <div class="month-grid" id="entriesMonthGrid"></div>
+        <button class="month-arrow-btn" id="entriesNextMonthSetBtn" onclick="shiftMonthSet(1)">
           <i data-lucide="chevron-right"></i>
         </button>
+      </section>
+      <div class="entries-filter" id="entriesFilter">
+        <button class="entries-filter-btn active" type="button" data-filter="all" onclick="setEntryFilter('all')">
+          <span>ALL ENTRIES</span>
+        </button>
+        <button class="entries-filter-btn" type="button" data-filter="income" onclick="setEntryFilter('income')">
+          <span>INCOME</span>
+        </button>
+        <button class="entries-filter-btn" type="button" data-filter="expense" onclick="setEntryFilter('expense')">
+          <span>EXPENSE</span>
+        </button>
+        <button class="entries-filter-btn" type="button" data-filter="deduction" onclick="setEntryFilter('deduction')">
+          <span>DEDUCTION</span>
+        </button>
       </div>
-      <button class="current-btn" onclick="resetToCurrent()">
-        <i data-lucide="calendar"></i>
-        CURRENT
-      </button>
-    </section>
-    <section class="month-nav-container">
-      <button class="month-arrow-btn" id="entriesPrevMonthSetBtn" onclick="shiftMonthSet(-1)">
-        <i data-lucide="chevron-left"></i>
-      </button>
-      <div class="month-grid" id="entriesMonthGrid"></div>
-      <button class="month-arrow-btn" id="entriesNextMonthSetBtn" onclick="shiftMonthSet(1)">
-        <i data-lucide="chevron-right"></i>
-      </button>
-    </section>
-   <div class="entries-filter" id="entriesFilter">
-  <button class="entries-filter-btn active" type="button"
-    data-filter="all" onclick="setEntryFilter('all')">
-    <span>ALL ENTRIES</span>
-  </button>
-  <button class="entries-filter-btn" type="button"
-    data-filter="income" onclick="setEntryFilter('income')">
-    <span>INCOME</span>
-  </button>
-  <button class="entries-filter-btn" type="button"
-    data-filter="expense" onclick="setEntryFilter('expense')">
-    <span>EXPENSE</span>
-  </button>
-  <button class="entries-filter-btn" type="button"
-    data-filter="deduction" onclick="setEntryFilter('deduction')">
-    <span>DEDUCTION</span>
-  </button>
-</div>
-<div class="entries-list" id="entriesList">
-  <div class="loading-state">No entries yet.</div>
-</div>
-  </main>
-</div>
-  <!-- Insights Page -->
-<div id="insightsView" style="display:none;">
-  <main class="container" id="insightsContent">
-    <section class="year-current-bar">
-      <div class="year-nav-transparent">
-        <button class="year-nav-btn" id="insightsPrevYearBtn" onclick="changeYear(-1)">
+      <div class="entries-list" id="entriesList">
+        <div class="loading-state">No entries yet.</div>
+      </div>
+    </main>
+  </div>
+    <!-- Insights Page -->
+  <div id="insightsView" style="display:none;">
+    <header class="app-header">
+      <div class="header-left">
+        <div class="home-icon-box">
+          <i data-lucide="chart-no-axes-combined"></i>
+        </div>
+        <div class="app-title">INSIGHTS</div>
+      </div>
+    </header>
+    <main class="container" id="insightsContent">
+      <section class="year-current-bar">
+        <div class="year-nav-transparent">
+          <button class="year-nav-btn" id="insightsPrevYearBtn" onclick="changeYear(-1)">
+            <i data-lucide="chevron-left"></i>
+          </button>
+          <span class="year-text-display" id="insightsSelectedYear">2026</span>
+          <button class="year-nav-btn" id="insightsNextYearBtn" onclick="changeYear(1)">
+            <i data-lucide="chevron-right"></i>
+          </button>
+        </div>
+        <button class="current-btn" onclick="resetToCurrent()">
+          <i data-lucide="calendar"></i>
+          CURRENT
+        </button>
+      </section>
+      <section class="month-nav-container">
+        <button class="month-arrow-btn" id="insightsPrevMonthSetBtn" onclick="shiftMonthSet(-1)">
           <i data-lucide="chevron-left"></i>
         </button>
-        <span class="year-text-display" id="insightsSelectedYear">2026</span>
-        <button class="year-nav-btn" id="insightsNextYearBtn" onclick="changeYear(1)">
+        <div class="month-grid" id="insightsMonthGrid"></div>
+        <button class="month-arrow-btn" id="insightsNextMonthSetBtn" onclick="shiftMonthSet(1)">
           <i data-lucide="chevron-right"></i>
         </button>
-      </div>
-      <button class="current-btn" onclick="resetToCurrent()">
-        <i data-lucide="calendar"></i>
-        CURRENT
-      </button>
-    </section>
-    <section class="month-nav-container">
-      <button class="month-arrow-btn"
-              id="insightsPrevMonthSetBtn"
-              onclick="shiftMonthSet(-1)">
-        <i data-lucide="chevron-left"></i>
-      </button>
-      <div class="month-grid" id="insightsMonthGrid"></div>
-      <button class="month-arrow-btn"
-              id="insightsNextMonthSetBtn"
-              onclick="shiftMonthSet(1)">
-        <i data-lucide="chevron-right"></i>
-      </button>
-    </section>
-   <section class="insights-section">
-  <div class="insights-section-title">
-    MONTHLY SUMMARY
+      </section>
+      <section class="insights-section">
+        <div class="insights-section-title">
+          MONTHLY SUMMARY
+        </div>
+        <div class="monthly-summary-card">
+          <div class="monthly-summary-row">
+            <div class="monthly-summary-label">Income</div>
+            <div class="monthly-summary-value-group">
+              <div class="monthly-summary-value income" id="insightsIncome">
+                ฿0.00
+              </div>
+              <div class="monthly-summary-mom" id="insightsIncomeMoM">
+                —
+              </div>
+            </div>
+          </div>
+          <div class="monthly-summary-row">
+            <div class="monthly-summary-label">Expense</div>
+            <div class="monthly-summary-value-group">
+              <div class="monthly-summary-value expense" id="insightsExpense">
+                ฿0.00
+              </div>
+              <div class="monthly-summary-mom" id="insightsExpenseMoM">
+                —
+              </div>
+            </div>
+          </div>
+          <div class="monthly-summary-row">
+            <div class="monthly-summary-label">Deduction</div>
+            <div class="monthly-summary-value-group">
+              <div class="monthly-summary-value deduction" id="insightsDeduction">
+                ฿0.00
+              </div>
+              <div class="monthly-summary-mom" id="insightsDeductionMoM">
+                —
+              </div>
+            </div>
+          </div>
+          <div class="monthly-summary-row">
+            <div class="monthly-summary-label">Balance</div>
+            <div class="monthly-summary-value-group">
+              <div class="monthly-summary-value balance" id="insightsBalance">
+                ฿0.00
+              </div>
+              <div class="monthly-summary-mom" id="insightsBalanceMoM">
+                —
+              </div>
+            </div>
+          </div>
+          <div class="monthly-summary-row savings-row">
+            <div class="monthly-summary-label">Savings Rate</div>
+            <div class="monthly-summary-value-group">
+              <div class="monthly-summary-value savings" id="insightsSavingsRate">
+                N/A
+              </div>
+              <div class="monthly-summary-mom" id="insightsSavingsRateMoM">
+                —
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
   </div>
-  <div class="monthly-summary-card">
-    <div class="monthly-summary-row">
-      <div class="monthly-summary-label">Income</div>
-      <div class="monthly-summary-value-group">
-  <div class="monthly-summary-value income" id="insightsIncome">
-    ฿0.00
-  </div>
-  <div class="monthly-summary-mom" id="insightsIncomeMoM">
-    —
-  </div>
-</div>
-</div>
- <div class="monthly-summary-row">
-  <div class="monthly-summary-label">Expense</div>
-  <div class="monthly-summary-value-group">
-    <div class="monthly-summary-value expense" id="insightsExpense">
-      ฿0.00
-    </div>
-    <div class="monthly-summary-mom" id="insightsExpenseMoM">
-      —
-    </div>
-  </div>
-</div>
-  <div class="monthly-summary-row">
-  <div class="monthly-summary-label">Deduction</div>
-  <div class="monthly-summary-value-group">
-    <div class="monthly-summary-value deduction" id="insightsDeduction">
-      ฿0.00
-    </div>
-    <div class="monthly-summary-mom" id="insightsDeductionMoM">
-      —
-    </div>
-  </div>
-</div>
-    <div class="monthly-summary-row">
-  <div class="monthly-summary-label">Balance</div>
-  <div class="monthly-summary-value-group">
-    <div class="monthly-summary-value balance" id="insightsBalance">
-      ฿0.00
-    </div>
-    <div class="monthly-summary-mom" id="insightsBalanceMoM">
-      —
-    </div>
-  </div>
-</div>
-    <div class="monthly-summary-row savings-row">
-  <div class="monthly-summary-label">Savings Rate</div>
-  <div class="monthly-summary-value-group">
-    <div class="monthly-summary-value savings" id="insightsSavingsRate">
-      N/A
-    </div>
-    <div class="monthly-summary-mom" id="insightsSavingsRateMoM">
-      —
-    </div>
-  </div>
-</div>
-</section>
-  </main>
- </div>
   <!-- Floating Bottom Navigation -->
   <nav class="floating-tab-bar" aria-label="Main navigation">
     <button class="floating-tab active" type="button" onclick="switchTab('overview')">
