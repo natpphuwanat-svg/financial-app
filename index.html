@@ -819,15 +819,15 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 });
 
     // Theme Toggle
-    function applyTheme(theme) {
-      document.body.setAttribute('data-theme', theme);
-      const btn = document.getElementById("themeToggle");
-      btn.innerHTML =
-        theme === "dark"
-          ? '<i data-lucide="sun"></i>'
-          : '<i data-lucide="moon-star"></i>';
-      lucide.createIcons();
-}
+  function applyTheme(theme) {
+   document.body.setAttribute('data-theme', theme);
+   document.querySelectorAll('.theme-toggle-btn').forEach(btn => {
+   btn.innerHTML =
+      theme === "dark"
+        ? '<i data-lucide="sun"></i>'
+        : '<i data-lucide="moon-star"></i>';
+   });
+   lucide.createIcons(); }
    function getPreferredTheme() {
      const manual = localStorage.getItem("themeManual");
      if (manual === "true") {
