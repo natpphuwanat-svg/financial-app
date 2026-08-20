@@ -466,73 +466,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .monthly-summary-mom.positive { color: #16a34a; }
 .monthly-summary-mom.negative { color: #ef4444; }
 .monthly-summary-mom.neutral { color: var(--text-sub); }
-.expense-breakdown-list {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.expense-breakdown-item {
-  width: 100%;
-}
-
-.expense-breakdown-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.expense-breakdown-icon {
-  width: 18px;
-  height: 18px;
-  flex: 0 0 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.expense-breakdown-name {
-  flex: 1;
-  min-width: 0;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text-main);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.expense-breakdown-amount {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text-main);
-  white-space: nowrap;
-}
-
-.expense-breakdown-percent {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-sub);
-  min-width: 34px;
-  text-align: right;
-}
-
-.expense-breakdown-track {
-  width: 100%;
-  height: 7px;
-  border-radius: 999px;
-  background: var(--surface-sub);
-  overflow: hidden;
-}
-
-.expense-breakdown-bar {
-  height: 100%;
-  border-radius: inherit;
-  background: var(--accent);
-  min-width: 2px;
-  transition: width 0.3s ease;
-}
 </style>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -550,6 +483,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       <i data-lucide="moon-star"></i>
   </button>
   </header>
+  
   <main class="container" id="mainContent">
     <section class="year-current-bar">
       <div class="year-nav-transparent">
@@ -561,11 +495,13 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
           <i data-lucide="chevron-right"></i>
         </button>
       </div>
+
       <button class="current-btn" onclick="resetToCurrent()">
         <i data-lucide="calendar"></i>
         CURRENT
       </button>
     </section>
+
     <section class="month-nav-container">
       <button class="month-arrow-btn" id="prevMonthSetBtn" onclick="shiftMonthSet(-1)">
         <i data-lucide="chevron-left"></i>
@@ -575,6 +511,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         <i data-lucide="chevron-right"></i>
       </button>
     </section>
+
     <section class="balance-card">
       <div class="balance-wallet">
         <i data-lucide="wallet"></i>
@@ -583,6 +520,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       <div class="balance-amount" id="balanceAmount">฿0.00</div>
       <div class="balance-change" id="balanceChange"></div>
     </section>
+
     <section class="stats-grid">
       <div class="stat-card income">
         <div class="stat-icon">
@@ -609,6 +547,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         <div class="stat-change" id="deductionChange"></div>
       </div>
     </section>
+
     <section>
       <div class="section-header">
         <div class="section-title">HIGHLIGHTS</div>
@@ -668,6 +607,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   <div class="loading-state">No entries yet.</div>
 </div>
   </main>
+</div>
   <!-- Insights Page -->
 <div id="insightsView" style="display:none;">
   <main class="container" id="insightsContent">
@@ -760,36 +700,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   </div>
 </div>
 </section>
-    <section class="insights-section">
-  <div class="insights-section-title">
-    EXPENSE BREAKDOWN
-  </div>
-  <div class="expense-breakdown-list" id="expenseBreakdownList">
-  <div class="expense-breakdown-item">
-    <div class="expense-breakdown-header">
-      <div class="expense-breakdown-icon">🍜</div>
-      <div class="expense-breakdown-name">
-        แม่
-      </div>
-      <div class="expense-breakdown-amount">
-        ฿3,000.00
-      </div>
-      <div class="expense-breakdown-percent">
-        19%
-      </div>
-    </div>
-    <div class="expense-breakdown-track">
-      <div
-        class="expense-breakdown-bar"
-        style="width: 19%;"
-      ></div>
-    </div>
-  </div>
-</div>
-</section>
   </main>
  </div>
-  </div>
   <!-- Floating Bottom Navigation -->
   <nav class="floating-tab-bar" aria-label="Main navigation">
     <button class="floating-tab active" type="button" onclick="switchTab('overview')">
