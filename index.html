@@ -528,6 +528,53 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   width: 19px;
   height: 19px;
 }
+.expense-chart-bar-wrap {
+  position: relative;
+}
+
+.expense-chart-percent {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translateX(-50%) translateY(-8px);
+  padding: 5px 10px;
+  border-radius: 999px;
+  color: var(--lime-400);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.expense-chart-dot {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--lime-400);
+  transform: translate(-50%, 50%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+  transition: opacity 0.2s ease;
+}
+ .expense-chart-item.is-selected .expense-chart-percent,
+.expense-chart-item.is-selected .expense-chart-dot {
+  opacity: 1;
+}
+
+.expense-chart-item:not(.is-selected) .expense-chart-bar {
+  opacity: 0.25;
+}
+
+.expense-chart-item.is-selected .expense-chart-bar {
+  opacity: 1;
+}
 </style>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1146,21 +1193,7 @@ Object.keys(grouped).forEach(type => {
   '#8B5CF6',
   '#14B8A6' ];
   const expenseColorMap = {};
-  function getExpenseBarColor(title) {
-  if (!title) return '#94A3B8';
-  if (expenseColorMap[title]) {
-    return expenseColorMap[title];
-  }
-  const usedColors = new Set(
-    Object.values(expenseColorMap)
-  );
-  const availableColor = expenseBarPalette.find(
-    color => !usedColors.has(color)
-  );
-  const assignedColor =
-    availableColor || '#94A3B8';
-  expenseColorMap[title] = assignedColor;
-  return assignedColor; }
+  let selectedExpenseTitle = null;
   function renderExpenseBreakdown(entries) {
   const container = document.getElementById('expenseBreakdownList');
   const expenses = (entries || [])
@@ -1169,25 +1202,44 @@ Object.keys(grouped).forEach(type => {
   if (expenses.length === 0) {
     container.innerHTML = '';
     return; }
+  selectedExpenseTitle = null;
   const topExpenses = expenses.slice(0, 5);
   const maxAmount = Math.max(
     ...topExpenses.map(item => Number(item.amount || 0))
   );
+  const totalExpense = expenses.reduce(
+    (sum, item) => sum + Number(item.amount || 0),
+    0
+  );
   container.innerHTML = `
     <div class="expense-chart-track">
-      ${topExpenses.map((item, index) => {
+      ${topExpenses.map((item) => {
         const amount = Number(item.amount || 0);
         const height = maxAmount > 0
           ? (amount / maxAmount) * 93
           : 0;
+        const percent = totalExpense > 0
+          ? Math.round((amount / totalExpense) * 100)
+          : 0;
+        const barColor = getExpenseBarColor(item.title);
         return `
-          <div class="expense-chart-item">
+          <div
+            class="expense-chart-item"
+            data-expense-title="${item.title}"
+          >
             <div class="expense-chart-bar-wrap">
+              <div
+                class="expense-chart-percent"
+                style="background: ${barColor};"
+              >
+                ${percent}%
+              </div>
+              <div class="expense-chart-dot"></div>
               <div
                 class="expense-chart-bar"
                 style="
                   height: ${height}%;
-                  background: ${getExpenseBarColor(item.title)};
+                  background: ${barColor};
                 "
               ></div>
             </div>
