@@ -1031,8 +1031,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     ${renderEntryGroup('Expense', grouped.Expense)}
     ${renderEntryGroup('Deduction', grouped.Deduction)}
   `;
-  lucide.createIcons();
-}
+  lucide.createIcons(); }
   function renderEntryGroup(type, items) {
   if (!items || items.length === 0) return '';
   const typeClass = type.toLowerCase();
@@ -1197,8 +1196,8 @@ function getExpenseBarColor(title) {
     return '#94A3B8'; }
   expenseColorMapV3[title] = availableColor;
   localStorage.setItem(
-    'expenseColorMapV3',
-    JSON.stringify(expenseColorMapV3) );
+    'expenseColorMap',
+    JSON.stringify(expenseColorMap) );
   return availableColor; }
   container.innerHTML = expenses.map((item, index) => {
     const amount = Number(item.amount || 0);
