@@ -1174,7 +1174,7 @@ Object.keys(grouped).forEach(type => {
     (sum, item) => sum + Number(item.amount || 0),
     0
   );
-  const barColors = [
+  const expenseBarPalette = [
   '#A3E635',
   '#60A5FA',
   '#F59E0B',
@@ -1183,22 +1183,22 @@ Object.keys(grouped).forEach(type => {
   '#FB7185',
   '#38BDF8',
   '#C084FC' ];
-  const expenseColorMapV2 =
-  JSON.parse(localStorage.getItem('expenseColorMapV2') || '{}');
+  const expenseColorMapV3 =
+  JSON.parse(localStorage.getItem('expenseColorMapV3') || '{}');
   function getExpenseBarColor(title) {
-  if (expenseColorMapV2[title]) {
-    return expenseColorMapV2[title]; }
-  const usedColors = new Set(Object.values(expenseColorMapV2));
-  const availableColor = barColors.find(
-    color => !usedColors.has(color)
-  );
-  const color = availableColor || barColors[0];
-  expenseColorMapV2[title] = color;
+  if (expenseColorMapV3[title]) {
+    return expenseColorMapV3[title]; }
+  const usedColors = new Set(
+    Object.values(expenseColorMapV3) );
+  const availableColor = expenseBarPalette.find(
+    color => !usedColors.has(color) );
+  if (!availableColor) {
+    return '#94A3B8'; }
+  expenseColorMapV3[title] = availableColor;
   localStorage.setItem(
-    'expenseColorMapV2',
-    JSON.stringify(expenseColorMapV2)
-  );
-  return color; }
+    'expenseColorMapV3',
+    JSON.stringify(expenseColorMapV3) );
+  return availableColor; }
   container.innerHTML = expenses.map((item, index) => {
     const amount = Number(item.amount || 0);
     const percent = totalExpense > 0
