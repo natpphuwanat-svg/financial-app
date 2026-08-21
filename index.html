@@ -1245,14 +1245,20 @@ Object.keys(grouped).forEach(type => {
   const maxAmount = Math.max(
     ...topExpenses.map(item => Number(item.amount || 0))
   );
+  const colors = [
+    '#A3E635',
+    '#38BDF8',
+    '#FB7185',
+    '#F59E0B',
+    '#A78BFA'
+  ];
   container.innerHTML = `
     <div class="expense-chart-track">
-      ${topExpenses.map(item => {
+      ${topExpenses.map((item, index) => {
         const amount = Number(item.amount || 0);
         const height = maxAmount > 0
           ? (amount / maxAmount) * 90
           : 0;
-        const barColor = getExpenseBarColor(item.title);
         return `
           <div class="expense-chart-item">
             <div class="expense-chart-bar-wrap">
@@ -1260,7 +1266,7 @@ Object.keys(grouped).forEach(type => {
                 class="expense-chart-bar"
                 style="
                   height: ${height}%;
-                  background: ${barColor};
+                  background: ${colors[index]};
                 "
               ></div>
             </div>
