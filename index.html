@@ -466,98 +466,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .monthly-summary-mom.positive { color: #16a34a; }
 .monthly-summary-mom.negative { color: #ef4444; }
 .monthly-summary-mom.neutral { color: var(--text-sub); }
-.expense-breakdown-list {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
 
-.expense-breakdown-item {
-  width: 100%;
-}
-
-.expense-breakdown-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.expense-breakdown-icon {
-  width: 18px;
-  height: 18px;
-  flex: 0 0 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.expense-breakdown-name {
-  flex: 1;
-  min-width: 0;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text-main);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.expense-breakdown-name .expense-breakdown-percent {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-sub);
-  margin-left: 3px;
-}
-
-.expense-breakdown-amount {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text-main);
-  white-space: nowrap;
-}
-
-.expense-breakdown-track {
-  flex: 1;
-  min-width: 0;
-  height: 9.5px;
-  display: flex;
-  align-items: center;
-}
-
-.expense-breakdown-bar {
-  height: 100%;
-  border-radius: 999px;
-  min-width: 2px;
-  transition: width 0.3s ease;
-}
-.expense-breakdown-bar-row {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  box-sizing: border-box;
-  gap: 10px;
-  padding-left: 26px;
-}
-
-.expense-breakdown-bar-area {
-  flex: 1;
-  min-width: 0;
-}
-
-.expense-breakdown-bar-area .expense-breakdown-track {
-  width: 100%;
-}
-
-.expense-breakdown-bar-amount {
-  width: 82px;
-  flex: 0 0 82px;
-  text-align: right;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text-main);
-  white-space: nowrap;
-}
 .expense-chart {
   width: 100%;
   height: 170px;
@@ -568,14 +477,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
 .expense-chart::-webkit-scrollbar {
   display: none;
-}
-.expense-chart-track {
-  height: 100%;
-  min-width: 100%;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-around;
-  padding: 12px 8px 0;
 }
 .expense-chart-track {
   height: 100%;
@@ -1277,7 +1178,7 @@ Object.keys(grouped).forEach(type => {
       ${topExpenses.map((item, index) => {
         const amount = Number(item.amount || 0);
         const height = maxAmount > 0
-          ? (amount / maxAmount) * 90
+          ? (amount / maxAmount) * 93
           : 0;
         return `
           <div class="expense-chart-item">
