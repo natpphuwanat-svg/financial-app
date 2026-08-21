@@ -1174,6 +1174,15 @@ Object.keys(grouped).forEach(type => {
     (sum, item) => sum + Number(item.amount || 0),
     0
   );
+  const barColors = [
+  '#A3E635',
+  '#60A5FA',
+  '#F59E0B',
+  '#A78BFA',
+  '#2DD4BF',
+  '#FB7185',
+  '#38BDF8',
+  '#C084FC' ];
   container.innerHTML = expenses.map(item => {
     const amount = Number(item.amount || 0);
     const percent = totalExpense > 0
