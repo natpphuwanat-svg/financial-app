@@ -1183,6 +1183,7 @@ Object.keys(grouped).forEach(type => {
   '#FB7185',
   '#38BDF8',
   '#C084FC' ];
+  const expenseColorMap = {};
   container.innerHTML = expenses.map((item, index) => {
     const amount = Number(item.amount || 0);
     const percent = totalExpense > 0
