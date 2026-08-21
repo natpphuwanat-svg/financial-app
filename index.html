@@ -1184,6 +1184,15 @@ Object.keys(grouped).forEach(type => {
   '#38BDF8',
   '#C084FC' ];
   const expenseColorMap = {};
+  function getExpenseBarColor(title) {
+  if (expenseColorMap[title]) {
+    return expenseColorMap[title]; }
+  const usedColors = new Set(Object.values(expenseColorMap));
+  const availableColor = barColors.find(
+    color => !usedColors.has(color) );
+  const color = availableColor || barColors[0];
+  expenseColorMap[title] = color;
+  return color; }
   container.innerHTML = expenses.map((item, index) => {
     const amount = Number(item.amount || 0);
     const percent = totalExpense > 0
