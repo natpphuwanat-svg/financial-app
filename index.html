@@ -1179,14 +1179,16 @@ const expenseBarPalette = [
   '#EAB308', '#EC4899', '#3B82F6', '#84CC16', '#F97316', '#14B8A6', 
   '#6366F1', '#D946EF', '#0EA5E9', '#059669', '#E11D48', '#8B5CF6'
 ];
+const memoryColorMap = {};
+let colorIndex = 0;
 function getExpenseBarColor(title) {
   if (!title) return '#94A3B8';
-  let hash = 2166136261;
-  for (let i = 0; i < title.length; i++) {
-    hash ^= title.charCodeAt(i);
-    hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24); }
-  const index = Math.abs(hash) % expenseBarPalette.length;
-  return expenseBarPalette[index]; }
+  if (memoryColorMap[title]) {
+    return memoryColorMap[title]; }
+  const assignedColor = expenseBarPalette[colorIndex % expenseBarPalette.length];
+  memoryColorMap[title] = assignedColor;
+  colorIndex++;
+  return assignedColor;}
   container.innerHTML = expenses.map((item, index) => {
     const amount = Number(item.amount || 0);
     const percent = totalExpense > 0
