@@ -1206,19 +1206,23 @@ function getExpenseBarColor(title) {
       (${Math.round(percent)}%)
     </span>
   </div>
-  <div class="expense-breakdown-amount">
+</div>
+<div class="expense-breakdown-bar-row">
+  <div class="expense-breakdown-bar-area">
+    <div class="expense-breakdown-track">
+      <div
+        class="expense-breakdown-bar"
+        style="width: ${percent}%; background: ${getExpenseBarColor(item.title)};"
+      ></div>
+    </div>
+  </div>
+  <div class="expense-breakdown-bar-amount">
     ฿${amount.toLocaleString('en-US', {
       minimumFractionDigits: 2
     })}
   </div>
 </div>
-  <div class="expense-breakdown-track">
-    <div
-      class="expense-breakdown-bar"
-      style="width: ${percent}%; background: ${getExpenseBarColor(item.title)};"
-      ></div>
-    </div>
-    </div>
+</div>
     `;
   }).join('');
   lucide.createIcons(); }
