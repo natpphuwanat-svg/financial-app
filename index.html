@@ -1188,13 +1188,16 @@ Object.keys(grouped).forEach(type => {
   function getExpenseBarColor(title) {
   if (expenseColorMap[title]) {
     return expenseColorMap[title]; }
-  let hash = 0;
-  for (let i = 0; i < title.length; i++) {
-    hash = ((hash << 5) - hash) + title.charCodeAt(i);
-    hash |= 0; }
-  const index = Math.abs(hash) % barColors.length;
-  const color = barColors[index];
+  const usedColors = new Set(Object.values(expenseColorMap));
+  const availableColor = barColors.find(
+    color => !usedColors.has(color)
+  );
+  const color = availableColor || barColors[0];
   expenseColorMap[title] = color;
+  localStorage.setItem(
+    'expenseColorMap',
+    JSON.stringify(expenseColorMap)
+  );
   return color; }
   container.innerHTML = expenses.map((item, index) => {
     const amount = Number(item.amount || 0);
