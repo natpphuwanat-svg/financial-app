@@ -1219,7 +1219,7 @@ Object.keys(grouped).forEach(type => {
   <div class="expense-breakdown-track">
     <div
       class="expense-breakdown-bar"
-     style="width: ${percent}%; background: ${barColors[index % barColors.length]};"
+      style="width: ${percent}%; background: ${getExpenseBarColor(item.title)};"
       ></div>
     </div>
     </div>
