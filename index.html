@@ -577,6 +577,56 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   justify-content: space-around;
   padding: 12px 8px 0;
 }
+.expense-chart-track {
+  height: 100%;
+  min-width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 18px;
+  padding: 12px 12px 0;
+}
+
+.expense-chart-item {
+  flex: 1 1 0;
+  min-width: 42px;
+  max-width: 56px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.expense-chart-bar-wrap {
+  width: 30px;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.expense-chart-bar {
+  width: 30px;
+  min-height: 4px;
+  border-radius: 999px;
+  transition: height 0.3s ease;
+}
+
+.expense-chart-icon {
+  width: 24px;
+  height: 24px;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 24px;
+}
+
+.expense-chart-icon svg {
+  width: 19px;
+  height: 19px;
+}
 </style>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1181,8 +1231,8 @@ Object.keys(grouped).forEach(type => {
         `).join('')}
       </div>
     </div>
-  `;
-}
+   `;
+  }
   function renderExpenseBreakdown(entries) {
   const container = document.getElementById('expenseBreakdownList');
   const expenses = (entries || [])
@@ -1191,73 +1241,37 @@ Object.keys(grouped).forEach(type => {
   if (expenses.length === 0) {
     container.innerHTML = '';
     return; }
-  const totalExpense = expenses.reduce(
-    (sum, item) => sum + Number(item.amount || 0),
-    0
+  const topExpenses = expenses.slice(0, 5);
+  const maxAmount = Math.max(
+    ...topExpenses.map(item => Number(item.amount || 0))
   );
-  const maxExpense = expenses.length > 0
-  ? Math.max(...expenses.map(item => Number(item.amount || 0)))
-  : 0;
-  const expenseBarPalette = [
-  '#A3E635', '#38BDF8', '#FB7185', '#F59E0B', '#A78BFA', '#2DD4BF', 
-  '#F43F5E', '#818CF8', '#10B981', '#FB923C', '#C084FC', '#06B6D4', 
-  '#EAB308', '#EC4899', '#3B82F6', '#84CC16', '#F97316', '#14B8A6', 
-  '#6366F1', '#D946EF', '#0EA5E9', '#059669', '#E11D48', '#8B5CF6'
-];
-const expenseColorMap = {};
-function getExpenseBarColor(title) {
-  if (!title) return '#94A3B8';
-  if (expenseColorMap[title]) {
-    return expenseColorMap[title]; }
-  const usedColors = new Set(
-    Object.values(expenseColorMap)
-  );
-  const availableColor = expenseBarPalette.find(
-    color => !usedColors.has(color)
-  );
-  const assignedColor =
-    availableColor || '#94A3B8';
-  expenseColorMap[title] = assignedColor;
-  return assignedColor; }
-  container.innerHTML = expenses.map((item, index) => {
-    const amount = Number(item.amount || 0);
-    const percent = totalExpense > 0
-      ? (amount / totalExpense) * 100
-      : 0;
-    const barWidth = maxExpense > 0
-      ? (amount / maxExpense) * 90
-      : 0;
-    return `
-      <div class="expense-breakdown-item">
-      <div class="expense-breakdown-header">
-  <div class="expense-breakdown-icon">
-    <i data-lucide="${item.icon || 'circle'}"></i>
-  </div>
-  <div class="expense-breakdown-name">
-    ${item.title}
-    <span class="expense-breakdown-percent">
-      (${Math.round(percent)}%)
-    </span>
-  </div>
-</div>
-<div class="expense-breakdown-bar-row">
-  <div class="expense-breakdown-bar-area">
-    <div class="expense-breakdown-track">
-      <div
-        class="expense-breakdown-bar"
-        style="width: ${barWidth}%; background: ${getExpenseBarColor(item.title)};"
-      ></div>
+  container.innerHTML = `
+    <div class="expense-chart-track">
+      ${topExpenses.map(item => {
+        const amount = Number(item.amount || 0);
+        const height = maxAmount > 0
+          ? (amount / maxAmount) * 90
+          : 0;
+        const barColor = getExpenseBarColor(item.title);
+        return `
+          <div class="expense-chart-item">
+            <div class="expense-chart-bar-wrap">
+              <div
+                class="expense-chart-bar"
+                style="
+                  height: ${height}%;
+                  background: ${barColor};
+                "
+              ></div>
+            </div>
+            <div class="expense-chart-icon">
+              <i data-lucide="${item.icon || 'circle'}"></i>
+            </div>
+          </div>
+        `;
+      }).join('')}
     </div>
-  </div>
-  <div class="expense-breakdown-bar-amount">
-    ฿${amount.toLocaleString('en-US', {
-      minimumFractionDigits: 2
-    })}
-  </div>
-</div>
-</div>
-    `;
-  }).join('');
+  `;
   lucide.createIcons(); }
   async function fetchData() {
   const requestId = ++fetchRequestId;
