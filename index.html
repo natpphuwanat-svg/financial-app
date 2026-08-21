@@ -520,7 +520,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .expense-breakdown-track {
   flex: 1;
   min-width: 0;
-  height: 9px;
+  height: 10px;
   display: flex;
   align-items: center;
 }
@@ -1199,7 +1199,7 @@ function getExpenseBarColor(title) {
       ? (amount / totalExpense) * 100
       : 0;
     const barWidth = maxExpense > 0
-      ? (amount / maxExpense) * 85
+      ? (amount / maxExpense) * 90
       : 0;
     return `
       <div class="expense-breakdown-item">
