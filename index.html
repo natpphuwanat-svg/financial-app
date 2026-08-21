@@ -1183,7 +1183,8 @@ Object.keys(grouped).forEach(type => {
   '#FB7185',
   '#38BDF8',
   '#C084FC' ];
-  const expenseColorMap = {};
+  const expenseColorMap =
+  JSON.parse(localStorage.getItem('expenseColorMap') || '{}');
   function getExpenseBarColor(title) {
   if (expenseColorMap[title]) {
     return expenseColorMap[title]; }
