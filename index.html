@@ -1183,7 +1183,7 @@ Object.keys(grouped).forEach(type => {
   '#FB7185',
   '#38BDF8',
   '#C084FC' ];
-  container.innerHTML = expenses.map(item => {
+  container.innerHTML = expenses.map((item, index) => {
     const amount = Number(item.amount || 0);
     const percent = totalExpense > 0
       ? (amount / totalExpense) * 100
@@ -1209,9 +1209,8 @@ Object.keys(grouped).forEach(type => {
   <div class="expense-breakdown-track">
     <div
       class="expense-breakdown-bar"
-       style="width: ${percent}%;"
+     style="width: ${percent}%; background: ${barColors[index % barColors.length]};"
       ></div>
-      </div>
     </div>
     `;
   }).join('');
