@@ -1233,6 +1233,22 @@ Object.keys(grouped).forEach(type => {
     </div>
    `;
   }
+  const expenseColorMap = {};
+  function getExpenseBarColor(title) {
+  if (!title) return '#94A3B8';
+  if (expenseColorMap[title]) {
+    return expenseColorMap[title];
+  }
+  const usedColors = new Set(
+    Object.values(expenseColorMap)
+  );
+  const availableColor = expenseBarPalette.find(
+    color => !usedColors.has(color)
+  );
+  const assignedColor =
+    availableColor || '#94A3B8';
+  expenseColorMap[title] = assignedColor;
+  return assignedColor; }
   function renderExpenseBreakdown(entries) {
   const container = document.getElementById('expenseBreakdownList');
   const expenses = (entries || [])
@@ -1245,13 +1261,6 @@ Object.keys(grouped).forEach(type => {
   const maxAmount = Math.max(
     ...topExpenses.map(item => Number(item.amount || 0))
   );
-  const colors = [
-    '#A3E635',
-    '#38BDF8',
-    '#FB7185',
-    '#F59E0B',
-    '#A78BFA'
-  ];
   container.innerHTML = `
     <div class="expense-chart-track">
       ${topExpenses.map((item, index) => {
@@ -1266,7 +1275,7 @@ Object.keys(grouped).forEach(type => {
                 class="expense-chart-bar"
                 style="
                   height: ${height}%;
-                  background: ${colors[index]};
+                  background: ${getExpenseBarColor(item.title)};
                 "
               ></div>
             </div>
