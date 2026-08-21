@@ -1196,7 +1196,7 @@ Object.keys(grouped).forEach(type => {
   expenseColorMapV2[title] = color;
   localStorage.setItem(
     'expenseColorMapV2',
-    JSON.stringify(expenseColorMap)
+    JSON.stringify(expenseColorMapV2)
   );
   return color; }
   container.innerHTML = expenses.map((item, index) => {
