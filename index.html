@@ -1174,7 +1174,10 @@ Object.keys(grouped).forEach(type => {
     (sum, item) => sum + Number(item.amount || 0),
     0
   );
-const expenseBarPalette = [
+  const maxExpense = expenses.length > 0
+  ? Math.max(...expenses.map(item => Number(item.amount || 0)))
+  : 0;
+  const expenseBarPalette = [
   '#A3E635', '#38BDF8', '#FB7185', '#F59E0B', '#A78BFA', '#2DD4BF', 
   '#F43F5E', '#818CF8', '#10B981', '#FB923C', '#C084FC', '#06B6D4', 
   '#EAB308', '#EC4899', '#3B82F6', '#84CC16', '#F97316', '#14B8A6', 
@@ -1195,6 +1198,9 @@ function getExpenseBarColor(title) {
     const percent = totalExpense > 0
       ? (amount / totalExpense) * 100
       : 0;
+    const barWidth = maxExpense > 0
+      ? (amount / maxExpense) * 85
+      : 0;
     return `
       <div class="expense-breakdown-item">
       <div class="expense-breakdown-header">
@@ -1213,7 +1219,7 @@ function getExpenseBarColor(title) {
     <div class="expense-breakdown-track">
       <div
         class="expense-breakdown-bar"
-        style="width: ${percent}%; background: ${getExpenseBarColor(item.title)};"
+        style="width: ${barWidth}%; background: ${getExpenseBarColor(item.title)};"
       ></div>
     </div>
   </div>
