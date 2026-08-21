@@ -1174,26 +1174,19 @@ Object.keys(grouped).forEach(type => {
     0
   );
 const expenseBarPalette = [
-  '#A3E635', '#60A5FA', '#F59E0B', '#A78BFA', '#2DD4BF', '#FB7185', '#38BDF8', '#C084FC',
-  '#84CC16', '#7DD3FC', '#FDBA74', '#C4B5FD', '#5EEAD4', '#FDA4AF', '#93C5FD', '#D8B4FE',
-  '#BEF264', '#BAE6FD', '#FED7AA', '#DDD6FE', '#99F6E4', '#FECDD3', '#BFDBFE', '#E9D5FF' ];
-const expenseColorMap =
-  JSON.parse(
-    localStorage.getItem('expenseColorMap') || '{}' );
+  '#A3E635', '#38BDF8', '#FB7185', '#F59E0B', '#A78BFA', '#2DD4BF', 
+  '#F43F5E', '#818CF8', '#10B981', '#FB923C', '#C084FC', '#06B6D4', 
+  '#EAB308', '#EC4899', '#3B82F6', '#84CC16', '#F97316', '#14B8A6', 
+  '#6366F1', '#D946EF', '#0EA5E9', '#059669', '#E11D48', '#8B5CF6' ];
 function getExpenseBarColor(title) {
-  if (expenseColorMap[title]) {
-    return expenseColorMap[title]; }
-  const usedColors = new Set(
-    Object.values(expenseColorMap) );
-  const availableColor = expenseBarPalette.find(
-    color => !usedColors.has(color) );
-  if (availableColor) {
-    expenseColorMap[title] = availableColor;
-    localStorage.setItem(
-      'expenseColorMap',
-      JSON.stringify(expenseColorMap) );
-    return availableColor; }
-    return '#94A3B8'; }
+  if (!title) return '#94A3B8';
+  let hash = 0;
+  for (let i = 0; i < title.length; i++) {
+    hash = title.charCodeAt(i) + ((hash << 5) - hash); }
+  const index = Math.abs(hash) % expenseBarPalette.length;
+  return expenseBarPalette[index]; }
+localStorage.removeItem('expenseColorMap');
+
   container.innerHTML = expenses.map((item, index) => {
     const amount = Number(item.amount || 0);
     const percent = totalExpense > 0
