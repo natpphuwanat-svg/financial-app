@@ -1194,11 +1194,6 @@ function getExpenseBarColor(title) {
       JSON.stringify(expenseColorMap) );
     return availableColor; }
     return '#94A3B8'; }
-  expenseColorMa[title] = availableColor;
-  localStorage.setItem(
-    'expenseColorMap',
-    JSON.stringify(expenseColorMap) );
-  return availableColor; }
   container.innerHTML = expenses.map((item, index) => {
     const amount = Number(item.amount || 0);
     const percent = totalExpense > 0
