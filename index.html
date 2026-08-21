@@ -1183,16 +1183,21 @@ Object.keys(grouped).forEach(type => {
   '#EAB308', '#EC4899', '#3B82F6', '#84CC16', '#F97316', '#14B8A6', 
   '#6366F1', '#D946EF', '#0EA5E9', '#059669', '#E11D48', '#8B5CF6'
 ];
-const memoryColorMap = {};
-let colorIndex = 0;
+const expenseColorMap = {};
 function getExpenseBarColor(title) {
   if (!title) return '#94A3B8';
-  if (memoryColorMap[title]) {
-    return memoryColorMap[title]; }
-  const assignedColor = expenseBarPalette[colorIndex % expenseBarPalette.length];
-  memoryColorMap[title] = assignedColor;
-  colorIndex++;
-  return assignedColor;}
+  if (expenseColorMap[title]) {
+    return expenseColorMap[title]; }
+  const usedColors = new Set(
+    Object.values(expenseColorMap)
+  );
+  const availableColor = expenseBarPalette.find(
+    color => !usedColors.has(color)
+  );
+  const assignedColor =
+    availableColor || '#94A3B8';
+  expenseColorMap[title] = assignedColor;
+  return assignedColor; }
   container.innerHTML = expenses.map((item, index) => {
     const amount = Number(item.amount || 0);
     const percent = totalExpense > 0
