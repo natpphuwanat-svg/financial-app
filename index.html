@@ -1194,6 +1194,20 @@ Object.keys(grouped).forEach(type => {
   '#14B8A6' ];
   const expenseColorMap = {};
   let selectedExpenseTitle = null;
+  function getExpenseBarColor(title) {
+  if (!title) return '#94A3B8';
+  if (expenseColorMap[title]) {
+    return expenseColorMap[title]; }
+  const usedColors = new Set(
+    Object.values(expenseColorMap)
+  );
+  const availableColor = expenseBarPalette.find(
+    color => !usedColors.has(color)
+  );
+  const assignedColor =
+    availableColor || '#94A3B8';
+  expenseColorMap[title] = assignedColor;
+  return assignedColor; }
   function renderExpenseBreakdown(entries) {
   const container = document.getElementById('expenseBreakdownList');
   const expenses = (entries || [])
