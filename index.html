@@ -469,7 +469,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 
 .expense-chart {
   width: 100%;
-  height: 170px;
+  height: 180px;
   overflow-x: auto;
   overflow-y: visible;
   -webkit-overflow-scrolling: touch;
@@ -485,7 +485,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   align-items: flex-end;
   justify-content: space-around;
   gap: 18px;
-  padding: 12px 12px 0;
+  padding: 28px 12px 0;
+  box-sizing: border-box;
 }
 
 .expense-chart-item {
@@ -540,7 +541,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   transform: translateX(-50%);
   padding: 5px 10px;
   border-radius: 999px;
-  color: var(--lime-400);
+  color: var(--text-main);
   font-size: 11px;
   font-weight: 800;
   line-height: 1;
@@ -555,10 +556,10 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   position: absolute;
   left: 50%;
   top: -4px;
-  width: 8px;
-  height: 8px;
+  width: 11px;
+  height: 11px;
   border-radius: 50%;
-  background: var(--lime-400);
+  background: var(--text-main);
   transform: translateX(-50%);
   opacity: 0;
   pointer-events: none;
