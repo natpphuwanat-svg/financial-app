@@ -490,44 +490,55 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
 
 .expense-chart-item {
+  position: relative;
   flex: 1 1 0;
   min-width: 42px;
   max-width: 56px;
   height: 100%;
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) 24px;
-  row-gap: 8px;
-  align-items: end;
-  justify-items: center;
+  display: block;
+  flex-shrink: 0;
 }
 
 .expense-chart-bar-wrap {
-  position: relative;
+  position: absolute;
+  left: 50%;
+  bottom: 32px;
   width: 30px;
-  height: 100%;
+  height: calc(100% - 40px);
+  transform: translateX(-50%);
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  justify-self: center;
   min-height: 0;
 }
-
 .expense-chart-bar {
-   position: relative;
+  position: relative;
   width: 30px;
   min-height: 4px;
   border-radius: 999px;
-  transition: height 0.3s ease;
+  transition: opacity 0.2s ease;
 }
-
 .expense-chart-icon {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
   width: 24px;
   height: 24px;
-  margin-top: 8px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  flex: 0 0 24px;
+  margin: 0;
+  padding: 0;
+  transform: translateX(-50%);
+  opacity: 1;
+  transition: opacity 0.15s ease;
+}
+
+.expense-chart-icon svg {
+  display: block;
+  width: 19px;
+  height: 19px;
+  margin: 0;
 }
 
 .expense-chart-icon svg {
@@ -577,18 +588,23 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   width: 22px;
   height: 22px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   color: var(--text-sub);
   transform: translateX(-50%);
+  margin: 0;
+  padding: 0;
   opacity: 0;
   pointer-events: none;
   z-index: 2;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.15s ease;
 }
+
 .expense-chart-selected-icon svg {
+  display: block;
   width: 18px;
   height: 18px;
+  margin: 0;
   stroke: currentColor;
   stroke-width: 2.1;
 }
@@ -612,34 +628,33 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   opacity: 1;
 }
 .expense-chart-label {
-  position: relative;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
   width: 100%;
   height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  justify-self: center;
+  transform: translateX(-50%);
   margin: 0;
-  flex: none;
+  padding: 0;
+  display: block;
 }
 .expense-chart-amount {
   position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: max-content;
+  height: 19px;
+  display: flex;
+  align-items: flex-end;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 0;
   font-size: 13px;
   font-weight: 800;
-  line-height: 24px;
+  line-height: 19px;
   color: var(--text-main);
   white-space: nowrap;
   opacity: 0;
-  transition: opacity 0.15s ease;
-}
-.expense-chart-icon {
-  position: absolute;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 1;
   transition: opacity 0.15s ease;
 }
 .expense-chart-item.is-selected .expense-chart-icon {
