@@ -541,14 +541,18 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   transform: translateX(-50%);
   padding: 5px 10px;
   border-radius: 999px;
-  color: var(--text-main);
+  color: var(--text-sub);
   font-size: 11px;
   font-weight: 800;
   line-height: 1;
   white-space: nowrap;
   opacity: 0;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.12);
   pointer-events: none;
-  transition: opacity 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
   z-index: 4;
 }
 .expense-chart-dot {
@@ -565,7 +569,9 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   z-index: 3;
   transition: opacity 0.2s ease;
 }
-.expense-chart-item.is-selected .expense-chart-percent,
+.expense-chart-item.is-selected .expense-chart-percent {
+  opacity: 0.9;
+}
 .expense-chart-item.is-selected .expense-chart-dot {
   opacity: 1;
 }
