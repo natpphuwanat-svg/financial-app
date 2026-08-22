@@ -508,6 +508,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
 
 .expense-chart-bar {
+   position: relative;
   width: 30px;
   min-height: 4px;
   border-radius: 999px;
@@ -535,8 +536,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .expense-chart-percent {
   position: absolute;
   left: 50%;
-  bottom: 100%;
-  transform: translateX(-50%) translateY(-8px);
+  bottom: calc(100% + 10px);
+  transform: translateX(-50%);
   padding: 5px 10px;
   border-radius: 999px;
   color: var(--lime-400);
@@ -547,17 +548,18 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
+  z-index: 4;
 }
 
 .expense-chart-dot {
   position: absolute;
   left: 50%;
-  bottom: 100%;
+  top: -4px;
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background: var(--lime-400);
-  transform: translate(-50%, 50%);
+  transform: translateX(-50%);
   opacity: 0;
   pointer-events: none;
   z-index: 3;
@@ -1234,20 +1236,21 @@ Object.keys(grouped).forEach(type => {
             data-expense-title="${item.title}"
           >
             <div class="expense-chart-bar-wrap">
-              <div
-                class="expense-chart-percent"
-                style="background: ${barColor};"
-              >
-                ${percent}%
-              </div>
-              <div class="expense-chart-dot"></div>
-              <div
-                class="expense-chart-bar"
-                style="
-                  height: ${height}%;
-                  background: ${barColor};
-                "
-              ></div>
+            <div
+            class="expense-chart-bar"
+            style="
+            height: ${height}%;
+            background: ${barColor};
+            "
+            >
+            <div
+            class="expense-chart-percent"
+            style="background: ${barColor};"
+            >
+            ${percent}%
+            </div>
+            <div class="expense-chart-dot"></div>
+            </div>
             </div>
             <div class="expense-chart-icon">
               <i data-lucide="${item.icon || 'circle'}"></i>
@@ -1258,6 +1261,30 @@ Object.keys(grouped).forEach(type => {
     </div>
   `;
   lucide.createIcons(); }
+  document
+  .getElementById('expenseBreakdownList')
+  .addEventListener('click', (event) => {
+    const item = event.target.closest('.expense-chart-item');
+    if (!item) return;
+    const title = item.dataset.expenseTitle;
+    if (selectedExpenseTitle === title) {
+      selectedExpenseTitle = null;
+      document
+        .querySelectorAll('.expense-chart-item')
+        .forEach(chartItem => {
+          chartItem.classList.remove('is-selected');
+        });
+      return; }
+    selectedExpenseTitle = title;
+    document
+      .querySelectorAll('.expense-chart-item')
+      .forEach(chartItem => {
+        chartItem.classList.toggle(
+          'is-selected',
+          chartItem === item
+        );
+      });
+  });
   async function fetchData() {
   const requestId = ++fetchRequestId;
 
