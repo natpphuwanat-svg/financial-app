@@ -498,18 +498,20 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
+  padding-bottom: 8px;
 }
 
 .expense-chart-bar-wrap {
-  width: 30px;
-  height: 100%;
+  position: relative;
+  width: 100%;
+  flex: 1 1 auto;
   display: flex;
   align-items: flex-end;
   justify-content: center;
 }
 
 .expense-chart-bar {
-   position: relative;
+  position: relative;
   width: 30px;
   min-height: 4px;
   border-radius: 999px;
@@ -530,10 +532,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   width: 19px;
   height: 19px;
 }
-.expense-chart-bar-wrap {
-  position: relative;
-}
-
 .expense-chart-percent {
   position: absolute;
   left: 50%;
