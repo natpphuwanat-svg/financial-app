@@ -650,7 +650,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   padding: 0;
   font-size: 13px;
   font-weight: 800;
-  line-height: 10px;
+  line-height: 12px;
   color: var(--text-main);
   white-space: nowrap;
   opacity: 0;
@@ -1304,7 +1304,7 @@ Object.keys(grouped).forEach(type => {
     container.innerHTML = '';
     return; }
   selectedExpenseTitle = null;
-  const topExpenses = expenses.slice(0, 5);
+  const topExpenses = expenses;
   const maxAmount = Math.max(
     ...topExpenses.map(item => Number(item.amount || 0))
   );
