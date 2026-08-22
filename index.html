@@ -551,7 +551,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   transition: opacity 0.2s ease;
   z-index: 4;
 }
-
 .expense-chart-dot {
   position: absolute;
   left: 50%;
@@ -566,8 +565,18 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   z-index: 3;
   transition: opacity 0.2s ease;
 }
- .expense-chart-item.is-selected .expense-chart-percent,
+.expense-chart-item.is-selected .expense-chart-percent,
 .expense-chart-item.is-selected .expense-chart-dot {
+  opacity: 1;
+}
+.expense-chart-track.has-selection
+.expense-chart-item:not(.is-selected)
+.expense-chart-bar {
+  opacity: 0.25;
+}
+.expense-chart-track.has-selection
+.expense-chart-item.is-selected
+.expense-chart-bar {
   opacity: 1;
 }
 </style>
@@ -1270,6 +1279,8 @@ Object.keys(grouped).forEach(type => {
     const title = item.dataset.expenseTitle;
     if (selectedExpenseTitle === title) {
       selectedExpenseTitle = null;
+    const track = document.querySelector('.expense-chart-track');
+      track.classList.remove('has-selection');
       document
         .querySelectorAll('.expense-chart-item')
         .forEach(chartItem => {
@@ -1277,6 +1288,8 @@ Object.keys(grouped).forEach(type => {
         });
       return; }
     selectedExpenseTitle = title;
+    const track = document.querySelector('.expense-chart-track');
+    track.classList.add('has-selection');
     document
       .querySelectorAll('.expense-chart-item')
       .forEach(chartItem => {
