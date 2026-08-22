@@ -530,6 +530,10 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   width: 19px;
   height: 19px;
 }
+.expense-chart-bar-wrap {
+  position: relative;
+}
+
 .expense-chart-percent {
   position: absolute;
   left: 50%;
@@ -609,22 +613,21 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .expense-chart-label {
   position: relative;
   width: 100%;
-  height: 24px;
+  height: 32px;
   margin-top: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 24px;
 }
 .expense-chart-amount {
   position: absolute;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 800;
   line-height: 24px;
   color: var(--text-main);
   white-space: nowrap;
   opacity: 0;
-  transition: opacity 0.15s ease;
+  transition: opacity 0.2s ease;
 }
 .expense-chart-icon {
   position: absolute;
@@ -634,7 +637,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   align-items: center;
   justify-content: center;
   opacity: 1;
-  transition: opacity 0.15s ease;
+  transition: opacity 0.2s ease;
 }
 .expense-chart-item.is-selected .expense-chart-icon {
   opacity: 0;
@@ -1309,35 +1312,35 @@ Object.keys(grouped).forEach(type => {
             data-expense-title="${item.title}"
           >
             <div class="expense-chart-bar-wrap">
-         <div
-        class="expense-chart-bar"
-        style="
-         height: ${height}%;
-        background: ${barColor};
-       "
-       >
-       <div
-        class="expense-chart-percent"
-        style="background: ${barColor};"
-      >
-      ${percent}%
-    </div>
-    <div class="expense-chart-dot"></div>
-    <div class="expense-chart-selected-icon">
-      <i data-lucide="${item.icon || 'circle'}"></i>
-    </div>
-  </div>
-  </div>
-    <div class="expense-chart-label">
-       <div class="expense-chart-amount">
-        ฿${amount.toLocaleString('en-US', {
-          minimumFractionDigits: 2
-        })}
-       </div>
-         <div class="expense-chart-icon">
-           <i data-lucide="${item.icon || 'circle'}"></i>
-         </div>
-       </div>
+            <div
+            class="expense-chart-bar"
+            style="
+            height: ${height}%;
+            background: ${barColor};
+            "
+            >
+            <div
+            class="expense-chart-percent"
+            style="background: ${barColor};"
+            >
+            ${percent}%
+            </div>
+            <div class="expense-chart-dot"></div>
+            <div class="expense-chart-selected-icon">
+            <i data-lucide="${item.icon || 'circle'}"></i>
+            </div>
+            </div>
+            </div>
+            <div class="expense-chart-label">
+            <div class="expense-chart-amount">
+            ฿${amount.toLocaleString('en-US', {
+              minimumFractionDigits: 2
+            })}
+            </div>
+            <div class="expense-chart-icon">
+            <i data-lucide="${item.icon || 'circle'}"></i>
+            </div>
+           </div>
           </div>
         `;
       }).join('')}
