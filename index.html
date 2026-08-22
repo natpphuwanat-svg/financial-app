@@ -569,6 +569,31 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   z-index: 3;
   transition: opacity 0.2s ease;
 }
+.expense-chart-selected-icon {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-sub);
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity 0.2s ease;
+}
+.expense-chart-selected-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 2.1;
+}
+.expense-chart-item.is-selected .expense-chart-selected-icon {
+  opacity: 1;
+}
 .expense-chart-item.is-selected .expense-chart-percent {
   opacity: 0.9;
 }
@@ -596,8 +621,9 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
 .expense-chart-amount {
   position: absolute;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
+  line-height: 24px;
   color: var(--text-main);
   white-space: nowrap;
   opacity: 0;
@@ -1300,6 +1326,8 @@ Object.keys(grouped).forEach(type => {
             ${percent}%
             </div>
             <div class="expense-chart-dot"></div>
+            <div class="expense-chart-selected-icon">
+            <i data-lucide="${item.icon || 'circle'}"></i>
             </div>
             </div>
             <div class="expense-chart-label">
