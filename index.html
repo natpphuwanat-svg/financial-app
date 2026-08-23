@@ -662,20 +662,92 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .expense-chart-item.is-selected .expense-chart-amount {
   opacity: 1;
 }
+.expense-chart-track.sub-mode
+.expense-chart-item.is-type-dimmed {
+  opacity: 0.38;
+}
+
+.expense-chart-track.sub-mode
+.expense-chart-item:not(.is-type-dimmed)
+.expense-chart-bar {
+  opacity: 1;
+}
+
+.expense-chart-track.sub-mode
+.expense-chart-item.is-type-dimmed
+.expense-chart-bar {
+  opacity: 0.25;
+}
+
+.expense-chart-track.sub-mode
+.expense-chart-percent {
+  opacity: 0.9;
+}
+
+.expense-chart-track.sub-mode
+.expense-chart-item.is-type-dimmed
+.expense-chart-percent {
+  opacity: 0;
+}
+
+.expense-chart-track.sub-mode
+.expense-chart-item
+.expense-chart-selected-icon {
+  opacity: 0;
+}
 .expense-type-summary {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  margin-top: 8px;
+  margin: 0 0 18px;
 }
 
 .expense-type-card {
   min-width: 0;
-  padding: 13px 15px;
-  border-radius: 16px;
+  padding: 13px 14px 12px;
+  border-radius: 17px;
   background: var(--glass-card);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease,
+    opacity 0.18s ease;
+}
+
+.expense-type-card:active {
+  transform: scale(0.985);
+}
+
+.expense-type-card.is-active {
+  border-color: var(--expense-type-color);
+  box-shadow:
+    0 0 0 1px var(--expense-type-color),
+    var(--glass-shadow);
+}
+
+.expense-type-card.is-dimmed {
+  opacity: 0.55;
+}
+
+.expense-type-card.fixed {
+  --expense-type-color: #A3E635;
+}
+
+.expense-type-card.variable {
+  --expense-type-color: #38BDF8;
+}
+
+.expense-type-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 5px;
 }
 
 .expense-type-label {
@@ -683,7 +755,12 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   font-weight: 800;
   letter-spacing: 0.7px;
   color: var(--text-sub);
-  margin-bottom: 5px;
+}
+
+.expense-type-percent {
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--text-main);
 }
 
 .expense-type-amount {
@@ -691,23 +768,23 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   font-weight: 900;
   color: var(--text-main);
   white-space: nowrap;
+  margin-bottom: 9px;
 }
 
-.expense-type-card.fixed .expense-type-amount {
-  color: var(--text-main);
+.expense-type-progress {
+  width: 100%;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.16);
+  overflow: hidden;
 }
 
-.expense-type-card.variable .expense-type-amount {
-  color: var(--text-main);
-}
-
-.expense-type-empty {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 14px;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-sub);
+.expense-type-progress-bar {
+  height: 100%;
+  width: 0;
+  border-radius: inherit;
+  background: var(--expense-type-color);
+  transition: width 0.25s ease;
 }
 </style>
 <script src="https://unpkg.com/lucide@latest"></script>
@@ -967,10 +1044,10 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   <div class="insights-section-title">
     EXPENSE BREAKDOWN
   </div>
+  <div class="expense-type-summary" id="expenseTypeSummary"></div>
   <div class="expense-chart" id="expenseBreakdownList">
    <div class="expense-chart-track"></div>
   </div>
- <div class="expense-type-summary" id="expenseTypeSummary"></div>
 </section>
     </main>
   </div>
@@ -1329,6 +1406,7 @@ Object.keys(grouped).forEach(type => {
   '#14B8A6' ];
   const expenseColorMap = {};
   let selectedExpenseTitle = null;
+  let selectedExpenseType = null;
   function getExpenseBarColor(title) {
   if (!title) return '#94A3B8';
   if (expenseColorMap[title]) {
@@ -1379,96 +1457,186 @@ function renderExpenseTypeSummary(entries) {
     const amount = Number(item.amount || 0);
     const type = getExpenseType(item.title);
     if (type === 'Fixed') {
-      fixedTotal += amount; }
+      fixedTotal += amount;
+    }
     if (type === 'Variable') {
-      variableTotal += amount; }
+      variableTotal += amount;
+    }
   });
+  const totalExpense = expenses.reduce(
+    (sum, item) => sum + Number(item.amount || 0),
+    0
+  );
+  const fixedPercent = totalExpense > 0
+    ? Math.round((fixedTotal / totalExpense) * 100)
+    : 0;
+  const variablePercent = totalExpense > 0
+    ? Math.round((variableTotal / totalExpense) * 100)
+    : 0;
   container.innerHTML = `
-    <div class="expense-type-card fixed">
-      <div class="expense-type-label">
-        FIXED
+    <div
+      class="expense-type-card fixed ${selectedExpenseType === 'Fixed' ? 'is-active' : ''} ${selectedExpenseType === 'Variable' ? 'is-dimmed' : ''}"
+      onclick="selectExpenseType('Fixed')"
+      role="button"
+      aria-label="Show Fixed expenses"
+    >
+      <div class="expense-type-top">
+        <div class="expense-type-label">
+          FIXED
+        </div>
+        <div class="expense-type-percent">
+          ${fixedPercent}%
+        </div>
       </div>
       <div class="expense-type-amount">
         ฿${fixedTotal.toLocaleString('en-US', {
           minimumFractionDigits: 2
         })}
       </div>
+      <div class="expense-type-progress">
+        <div
+          class="expense-type-progress-bar"
+          style="width: ${fixedPercent}%"
+        ></div>
+      </div>
     </div>
-    <div class="expense-type-card variable">
-      <div class="expense-type-label">
-        VARIABLE
+    <div
+      class="expense-type-card variable ${selectedExpenseType === 'Variable' ? 'is-active' : ''} ${selectedExpenseType === 'Fixed' ? 'is-dimmed' : ''}"
+      onclick="selectExpenseType('Variable')"
+      role="button"
+      aria-label="Show Variable expenses"
+    >
+      <div class="expense-type-top">
+        <div class="expense-type-label">
+          VARIABLE
+        </div>
+        <div class="expense-type-percent">
+          ${variablePercent}%
+        </div>
       </div>
       <div class="expense-type-amount">
         ฿${variableTotal.toLocaleString('en-US', {
           minimumFractionDigits: 2
         })}
       </div>
+      <div class="expense-type-progress">
+        <div
+          class="expense-type-progress-bar"
+          style="width: ${variablePercent}%"
+        ></div>
+      </div>
     </div>
   `;
   }
+  function selectExpenseType(type) {
+  if (selectedExpenseType === type) {
+    selectedExpenseType = null;
+  } else {
+    selectedExpenseType = type; }
+  selectedExpenseTitle = null;
+  renderExpenseTypeSummary(currentEntries);
+  renderExpenseBreakdown(currentEntries); }
   function renderExpenseBreakdown(entries) {
-  const container = document.getElementById('expenseBreakdownList');
+  const container =
+    document.getElementById('expenseBreakdownList');
   const expenses = (entries || [])
     .filter(item => item.financial_type === 'Expense')
     .sort((a, b) => Number(b.amount) - Number(a.amount));
   if (expenses.length === 0) {
     container.innerHTML = '';
     return; }
-  selectedExpenseTitle = null;
-  const topExpenses = expenses;
-  const maxAmount = Math.max(
-    ...topExpenses.map(item => Number(item.amount || 0))
-  );
+  if (selectedExpenseType) {
+    selectedExpenseTitle = null; }
   const totalExpense = expenses.reduce(
     (sum, item) => sum + Number(item.amount || 0),
     0
   );
+  const contextualExpenses = selectedExpenseType
+    ? expenses.filter(
+        item => getExpenseType(item.title) === selectedExpenseType
+      )
+    : expenses;
+  const contextTotal = selectedExpenseType
+    ? contextualExpenses.reduce(
+        (sum, item) => sum + Number(item.amount || 0),
+        0
+      )
+    : totalExpense;
+  const maxAmount = Math.max(
+    ...expenses.map(item => Number(item.amount || 0))
+  );
   container.innerHTML = `
-    <div class="expense-chart-track">
-      ${topExpenses.map((item) => {
+    <div class="expense-chart-track ${selectedExpenseType ? 'sub-mode' : ''}">
+      ${expenses.map((item) => {
         const amount = Number(item.amount || 0);
         const height = maxAmount > 0
           ? (amount / maxAmount) * 93
           : 0;
-        const percent = totalExpense > 0
-          ? Math.round((amount / totalExpense) * 100)
-          : 0;
-        const barColor = getExpenseBarColor(item.title);
+        const itemType = getExpenseType(item.title);
+        const percent =
+          selectedExpenseType
+            ? (
+                itemType === selectedExpenseType &&
+                contextTotal > 0
+                  ? Math.round((amount / contextTotal) * 100)
+                  : 0
+              )
+            : (
+                totalExpense > 0
+                  ? Math.round((amount / totalExpense) * 100)
+                  : 0
+              );
+        const normalColor =
+          getExpenseBarColor(item.title);
+        let barColor = normalColor;
+        if (selectedExpenseType) {
+          if (itemType === selectedExpenseType) {
+            barColor =
+              selectedExpenseType === 'Fixed'
+                ? '#A3E635'
+                : '#38BDF8';
+          } else {
+            barColor = normalColor;
+          }
+        }
+        const isDimmed =
+          selectedExpenseType &&
+          itemType !== selectedExpenseType;
         return `
           <div
-            class="expense-chart-item"
+            class="expense-chart-item ${isDimmed ? 'is-type-dimmed' : ''}"
             data-expense-title="${item.title}"
           >
             <div class="expense-chart-bar-wrap">
-            <div
-            class="expense-chart-bar"
-            style="
-            height: ${height}%;
-            background: ${barColor};
-            "
-            >
-            <div
-            class="expense-chart-percent"
-            style="background: ${barColor};"
-            >
-            ${percent}%
-            </div>
-            <div class="expense-chart-dot"></div>
-            <div class="expense-chart-selected-icon">
-            <i data-lucide="${item.icon || 'circle'}"></i>
-            </div>
-            </div>
+              <div
+                class="expense-chart-bar"
+                style="
+                  height: ${height}%;
+                  background: ${barColor};
+                "
+              >
+                <div
+                  class="expense-chart-percent"
+                  style="background: ${barColor};"
+                >
+                  ${percent}%
+                </div>
+                <div class="expense-chart-dot"></div>
+                <div class="expense-chart-selected-icon">
+                  <i data-lucide="${item.icon || 'circle'}"></i>
+                </div>
+              </div>
             </div>
             <div class="expense-chart-label">
-            <div class="expense-chart-amount">
-            ฿${amount.toLocaleString('en-US', {
-              minimumFractionDigits: 2
-            })}
+              <div class="expense-chart-amount">
+                ฿${amount.toLocaleString('en-US', {
+                  minimumFractionDigits: 2
+                })}
+              </div>
+              <div class="expense-chart-icon">
+                <i data-lucide="${item.icon || 'circle'}"></i>
+              </div>
             </div>
-            <div class="expense-chart-icon">
-            <i data-lucide="${item.icon || 'circle'}"></i>
-            </div>
-           </div>
           </div>
         `;
       }).join('')}
@@ -1478,6 +1646,7 @@ function renderExpenseTypeSummary(entries) {
   document
   .getElementById('expenseBreakdownList')
   .addEventListener('click', (event) => {
+    if (selectedExpenseType) return;
     const item = event.target.closest('.expense-chart-item');
     if (!item) return;
     const title = item.dataset.expenseTitle;
@@ -1571,8 +1740,8 @@ function renderExpenseTypeSummary(entries) {
     const totalExpense = entries
       .filter(item => item.financial_type === 'Expense')
       .reduce((sum, item) => sum + Number(item.amount || 0), 0);
-    renderExpenseBreakdown(entries);
     renderExpenseTypeSummary(entries);
+    renderExpenseBreakdown(entries);
     const totalDeduction = entries
       .filter(item => item.financial_type === 'Deduction')
       .reduce((sum, item) => sum + Number(item.amount || 0), 0);
