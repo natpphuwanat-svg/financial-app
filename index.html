@@ -623,6 +623,11 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   opacity: 0.25;
 }
 .expense-chart-track.has-selection
+.expense-chart-item:not(.is-selected)
+.expense-chart-icon {
+  opacity: 0.25;
+}
+.expense-chart-track.has-selection
 .expense-chart-item.is-selected
 .expense-chart-bar {
   opacity: 1;
@@ -664,7 +669,19 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
 .expense-chart-track.sub-mode
 .expense-chart-item.is-type-dimmed {
-  opacity: 0.38;
+  opacity: 1;
+}
+
+.expense-chart-track.sub-mode
+.expense-chart-item.is-type-dimmed
+.expense-chart-bar {
+  opacity: 0.25;
+}
+
+.expense-chart-track.sub-mode
+.expense-chart-item.is-type-dimmed
+.expense-chart-icon {
+  opacity: 0.25;
 }
 
 .expense-chart-track.sub-mode
@@ -699,7 +716,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  margin: 0 0 18px;
+  margin: 0 0 15px;
 }
 
 .expense-type-card {
@@ -735,11 +752,11 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
 
 .expense-type-card.fixed {
-  --expense-type-color: #A3E635;
+  --expense-type-color: #8C6F61;
 }
 
 .expense-type-card.variable {
-  --expense-type-color: #38BDF8;
+  --expense-type-color: #D0977C;
 }
 
 .expense-type-top {
@@ -1590,11 +1607,10 @@ function renderExpenseTypeSummary(entries) {
           getExpenseBarColor(item.title);
         let barColor = normalColor;
         if (selectedExpenseType) {
-          if (itemType === selectedExpenseType) {
-            barColor =
-              selectedExpenseType === 'Fixed'
-                ? '#A3E635'
-                : '#38BDF8';
+          if (itemType === 'Fixed') {
+            barColor = '#8C6F61';
+          } else if (itemType === 'Variable') {
+            barColor = '#D0977C';
           } else {
             barColor = normalColor;
           }
