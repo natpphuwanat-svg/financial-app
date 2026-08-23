@@ -662,6 +662,53 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .expense-chart-item.is-selected .expense-chart-amount {
   opacity: 1;
 }
+.expense-type-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.expense-type-card {
+  min-width: 0;
+  padding: 13px 15px;
+  border-radius: 16px;
+  background: var(--glass-card);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.expense-type-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.7px;
+  color: var(--text-sub);
+  margin-bottom: 5px;
+}
+
+.expense-type-amount {
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--text-main);
+  white-space: nowrap;
+}
+
+.expense-type-card.fixed .expense-type-amount {
+  color: var(--text-main);
+}
+
+.expense-type-card.variable .expense-type-amount {
+  color: var(--text-main);
+}
+
+.expense-type-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-sub);
+}
 </style>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1295,6 +1342,69 @@ Object.keys(grouped).forEach(type => {
     availableColor || '#94A3B8';
   expenseColorMap[title] = assignedColor;
   return assignedColor; }
+  const expenseTypeMap = {
+  Fixed: [
+    'แม่',
+    'ศรีสวัสดิ์',
+    'สยามชัย',
+    'แชร์',
+    '3BB'
+  ],
+  Variable: [
+    'Tpay later',
+    'SEasy',
+    'Spay later',
+    'AIS Bill'
+  ]
+};
+function getExpenseType(title) {
+  if (expenseTypeMap.Fixed.includes(title)) {
+    return 'Fixed'; }
+  if (expenseTypeMap.Variable.includes(title)) {
+    return 'Variable'; }
+  return null; }
+function renderExpenseTypeSummary(entries) {
+  const container =
+    document.getElementById('expenseTypeSummary');
+  if (!container) return;
+  const expenses = (entries || [])
+    .filter(item => item.financial_type === 'Expense');
+  if (expenses.length === 0) {
+    container.innerHTML = '';
+    return; }
+  let fixedTotal = 0;
+  let variableTotal = 0;
+  expenses.forEach(item => {
+    const amount = Number(item.amount || 0);
+    const type = getExpenseType(item.title);
+    if (type === 'Fixed') {
+      fixedTotal += amount; }
+    if (type === 'Variable') {
+      variableTotal += amount; }
+  });
+  container.innerHTML = `
+    <div class="expense-type-card fixed">
+      <div class="expense-type-label">
+        FIXED
+      </div>
+      <div class="expense-type-amount">
+        ฿${fixedTotal.toLocaleString('en-US', {
+          minimumFractionDigits: 2
+        })}
+      </div>
+    </div>
+    <div class="expense-type-card variable">
+      <div class="expense-type-label">
+        VARIABLE
+      </div>
+      <div class="expense-type-amount">
+        ฿${variableTotal.toLocaleString('en-US', {
+          minimumFractionDigits: 2
+        })}
+      </div>
+    </div>
+  `;
+  }
   function renderExpenseBreakdown(entries) {
   const container = document.getElementById('expenseBreakdownList');
   const expenses = (entries || [])
