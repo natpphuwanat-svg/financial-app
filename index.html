@@ -810,6 +810,64 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   background: var(--expense-type-color);
   transition: width 0.25s ease;
 }
+.top-spending-section {
+  margin-top: 2px;
+}
+
+.top-spending-title {
+  margin-bottom: 13px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: var(--text-sub);
+  text-transform: uppercase;
+}
+
+.top-spending-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.top-spending-item {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 10px;
+  min-height: 42px;
+}
+
+.top-spending-rank {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-sub);
+  line-height: 1;
+  text-align: left;
+}
+
+.top-spending-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.top-spending-amount {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-main);
+  white-space: nowrap;
+  text-align: right;
+}
+
+.top-spending-empty {
+  padding: 6px 0 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-sub);
+}
 </style>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1072,6 +1130,10 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   <div class="expense-chart" id="expenseBreakdownList">
    <div class="expense-chart-track"></div>
   </div>
+<div class="top-spending-section" id="topSpendingSection">
+  <div class="top-spending-title">TOP SPENDING</div>
+  <div class="top-spending-list" id="topSpendingList"></div>
+</div>
 </section>
     </main>
   </div>
@@ -1670,6 +1732,39 @@ function renderExpenseTypeSummary(entries) {
       updateExpenseChartCompactState();
     }); 
   }
+  function renderTopSpending(entries) {
+  const container =
+    document.getElementById('topSpendingList');
+  if (!container) return;
+  const expenses = (entries || [])
+    .filter(item => item.financial_type === 'Expense')
+    .sort((a, b) =>
+      Number(b.amount || 0) - Number(a.amount || 0)
+    )
+    .slice(0, 3);
+  if (expenses.length === 0) {
+    container.innerHTML = `
+      <div class="top-spending-empty">
+        No expenses this month
+      </div>
+    `;
+    return; }
+  container.innerHTML = expenses.map((item, index) => `
+    <div class="top-spending-item">
+      <div class="top-spending-rank">
+        ${String(index + 1).padStart(2, '0')}
+      </div>
+      <div class="top-spending-name">
+        ${item.title}
+      </div>
+      <div class="top-spending-amount">
+        ฿${Number(item.amount || 0).toLocaleString('en-US', {
+          minimumFractionDigits: 2
+        })}
+      </div>
+    </div>
+  `).join('');
+ }
   document
   .getElementById('expenseBreakdownList')
   .addEventListener('click', (event) => {
