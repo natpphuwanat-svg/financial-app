@@ -518,6 +518,15 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   border-radius: 999px;
   transition: opacity 0.2s ease;
 }
+.expense-chart-bar.is-compact
+.expense-chart-selected-icon {
+  opacity: 0 !important;
+}
+
+.expense-chart-bar.is-tiny
+.expense-chart-dot {
+  opacity: 0 !important;
+}
 .expense-chart-icon {
   position: absolute;
   left: 50%;
@@ -553,7 +562,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   transform: translateX(-50%);
   padding: 5px 10px;
   border-radius: 999px;
-  color: var(--text-sub);
+  color: var(--text-main);
   font-size: 11px;
   font-weight: 800;
   line-height: 1;
@@ -574,7 +583,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--text-sub);
+  background: var(--text-main);
   transform: translateX(-50%);
   opacity: 0;
   pointer-events: none;
@@ -590,7 +599,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  color: var(--text-sub);
+  color: var(--text-main);
   transform: translateX(-50%);
   margin: 0;
   padding: 0;
@@ -609,13 +618,13 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   stroke-width: 2.1;
 }
 .expense-chart-item.is-selected .expense-chart-selected-icon {
-  opacity: 1;
+  opacity: 0.9;
 }
 .expense-chart-item.is-selected .expense-chart-percent {
   opacity: 0.9;
 }
 .expense-chart-item.is-selected .expense-chart-dot {
-  opacity: 1;
+  opacity: 0.9;
 }
 .expense-chart-track.has-selection
 .expense-chart-item:not(.is-selected)
@@ -700,6 +709,16 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .expense-chart-percent {
   opacity: 0.9;
 }
+.expense-chart-track.sub-mode
+.expense-chart-item:not(.is-type-dimmed)
+.expense-chart-selected-icon {
+  opacity: 0.9;
+}
+.expense-chart-track.sub-mode
+.expense-chart-item.is-type-dimmed
+.expense-chart-selected-icon {
+  opacity: 0.25;
+}
 
 .expense-chart-track.sub-mode
 .expense-chart-item.is-type-dimmed
@@ -752,13 +771,12 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
 
 .expense-type-card.fixed {
-  --expense-type-color: #8C6F61;
+  --expense-type-color: #A3CA7E;
 }
 
 .expense-type-card.variable {
-  --expense-type-color: #D0977C;
+  --expense-type-color: #B0CBE7;
 }
-
 .expense-type-top {
   display: flex;
   align-items: center;
@@ -1608,9 +1626,9 @@ function renderExpenseTypeSummary(entries) {
         let barColor = normalColor;
         if (selectedExpenseType) {
           if (itemType === 'Fixed') {
-            barColor = '#8C6F61';
+            barColor = '#A3CA7E';
           } else if (itemType === 'Variable') {
-            barColor = '#D0977C';
+            barColor = '#B0CBE7';
           } else {
             barColor = normalColor;
           }
@@ -1658,7 +1676,11 @@ function renderExpenseTypeSummary(entries) {
       }).join('')}
     </div>
   `;
-  lucide.createIcons(); }
+  lucide.createIcons();
+    requestAnimationFrame(() => {
+      updateExpenseChartCompactState();
+    }); 
+  }
   document
   .getElementById('expenseBreakdownList')
   .addEventListener('click', (event) => {
@@ -1688,6 +1710,22 @@ function renderExpenseTypeSummary(entries) {
         );
       });
   });
+  function updateExpenseChartCompactState() {
+  const bars = document.querySelectorAll(
+    '#expenseBreakdownList .expense-chart-bar'
+  );
+  bars.forEach(bar => {
+    const height = bar.getBoundingClientRect().height;
+    bar.classList.toggle(
+      'is-compact',
+      height < 32
+    );
+    bar.classList.toggle(
+      'is-tiny',
+      height < 24
+    );
+  });
+ }
   async function fetchData() {
   const requestId = ++fetchRequestId;
 
