@@ -704,20 +704,14 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .expense-chart-bar {
   opacity: 0.25;
 }
+.expense-chart-track.sub-mode
+.expense-chart-selected-icon {
+  display: none !important;
+}
 
 .expense-chart-track.sub-mode
 .expense-chart-percent {
   opacity: 0.9;
-}
-.expense-chart-track.sub-mode
-.expense-chart-item:not(.is-type-dimmed)
-.expense-chart-selected-icon {
-  opacity: 0.9;
-}
-.expense-chart-track.sub-mode
-.expense-chart-item.is-type-dimmed
-.expense-chart-selected-icon {
-  opacity: 0.25;
 }
 
 .expense-chart-track.sub-mode
@@ -726,11 +720,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   opacity: 0;
 }
 
-.expense-chart-track.sub-mode
-.expense-chart-item
-.expense-chart-selected-icon {
-  opacity: 0;
-}
 .expense-type-summary {
   display: grid;
   grid-template-columns: 1fr 1fr;
