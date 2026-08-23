@@ -970,6 +970,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   <div class="expense-chart" id="expenseBreakdownList">
    <div class="expense-chart-track"></div>
   </div>
+ <div class="expense-type-summary" id="expenseTypeSummary"></div>
 </section>
     </main>
   </div>
@@ -1571,6 +1572,7 @@ function renderExpenseTypeSummary(entries) {
       .filter(item => item.financial_type === 'Expense')
       .reduce((sum, item) => sum + Number(item.amount || 0), 0);
     renderExpenseBreakdown(entries);
+    renderExpenseTypeSummary(entries);
     const totalDeduction = entries
       .filter(item => item.financial_type === 'Deduction')
       .reduce((sum, item) => sum + Number(item.amount || 0), 0);
