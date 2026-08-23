@@ -1624,7 +1624,8 @@ function renderExpenseTypeSummary(entries) {
     selectedExpenseType = type; }
   selectedExpenseTitle = null;
   renderExpenseTypeSummary(currentEntries);
-  renderExpenseBreakdown(currentEntries); }
+  renderExpenseBreakdown(currentEntries);
+  renderTopSpending(currentEntries); }
   function renderExpenseBreakdown(entries) {
   const container =
     document.getElementById('expenseBreakdownList');
@@ -1738,23 +1739,46 @@ function renderExpenseTypeSummary(entries) {
   function renderTopSpending(entries) {
   const container =
     document.getElementById('topSpendingList');
-  if (!container) return;
+  const title =
+    document.querySelector('.top-spending-title');
+  if (!container || !title) return;
   const expenses = (entries || [])
-    .filter(item => item.financial_type === 'Expense')
-    .sort((a, b) =>
-      Number(b.amount || 0) - Number(a.amount || 0)
-    )
-    .slice(0, 3);
-  if (expenses.length === 0) {
+    .filter(item => item.financial_type === 'Expense');
+  let contextualExpenses = expenses;
+  if (selectedExpenseType) {
+    contextualExpenses = expenses.filter(
+      item => getExpenseType(item.title) === selectedExpenseType
+    );
+  }
+  contextualExpenses.sort(
+    (a, b) => Number(b.amount || 0) - Number(a.amount || 0)
+  );
+  const topExpenses = contextualExpenses.slice(0, 3);
+  if (selectedExpenseType === 'Fixed') {
+    title.innerText = 'TOP FIXED';
+  } else if (selectedExpenseType === 'Variable') {
+    title.innerText = 'TOP VARIABLE';
+  } else {
+    title.innerText = 'TOP SPENDING'; }
+  if (topExpenses.length === 0) {
     container.innerHTML = `
       <div class="top-spending-empty">
         No expenses this month
       </div>
     `;
     return; }
-  container.innerHTML = expenses.map((item, index) => `
+  const rankColor =
+    selectedExpenseType === 'Fixed'
+      ? '#A3CA7E'
+      : selectedExpenseType === 'Variable'
+        ? '#B0CBE7'
+        : 'var(--text-sub)';
+  container.innerHTML = topExpenses.map((item, index) => `
     <div class="top-spending-item">
-      <div class="top-spending-rank">
+      <div
+        class="top-spending-rank"
+        style="color: ${rankColor}; opacity: 0.9;"
+      >
         ${String(index + 1).padStart(2, '0')}
       </div>
       <div class="top-spending-name">
@@ -1767,7 +1791,7 @@ function renderExpenseTypeSummary(entries) {
       </div>
     </div>
   `).join('');
- }
+  }
   document
   .getElementById('expenseBreakdownList')
   .addEventListener('click', (event) => {
