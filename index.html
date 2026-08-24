@@ -194,7 +194,8 @@
       font-weight: 800;
       box-shadow: 0 4px 10px rgba(163, 230, 53, 0.18);
     }
-
+    .month-chip.future { opacity: 0.45; }
+    .month-chip.future.active { opacity: 1; }
     .balance-card { 
       background: var(--balance-bg);
       backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -1318,12 +1319,19 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   // Month Controller
   function renderMonthGrid() {
   const months = monthSets[currentMonthSet];
-  const monthHTML = months.map(item => `
-    <div class="month-chip ${item.m === selectedMonth ? 'active' : ''}"
-         onclick="selectMonth(${item.m})">
+  const monthHTML = months.map(item => {
+  const isFuture =
+    selectedYear > realCurrentYear ||
+    (selectedYear === realCurrentYear && item.m > realCurrentMonth);
+  return `
+    <div class="month-chip
+      ${item.m === selectedMonth ? 'active' : ''}
+      ${isFuture ? 'future' : ''}"
+      onclick="selectMonth(${item.m})">
       ${item.name}
     </div>
-  `).join('');
+  `;
+  }).join('');
   // Overview
   document.getElementById('monthGrid').innerHTML = monthHTML;
   // Entries
