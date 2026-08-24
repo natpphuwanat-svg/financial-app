@@ -488,6 +488,19 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   padding: 28px 12px 0;
   box-sizing: border-box;
 }
+.expense-chart-empty {
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+}
+
+.expense-chart-empty-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.9px;
+  color: var(--text-sub);
+  opacity: 0.85;
+}
 
 .expense-chart-item {
   position: relative;
@@ -870,6 +883,23 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   font-size: 12px;
   font-weight: 600;
   color: var(--text-sub);
+}
+.expense-type-card.is-empty {
+  cursor: default;
+}
+
+.expense-type-card.is-empty:active {
+  transform: none;
+}
+
+.expense-type-status {
+  margin-top: -4px;
+  margin-bottom: 9px;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-sub);
+  letter-spacing: 0.2px;
+  text-transform: lowercase;
 }
 </style>
 <script src="https://unpkg.com/lucide@latest"></script>
@@ -1330,15 +1360,29 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   updateYearUI();
   renderMonthGrid();
   fetchData();
-}
+  }
+  function isSelectedMonthFuture() {
+  return (
+    selectedYear > realCurrentYear ||
+    (
+      selectedYear === realCurrentYear &&
+      selectedMonth > realCurrentMonth
+    )
+   );
+  }
   function renderEntriesPage(entries) {
   const total = entries.length;
   document.getElementById('entriesTotal').innerText =
     `${total} ${total === 1 ? 'ENTRY' : 'ENTRIES'}`;
-  if (total === 0) {
+  if (filteredEntries.length === 0) {
+  const isFuture = isSelectedMonthFuture();
+  const emptyText =
+    isFuture && currentEntries.length === 0
+      ? 'Upcoming'
+      : 'No entries yet.';
   document.getElementById('entriesList').innerHTML =
-      `<div class="loading-state">No entries yet.</div>`;
-  return; }
+    `<div class="loading-state">${emptyText}</div>`;
+  return;}
   const grouped = {
     Income: [],
     Expense: [],
@@ -1537,9 +1581,8 @@ function renderExpenseTypeSummary(entries) {
   if (!container) return;
   const expenses = (entries || [])
     .filter(item => item.financial_type === 'Expense');
-  if (expenses.length === 0) {
-    container.innerHTML = '';
-    return; }
+  const isFuture = isSelectedMonthFuture();
+  const hasExpense = expenses.length > 0;
   let fixedTotal = 0;
   let variableTotal = 0;
   expenses.forEach(item => {
@@ -1562,10 +1605,17 @@ function renderExpenseTypeSummary(entries) {
   const variablePercent = totalExpense > 0
     ? Math.round((variableTotal / totalExpense) * 100)
     : 0;
+  const emptyState = !hasExpense;
   container.innerHTML = `
     <div
-      class="expense-type-card fixed ${selectedExpenseType === 'Fixed' ? 'is-active' : ''} ${selectedExpenseType === 'Variable' ? 'is-dimmed' : ''}"
-      onclick="selectExpenseType('Fixed')"
+      class="
+        expense-type-card
+        fixed
+        ${selectedExpenseType === 'Fixed' ? 'is-active' : ''}
+        ${selectedExpenseType === 'Variable' ? 'is-dimmed' : ''}
+        ${emptyState ? 'is-empty' : ''}
+      "
+      ${emptyState ? '' : `onclick="selectExpenseType('Fixed')"`}
       role="button"
       aria-label="Show Fixed expenses"
     >
@@ -1582,6 +1632,11 @@ function renderExpenseTypeSummary(entries) {
           minimumFractionDigits: 2
         })}
       </div>
+      ${isFuture && !hasExpense ? `
+        <div class="expense-type-status">
+          upcoming
+        </div>
+      ` : ''}
       <div class="expense-type-progress">
         <div
           class="expense-type-progress-bar"
@@ -1590,8 +1645,14 @@ function renderExpenseTypeSummary(entries) {
       </div>
     </div>
     <div
-      class="expense-type-card variable ${selectedExpenseType === 'Variable' ? 'is-active' : ''} ${selectedExpenseType === 'Fixed' ? 'is-dimmed' : ''}"
-      onclick="selectExpenseType('Variable')"
+      class="
+        expense-type-card
+        variable
+        ${selectedExpenseType === 'Variable' ? 'is-active' : ''}
+        ${selectedExpenseType === 'Fixed' ? 'is-dimmed' : ''}
+        ${emptyState ? 'is-empty' : ''}
+      "
+      ${emptyState ? '' : `onclick="selectExpenseType('Variable')"`}
       role="button"
       aria-label="Show Variable expenses"
     >
@@ -1608,6 +1669,11 @@ function renderExpenseTypeSummary(entries) {
           minimumFractionDigits: 2
         })}
       </div>
+      ${isFuture && !hasExpense ? `
+        <div class="expense-type-status">
+          upcoming
+        </div>
+      ` : ''}
       <div class="expense-type-progress">
         <div
           class="expense-type-progress-bar"
@@ -1633,8 +1699,17 @@ function renderExpenseTypeSummary(entries) {
     .filter(item => item.financial_type === 'Expense')
     .sort((a, b) => Number(b.amount) - Number(a.amount));
   if (expenses.length === 0) {
-    container.innerHTML = '';
-    return; }
+  const isFuture = isSelectedMonthFuture();
+  selectedExpenseTitle = null;
+  selectedExpenseType = null;
+  container.innerHTML = `
+    <div class="expense-chart-track expense-chart-empty">
+      <div class="expense-chart-empty-label">
+        ${isFuture ? 'UPCOMING' : 'NO EXPENSE'}
+      </div>
+    </div>
+  `;
+  return; }
   if (selectedExpenseType) {
     selectedExpenseTitle = null; }
   const totalExpense = expenses.reduce(
@@ -1761,12 +1836,21 @@ function renderExpenseTypeSummary(entries) {
   } else {
     title.innerText = 'TOP SPENDING'; }
   if (topExpenses.length === 0) {
-    container.innerHTML = `
-      <div class="top-spending-empty">
-        No expenses this month
-      </div>
-    `;
-    return; }
+  const isFuture = isSelectedMonthFuture();
+  let emptyText = 'No expenses this month';
+  if (isFuture && expenses.length === 0) {
+    emptyText = 'Upcoming';
+  } else if (selectedExpenseType === 'Fixed') {
+    emptyText = 'No fixed expenses this month';
+  } else if (selectedExpenseType === 'Variable') {
+    emptyText = 'No variable expenses this month';
+  }
+  container.innerHTML = `
+    <div class="top-spending-empty">
+      ${emptyText}
+    </div>
+  `;
+  return; }
   const rankColor =
     selectedExpenseType === 'Fixed'
       ? '#A3CA7E'
@@ -1942,8 +2026,7 @@ function renderExpenseTypeSummary(entries) {
     const expenseMoM = calculateMoM(totalExpense, previousExpense);
     const balanceMoM = calculateMoM(balance, previousBalance);
     const deductionMoM = calculateMoM(totalDeduction, previousDeduction);
-    const isFuture = selectedYear > realCurrentYear ||
-    (selectedYear === realCurrentYear && selectedMonth > realCurrentMonth);
+    const isFuture = isSelectedMonthFuture();
     lastFetchTime = Date.now();
     // 8. Remove updating state
     document.getElementById('balanceAmount').classList.remove('updating');
@@ -2221,8 +2304,13 @@ if (typeOrder[typeA] !== typeOrder[typeB]) {
 return typeOrder[typeA] - typeOrder[typeB]; }
 return Number(b.amount) - Number(a.amount); });
     if (highlights.length === 0) {
-      document.getElementById('entryList').innerHTML =
-        `<div class="loading-state">No highlights yet.</div>`; return; }
+  const highlightEmptyText =
+    isFuture && entries.length === 0
+      ? 'Upcoming'
+      : 'No highlights yet.';
+  document.getElementById('entryList').innerHTML =
+    `<div class="loading-state">${highlightEmptyText}</div>`;
+  return; }
     document.getElementById('entryList').innerHTML = `
       <div class="highlight-card">
         ${highlights.map(item => `
