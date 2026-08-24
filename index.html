@@ -1427,10 +1427,14 @@ function renderEntriesPage(entries) {
     );
   }
   if (filteredEntries.length === 0) {
-    document.getElementById('entriesList').innerHTML =
-      `<div class="loading-state">No entries yet.</div>`;
-    return;
-  }
+  const isFuture = isSelectedMonthFuture();
+  const emptyText =
+    isFuture && currentEntries.length === 0
+      ? 'Upcoming'
+      : 'No entries yet.';
+  document.getElementById('entriesList').innerHTML =
+    `<div class="loading-state">${emptyText}</div>`;
+  return; }
   const grouped = {
     Income: [],
     Expense: [],
