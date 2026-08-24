@@ -1370,33 +1370,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     )
    );
   }
-  function renderEntriesPage(entries) {
-  const total = entries.length;
-  document.getElementById('entriesTotal').innerText =
-    `${total} ${total === 1 ? 'ENTRY' : 'ENTRIES'}`;
-  if (filteredEntries.length === 0) {
-  const isFuture = isSelectedMonthFuture();
-  const emptyText =
-    isFuture && currentEntries.length === 0
-      ? 'Upcoming'
-      : 'No entries yet.';
-  document.getElementById('entriesList').innerHTML =
-    `<div class="loading-state">${emptyText}</div>`;
-  return;}
-  const grouped = {
-    Income: [],
-    Expense: [],
-    Deduction: [] };
-  entries.forEach(item => {
-  if (grouped[item.financial_type]) {
-      grouped[item.financial_type].push(item); }
-  });
-  document.getElementById('entriesList').innerHTML = `
-    ${renderEntryGroup('Income', grouped.Income)}
-    ${renderEntryGroup('Expense', grouped.Expense)}
-    ${renderEntryGroup('Deduction', grouped.Deduction)}
-  `;
-  lucide.createIcons(); }
   function renderEntryGroup(type, items) {
   if (!items || items.length === 0) return '';
   const typeClass = type.toLowerCase();
