@@ -467,34 +467,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .monthly-summary-mom.positive { color: #16a34a; }
 .monthly-summary-mom.negative { color: #ef4444; }
 .monthly-summary-mom.neutral { color: var(--text-sub); }
-.monthly-summary-upcoming {
-  display: none;
-  align-items: center;
-  gap: 7px;
-  margin-top: 10px;
-  padding-top: 10px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.6px;
-  color: var(--text-sub);
-}
-
-.upcoming-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-  animation: upcomingPulse 2.8s ease-in-out infinite;
-}
-
-@keyframes upcomingPulse {
-  0%, 100% {
-    opacity: 0.35;
-  }
-  50% {
-    opacity: 1;
-  }
-}
 
 .expense-chart {
   width: 100%;
@@ -1182,11 +1154,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
               </div>
             </div>
           </div>
-        <div class="monthly-summary-upcoming" id="insightsUpcomingState">
-    <span class="upcoming-dot"></span>
-      <span>UPCOMING</span>
         </div>
-      </div>
       </section>
       <section class="insights-section">
   <div class="insights-section-title">
@@ -2278,11 +2246,6 @@ renderMoM( 'insightsExpenseMoM', totalExpense, previousExpense, isFuture );
 renderMoM( 'insightsDeductionMoM', totalDeduction, previousDeduction, isFuture );
 renderMoM( 'insightsBalanceMoM', balance, previousBalance, isFuture );
 renderSavingsRateMoM( savingsRate, previousSavingsRate, isFuture );
-const insightsUpcomingState =
-  document.getElementById('insightsUpcomingState');
-if (insightsUpcomingState) {
-  insightsUpcomingState.style.display =
-    isFuture ? 'flex' : 'none'; }
     // 14. Select Highlights
 const highlightCandidates = []; entries.forEach(function(currentItem) {
 const previousItem = previous.find(function(item) { return ( item.financial_type === currentItem.financial_type && item.title === currentItem.title  );
