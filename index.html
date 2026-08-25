@@ -2278,6 +2278,11 @@ renderMoM( 'insightsExpenseMoM', totalExpense, previousExpense, isFuture );
 renderMoM( 'insightsDeductionMoM', totalDeduction, previousDeduction, isFuture );
 renderMoM( 'insightsBalanceMoM', balance, previousBalance, isFuture );
 renderSavingsRateMoM( savingsRate, previousSavingsRate, isFuture );
+const insightsUpcomingState =
+  document.getElementById('insightsUpcomingState');
+if (insightsUpcomingState) {
+  insightsUpcomingState.style.display =
+    isFuture ? 'flex' : 'none'; }
     // 14. Select Highlights
 const highlightCandidates = []; entries.forEach(function(currentItem) {
 const previousItem = previous.find(function(item) { return ( item.financial_type === currentItem.financial_type && item.title === currentItem.title  );
