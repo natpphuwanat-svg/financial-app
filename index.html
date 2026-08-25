@@ -2289,12 +2289,8 @@ if (typeOrder[typeA] !== typeOrder[typeB]) {
 return typeOrder[typeA] - typeOrder[typeB]; }
 return Number(b.amount) - Number(a.amount); });
     if (highlights.length === 0) {
-  const highlightEmptyText =
-    isFuture && entries.length === 0
-      ? 'Upcoming'
-      : 'No highlights yet.';
   document.getElementById('entryList').innerHTML =
-    `<div class="loading-state">${highlightEmptyText}</div>`;
+    `<div class="loading-state">No highlights yet.</div>`;
   return; }
     document.getElementById('entryList').innerHTML = `
       <div class="highlight-card">
