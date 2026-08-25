@@ -2164,7 +2164,7 @@ function renderMoM(elementId, currentValue, previousValue, isFuture) {
     previousValue !== 0;
   // เดือนอนาคตที่ยังไม่มีข้อมูล
   if (isFuture && !currentHasData) {
-    element.innerText = '';
+    element.innerText = 'Upcoming';
     element.className = 'monthly-summary-mom neutral';
     return; }
   // เดือนนี้ไม่มีข้อมูล
@@ -2206,7 +2206,7 @@ function renderSavingsRateMoM(currentRate, previousRate, isFuture) {
   const element = document.getElementById('insightsSavingsRateMoM');
   // เดือนอนาคตที่ยังไม่มีข้อมูล
   if (isFuture && totalIncome <= 0) {
-    element.innerText = '';
+    element.innerText = 'Upcoming';
     element.className = 'monthly-summary-mom neutral';
     return; }
   // เดือนนี้ไม่มี Income → Savings Rate คำนวณไม่ได้
@@ -2289,8 +2289,12 @@ if (typeOrder[typeA] !== typeOrder[typeB]) {
 return typeOrder[typeA] - typeOrder[typeB]; }
 return Number(b.amount) - Number(a.amount); });
     if (highlights.length === 0) {
+  const highlightEmptyText =
+    isFuture && entries.length === 0
+      ? 'Upcoming'
+      : 'No highlights yet.';
   document.getElementById('entryList').innerHTML =
-    `<div class="loading-state">No highlights yet.</div>`;
+    `<div class="loading-state">${highlightEmptyText}</div>`;
   return; }
     document.getElementById('entryList').innerHTML = `
       <div class="highlight-card">
