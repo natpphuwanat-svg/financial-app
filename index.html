@@ -282,6 +282,8 @@
     .entry-amount.income { color: var(--income-color); }
     .entry-amount.expense { color: var(--expense-color); }
     .entry-amount.deduction { color: var(--deduction-color); }
+    .highlight-empty { min-height: 70px; display: flex; align-items: center; justify-content: center;
+     padding: 15px 18px; color: var(--text-sub); font-size: 12px; font-weight: 600; text-align: center; }
 
     /* Liquid Glass Floating Bottom Action Bar */
 
@@ -2289,12 +2291,13 @@ if (typeOrder[typeA] !== typeOrder[typeB]) {
 return typeOrder[typeA] - typeOrder[typeB]; }
 return Number(b.amount) - Number(a.amount); });
     if (highlights.length === 0) {
-  const highlightEmptyText =
-    isFuture && entries.length === 0
-      ? 'Upcoming'
-      : 'No highlights yet.';
-  document.getElementById('entryList').innerHTML =
-    `<div class="loading-state">${highlightEmptyText}</div>`;
+  document.getElementById('entryList').innerHTML = `
+    <div class="highlight-card">
+      <div class="highlight-empty">
+        No highlights yet.
+      </div>
+    </div>
+  `;
   return; }
     document.getElementById('entryList').innerHTML = `
       <div class="highlight-card">
