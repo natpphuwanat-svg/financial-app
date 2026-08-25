@@ -2164,7 +2164,7 @@ function renderMoM(elementId, currentValue, previousValue, isFuture) {
     previousValue !== 0;
   // เดือนอนาคตที่ยังไม่มีข้อมูล
   if (isFuture && !currentHasData) {
-    element.innerText = 'upcoming';
+    element.innerText = '';
     element.className = 'monthly-summary-mom neutral';
     return; }
   // เดือนนี้ไม่มีข้อมูล
@@ -2206,7 +2206,7 @@ function renderSavingsRateMoM(currentRate, previousRate, isFuture) {
   const element = document.getElementById('insightsSavingsRateMoM');
   // เดือนอนาคตที่ยังไม่มีข้อมูล
   if (isFuture && totalIncome <= 0) {
-    element.innerText = 'upcoming';
+    element.innerText = '';
     element.className = 'monthly-summary-mom neutral';
     return; }
   // เดือนนี้ไม่มี Income → Savings Rate คำนวณไม่ได้
