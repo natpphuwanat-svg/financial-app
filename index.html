@@ -2233,9 +2233,12 @@ function renderMoM(elementId, currentValue, previousValue, isFuture) {
 }
 function renderSavingsRateMoM(currentRate, previousRate, isFuture) {
   const element = document.getElementById('insightsSavingsRateMoM');
+  const upcomingState = document.getElementById('insightsUpcomingState');
+  upcomingState.style.display = 'none';
   // เดือนอนาคตที่ยังไม่มีข้อมูล
   if (isFuture && totalIncome <= 0) {
-    element.innerText = '-';
+    upcomingState.style.display = 'flex';
+    element.innerText = '—';
     element.className = 'monthly-summary-mom neutral';
     return; }
   // เดือนนี้ไม่มี Income → Savings Rate คำนวณไม่ได้
