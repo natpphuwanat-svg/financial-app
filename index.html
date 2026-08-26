@@ -487,11 +487,31 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
 
 .upcoming-dot {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+@keyframes upcomingDotPulse {
+  0%,
+  45%,
+  100% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.upcoming-dot {
   width: 6px;
   height: 6px;
   flex: 0 0 6px;
   border-radius: 50%;
   background: currentColor;
+  animation: upcomingDotPulse 3.5s ease-in-out infinite;
 }
 .expense-chart {
   width: 100%;
