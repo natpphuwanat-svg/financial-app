@@ -2452,6 +2452,8 @@ return Number(b.amount) - Number(a.amount); });
       heroSection.style.display = 'none';
       placeholderView.style.display = 'none';
       insightsView.style.display = '';
+      requestAnimationFrame(() => {
+        updateExpenseChartCompactState(); });
       tabs[2].classList.add('active'); }
     lucide.createIcons(); }
 
