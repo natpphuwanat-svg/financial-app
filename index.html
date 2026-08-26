@@ -1149,7 +1149,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         <div class="insights-section-title">
           MONTHLY SUMMARY
         </div>
-        <div class="monthly-summary-card">
+        <div class="monthly-summary-card" id="insightsMonthlySummaryCard">
           <div class="monthly-summary-row">
             <div class="monthly-summary-label">Income</div>
             <div class="monthly-summary-value-group">
@@ -2261,6 +2261,8 @@ function renderMoM(elementId, currentValue, previousValue, isFuture) {
 function renderSavingsRateMoM(currentRate, previousRate, isFuture) {
   const element = document.getElementById('insightsSavingsRateMoM');
   const upcomingState = document.getElementById('insightsUpcomingState');
+  const monthlySummaryCard = document.getElementById('insightsMonthlySummaryCard');
+  monthlySummaryCard.classList.toggle('future-state', isFuture);
   upcomingState.style.display = 'none';
   element.style.display = '';
   // เดือนอนาคตที่ยังไม่มีข้อมูล
