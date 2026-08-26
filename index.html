@@ -1657,6 +1657,7 @@ function renderExpenseTypeSummary(entries) {
         ${selectedExpenseType === 'Fixed' ? 'is-active' : ''}
         ${selectedExpenseType === 'Variable' ? 'is-dimmed' : ''}
         ${emptyState ? 'is-empty' : ''}
+        ${isFuture && !hasExpense ? 'future-state' : ''}
       "
       ${emptyState ? '' : `onclick="selectExpenseType('Fixed')"`}
       role="button"
@@ -1675,11 +1676,6 @@ function renderExpenseTypeSummary(entries) {
           minimumFractionDigits: 2
         })}
       </div>
-      ${isFuture && !hasExpense ? `
-        <div class="expense-type-status">
-          upcoming
-        </div>
-      ` : ''}
       <div class="expense-type-progress">
         <div
           class="expense-type-progress-bar"
@@ -1694,6 +1690,7 @@ function renderExpenseTypeSummary(entries) {
         ${selectedExpenseType === 'Variable' ? 'is-active' : ''}
         ${selectedExpenseType === 'Fixed' ? 'is-dimmed' : ''}
         ${emptyState ? 'is-empty' : ''}
+        ${isFuture && !hasExpense ? 'future-state' : ''}
       "
       ${emptyState ? '' : `onclick="selectExpenseType('Variable')"`}
       role="button"
@@ -1712,11 +1709,6 @@ function renderExpenseTypeSummary(entries) {
           minimumFractionDigits: 2
         })}
       </div>
-      ${isFuture && !hasExpense ? `
-        <div class="expense-type-status">
-          upcoming
-        </div>
-      ` : ''}
       <div class="expense-type-progress">
         <div
           class="expense-type-progress-bar"
