@@ -483,6 +483,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   font-weight: 700;
   letter-spacing: 0.5px;
   color: var(--text-sub);
+  transform: translateX(-8px);
 }
 
 .upcoming-dot {
@@ -2238,7 +2239,7 @@ function renderSavingsRateMoM(currentRate, previousRate, isFuture) {
   // เดือนอนาคตที่ยังไม่มีข้อมูล
   if (isFuture && totalIncome <= 0) {
     upcomingState.style.display = 'flex';
-    element.innerText = '—';
+    element.innerText = '';
     element.className = 'monthly-summary-mom neutral';
     return; }
   // เดือนนี้ไม่มี Income → Savings Rate คำนวณไม่ได้
