@@ -1203,7 +1203,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
        <div class="monthly-summary-upcoming"
          id="insightsUpcomingState">
       <span class="upcoming-dot"></span>
-      <span>UPCOMING</span>
+      <span>Upcoming</span>
        </div>
         <div class="monthly-summary-mom" id="insightsSavingsRateMoM">
           —
@@ -2262,12 +2262,13 @@ function renderSavingsRateMoM(currentRate, previousRate, isFuture) {
   const element = document.getElementById('insightsSavingsRateMoM');
   const upcomingState = document.getElementById('insightsUpcomingState');
   upcomingState.style.display = 'none';
+  element.style.display = '';
   // เดือนอนาคตที่ยังไม่มีข้อมูล
   if (isFuture && totalIncome <= 0) {
-    upcomingState.style.display = 'flex';
-    element.innerText = '';
-    element.className = 'monthly-summary-mom neutral';
-    return; }
+  upcomingState.style.display = 'flex';
+  element.style.display = 'none';
+  element.innerText = '';
+  return; }
   // เดือนนี้ไม่มี Income → Savings Rate คำนวณไม่ได้
   if (totalIncome <= 0) {
     element.innerText = 'no data';
