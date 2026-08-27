@@ -2308,7 +2308,7 @@ function renderMoM(elementId, currentValue, previousValue, isFuture) {
     previousValue !== 0;
   // เดือนอนาคตที่ยังไม่มีข้อมูล
   if (isFuture && !currentHasData) {
-    element.innerText = '-';
+    element.innerText = '';
     element.className = 'monthly-summary-mom neutral';
     return; }
   // เดือนนี้ไม่มีข้อมูล
