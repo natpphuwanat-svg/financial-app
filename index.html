@@ -975,6 +975,35 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   color: var(--text-sub);
   text-align: center;
 }
+.top-spending-placeholder {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 6px 0 4px;
+}
+
+.top-spending-placeholder-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 18px;
+}
+
+.top-spending-placeholder-name {
+  width: 42%;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--text-sub);
+  opacity: 0.12;
+}
+
+.top-spending-placeholder-amount {
+  width: 18%;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--text-sub);
+  opacity: 0.08;
+}
 .expense-type-card.is-empty {
   cursor: default;
 }
