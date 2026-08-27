@@ -1759,7 +1759,7 @@ function renderExpenseTypeSummary(entries) {
         ${emptyState ? 'is-empty' : ''}
         ${isFuture && !hasExpense ? 'future-state' : ''}
       "
-      ${emptyState ? '' : `onclick="selectExpenseType('Fixed')"`}
+      ${isFuture ? '' : `onclick="selectExpenseType('Fixed')"`}
       role="button"
       aria-label="Show Fixed expenses"
     >
@@ -1792,7 +1792,7 @@ function renderExpenseTypeSummary(entries) {
         ${emptyState ? 'is-empty' : ''}
         ${isFuture && !hasExpense ? 'future-state' : ''}
       "
-      ${emptyState ? '' : `onclick="selectExpenseType('Variable')"`}
+      ${isFuture ? '' : `onclick="selectExpenseType('Variable')"`}
       role="button"
       aria-label="Show Variable expenses"
     >
