@@ -1745,9 +1745,6 @@ function renderExpenseTypeSummary(entries) {
   selectedExpenseTitle = null;
   selectedExpenseType = null;
   container.innerHTML = `
-    if (expenses.length === 0) {
-  const isFuture = isSelectedMonthFuture();
-  container.innerHTML = `
     <div class="expense-chart-track expense-chart-empty">
       <div class="expense-chart-empty-label">
         ${isFuture ? 'UPCOMING' : 'NO EXPENSE'}
