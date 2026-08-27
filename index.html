@@ -1745,9 +1745,26 @@ function renderExpenseTypeSummary(entries) {
   selectedExpenseTitle = null;
   selectedExpenseType = null;
   container.innerHTML = `
+    if (expenses.length === 0) {
+  const isFuture = isSelectedMonthFuture();
+    if (isFuture) {
+    container.innerHTML = `
+      <div class="expense-chart-track expense-chart-future">
+        ${Array.from({ length: 6 }, () => `
+          <div class="expense-chart-item future-placeholder">
+            <div class="expense-chart-bar-wrap">
+              <div class="expense-chart-bar future-placeholder-bar"></div>
+            </div>
+            <div class="expense-chart-icon future-placeholder-dot"></div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    return; }
+  container.innerHTML = `
     <div class="expense-chart-track expense-chart-empty">
       <div class="expense-chart-empty-label">
-        ${isFuture ? 'UPCOMING' : 'NO EXPENSE'}
+        NO EXPENSE
       </div>
     </div>
   `;
