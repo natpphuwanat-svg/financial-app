@@ -1922,14 +1922,29 @@ function renderExpenseTypeSummary(entries) {
     title.innerText = 'TOP SPENDING'; }
   if (topExpenses.length === 0) {
   const isFuture = isSelectedMonthFuture();
-  let emptyText = 'No expenses this month';
   if (isFuture && expenses.length === 0) {
-    emptyText = 'Upcoming';
-  } else if (selectedExpenseType === 'Fixed') {
+    container.innerHTML = `
+      <div class="top-spending-placeholder">
+        <div class="top-spending-placeholder-row">
+          <div class="top-spending-placeholder-name"></div>
+          <div class="top-spending-placeholder-amount"></div>
+        </div>
+        <div class="top-spending-placeholder-row">
+          <div class="top-spending-placeholder-name"></div>
+          <div class="top-spending-placeholder-amount"></div>
+        </div>
+        <div class="top-spending-placeholder-row">
+          <div class="top-spending-placeholder-name"></div>
+          <div class="top-spending-placeholder-amount"></div>
+        </div>
+      </div>
+    `;
+    return; }
+  let emptyText = 'No expenses this month';
+  if (selectedExpenseType === 'Fixed') {
     emptyText = 'No fixed expenses this month';
   } else if (selectedExpenseType === 'Variable') {
-    emptyText = 'No variable expenses this month';
-  }
+    emptyText = 'No variable expenses this month'; }
   container.innerHTML = `
     <div class="top-spending-empty">
       ${emptyText}
