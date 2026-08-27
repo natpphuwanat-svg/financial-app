@@ -1746,9 +1746,22 @@ function renderExpenseTypeSummary(entries) {
   selectedExpenseType = null;
   container.innerHTML = `
     <div class="expense-chart-track expense-chart-empty">
-      <div class="expense-chart-empty-label">
-        ${isFuture ? '' : 'NO EXPENSE'}
-      </div>
+  ${
+    isFuture
+      ? Array.from({ length: 6 }, () => `
+          <div class="expense-chart-item future-placeholder">
+            <div class="expense-chart-bar-wrap">
+              <div class="expense-chart-bar future-placeholder-bar"></div>
+            </div>
+            <div class="expense-chart-icon future-placeholder-dot"></div>
+          </div>
+        `).join('')
+      : `
+          <div class="expense-chart-empty-label">
+            NO EXPENSE
+          </div>
+        `
+      }
     </div>
   `;
   return; }
