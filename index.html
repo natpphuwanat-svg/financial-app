@@ -576,13 +576,19 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   opacity: 0.18;
   border-radius: 999px;
 }
-
+      
 .future-placeholder-dot {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
   width: 3px;
   height: 3px;
+  margin: 0;
+  padding: 0;
   border-radius: 50%;
   background: var(--text-sub);
   opacity: 0.06;
+  transform: translateX(-50%);
 }
 
 .expense-chart-bar-wrap {
