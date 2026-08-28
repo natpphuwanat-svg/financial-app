@@ -2035,9 +2035,13 @@ function renderMonthlyComparison(months) {
       </div>
     `;
   }).join(''); }
-async function fetchMonthlyComparisonMonths() {
+async function fetchMonthlyComparisonMonths(period = 3) {
   const months = [];
-  for (let offset = 2; offset >= 0; offset--) {
+  for (
+    let offset = period - 1;
+    offset >= 0;
+    offset--
+  ) {
     const date = new Date(
       selectedYear,
       selectedMonth - 1 - offset,
@@ -2047,11 +2051,8 @@ async function fetchMonthlyComparisonMonths() {
     const month = date.getMonth() + 1;
     const start =
       `${year}-${String(month).padStart(2, '0')}-01`;
-    const nextDate = new Date(
-      year,
-      month,
-      1
-    );
+    const nextDate =
+      new Date(year, month, 1);
     const nextStart =
       `${nextDate.getFullYear()}-${String(
         nextDate.getMonth() + 1
@@ -2062,7 +2063,9 @@ async function fetchMonthlyComparisonMonths() {
         .select('*')
         .gte('entry_date', start)
         .lt('entry_date', nextStart)
-        .order('entry_date', { ascending: false });
+        .order('entry_date', {
+          ascending: false
+        });
     if (error) {
       throw error;
     }
@@ -2540,7 +2543,8 @@ function renderExpenseTypeSummary(entries) {
     renderExpenseTypeSummary(entries);
     renderExpenseBreakdown(entries);
     renderTopSpending(entries);
-    fetchMonthlyComparisonMonths()
+    fetchMonthlyComparisonMonths(
+      monthlyComparisonPeriod )
     .then(months => {
     renderMonthlyComparison(months);
      })
