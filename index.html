@@ -1194,6 +1194,20 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   font-weight: 800;
   letter-spacing: 0.2px;
 }
+.monthly-comparison-scroll-content
+.monthly-comparison-header > div + div,
+.monthly-comparison-scroll-content
+.monthly-comparison-row > div + div {
+  border-left: 1px solid rgba(127, 127, 127, 0.10);
+}
+[data-theme="dark"]
+.monthly-comparison-scroll-content
+.monthly-comparison-header > div + div,
+[data-theme="dark"]
+.monthly-comparison-scroll-content
+.monthly-comparison-row > div + div {
+  border-left-color: rgba(255, 255, 255, 0.12);
+}
 .monthly-comparison-item-header {
   display: flex;
   align-items: center;
