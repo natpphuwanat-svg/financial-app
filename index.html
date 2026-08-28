@@ -2536,6 +2536,16 @@ function renderExpenseTypeSummary(entries) {
     renderExpenseTypeSummary(entries);
     renderExpenseBreakdown(entries);
     renderTopSpending(entries);
+    fetchMonthlyComparisonMonths()
+    .then(months => {
+    renderMonthlyComparison(months);
+     })
+    .catch(error => {
+     console.error(
+      'Monthly Comparison error:',
+      error
+     );
+    });
     const totalDeduction = entries
       .filter(item => item.financial_type === 'Deduction')
       .reduce((sum, item) => sum + Number(item.amount || 0), 0);
