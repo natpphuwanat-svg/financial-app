@@ -1957,13 +1957,17 @@ Object.keys(grouped).forEach(type => {
   if (monthlyComparisonPeriodBtn) {
   monthlyComparisonPeriodBtn.addEventListener(
     'click',
-    () => {
+    async () => {
       monthlyComparisonPeriod =
         monthlyComparisonPeriod === 3 ? 6 : 3;
       if (monthlyComparisonPeriodLabel) {
         monthlyComparisonPeriodLabel.innerText =
-          `${monthlyComparisonPeriod} MONTHS`;
-      }
+          `${monthlyComparisonPeriod} MONTHS`; }
+      const months =
+        await fetchMonthlyComparisonMonths(
+          monthlyComparisonPeriod
+        );
+      renderMonthlyComparison(months);
     }
    );
   }
