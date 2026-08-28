@@ -1207,6 +1207,37 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .monthly-comparison-header > div:not(:first-child) {
   border-left-color: rgba(255, 255, 255, 0.05);
 }
+.monthly-comparison-table.is-six-months {
+  width: max-content;
+  min-width: 100%;
+}
+
+.monthly-comparison-table.is-six-months
+.monthly-comparison-header,
+.monthly-comparison-table.is-six-months
+.monthly-comparison-row {
+  grid-template-columns:
+    92px
+    repeat(6, 78px);
+}
+
+.monthly-comparison-table.is-six-months
+.monthly-comparison-body {
+  width: max-content;
+  min-width: 100%;
+}
+
+.monthly-comparison-table-wrap.is-scrollable {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.monthly-comparison-table-wrap.is-scrollable::-webkit-scrollbar {
+  display: none;
+}
 </style>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
