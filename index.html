@@ -1926,6 +1926,60 @@ function getExpenseType(title) {
   if (expenseTypeMap.Variable.includes(title)) {
     return 'Variable'; }
   return null; }
+function getMonthlyComparisonEntries(entries, type) {
+  return (entries || [])
+    .filter(item => item.financial_type === type)
+    .reduce((groups, item) => {
+      const title = item.title || 'Untitled';
+      if (!groups[title]) {
+        groups[title] = {
+          title,
+          entries: []
+        };
+      }
+      groups[title].entries.push(item);
+      return groups;
+    }, {}); }
+function renderMonthlyComparison(entries) {
+  const body =
+    document.getElementById('monthlyComparisonBody');
+  if (!body) return;
+  const grouped =
+    getMonthlyComparisonEntries(
+      entries,
+      monthlyComparisonType
+    );
+  const items = Object.values(grouped)
+    .sort((a, b) => {
+      const amountA = a.entries.reduce(
+        (sum, item) => sum + Number(item.amount || 0),
+        0
+      );
+      const amountB = b.entries.reduce(
+        (sum, item) => sum + Number(item.amount || 0),
+        0
+      );
+      return amountB - amountA;
+    });
+  if (items.length === 0) {
+    body.innerHTML = '';
+    return; }
+  body.innerHTML = items.map(item => `
+    <div class="monthly-comparison-row">
+      <div class="monthly-comparison-item">
+        ${item.title}
+      </div>
+      <div class="monthly-comparison-value">
+        —
+      </div>
+      <div class="monthly-comparison-value">
+        —
+      </div>
+      <div class="monthly-comparison-value">
+        —
+      </div>
+    </div>
+  `).join(''); }
 function renderExpenseTypeSummary(entries) {
   const container =
     document.getElementById('expenseTypeSummary');
