@@ -2080,15 +2080,18 @@ function renderMonthlyComparison(months) {
   month5,
   month6
 ];
+const isSixMonths =
+  months.length === 6;
 monthElements.forEach((element, index) => {
   if (months[index]) {
     element.innerText =
       monthNames[months[index].month - 1];
+    element.style.display = 'flex';
   } else {
-    element.innerText = ''; }
+    element.innerText = '';
+    element.style.display = 'none';
+  }
   });
-  const isSixMonths =
-  months.length === 6;
   table.classList.toggle(
     'is-six-months',
     isSixMonths
