@@ -1942,46 +1942,95 @@ function getMonthlyComparisonEntries(entries, type) {
       groups[title].entries.push(item);
       return groups;
     }, {}); }
-function renderMonthlyComparison(entries) {
+function renderMonthlyComparison(months) {
   const body =
     document.getElementById('monthlyComparisonBody');
-  if (!body) return;
-  const grouped =
-    getMonthlyComparisonEntries(
-      entries,
+  const month1 =
+    document.getElementById('monthlyComparisonMonth1');
+  const month2 =
+    document.getElementById('monthlyComparisonMonth2');
+  const month3 =
+    document.getElementById('monthlyComparisonMonth3');
+  if (!body || !month1 || !month2 || !month3) {
+    return; }
+  if (!Array.isArray(months) || months.length !== 3) {
+    body.innerHTML = '';
+    month1.innerText = '—';
+    month2.innerText = '—';
+    month3.innerText = '—';
+    return;
+  }
+  const monthNames = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'
+  ];
+  month1.innerText =
+    monthNames[months[0].month - 1];
+  month2.innerText =
+    monthNames[months[1].month - 1];
+  month3.innerText =
+    monthNames[months[2].month - 1];
+  const rows =
+    buildMonthlyComparisonRows(
+      months,
       monthlyComparisonType
     );
-  const items = Object.values(grouped)
-    .sort((a, b) => {
-      const amountA = a.entries.reduce(
-        (sum, item) => sum + Number(item.amount || 0),
-        0
-      );
-      const amountB = b.entries.reduce(
-        (sum, item) => sum + Number(item.amount || 0),
-        0
-      );
-      return amountB - amountA;
-    });
-  if (items.length === 0) {
+  if (rows.length === 0) {
     body.innerHTML = '';
     return; }
-  body.innerHTML = items.map(item => `
-    <div class="monthly-comparison-row">
-      <div class="monthly-comparison-item">
-        ${item.title}
+  const lastMonthKey =
+    `${months[2].year}-${months[2].month}`;
+  rows.sort((a, b) => {
+    const amountA =
+      Number(a.months[lastMonthKey] || 0);
+    const amountB =
+      Number(b.months[lastMonthKey] || 0);
+    return amountB - amountA;
+  });
+  body.innerHTML = rows.map(row => {
+    const values = months.map(monthData => {
+      const key =
+        `${monthData.year}-${monthData.month}`;
+      const amount =
+        row.months[key];
+      if (
+        amount === undefined ||
+        amount === null
+      ) {
+        return `
+          <div class="monthly-comparison-value is-empty">
+            —
+          </div>
+        `;
+      }
+      return `
+        <div class="monthly-comparison-value">
+          ฿${Number(amount).toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          })}
+        </div>
+      `;
+    });
+    return `
+      <div class="monthly-comparison-row">
+        <div class="monthly-comparison-item">
+          ${row.title}
+        </div>
+        ${values.join('')}
       </div>
-      <div class="monthly-comparison-value">
-        —
-      </div>
-      <div class="monthly-comparison-value">
-        —
-      </div>
-      <div class="monthly-comparison-value">
-        —
-      </div>
-    </div>
-  `).join(''); }
+    `;
+  }).join(''); }
 async function fetchMonthlyComparisonMonths() {
   const months = [];
   for (let offset = 2; offset >= 0; offset--) {
