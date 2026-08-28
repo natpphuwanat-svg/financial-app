@@ -1188,20 +1188,28 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .monthly-comparison-body {
   width: 100%;
 }
+.monthly-comparison-value.is-empty {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+  font-size: 10px;
+  font-weight: 600;
+  opacity: 0.45;
+}
 [data-theme="dark"] .monthly-comparison-header {
   border-top-color: rgba(255, 255, 255, 0.05);
   border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
 [data-theme="dark"] .monthly-comparison-row {
-  border-bottom-color: rgba(255, 255, 255, 0.05);
+  border-bottom-color: rgba(255, 255, 255, 0.085);
 }
 
 [data-theme="dark"]
 .monthly-comparison-row > div:not(:first-child),
 [data-theme="dark"]
 .monthly-comparison-header > div:not(:first-child) {
-  border-left-color: rgba(255, 255, 255, 0.035);
+  border-left-color: rgba(255, 255, 255, 0.05);
 }
 </style>
 <script src="https://unpkg.com/lucide@latest"></script>
@@ -2015,7 +2023,7 @@ function renderMonthlyComparison(months) {
       }
       return `
         <div class="monthly-comparison-value">
-          ฿${Number(amount).toLocaleString('en-US', {
+          ${Number(amount).toLocaleString('en-US', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
           })}
