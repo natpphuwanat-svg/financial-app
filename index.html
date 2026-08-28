@@ -1946,6 +1946,14 @@ Object.keys(grouped).forEach(type => {
   let selectedExpenseType = null;
   let monthlyComparisonType = 'Expense';
   let monthlyComparisonPeriod = 3;
+  const monthlyComparisonTypeBtn =
+  document.getElementById('monthlyComparisonTypeBtn');
+  const monthlyComparisonTypeLabel =
+  document.getElementById('monthlyComparisonTypeLabel');
+  const monthlyComparisonPeriodBtn =
+  document.getElementById('monthlyComparisonPeriodBtn');
+  const monthlyComparisonPeriodLabel =
+  document.getElementById('monthlyComparisonPeriodLabel');
   function getExpenseBarColor(title) {
   if (!title) return '#94A3B8';
   if (expenseColorMap[title]) {
