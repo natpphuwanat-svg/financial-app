@@ -1145,6 +1145,17 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   overscroll-behavior-x: contain;
   scrollbar-width: none;
 }
+.monthly-comparison-fixed {
+  flex: 0 0 92px;
+  width: 92px;
+  background: var(--card-bg);
+  position: relative;
+  z-index: 2;
+  border-right: 1px solid rgba(127, 127, 127, 0.10);
+}
+[data-theme="dark"] .monthly-comparison-fixed {
+  border-right-color: rgba(255, 255, 255, 0.12);
+}
 
 .monthly-comparison-scroll::-webkit-scrollbar {
   display: none;
@@ -1204,7 +1215,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 
 .monthly-comparison-row > div:not(:first-child),
 .monthly-comparison-header > div:not(:first-child) {
-  border-left: 1px solid rgba(127, 127, 127, 0.045);
+  border-left: 1px solid rgba(127, 127, 127, 0.10);
 }
 
 .monthly-comparison-item {
@@ -1256,7 +1267,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .monthly-comparison-row > div:not(:first-child),
 [data-theme="dark"]
 .monthly-comparison-header > div:not(:first-child) {
-  border-left-color: rgba(255, 255, 255, 0.05);
+  border-left-color: rgba(255, 255, 255, 0.12);
 }
 .monthly-comparison-table.is-six-months {
   width: max-content;
