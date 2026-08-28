@@ -2004,15 +2004,35 @@ function renderMonthlyComparison(months) {
     document.getElementById('monthlyComparisonMonth2');
   const month3 =
     document.getElementById('monthlyComparisonMonth3');
-  if (!body || !month1 || !month2 || !month3) {
-    return; }
-  if (!Array.isArray(months) || months.length !== 3) {
+  const month4 =
+    document.getElementById('monthlyComparisonMonth4');
+  const month5 =
+    document.getElementById('monthlyComparisonMonth5');
+  const month6 =
+    document.getElementById('monthlyComparisonMonth6');
+  const table =
+    document.getElementById('monthlyComparisonTable');
+  const tableWrap =
+    document.querySelector('.monthly-comparison-table-wrap');
+  if (
+  !body ||
+  !month1 ||
+  !month2 ||
+  !month3 ||
+  !month4 ||
+  !month5 ||
+  !month6
+  ) {
+  return; }
+  if (
+  !Array.isArray(months) ||
+  ![3, 6].includes(months.length)
+  ) {
     body.innerHTML = '';
     month1.innerText = '—';
     month2.innerText = '—';
     month3.innerText = '—';
-    return;
-  }
+    return; }
   const monthNames = [
     'Jan',
     'Feb',
@@ -2027,12 +2047,31 @@ function renderMonthlyComparison(months) {
     'Nov',
     'Dec'
   ];
-  month1.innerText =
-    monthNames[months[0].month - 1];
-  month2.innerText =
-    monthNames[months[1].month - 1];
-  month3.innerText =
-    monthNames[months[2].month - 1];
+  const monthElements = [
+  month1,
+  month2,
+  month3,
+  month4,
+  month5,
+  month6
+];
+monthElements.forEach((element, index) => {
+  if (months[index]) {
+    element.innerText =
+      monthNames[months[index].month - 1];
+  } else {
+    element.innerText = '—'; }
+  });
+  const isSixMonths =
+  months.length === 6;
+  table.classList.toggle(
+    'is-six-months',
+    isSixMonths
+    );
+  tableWrap.classList.toggle(
+    'is-scrollable',
+    isSixMonths
+    );
   const rows =
     buildMonthlyComparisonRows(
       months,
@@ -2041,8 +2080,10 @@ function renderMonthlyComparison(months) {
   if (rows.length === 0) {
     body.innerHTML = '';
     return; }
+  const lastMonth =
+  months[months.length - 1];
   const lastMonthKey =
-    `${months[2].year}-${months[2].month}`;
+  `${lastMonth.year}-${lastMonth.month}`;
   rows.sort((a, b) => {
     const amountA =
       Number(a.months[lastMonthKey] || 0);
