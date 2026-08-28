@@ -1326,6 +1326,65 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   <div class="top-spending-list" id="topSpendingList"></div>
 </div>
 </section>
+<section class="insights-section">
+  <div class="insights-section-title">
+    MONTHLY COMPARISON
+  </div>
+  <div class="monthly-comparison-card" id="monthlyComparisonCard">
+    <div class="monthly-comparison-controls">
+      <button
+        type="button"
+        class="monthly-comparison-select"
+        id="monthlyComparisonTypeBtn"
+        aria-label="Select comparison type"
+      >
+        <span id="monthlyComparisonTypeLabel">EXPENSE</span>
+        <i data-lucide="chevron-down"></i>
+      </button>
+      <button
+        type="button"
+        class="monthly-comparison-select"
+        id="monthlyComparisonPeriodBtn"
+        aria-label="Select comparison period"
+      >
+        <span id="monthlyComparisonPeriodLabel">3 MONTHS</span>
+        <i data-lucide="chevron-down"></i>
+      </button>
+    </div>
+    <div class="monthly-comparison-table-wrap">
+      <div
+        class="monthly-comparison-table"
+        id="monthlyComparisonTable"
+      >
+        <div class="monthly-comparison-header">
+          <div class="monthly-comparison-item-header"></div>
+          <div
+            class="monthly-comparison-month"
+            id="monthlyComparisonMonth1"
+          >
+            —
+          </div>
+          <div
+            class="monthly-comparison-month"
+            id="monthlyComparisonMonth2"
+          >
+            —
+          </div>
+          <div
+            class="monthly-comparison-month"
+            id="monthlyComparisonMonth3"
+          >
+            —
+          </div>
+        </div>
+        <div
+          class="monthly-comparison-body"
+          id="monthlyComparisonBody"
+        ></div>
+      </div>
+    </div>
+  </div>
+</section>
     </main>
   </div>
   <!-- Floating Bottom Navigation -->
