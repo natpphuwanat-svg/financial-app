@@ -1891,6 +1891,8 @@ Object.keys(grouped).forEach(type => {
   const expenseColorMap = {};
   let selectedExpenseTitle = null;
   let selectedExpenseType = null;
+  let monthlyComparisonType = 'Expense';
+  let monthlyComparisonPeriod = 3;
   function getExpenseBarColor(title) {
   if (!title) return '#94A3B8';
   if (expenseColorMap[title]) {
