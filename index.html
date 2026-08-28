@@ -1108,7 +1108,50 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
 
 .monthly-comparison-table {
+  display: flex;
   width: 100%;
+  min-width: 100%;
+}
+.monthly-comparison-fixed {
+  flex: 0 0 92px;
+  width: 92px;
+  background: var(--card-bg);
+  position: relative;
+  z-index: 2;
+}
+
+.monthly-comparison-fixed-header {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px 0 14px;
+  color: var(--text-sub);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  border-top: 1px solid rgba(127, 127, 127, 0.07);
+  border-bottom: 1px solid rgba(127, 127, 127, 0.10);
+}
+
+.monthly-comparison-fixed-body {
+  width: 100%;
+}
+.monthly-comparison-scroll {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.monthly-comparison-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.monthly-comparison-scroll-content {
+  width: max-content;
   min-width: 100%;
 }
 
@@ -1176,29 +1219,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.monthly-comparison-table.is-six-months
-.monthly-comparison-item,
-.monthly-comparison-table.is-six-months
-.monthly-comparison-item-header {
-  position: sticky;
-  left: 0;
-  z-index: 3;
-  background: var(--card-bg);
-}
-.monthly-comparison-table.is-six-months
-.monthly-comparison-item,
-.monthly-comparison-table.is-six-months
-.monthly-comparison-item-header {
-  border-right: 1px solid rgba(127, 127, 127, 0.07);
-}
-[data-theme="dark"]
-.monthly-comparison-table.is-six-months
-.monthly-comparison-item,
-[data-theme="dark"]
-.monthly-comparison-table.is-six-months
-.monthly-comparison-item-header {
-  border-right-color: rgba(255, 255, 255, 0.08);
-}
 
 .monthly-comparison-value {
   display: flex;
@@ -1249,8 +1269,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .monthly-comparison-table.is-six-months
 .monthly-comparison-row {
   grid-template-columns:
-    92px
-    repeat(6, 78px);
+  repeat(6, 78px);
 }
 
 .monthly-comparison-table.is-six-months
@@ -1568,23 +1587,12 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       </button>
     </div>
     <div class="monthly-comparison-table-wrap">
-  <div
-    class="monthly-comparison-table"
-    id="monthlyComparisonTable"
-  >
-    <div class="monthly-comparison-fixed">
-      <div class="monthly-comparison-fixed-header">
-        Item
-      </div>
       <div
-        class="monthly-comparison-fixed-body"
-        id="monthlyComparisonFixedBody"
-      ></div>
-    </div>
-    <div class="monthly-comparison-scroll">
-      <div class="monthly-comparison-scroll-content">
-
+        class="monthly-comparison-table"
+        id="monthlyComparisonTable"
+      >
         <div class="monthly-comparison-header">
+          <div class="monthly-comparison-item-header">Item</div>
           <div
             class="monthly-comparison-month"
             id="monthlyComparisonMonth1"
@@ -1618,8 +1626,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
           <div
             class="monthly-comparison-month"
             id="monthlyComparisonMonth6"
-          >
-            —
+         >
+           —
           </div>
         </div>
         <div
@@ -1628,8 +1636,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         ></div>
       </div>
     </div>
-  </div>
-</div>
   </div>
 </section>
     </main>
