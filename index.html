@@ -1954,6 +1954,19 @@ Object.keys(grouped).forEach(type => {
   document.getElementById('monthlyComparisonPeriodBtn');
   const monthlyComparisonPeriodLabel =
   document.getElementById('monthlyComparisonPeriodLabel');
+  if (monthlyComparisonPeriodBtn) {
+  monthlyComparisonPeriodBtn.addEventListener(
+    'click',
+    () => {
+      monthlyComparisonPeriod =
+        monthlyComparisonPeriod === 3 ? 6 : 3;
+      if (monthlyComparisonPeriodLabel) {
+        monthlyComparisonPeriodLabel.innerText =
+          `${monthlyComparisonPeriod} MONTHS`;
+      }
+    }
+   );
+  }
   function getExpenseBarColor(title) {
   if (!title) return '#94A3B8';
   if (expenseColorMap[title]) {
