@@ -1568,12 +1568,23 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       </button>
     </div>
     <div class="monthly-comparison-table-wrap">
+  <div
+    class="monthly-comparison-table"
+    id="monthlyComparisonTable"
+  >
+    <div class="monthly-comparison-fixed">
+      <div class="monthly-comparison-fixed-header">
+        Item
+      </div>
       <div
-        class="monthly-comparison-table"
-        id="monthlyComparisonTable"
-      >
+        class="monthly-comparison-fixed-body"
+        id="monthlyComparisonFixedBody"
+      ></div>
+    </div>
+    <div class="monthly-comparison-scroll">
+      <div class="monthly-comparison-scroll-content">
+
         <div class="monthly-comparison-header">
-          <div class="monthly-comparison-item-header">Item</div>
           <div
             class="monthly-comparison-month"
             id="monthlyComparisonMonth1"
@@ -1607,8 +1618,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
           <div
             class="monthly-comparison-month"
             id="monthlyComparisonMonth6"
-         >
-           —
+          >
+            —
           </div>
         </div>
         <div
@@ -1617,6 +1628,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         ></div>
       </div>
     </div>
+  </div>
+</div>
   </div>
 </section>
     </main>
