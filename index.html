@@ -2154,6 +2154,8 @@ function renderMonthlyComparison(months) {
     document.getElementById('monthlyComparisonMonth6');
   const table =
     document.getElementById('monthlyComparisonTable');
+  const tableWrap =
+    document.querySelector('.monthly-comparison-table-wrap');
   if (
     !body ||
     !month1 ||
@@ -2216,6 +2218,12 @@ function renderMonthlyComparison(months) {
   if (table) {
     table.classList.toggle(
       'is-six-months',
+      isSixMonths
+    );
+  }
+  if (tableWrap) {
+    tableWrap.classList.toggle(
+      'is-scrollable',
       isSixMonths
     );
   }
