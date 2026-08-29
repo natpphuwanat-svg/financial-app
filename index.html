@@ -1168,25 +1168,15 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   position: relative;
 }
 .monthly-comparison-scroll-content {
-  background-image:
-    linear-gradient(
-      to right,
-      transparent 77px,
-      rgba(127, 127, 127, 0.10) 77px,
-      rgba(127, 127, 127, 0.10) 78px,
-      transparent 78px,
-
-      transparent 155px,
-      rgba(127, 127, 127, 0.10) 155px,
-      rgba(127, 127, 127, 0.10) 156px,
-      transparent 156px,
-
-      transparent 233px,
-      rgba(127, 127, 127, 0.10) 233px,
-      rgba(127, 127, 127, 0.10) 234px,
-      transparent 234px
-    );
-  background-repeat: no-repeat;
+  background-image: repeating-linear-gradient(
+    to right,
+    transparent 0,
+    transparent 77px,
+    rgba(127, 127, 127, 0.10) 77px,
+    rgba(127, 127, 127, 0.10) 78px
+  );
+  background-size: 78px 100%;
+  background-repeat: repeat-x;
 }
 
 .monthly-comparison-header,
