@@ -1153,10 +1153,18 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   background: var(--card-bg);
   position: relative;
   z-index: 2;
-  border-right: 1px solid rgba(127, 127, 127, 0.08);
 }
-[data-theme="dark"] .monthly-comparison-fixed {
-  border-right-color: rgba(255, 255, 255, 0.09);
+
+.monthly-comparison-fixed::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(127, 127, 127, 0.08);
+  pointer-events: none;
+  z-index: 3;
 }
 
 .monthly-comparison-scroll::-webkit-scrollbar {
