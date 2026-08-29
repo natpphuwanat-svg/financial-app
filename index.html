@@ -1118,7 +1118,13 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .monthly-comparison-table-wrap.is-scrollable::-webkit-scrollbar {
   display: none;
 }
-
+.monthly-comparison-item-header,
+.monthly-comparison-item {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  background: var(--bg-color);
+}
 .monthly-comparison-table {
   width: 100%;
   min-width: 100%;
