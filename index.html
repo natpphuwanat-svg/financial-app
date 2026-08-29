@@ -1126,9 +1126,17 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   background: var(--card-bg);
 }
 .monthly-comparison-table {
-  width: 100%;
+  width: max-content;
   min-width: 100%;
   padding-left: 8px;
+}
+
+.monthly-comparison-header,
+.monthly-comparison-row {
+  display: grid;
+  grid-template-columns:
+    92px
+    repeat(6, 78px);
 }
 
 .monthly-comparison-header,
@@ -1222,20 +1230,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 
 [data-theme="dark"] .monthly-comparison-row {
   border-bottom-color: rgba(255, 255, 255, 0.085);
-}
-
-/* Monthly Comparison — One Table */
-.monthly-comparison-table {
-  width: max-content;
-  min-width: 100%;
-}
-
-.monthly-comparison-header,
-.monthly-comparison-row {
-  display: grid;
-  grid-template-columns:
-    92px
-    repeat(6, 78px);
 }
 
 .monthly-comparison-item-header,
