@@ -1208,13 +1208,22 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   font-weight: 600;
   opacity: 0.45;
 }
-[data-theme="dark"] .monthly-comparison-header {
-  border-top-color: rgba(255, 255, 255, 0.05);
-  border-bottom-color: rgba(255, 255, 255, 0.08);
+.monthly-comparison-item-header,
+.monthly-comparison-item {
+  border-right: 1px solid rgba(127, 127, 127, 0.010);
 }
 
-[data-theme="dark"] .monthly-comparison-row {
-  border-bottom-color: rgba(255, 255, 255, 0.085);
+.monthly-comparison-value {
+  border-right: 1px solid rgba(127, 127, 127, 0.010);
+}
+
+.monthly-comparison-header > div:not(.monthly-comparison-item-header) {
+  border-right: 1px solid rgba(127, 127, 127, 0.010);
+}
+
+.monthly-comparison-header > div:last-child,
+.monthly-comparison-row > div:last-child {
+  border-right: none;
 }
 
 /* Monthly Comparison — One Table */
