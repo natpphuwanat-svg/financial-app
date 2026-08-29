@@ -1166,15 +1166,20 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   min-width: 100%;
   position: relative;
 }
-.monthly-comparison-scroll-content::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 156px;
-  width: 1px;
-  background: rgba(127, 127, 127, 0.10);
-  pointer-events: none;
+.monthly-comparison-scroll-content {
+  background-image:
+    linear-gradient(
+      to right,
+      transparent 77px,
+      rgba(127, 127, 127, 0.10) 77px,
+      rgba(127, 127, 127, 0.10) 78px,
+      transparent 78px,
+      transparent 155px,
+      rgba(127, 127, 127, 0.10) 155px,
+      rgba(127, 127, 127, 0.10) 156px,
+      transparent 156px
+    );
+  background-repeat: no-repeat;
 }
 .monthly-comparison-header,
 .monthly-comparison-row {
