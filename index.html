@@ -1107,6 +1107,24 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   overflow-y: hidden;
 }
 
+.monthly-comparison-table-wrap.is-scrollable {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.monthly-comparison-table-wrap.is-scrollable::-webkit-scrollbar {
+  display: none;
+}
+.monthly-comparison-item-header,
+.monthly-comparison-item {
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  background: var(--card-bg);
+}
 .monthly-comparison-table {
   width: 100%;
   min-width: 100%;
