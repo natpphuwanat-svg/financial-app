@@ -1108,83 +1108,9 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
 
 .monthly-comparison-table {
-  display: flex;
   width: 100%;
   min-width: 100%;
   padding-left: 8px;
-  border: 1px solid rgba(127, 127, 127, 0.10);
-}
-
-.monthly-comparison-fixed {
-  flex: 0 0 92px;
-  width: 92px;
-  background: var(--card-bg);
-  position: relative;
-  z-index: 2;
-}
-
-.monthly-comparison-fixed-header {
-  height: 34px;
-  display: flex;
-  align-items: center;
-  padding: 0 10px 0 14px;
-  color: var(--text-sub);
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 0.2px;
-  border-bottom: 1px solid rgba(127, 127, 127, 0.10);
-}
-
-.monthly-comparison-fixed-body {
-  width: 100%;
-}
-.monthly-comparison-scroll {
-  flex: 1 1 auto;
-  min-width: 0;
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-x: contain;
-  scrollbar-width: none;
-}
-.monthly-comparison-fixed {
-  flex: 0 0 92px;
-  width: 92px;
-  background: var(--card-bg);
-  position: relative;
-  z-index: 2;
-}
-
-.monthly-comparison-fixed::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 1px;
-  background: rgba(127, 127, 127, 0.08);
-  pointer-events: none;
-  z-index: 3;
-}
-
-.monthly-comparison-scroll::-webkit-scrollbar {
-  display: none;
-}
-
-.monthly-comparison-scroll-content {
-  width: max-content;
-  position: relative;
-}
-.monthly-comparison-scroll-content {
-  background-image: repeating-linear-gradient(
-    to right,
-    transparent 0,
-    transparent 77px,
-    rgba(127, 127, 127, 0.10) 77px,
-    rgba(127, 127, 127, 0.10) 78px
-  );
-  background-size: 78px 100%;
-  background-repeat: repeat-x;
 }
 
 .monthly-comparison-header,
@@ -1280,36 +1206,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   border-bottom-color: rgba(255, 255, 255, 0.085);
 }
 
-.monthly-comparison-table.is-six-months {
-  width: max-content;
-  min-width: 100%;
-}
-
-.monthly-comparison-table.is-six-months
-.monthly-comparison-header,
-.monthly-comparison-table.is-six-months
-.monthly-comparison-row {
-  grid-template-columns:
-  repeat(6, 78px);
-}
-
-.monthly-comparison-table.is-six-months
-.monthly-comparison-body {
-  width: max-content;
-  min-width: 100%;
-}
-
-.monthly-comparison-table-wrap.is-scrollable {
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-x: contain;
-  scrollbar-width: none;
-}
-
-.monthly-comparison-table-wrap.is-scrollable::-webkit-scrollbar {
-  display: none;
-}
 /* Monthly Comparison — One Table */
 .monthly-comparison-table {
   width: max-content;
