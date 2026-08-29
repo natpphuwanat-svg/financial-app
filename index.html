@@ -1214,6 +1214,22 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   width: 100%;
 }
 
+.monthly-comparison-row > div:last-child {
+  border-right: none;
+}
+
+.monthly-comparison-table:not(.is-six-months) .monthly-comparison-header > div:nth-child(4) {
+  border-right: none;
+}
+
+.monthly-comparison-table.is-six-months .monthly-comparison-header > div:nth-child(4) {
+  border-right: 1px solid var(--glass-border);
+}
+
+.monthly-comparison-table.is-six-months .monthly-comparison-header > div:last-child {
+  border-right: none;
+}
+
 .monthly-comparison-value.is-empty {
   justify-content: center;
   color: var(--text-sub);
