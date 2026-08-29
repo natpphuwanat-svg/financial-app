@@ -1310,6 +1310,49 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .monthly-comparison-table-wrap.is-scrollable::-webkit-scrollbar {
   display: none;
 }
+/* Monthly Comparison — One Table */
+.monthly-comparison-table {
+  width: max-content;
+  min-width: 100%;
+}
+
+.monthly-comparison-header,
+.monthly-comparison-row {
+  display: grid;
+  grid-template-columns:
+    92px
+    repeat(6, 78px);
+}
+
+.monthly-comparison-item-header,
+.monthly-comparison-item {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  background: var(--card-bg);
+}
+
+.monthly-comparison-item-header {
+  display: flex;
+  align-items: center;
+  padding: 0 10px 0 14px;
+  color: var(--text-sub);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+.monthly-comparison-item {
+  display: flex;
+  align-items: center;
+  padding: 0 10px 0 14px;
+  color: var(--text-main);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 </style>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
