@@ -1164,11 +1164,18 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .monthly-comparison-scroll-content {
   width: max-content;
   min-width: 100%;
-}
-.monthly-comparison-scroll-content {
   position: relative;
 }
-
+.monthly-comparison-scroll-content::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 78px;
+  width: 1px;
+  background: rgba(127, 127, 127, 0.10);
+  pointer-events: none;
+}
 .monthly-comparison-header,
 .monthly-comparison-row {
   display: grid;
