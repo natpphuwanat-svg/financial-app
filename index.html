@@ -1061,9 +1061,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   background: var(--bg-color);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
-  position: relative;
-  z-index: 50; 
-  overflow: visible;
+  overflow: hidden;
 }
 
 .monthly-comparison-controls {
@@ -1072,8 +1070,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   justify-content: space-between;
   gap: 10px;
   padding: 0 14px 14px;
-  position: relative;
-  z-index: 30;
 }
 
 .monthly-comparison-select {
@@ -1112,9 +1108,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   overflow-x: hidden;
   overflow-y: hidden;
   border-top: 1px solid var(--glass-border);
-  border-bottom-left-radius: 18px;
-  border-bottom-right-radius: 18px;
-  overflow: hidden;
 }
 
 .monthly-comparison-table-wrap.is-scrollable {
@@ -1133,9 +1126,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   width: max-content;
   min-width: 100%;
   padding-left: 0px;
-  position: relative;
-  z-index: 1;
 }
+
 .monthly-comparison-header,
 .monthly-comparison-row {
   display: grid;
@@ -1266,10 +1258,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   z-index: 20;
 }
-.monthly-comparison-dropdown-menu {
-  position: fixed;
-  z-index: 9999;
-}
 
 .monthly-comparison-dropdown-option {
   width: 100%;
@@ -1295,6 +1283,19 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 
 .monthly-comparison-dropdown-option.is-selected {
   background: rgba(127, 127, 127, 0.08);
+}
+.monthly-comparison-controls {
+  position: relative;
+  z-index: 30;
+}
+
+.monthly-comparison-dropdown {
+  position: relative;
+  z-index: 31;
+}
+
+.monthly-comparison-dropdown-menu {
+  z-index: 32;
 }
 </style>
 <script src="https://unpkg.com/lucide@latest"></script>
