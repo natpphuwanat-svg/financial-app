@@ -2065,6 +2065,20 @@ Object.keys(grouped).forEach(type => {
   if (monthlyComparisonPeriodBtn) {
   monthlyComparisonPeriodBtn.addEventListener(
     'click',
+    () => {
+      const menu =
+        document.getElementById(
+          'monthlyComparisonPeriodMenu'
+        );
+      if (!menu) {
+        return; }
+      menu.hidden = !menu.hidden;
+    }
+   );
+  }
+  if (monthlyComparisonPeriodBtn) {
+  monthlyComparisonPeriodBtn.addEventListener(
+    'click',
     async () => {
       monthlyComparisonPeriod =
         monthlyComparisonPeriod === 3 ? 6 : 3;
