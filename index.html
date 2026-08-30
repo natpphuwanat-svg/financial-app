@@ -289,7 +289,7 @@
 
 
     /* Liquid Glass Modal */
-    .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--modal-bg); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 0; align-items: flex-end; justify-content: center; }
+    .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--modal-bg); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 1000; align-items: flex-end; justify-content: center; }
     .modal.active { display: flex; }
     .modal-content { 
       background: var(--glass-card); 
@@ -1061,6 +1061,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   background: var(--bg-color);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
+  overflow: visible;
 }
 
 .monthly-comparison-controls {
