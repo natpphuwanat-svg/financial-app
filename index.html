@@ -1609,15 +1609,37 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
           </button>
         </div>
       </div>
-      <button
-        type="button"
-        class="monthly-comparison-select"
-        id="monthlyComparisonPeriodBtn"
-        aria-label="Select comparison period"
-      >
-        <span id="monthlyComparisonPeriodLabel">3 MONTHS</span>
-        <i data-lucide="chevron-down"></i>
-      </button>
+      <div class="monthly-comparison-dropdown">
+        <button
+          type="button"
+          class="monthly-comparison-select"
+          id="monthlyComparisonPeriodBtn"
+          aria-label="Select comparison period"
+          >
+          <span id="monthlyComparisonPeriodLabel">3 MONTHS</span>
+          <i data-lucide="chevron-down"></i>
+        </button>
+        <div
+          class="monthly-comparison-dropdown-menu"
+          id="monthlyComparisonPeriodMenu"
+          hidden
+          >
+          <button
+            type="button"
+            class="monthly-comparison-dropdown-option is-selected"
+            data-period="3"
+            >
+            3 MONTHS
+          </button>
+          <button
+            type="button"
+            class="monthly-comparison-dropdown-option"
+            data-period="6"
+            >
+            6 MONTHS
+          </button>
+        </div>
+      </div>
     </div>
     <div class="monthly-comparison-table-wrap">
   <div
