@@ -2076,23 +2076,6 @@ Object.keys(grouped).forEach(type => {
     }
    );
   }
-  if (monthlyComparisonPeriodBtn) {
-  monthlyComparisonPeriodBtn.addEventListener(
-    'click',
-    async () => {
-      monthlyComparisonPeriod =
-        monthlyComparisonPeriod === 3 ? 6 : 3;
-      if (monthlyComparisonPeriodLabel) {
-        monthlyComparisonPeriodLabel.innerText =
-          `${monthlyComparisonPeriod} MONTHS`; }
-      const months =
-        await fetchMonthlyComparisonMonths(
-          monthlyComparisonPeriod
-        );
-      renderMonthlyComparison(months);
-    }
-   );
-  }
   if (monthlyComparisonTypeBtn) {
   monthlyComparisonTypeBtn.addEventListener(
     'click',
@@ -2107,6 +2090,45 @@ Object.keys(grouped).forEach(type => {
     }
    );
   }
+  const monthlyComparisonPeriodOptions =
+  document.querySelectorAll(
+    '#monthlyComparisonPeriodMenu .monthly-comparison-dropdown-option'
+  );
+  monthlyComparisonPeriodOptions.forEach(option => {
+  option.addEventListener(
+    'click',
+    async () => {
+      const selectedPeriod =
+        Number(option.dataset.period);
+      if (![3, 6].includes(selectedPeriod)) {
+        return; }
+      monthlyComparisonPeriod =
+        selectedPeriod;
+      if (monthlyComparisonPeriodLabel) {
+        monthlyComparisonPeriodLabel.innerText =
+          `${selectedPeriod} MONTHS`; }
+      monthlyComparisonPeriodOptions.forEach(
+        item => {
+          item.classList.toggle(
+            'is-selected',
+            item === option
+          );
+        }
+      );
+      const menu =
+        document.getElementById(
+          'monthlyComparisonPeriodMenu'
+        );
+      if (menu) {
+        menu.hidden = true; }
+      const months =
+        await fetchMonthlyComparisonMonths(
+          selectedPeriod
+        );
+      renderMonthlyComparison(months);
+    }
+   );
+  });
   const monthlyComparisonTypeOptions =
   document.querySelectorAll(
     '.monthly-comparison-dropdown-option'
