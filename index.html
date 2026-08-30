@@ -1061,6 +1061,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   background: var(--bg-color);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
+  position: relative;
+  z-index: 50; 
   overflow: visible;
 }
 
@@ -1112,6 +1114,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   border-top: 1px solid var(--glass-border);
   border-bottom-left-radius: 18px;
   border-bottom-right-radius: 18px;
+  overflow: hidden;
 }
 
 .monthly-comparison-table-wrap.is-scrollable {
