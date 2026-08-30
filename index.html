@@ -2071,6 +2071,46 @@ Object.keys(grouped).forEach(type => {
     }
    );
   }
+  const monthlyComparisonTypeOptions =
+  document.querySelectorAll(
+    '.monthly-comparison-dropdown-option'
+  );
+  monthlyComparisonTypeOptions.forEach(option => {
+  option.addEventListener(
+    'click',
+    async () => {
+      const selectedType =
+        option.dataset.type;
+      if (!selectedType) {
+        return; }
+      monthlyComparisonType =
+        selectedType;
+      if (monthlyComparisonTypeLabel) {
+        monthlyComparisonTypeLabel.innerText =
+          selectedType.toUpperCase();
+      }
+      monthlyComparisonTypeOptions.forEach(
+        item => {
+          item.classList.toggle(
+            'is-selected',
+            item === option
+          );
+        }
+      );
+      const menu =
+        document.getElementById(
+          'monthlyComparisonTypeMenu'
+        );
+      if (menu) {
+        menu.hidden = true; }
+      const months =
+        await fetchMonthlyComparisonMonths(
+          monthlyComparisonPeriod
+        );
+      renderMonthlyComparison(months);
+    }
+   );
+  });
   function getExpenseBarColor(title) {
   if (!title) return '#94A3B8';
   if (expenseColorMap[title]) {
