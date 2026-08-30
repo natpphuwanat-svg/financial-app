@@ -1978,6 +1978,14 @@ Object.keys(grouped).forEach(type => {
     }
    );
   }
+  if (monthlyComparisonTypeBtn) {
+  monthlyComparisonTypeBtn.addEventListener(
+    'click',
+    () => {
+      console.log('Monthly Comparison Type clicked');
+    }
+   );
+  }
   function getExpenseBarColor(title) {
   if (!title) return '#94A3B8';
   if (expenseColorMap[title]) {
