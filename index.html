@@ -289,7 +289,7 @@
 
 
     /* Liquid Glass Modal */
-    .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--modal-bg); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 1000; align-items: flex-end; justify-content: center; }
+    .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--modal-bg); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 0; align-items: flex-end; justify-content: center; }
     .modal.active { display: flex; }
     .modal-content { 
       background: var(--glass-card); 
@@ -1070,7 +1070,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   gap: 10px;
   padding: 0 14px 14px;
   position: relative;
-  z-index: 60;
+  z-index: 30;
 }
 
 .monthly-comparison-select {
@@ -1109,8 +1109,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   overflow-x: hidden;
   overflow-y: hidden;
   border-top: 1px solid var(--glass-border);
-  border-bottom-left-radius: 18px
-  border-bottom-right-radius: 18px
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
 }
 
 .monthly-comparison-table-wrap.is-scrollable {
