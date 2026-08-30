@@ -2052,7 +2052,13 @@ Object.keys(grouped).forEach(type => {
   monthlyComparisonTypeBtn.addEventListener(
     'click',
     () => {
-      console.log('Monthly Comparison Type clicked');
+      const menu =
+        document.getElementById(
+          'monthlyComparisonTypeMenu'
+        );
+      if (!menu) {
+        return; }
+      menu.hidden = !menu.hidden;
     }
    );
   }
