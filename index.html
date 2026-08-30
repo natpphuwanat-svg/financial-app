@@ -2129,6 +2129,45 @@ Object.keys(grouped).forEach(type => {
     }
    );
   });
+  document.addEventListener('click', event => {
+  const target = event.target;
+  const typeDropdown =
+    document.querySelector(
+      '#monthlyComparisonTypeBtn'
+    )?.closest(
+      '.monthly-comparison-dropdown'
+    );
+  const periodDropdown =
+    document.querySelector(
+      '#monthlyComparisonPeriodBtn'
+    )?.closest(
+      '.monthly-comparison-dropdown'
+    );
+  if (
+    typeDropdown &&
+    !typeDropdown.contains(target)
+  ) {
+    const menu =
+      document.getElementById(
+        'monthlyComparisonTypeMenu'
+      );
+    if (menu) {
+      menu.hidden = true;
+    }
+  }
+  if (
+    periodDropdown &&
+    !periodDropdown.contains(target)
+  ) {
+    const menu =
+      document.getElementById(
+        'monthlyComparisonPeriodMenu'
+      );
+    if (menu) {
+      menu.hidden = true;
+    }
+   }
+  });
   const monthlyComparisonTypeOptions =
   document.querySelectorAll(
     '.monthly-comparison-dropdown-option'
