@@ -1061,7 +1061,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   background: var(--bg-color);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
-  overflow: hidden;
 }
 
 .monthly-comparison-controls {
@@ -1070,6 +1069,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   justify-content: space-between;
   gap: 10px;
   padding: 0 14px 14px;
+  position: relative;
+  z-index: 30;
 }
 
 .monthly-comparison-select {
@@ -1108,6 +1109,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   overflow-x: hidden;
   overflow-y: hidden;
   border-top: 1px solid var(--glass-border);
+  border-bottom-left-radius: 18px
+  border-bottom-right-radius: 18px
 }
 
 .monthly-comparison-table-wrap.is-scrollable {
