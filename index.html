@@ -2315,6 +2315,22 @@ function getMonthlyComparisonEntries(entries, type) {
       groups[title].entries.push(item);
       return groups;
     }, {}); }
+function formatMonthlyComparisonMonth(
+  monthData,
+  months,
+  monthNames
+) {
+  const crossesYear =
+    months.some(
+      month => month.year !== months[0].year
+    );
+  const monthName =
+    monthNames[monthData.month - 1];
+  if (!crossesYear) {
+    return monthName; }
+  const shortYear =
+    String(monthData.year).slice(-2);
+  return `${monthName} ’${shortYear}`; }
 function renderMonthlyComparison(months) {
   const body = document.getElementById('monthlyComparisonBody');
   const month1 = document.getElementById('monthlyComparisonMonth1');
@@ -2364,7 +2380,7 @@ function renderMonthlyComparison(months) {
   const monthElements = [month1, month2, month3, month4, month5, month6, month7, month8, month9, month10, month11, month12 ];
   monthElements.forEach((element, index) => {
     if (months[index]) {
-      element.innerText = monthNames[months[index].month - 1];
+      element.innerText = formatMonthlyComparisonMonth (months[index], months, monthNames);
       element.style.display = 'flex';
     } else {
       element.innerText = '';
