@@ -2288,7 +2288,7 @@ function renderMonthlyComparison(months) {
     tableWrap.classList.toggle('is-scrollable', isSixMonths); }
   if (table) {
     table.classList.toggle('is-six-months', isSixMonths); }
-  if (!Array.isArray(months) || ![3, 6].includes(months.length)) {
+  if (!Array.isArray(months) || ![3, 6, 9, 12].includes(months.length)) {
     body.innerHTML = '';
     return; }
   const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
