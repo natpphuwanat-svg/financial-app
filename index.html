@@ -2334,11 +2334,29 @@ function renderMonthlyComparison(months) {
   if (!body || !month1 || !month2 || !month3 || !month4 || !month5 || !month6 ||
                 !month7 || !month8 || !month9 || !month10 || !month11 || !month12 ) return;
   const isSixMonths = months && months.length === 6;
+  const isNineMonths = months && months.length === 9;
+  const isTwelveMonths = months && months.length === 12;
   if (tableWrap) {
     tableWrap.scrollLeft = 0;
-    tableWrap.classList.toggle('is-scrollable', isSixMonths); }
+    tableWrap.classList.toggle(
+      'is-scrollable',
+      months && months.length > 3
+    );
+  }
   if (table) {
-    table.classList.toggle('is-six-months', isSixMonths); }
+    table.classList.toggle(
+      'is-six-months',
+      isSixMonths
+    );
+    table.classList.toggle(
+      'is-nine-months',
+      isNineMonths
+    );
+    table.classList.toggle(
+      'is-twelve-months',
+      isTwelveMonths
+    );
+  }
   if (!Array.isArray(months) || ![3, 6, 9, 12].includes(months.length)) {
     body.innerHTML = '';
     return; }
