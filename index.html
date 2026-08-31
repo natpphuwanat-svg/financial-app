@@ -2315,9 +2315,16 @@ function renderMonthlyComparison(months) {
   const month4 = document.getElementById('monthlyComparisonMonth4');
   const month5 = document.getElementById('monthlyComparisonMonth5');
   const month6 = document.getElementById('monthlyComparisonMonth6');
+  const month7 = document.getElementById('monthlyComparisonMonth7');
+  const month8 = document.getElementById('monthlyComparisonMonth8');
+  const month9 = document.getElementById('monthlyComparisonMonth9');
+  const month10 = document.getElementById('monthlyComparisonMonth10');
+  const month11 = document.getElementById('monthlyComparisonMonth11');
+  const month12 = document.getElementById('monthlyComparisonMonth12');
   const table = document.getElementById('monthlyComparisonTable');
   const tableWrap = document.querySelector('.monthly-comparison-table-wrap');
-  if (!body || !month1 || !month2 || !month3 || !month4 || !month5 || !month6) return;
+  if (!body || !month1 || !month2 || !month3 || !month4 || !month5 || !month6 ||
+                !month7 || !month8 || !month9 || !month10 || !month11 || !month12 ) return;
   const isSixMonths = months && months.length === 6;
   if (tableWrap) {
     tableWrap.scrollLeft = 0;
@@ -2328,7 +2335,7 @@ function renderMonthlyComparison(months) {
     body.innerHTML = '';
     return; }
   const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  const monthElements = [month1, month2, month3, month4, month5, month6];
+  const monthElements = [month1, month2, month3, month4, month5, month6, month7, month8, month9, month10, month11, month12 ];
   monthElements.forEach((element, index) => {
     if (months[index]) {
       element.innerText = monthNames[months[index].month - 1];
