@@ -2114,7 +2114,7 @@ Object.keys(grouped).forEach(type => {
     async () => {
       const selectedPeriod =
         Number(option.dataset.period);
-      if (![3, 6].includes(selectedPeriod)) {
+      if (![3, 6, 9, 12].includes(selectedPeriod)) {
         return; }
       monthlyComparisonPeriod =
         selectedPeriod;
