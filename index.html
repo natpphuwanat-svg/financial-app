@@ -2452,6 +2452,20 @@ function renderMonthlyComparison(months) {
     `;
   }).join('');
 }
+async function fetchPaymentHistory() {
+  const { data, error } =
+    await supabaseClient
+      .from('financial_entries')
+      .select(
+        'title, amount, entry_date, financial_type'
+      )
+      .eq('financial_type', 'Expense')
+      .order('entry_date', {
+        ascending: true
+      });
+  if (error) {
+    throw error; }
+  return data || []; }
 async function fetchMonthlyComparisonMonths(period = 3) {
   const months = [];
   for (
