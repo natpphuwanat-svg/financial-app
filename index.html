@@ -1327,6 +1327,23 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   font-weight: 500;
   line-height: 1.65;
 }
+.monthly-takeaway-empty {
+  padding: 4px 2px 2px;
+}
+
+.monthly-takeaway-empty-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.monthly-takeaway-empty-description {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--text-sub);
+}
 
 </style>
 <script src="https://unpkg.com/lucide@latest"></script>
@@ -3326,10 +3343,24 @@ function renderExpenseTypeSummary(entries) {
   const currentEntries = Array.isArray(entries)
     ? entries
     : [];
-  if (currentEntries.length === 0) {
-    container.innerHTML = '';
-    return; }
-  const incomeEntries =
+  const takeawayState =
+  getMonthlyTakeawayState(
+    currentEntries
+    );
+    if (
+      takeawayState.type !== 'HAS_DATA'
+      ) {
+        container.innerHTML = `
+        <div class="monthly-takeaway-empty">
+        <div class="monthly-takeaway-empty-title">
+        ${takeawayState.title}
+        </div>
+        <div class="monthly-takeaway-empty-description">
+        ${takeawayState.description}
+        </div>
+        </div>
+  `;
+  return; }
     currentEntries.filter(
       item => item.financial_type === 'Income'
     );
@@ -3871,6 +3902,59 @@ function renderExpenseTypeSummary(entries) {
       currentDeductionEntries.length,
     text:
       `เดือนนี้มียอดหักจากการทำงานทั้งหมด ${formatAmount(totalDeduction)} จาก ${currentDeductionEntries.length} รายการ`
+   };
+  }
+  function getMonthlyTakeawayState(
+  currentEntries
+  ) {
+  const hasData =
+    Array.isArray(currentEntries) &&
+    currentEntries.length > 0;
+  if (hasData) {
+    return {
+      type: 'HAS_DATA',
+      title: null,
+      description: null
+    };
+  }
+  const now = new Date();
+  const currentYear =
+    now.getFullYear();
+  const currentMonth =
+    now.getMonth() + 1;
+  if (
+    selectedYear > currentYear ||
+    (
+      selectedYear === currentYear &&
+      selectedMonth > currentMonth
+    )
+  ) {
+    return {
+      type: 'FUTURE',
+      title:
+        'เดือนที่เลือกยังมาไม่ถึง',
+      description:
+        'Monthly Takeaway จะพร้อมแสดงเมื่อถึงเดือนนั้นและมีข้อมูลทางการเงิน'
+    };
+  }
+  if (
+    selectedYear === currentYear &&
+    selectedMonth === currentMonth
+  ) {
+    return {
+      type: 'CURRENT_EMPTY',
+      title:
+        'เดือนนี้ยังไม่มีข้อมูลทางการเงิน',
+      description:
+        'เมื่อมีการบันทึกรายการแล้ว แอปจะเริ่มสรุปและวิเคราะห์ให้คุณ'
+    };
+  }
+  return {
+    type: 'PAST_EMPTY',
+    title:
+      'ยังไม่มีข้อมูลสำหรับเดือนที่เลือก',
+    description:
+      'ยังไม่สามารถวิเคราะห์ภาพรวมและแนวโน้มทางการเงินได้'
    };
   }
   async function fetchData() {
