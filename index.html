@@ -3441,16 +3441,15 @@ function renderExpenseTypeSummary(entries) {
     currentEntries.filter(
       item => item.financial_type === 'Deduction'
     );
-  if (deductionEntries.length > 0) {
-    const totalDeduction =
-      deductionEntries.reduce(
-        (sum, item) =>
-          sum + Number(item.amount || 0),
-        0
-      );
+  const deductionInsight =
+  buildDeductionInsight(
+    currentEntries,
+    previousMonthEntries
+  );
+  if (deductionInsight) {
     paragraphs.push(
-      `เดือนนี้มียอดหักจากการทำงานทั้งหมด ${formatAmount(totalDeduction)} จาก ${deductionEntries.length} รายการ`
-    );
+      deductionInsight.text
+      );
   }
   const selectedMonthKey =
     `${selectedYear}-${String(selectedMonth).padStart(2, '0')}`;
