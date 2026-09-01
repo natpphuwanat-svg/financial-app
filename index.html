@@ -3701,6 +3701,122 @@ function renderExpenseTypeSummary(entries) {
     text: parts.join(' ')
   };
  }
+  function buildDeductionInsight(
+  currentEntries,
+  previousEntries
+) {
+  if (!Array.isArray(currentEntries)) {
+    return null; }
+  const currentDeductionEntries =
+    currentEntries.filter(
+      item =>
+        item.financial_type === 'Deduction'
+    );
+  if (
+    currentDeductionEntries.length === 0
+  ) {
+    return null; }
+  const previousDeductionEntries =
+    Array.isArray(previousEntries)
+      ? previousEntries.filter(
+          item =>
+            item.financial_type ===
+            'Deduction'
+        )
+      : [];
+  const getTitle = item =>
+    item.name ||
+    item.title ||
+    item.description ||
+    'รายการนี้';
+  const getGroupedAmounts = entries => {
+    const grouped = {};
+    entries.forEach(item => {
+      const title = getTitle(item);
+      if (!grouped[title]) {
+        grouped[title] = 0; }
+      grouped[title] +=
+        Number(item.amount || 0);
+    });
+    return grouped;
+  };
+  const currentGrouped =
+    getGroupedAmounts(
+      currentDeductionEntries
+    );
+  const previousGrouped =
+    getGroupedAmounts(
+      previousDeductionEntries
+    );
+  const significantChanges = [];
+  Object.entries(currentGrouped).forEach(
+    ([title, currentAmount]) => {
+      const previousAmount =
+        previousGrouped[title] || 0;
+      const difference =
+        currentAmount - previousAmount;
+      if (difference >= 100) {
+        significantChanges.push({
+          title,
+          currentAmount,
+          previousAmount,
+          difference
+        });
+      }
+    }
+  );
+  if (
+    significantChanges.length > 0
+  ) {
+    significantChanges.sort(
+      (a, b) =>
+        b.difference - a.difference
+    );
+    const largest =
+      significantChanges[0];
+    const formatAmount = amount =>
+      `฿${Number(amount).toLocaleString(
+        'en-US',
+        {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }
+      )}`;
+    return {
+      type: 'significant',
+      title: largest.title,
+      difference: largest.difference,
+      currentAmount:
+        largest.currentAmount,
+      previousAmount:
+        largest.previousAmount,
+      text:
+        `ยอดหักจากการทำงานเพิ่มขึ้น โดย “${largest.title}” เพิ่มขึ้น ${formatAmount(largest.difference)} จากเดือนก่อน`
+    };
+  }
+  const totalDeduction =
+    currentDeductionEntries.reduce(
+      (sum, item) =>
+        sum + Number(item.amount || 0),
+      0
+    );
+  const formatAmount = amount =>
+    `฿${Number(amount).toLocaleString(
+      'en-US',
+      {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }
+    )}`;
+  return {
+    type: 'normal',
+    totalDeduction,
+    count:
+      currentDeductionEntries.length,
+    text:
+      `เดือนนี้มียอดหักจากการทำงานทั้งหมด ${formatAmount(totalDeduction)} จาก ${currentDeductionEntries.length} รายการ`
+   };
+  }
   async function fetchData() {
   const requestId = ++fetchRequestId;
   // Updating state
