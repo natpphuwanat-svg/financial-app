@@ -3411,28 +3411,6 @@ function renderExpenseTypeSummary(entries) {
       financialAnalysis.text
       );
   }
-  if (totalIncome > 0 && totalExpense > 0) {
-    let overview =
-      `เดือนนี้คุณมีรายรับ ${formatAmount(totalIncome)} และรายจ่าย ${formatAmount(totalExpense)} ทำให้มีเงินคงเหลือสำหรับใช้ ${formatAmount(balance)}`;
-    if (savingsRate !== null) {
-      overview +=
-        ` หรือ ${Math.round(savingsRate)}% ของรายรับ`; }
-    paragraphs.push(overview);
-  } else if (
-    totalIncome > 0 &&
-    totalExpense === 0
-  ) {
-    paragraphs.push(
-      `เดือนนี้คุณมีรายรับ ${formatAmount(totalIncome)} และยังไม่มีรายจ่ายที่บันทึกไว้`
-    );
-  } else if (
-    totalIncome === 0 &&
-    totalExpense > 0
-  ) {
-    paragraphs.push(
-      `เดือนนี้มีรายจ่าย ${formatAmount(totalExpense)} แต่ยังไม่มีรายรับที่บันทึกไว้`
-    );
-  }
   const monthlyTrendInsight =
     buildMonthlyTrendInsight(
       currentEntries,
