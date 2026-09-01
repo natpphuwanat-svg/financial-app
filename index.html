@@ -2971,6 +2971,21 @@ function renderExpenseTypeSummary(entries) {
       `รายจ่ายที่มียอดสูงที่สุดในเดือนนี้คือ “${topExpenseName}” จำนวน ${formatAmount(topExpenseAmount)}`
     );
   }
+  const deductionEntries =
+    currentEntries.filter(
+      item => item.financial_type === 'Deduction'
+    );
+  if (deductionEntries.length > 0) {
+    const totalDeduction =
+      deductionEntries.reduce(
+        (sum, item) =>
+          sum + Number(item.amount || 0),
+        0
+      );
+    paragraphs.push(
+      `เดือนนี้มียอดหักจากการทำงานทั้งหมด ${formatAmount(totalDeduction)} จาก ${deductionEntries.length} รายการ`
+    );
+  }
   container.innerHTML =
     paragraphs
       .map(text => `<p>${text}</p>`)
