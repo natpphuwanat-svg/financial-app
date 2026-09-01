@@ -3369,6 +3369,16 @@ function renderExpenseTypeSummary(entries) {
       monthlyAssessment.text
     );
   }
+  const financialAnalysis =
+  buildFinancialAnalysis(
+    currentEntries,
+    previousMonthEntries
+  );
+  if (financialAnalysis) {
+    paragraphs.push(
+      financialAnalysis.text
+      );
+  }
   if (totalIncome > 0 && totalExpense > 0) {
     let overview =
       `เดือนนี้คุณมีรายรับ ${formatAmount(totalIncome)} และรายจ่าย ${formatAmount(totalExpense)} ทำให้มีเงินคงเหลือสำหรับใช้ ${formatAmount(balance)}`;
