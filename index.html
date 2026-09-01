@@ -2897,17 +2897,23 @@ function renderExpenseTypeSummary(entries) {
     ? entries
     : [];
   if (currentEntries.length === 0) {
-    container.innerText = '';
+    container.innerHTML = '';
     return; }
-  const totalIncome = currentEntries
-    .filter(item => item.financial_type === 'Income')
-    .reduce(
+  const incomeEntries =
+    currentEntries.filter(
+      item => item.financial_type === 'Income'
+    );
+  const expenseEntries =
+    currentEntries.filter(
+      item => item.financial_type === 'Expense'
+    );
+  const totalIncome =
+    incomeEntries.reduce(
       (sum, item) => sum + Number(item.amount || 0),
       0
     );
-  const totalExpense = currentEntries
-    .filter(item => item.financial_type === 'Expense')
-    .reduce(
+  const totalExpense =
+    expenseEntries.reduce(
       (sum, item) => sum + Number(item.amount || 0),
       0
     );
@@ -2917,35 +2923,58 @@ function renderExpenseTypeSummary(entries) {
     totalIncome > 0
       ? (balance / totalIncome) * 100
       : null;
-  let sentence = '';
+  const formatAmount = amount =>
+    `฿${Number(amount).toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    })}`;
+  const paragraphs = [];
   if (totalIncome > 0 && totalExpense > 0) {
-    sentence =
-      `เดือนนี้คุณมีรายรับ ฿${totalIncome.toLocaleString('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      })} และรายจ่าย ฿${totalExpense.toLocaleString('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      })} ทำให้มีเงินคงเหลือสำหรับใช้ ฿${balance.toLocaleString('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      })}`;
-  } else if (totalIncome > 0 && totalExpense === 0) {
-    sentence =
-      `เดือนนี้คุณมีรายรับ ฿${totalIncome.toLocaleString('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      })} และยังไม่มีรายจ่ายที่บันทึกไว้`;
-  } else if (totalIncome === 0 && totalExpense > 0) {
-    sentence =
-      `เดือนนี้มีรายจ่าย ฿${totalExpense.toLocaleString('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      })} แต่ยังไม่มีรายรับที่บันทึกไว้`; }
-  if (savingsRate !== null) {
-    sentence +=
-      ` คิดเป็นเงินคงเหลือ ${Math.round(savingsRate)}% ของรายรับ`; }
-  container.innerText = sentence; }
+    let overview =
+      `เดือนนี้คุณมีรายรับ ${formatAmount(totalIncome)} และรายจ่าย ${formatAmount(totalExpense)} ทำให้มีเงินคงเหลือสำหรับใช้ ${formatAmount(balance)}`;
+    if (savingsRate !== null) {
+      overview +=
+        ` หรือ ${Math.round(savingsRate)}% ของรายรับ`; }
+    paragraphs.push(overview);
+  } else if (
+    totalIncome > 0 &&
+    totalExpense === 0
+  ) {
+    paragraphs.push(
+      `เดือนนี้คุณมีรายรับ ${formatAmount(totalIncome)} และยังไม่มีรายจ่ายที่บันทึกไว้`
+    );
+  } else if (
+    totalIncome === 0 &&
+    totalExpense > 0
+  ) {
+    paragraphs.push(
+      `เดือนนี้มีรายจ่าย ${formatAmount(totalExpense)} แต่ยังไม่มีรายรับที่บันทึกไว้`
+    );
+  }
+  if (expenseEntries.length > 0) {
+    const topExpense =
+      expenseEntries.reduce(
+        (largest, item) =>
+          Number(item.amount || 0) >
+          Number(largest.amount || 0)
+            ? item
+            : largest
+      );
+    const topExpenseAmount =
+      Number(topExpense.amount || 0);
+    const topExpenseName =
+      topExpense.name ||
+      topExpense.title ||
+      topExpense.description ||
+      'รายการนี้';
+    paragraphs.push(
+      `รายจ่ายที่มียอดสูงที่สุดในเดือนนี้คือ “${topExpenseName}” จำนวน ${formatAmount(topExpenseAmount)}`
+    );
+  }
+  container.innerHTML =
+    paragraphs
+      .map(text => `<p>${text}</p>`)
+      .join(''); }
   async function fetchData() {
   const requestId = ++fetchRequestId;
 
