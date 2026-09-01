@@ -3686,49 +3686,66 @@ function renderExpenseTypeSummary(entries) {
     }
   }
   if (
-    savingsRateChange !== null
-  ) {
-    const currentRate =
-      Math.round(
-        current.savingsRate
-      );
-    const previousRate =
-      Math.round(
-        previous.savingsRate
-      );
-    if (
-      savingsRateChange >= 5
+    current.savingsRate !== null &&
+    previous.savingsRate !== null
     ) {
-      parts.push(
-        `Savings Rate เพิ่มจาก ${previousRate}% เป็น ${currentRate}%`
+      const currentRate =
+        Math.round(current.savingsRate);
+      const previousRate =
+        Math.round(previous.savingsRate);
+      const rateDifference =
+        Math.round(
+          current.savingsRate -
+          previous.savingsRate
+          );
+   if (rateDifference >= 5) {
+    parts.push(
+      `Savings Rate เพิ่มจาก ${previousRate}% เป็น ${currentRate}%`
       );
-    } else if (
-      savingsRateChange <= -5
-    ) {
-      parts.push(
-        `Savings Rate ลดจาก ${previousRate}% เหลือ ${currentRate}%`
+  } else if (rateDifference <= -5) {
+    parts.push(
+      `Savings Rate ลดจาก ${previousRate}% เหลือ ${currentRate}%`
       );
     }
   }
-  if (
+  const balanceChangedFromZero =
+    previous.balance === 0 &&
+    current.balance !== 0;
+  const balanceCrossedZero =
+    previous.balance < 0 &&
+    current.balance >= 0;
+  const balanceWentNegative =
+    previous.balance >= 0 &&
+    current.balance < 0;
+  if (balanceChangedFromZero) {
+    parts.push(
+      `เงินคงเหลือเปลี่ยนจาก ${formatAmount(previous.balance)} เป็น ${formatAmount(current.balance)}`
+      );
+  } else if (balanceCrossedZero) {
+    parts.push(
+      `เงินคงเหลือเปลี่ยนจาก ${formatAmount(previous.balance)} เป็น ${formatAmount(current.balance)} และกลับมาเป็นยอดคงเหลือเป็นบวก`
+      );
+  } else if (balanceWentNegative) {
+    parts.push(
+      `เงินคงเหลือเปลี่ยนจาก ${formatAmount(previous.balance)} เป็น ${formatAmount(current.balance)} และกลายเป็นยอดติดลบ`
+      );
+  } else if (
     balanceChange !== null &&
     Math.abs(balanceChange) >= 10
-  ) {
-    if (
-      balanceChange > 0
     ) {
-      parts.push(
-        `เงินคงเหลือเพิ่มขึ้น ${Math.round(balanceChange)}%`
-      );
-    } else {
-      parts.push(
-        `เงินคงเหลือลดลง ${Math.abs(Math.round(balanceChange))}%`
-      );
+      if (balanceChange > 0) {
+        parts.push(
+          `เงินคงเหลือเพิ่มขึ้น ${Math.round(balanceChange)}%`
+          );
+      } else {
+        parts.push(
+          `เงินคงเหลือลดลง ${Math.abs(Math.round(balanceChange))}%`
+          );
+      }
     }
-  }
   if (
     parts.length === 0
-  ) {
+    ) {
     return {
       type: 'neutral',
       text:
