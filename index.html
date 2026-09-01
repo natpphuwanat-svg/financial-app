@@ -3454,6 +3454,237 @@ function renderExpenseTypeSummary(entries) {
     paragraphs
       .map(text => `<p>${text}</p>`)
       .join(''); }
+  function buildFinancialAnalysis(
+  currentEntries,
+  previousEntries
+) {
+  if (
+    !Array.isArray(currentEntries) ||
+    currentEntries.length === 0
+  ) {
+    return null; }
+  const getTotals = entries => {
+    const income = entries
+      .filter(
+        item => item.financial_type === 'Income'
+      )
+      .reduce(
+        (sum, item) =>
+          sum + Number(item.amount || 0),
+        0
+      );
+    const expense = entries
+      .filter(
+        item => item.financial_type === 'Expense'
+      )
+      .reduce(
+        (sum, item) =>
+          sum + Number(item.amount || 0),
+        0
+      );
+    const balance =
+      income - expense;
+    const savingsRate =
+      income > 0
+        ? (balance / income) * 100
+        : null;
+    return {
+      income,
+      expense,
+      balance,
+      savingsRate
+    };
+  };
+  const current =
+    getTotals(currentEntries);
+  const previous =
+    Array.isArray(previousEntries) &&
+    previousEntries.length > 0
+      ? getTotals(previousEntries)
+      : null;
+  const formatAmount = amount =>
+    `฿${Number(amount).toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    })}`;
+  if (!previous) {
+    if (
+      current.income > 0 &&
+      current.expense > 0
+    ) {
+      return {
+        type: 'current',
+        text:
+          `เดือนนี้มีรายรับ ${formatAmount(current.income)} และรายจ่าย ${formatAmount(current.expense)} ทำให้มีเงินคงเหลือ ${formatAmount(current.balance)} หรือ ${Math.round(current.savingsRate)}% ของรายรับ`
+      };
+    }
+    if (
+      current.income > 0 &&
+      current.expense === 0
+    ) {
+      return {
+        type: 'current',
+        text:
+          `เดือนนี้มีรายรับ ${formatAmount(current.income)} และยังไม่มีรายจ่ายที่บันทึกไว้`
+      };
+    }
+    if (
+      current.income === 0 &&
+      current.expense > 0
+    ) {
+      return {
+        type: 'current',
+        text:
+          `เดือนนี้มีรายจ่าย ${formatAmount(current.expense)} แต่ยังไม่มีรายรับที่บันทึกไว้`
+      };
+    }
+    return null; }
+  const getPercentChange = (
+    currentValue,
+    previousValue
+  ) => {
+    if (previousValue <= 0) {
+      return null; }
+    return (
+      ((currentValue - previousValue) /
+        previousValue) *
+      100
+    );
+  };
+  const incomeChange =
+    getPercentChange(
+      current.income,
+      previous.income
+    );
+  const expenseChange =
+    getPercentChange(
+      current.expense,
+      previous.expense
+    );
+  const balanceChange =
+    getPercentChange(
+      current.balance,
+      previous.balance
+    );
+  const savingsRateChange =
+    current.savingsRate !== null &&
+    previous.savingsRate !== null
+      ? current.savingsRate -
+        previous.savingsRate
+      : null;
+  const parts = [];
+  if (
+    incomeChange !== null &&
+    expenseChange !== null
+  ) {
+    if (
+      incomeChange > 0 &&
+      expenseChange > 0
+    ) {
+      if (
+        incomeChange > expenseChange
+      ) {
+        parts.push(
+          `รายรับเพิ่มขึ้น ${incomeChange >= 0 ? '+' : ''}${Math.round(incomeChange)}% ขณะที่รายจ่ายเพิ่มขึ้น ${expenseChange >= 0 ? '+' : ''}${Math.round(expenseChange)}% ทำให้เงินคงเหลือดีขึ้น`
+        );
+      } else if (
+        expenseChange > incomeChange
+      ) {
+        parts.push(
+          `รายรับเพิ่มขึ้น ${incomeChange >= 0 ? '+' : ''}${Math.round(incomeChange)}% แต่รายจ่ายเพิ่มขึ้นเร็วกว่าที่ ${Math.round(expenseChange)}%`
+        );
+      } else {
+        parts.push(
+          `รายรับและรายจ่ายเพิ่มขึ้นในสัดส่วนใกล้เคียงกัน`
+        );
+      }
+    } else if (
+      incomeChange > 0 &&
+      expenseChange <= 0
+    ) {
+      parts.push(
+        `รายรับเพิ่มขึ้น ${Math.round(incomeChange)}% ขณะที่รายจ่ายลดลง ${Math.abs(Math.round(expenseChange))}% ทำให้เงินคงเหลือดีขึ้นอย่างชัดเจน`
+      );
+    } else if (
+      incomeChange <= 0 &&
+      expenseChange < 0
+    ) {
+      if (
+        Math.abs(expenseChange) >
+        Math.abs(incomeChange)
+      ) {
+        parts.push(
+          `รายจ่ายลดลง ${Math.abs(Math.round(expenseChange))}% ซึ่งมากกว่าการลดลงของรายรับ`
+        );
+      } else {
+        parts.push(
+          `ทั้งรายรับและรายจ่ายลดลงจากเดือนก่อน`
+        );
+      }
+    } else if (
+      incomeChange < 0 &&
+      expenseChange > 0
+    ) {
+      parts.push(
+        `รายรับลดลง ${Math.abs(Math.round(incomeChange))}% ขณะที่รายจ่ายเพิ่มขึ้น ${Math.round(expenseChange)}%`
+      );
+    }
+  }
+  if (
+    savingsRateChange !== null
+  ) {
+    const currentRate =
+      Math.round(
+        current.savingsRate
+      );
+    const previousRate =
+      Math.round(
+        previous.savingsRate
+      );
+    if (
+      savingsRateChange >= 5
+    ) {
+      parts.push(
+        `Savings Rate เพิ่มจาก ${previousRate}% เป็น ${currentRate}%`
+      );
+    } else if (
+      savingsRateChange <= -5
+    ) {
+      parts.push(
+        `Savings Rate ลดจาก ${previousRate}% เหลือ ${currentRate}%`
+      );
+    }
+  }
+  if (
+    balanceChange !== null &&
+    Math.abs(balanceChange) >= 10
+  ) {
+    if (
+      balanceChange > 0
+    ) {
+      parts.push(
+        `เงินคงเหลือเพิ่มขึ้น ${Math.round(balanceChange)}%`
+      );
+    } else {
+      parts.push(
+        `เงินคงเหลือลดลง ${Math.abs(Math.round(balanceChange))}%`
+      );
+    }
+  }
+  if (
+    parts.length === 0
+  ) {
+    return {
+      type: 'neutral',
+      text:
+        'รายรับ รายจ่าย และเงินคงเหลือเปลี่ยนแปลงไม่มากจากเดือนก่อน'
+    };
+  }
+  return {
+    type: 'comparison',
+    text: parts.join(' ')
+  };
+ }
   async function fetchData() {
   const requestId = ++fetchRequestId;
   // Updating state
