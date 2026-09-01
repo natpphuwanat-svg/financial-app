@@ -2904,27 +2904,20 @@ function renderExpenseTypeSummary(entries) {
     );
    });
   }
-  function findPaymentCompletionInsights(allEntries, selectedMonth) {
+  function findPaymentCompletionInsights(
+  allEntries,
+  selectedMonth
+) {
   if (!Array.isArray(allEntries) || !selectedMonth) {
     return []; }
   const expenseEntries = allEntries.filter(
-    item => item.financial_type === 'Expense'
+    item =>
+      item.financial_type === 'Expense' &&
+      item.title &&
+      item.entry_date
   );
   if (expenseEntries.length === 0) {
     return []; }
-  const monthMap = {};
-  expenseEntries.forEach(item => {
-    if (!item.entry_date || !item.title) return;
-    const date = new Date(item.entry_date);
-    if (Number.isNaN(date.getTime())) return;
-    const monthKey =
-      `${date.getFullYear()}-${String(
-        date.getMonth() + 1
-      ).padStart(2, '0')}`;
-    if (!monthMap[monthKey]) {
-      monthMap[monthKey] = []; }
-    monthMap[monthKey].push(item);
-  });
   const selectedDate =
     new Date(`${selectedMonth}-01`);
   if (Number.isNaN(selectedDate.getTime())) {
@@ -2933,12 +2926,16 @@ function renderExpenseTypeSummary(entries) {
     selectedDate.getFullYear();
   const selectedMonthIndex =
     selectedDate.getMonth();
+  const selectedKey =
+    `${selectedYear}-${String(
+      selectedMonthIndex + 1
+    ).padStart(2, '0')}`;
   const results = [];
   const titles = [
     ...new Set(
-      expenseEntries
-        .map(item => item.title)
-        .filter(Boolean)
+      expenseEntries.map(
+        item => item.title
+      )
     )
   ];
   titles.forEach(title => {
@@ -2952,14 +2949,17 @@ function renderExpenseTypeSummary(entries) {
           .map(item => {
             const date =
               new Date(item.entry_date);
-            if (Number.isNaN(date.getTime())) {
+            if (
+              Number.isNaN(
+                date.getTime()
+              )
+            ) {
               return null; }
             return (
-              date.getFullYear() +
-              '-' +
-              String(
+              `${date.getFullYear()}-` +
+              `${String(
                 date.getMonth() + 1
-              ).padStart(2, '0')
+              ).padStart(2, '0')}`
             );
           })
           .filter(Boolean)
@@ -2967,40 +2967,38 @@ function renderExpenseTypeSummary(entries) {
     ].sort();
     if (paidMonths.length < 3) {
       return; }
-    const selectedKey =
-      `${selectedYear}-${String(
-        selectedMonthIndex + 1
-      ).padStart(2, '0')}`;
     if (paidMonths.includes(selectedKey)) {
       return; }
-    const selectedMonthDate =
-      new Date(
-        selectedYear,
-        selectedMonthIndex,
-        1
-      );
     let consecutiveMissing = 0;
     for (let i = 1; i <= 3; i++) {
       const checkDate =
         new Date(
-          selectedMonthDate.getFullYear(),
-          selectedMonthDate.getMonth() - i,
+          selectedYear,
+          selectedMonthIndex - i,
           1
         );
       const checkKey =
-        `${checkDate.getFullYear()}-${String(
+        `${checkDate.getFullYear()}-` +
+        `${String(
           checkDate.getMonth() + 1
         ).padStart(2, '0')}`;
-      if (paidMonths.includes(checkKey)) {
+      if (
+        paidMonths.includes(checkKey)
+      ) {
         break; }
       consecutiveMissing++; }
-    if (consecutiveMissing >= 3) {
-      results.push({
-        title,
-        lastPaidMonth:
-          paidMonths[paidMonths.length - 1]
-      });
-    }
+    if (consecutiveMissing < 3) {
+      return; }
+    const lastPaidMonth =
+      paidMonths[paidMonths.length - 1];
+    if (
+      lastPaidMonth >= selectedKey
+    ) {
+      return; }
+    results.push({
+      title,
+      lastPaidMonth
+    });
   });
   return results; }
   function renderMonthlyTakeaway(entries) {
@@ -3100,6 +3098,20 @@ function renderExpenseTypeSummary(entries) {
       `เดือนนี้มียอดหักจากการทำงานทั้งหมด ${formatAmount(totalDeduction)} จาก ${deductionEntries.length} รายการ`
     );
   }
+  const selectedMonthKey =
+    `${selectedYear}-${String(selectedMonth).padStart(2, '0')}`;
+  const paymentCompletionInsights =
+    findPaymentCompletionInsights(
+      paymentHistoryEntries,
+      selectedMonthKey
+    );
+  paymentCompletionInsights.forEach(
+    insight => {
+      paragraphs.push(
+        `“${insight.title}” ไม่มีรายการชำระเงินต่อเนื่องมา 3 เดือนแล้ว ซึ่งอาจหมายความว่าภาระรายการนี้สิ้นสุดลง`
+      );
+    }
+  );
   container.innerHTML =
     paragraphs
       .map(text => `<p>${text}</p>`)
