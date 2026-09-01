@@ -3412,24 +3412,30 @@ function renderExpenseTypeSummary(entries) {
     );
   }
   if (expenseEntries.length > 0) {
-    const topExpense =
-      expenseEntries.reduce(
-        (largest, item) =>
-          Number(item.amount || 0) >
-          Number(largest.amount || 0)
-            ? item
-            : largest
-      );
-    const topExpenseAmount =
-      Number(topExpense.amount || 0);
-    const topExpenseName =
-      topExpense.name ||
-      topExpense.title ||
-      topExpense.description ||
-      'รายการนี้';
-    paragraphs.push(
-      `รายจ่ายที่มียอดสูงที่สุดในเดือนนี้คือ “${topExpenseName}” จำนวน ${formatAmount(topExpenseAmount)}`
+  const topExpense =
+    expenseEntries.reduce(
+      (largest, item) =>
+        Number(item.amount || 0) >
+        Number(largest.amount || 0)
+          ? item
+          : largest
     );
+  const topExpenseAmount =
+    Number(topExpense.amount || 0);
+  const topExpenseName =
+    topExpense.name ||
+    topExpense.title ||
+    topExpense.description ||
+    'รายการนี้';
+  const expenseShare =
+    totalExpense > 0
+      ? (topExpenseAmount / totalExpense) * 100
+      : null;
+  if (expenseShare !== null) {
+    paragraphs.push(
+      `รายการ “${topExpenseName}” เป็นรายจ่ายสูงสุดของเดือนนี้ จำนวน ${formatAmount(topExpenseAmount)} และคิดเป็น ${Math.round(expenseShare)}% ของรายจ่ายทั้งหมด`
+      );
+    }
   }
   const deductionEntries =
     currentEntries.filter(
