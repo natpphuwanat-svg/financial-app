@@ -2150,6 +2150,7 @@ Object.keys(grouped).forEach(type => {
   let monthlyComparisonType = 'Expense';
   let monthlyComparisonPeriod = 3;
   let paymentHistoryEntries = [];
+  let previousMonthEntries = [];
   const monthlyComparisonTypeBtn =
   document.getElementById('monthlyComparisonTypeBtn');
   const monthlyComparisonTypeLabel =
@@ -2904,6 +2905,122 @@ function renderExpenseTypeSummary(entries) {
     );
    });
   }
+  function buildMonthlyTrendInsight(
+  currentEntries,
+  previousEntries
+) {
+  if (
+    !Array.isArray(currentEntries) ||
+    !Array.isArray(previousEntries) ||
+    currentEntries.length === 0 ||
+    previousEntries.length === 0
+  ) {
+    return null; }
+  const getTotals = entries => {
+    const income = entries
+      .filter(
+        item =>
+          item.financial_type === 'Income'
+      )
+      .reduce(
+        (sum, item) =>
+          sum + Number(item.amount || 0),
+        0
+      );
+    const expense = entries
+      .filter(
+        item =>
+          item.financial_type === 'Expense'
+      )
+      .reduce(
+        (sum, item) =>
+          sum + Number(item.amount || 0),
+        0
+      );
+    return {
+      income,
+      expense,
+      balance: income - expense
+    };
+  };
+  const current =
+    getTotals(currentEntries);
+  const previous =
+    getTotals(previousEntries);
+  const getChangePercent = (
+    currentValue,
+    previousValue
+  ) => {
+    if (previousValue <= 0) {
+      return null; }
+    return (
+      ((currentValue - previousValue) /
+        previousValue) *
+      100
+    );
+  };
+  const incomeChange =
+    getChangePercent(
+      current.income,
+      previous.income
+    );
+  const expenseChange =
+    getChangePercent(
+      current.expense,
+      previous.expense
+    );
+  const significantIncome =
+    incomeChange !== null &&
+    Math.abs(incomeChange) >= 10;
+  const significantExpense =
+    expenseChange !== null &&
+    Math.abs(expenseChange) >= 10;
+  if (
+    !significantIncome &&
+    !significantExpense
+  ) {
+    return null; }
+  const incomeIncreased =
+    significantIncome &&
+    incomeChange > 0;
+  const incomeDecreased =
+    significantIncome &&
+    incomeChange < 0;
+  const expenseIncreased =
+    significantExpense &&
+    expenseChange > 0;
+  const expenseDecreased =
+    significantExpense &&
+    expenseChange < 0;
+  if (
+    incomeIncreased &&
+    expenseDecreased
+  ) {
+    return 'เดือนนี้รายรับเพิ่มขึ้น ขณะที่รายจ่ายลดลงจากเดือนก่อน ทำให้เงินคงเหลือดีขึ้น'; }
+  if (
+    incomeDecreased &&
+    expenseIncreased
+  ) {
+    return 'เดือนนี้รายรับลดลง ขณะที่รายจ่ายเพิ่มขึ้นจากเดือนก่อน ทำให้เงินคงเหลือลดลง'; }
+  if (
+    incomeIncreased &&
+    expenseIncreased
+  ) {
+    return 'เดือนนี้รายรับเพิ่มขึ้น แต่รายจ่ายก็เพิ่มขึ้นจากเดือนก่อน'; }
+  if (
+    incomeDecreased &&
+    expenseDecreased
+  ) {
+    return 'เดือนนี้รายรับและรายจ่ายลดลงจากเดือนก่อน'; }
+  if (incomeIncreased) {
+    return 'เดือนนี้รายรับเพิ่มขึ้นจากเดือนก่อน'; }
+  if (incomeDecreased) {
+    return 'เดือนนี้รายรับลดลงจากเดือนก่อน'; }
+  if (expenseIncreased) {
+    return 'เดือนนี้รายจ่ายเพิ่มขึ้นจากเดือนก่อน'; }
+  if (expenseDecreased) {
+    return 'เดือนนี้รายจ่ายลดลงจากเดือนก่อน'; }
+  return null; }
   function findPaymentCompletionInsights(
   allEntries,
   selectedMonth
@@ -3060,6 +3177,16 @@ function renderExpenseTypeSummary(entries) {
       `เดือนนี้มีรายจ่าย ${formatAmount(totalExpense)} แต่ยังไม่มีรายรับที่บันทึกไว้`
     );
   }
+  const monthlyTrendInsight =
+    buildMonthlyTrendInsight(
+      currentEntries,
+      previousMonthEntries
+    );
+  if (monthlyTrendInsight) {
+    paragraphs.push(
+      monthlyTrendInsight
+    );
+  }
   if (expenseEntries.length > 0) {
     const topExpense =
       expenseEntries.reduce(
@@ -3171,6 +3298,7 @@ function renderExpenseTypeSummary(entries) {
     // 6. Calculate current totals
     const entries = currentEntries || [];
     const previous = previousEntries || [];
+    previousMonthEntries = previous;
     if (requestId !== fetchRequestId) {
     return; }
     paymentHistoryEntries =
