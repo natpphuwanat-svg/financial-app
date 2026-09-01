@@ -2905,6 +2905,210 @@ function renderExpenseTypeSummary(entries) {
     );
    });
   }
+  function buildMonthlyAssessment(
+  currentEntries,
+  previousEntries
+) {
+  if (
+    !Array.isArray(currentEntries) ||
+    currentEntries.length === 0
+  ) {
+    return null; }
+  const getTotals = entries => {
+    const income = entries
+      .filter(
+        item => item.financial_type === 'Income'
+      )
+      .reduce(
+        (sum, item) =>
+          sum + Number(item.amount || 0),
+        0
+      );
+    const expense = entries
+      .filter(
+        item => item.financial_type === 'Expense'
+      )
+      .reduce(
+        (sum, item) =>
+          sum + Number(item.amount || 0),
+        0
+      );
+    const balance =
+      income - expense;
+    const savingsRate =
+      income > 0
+        ? (balance / income) * 100
+        : null;
+    return {
+      income,
+      expense,
+      balance,
+      savingsRate
+    };
+  };
+  const current =
+    getTotals(currentEntries);
+  const previous =
+    Array.isArray(previousEntries) &&
+    previousEntries.length > 0
+      ? getTotals(previousEntries)
+      : null;
+  if (!previous) {
+    if (
+      current.income > 0 &&
+      current.expense > 0 &&
+      current.balance > 0 &&
+      current.savingsRate !== null
+    ) {
+      if (current.savingsRate >= 50) {
+        return {
+          type: 'positive',
+          text:
+            'ภาพรวมของเดือนนี้ การเงินของคุณอยู่ในเกณฑ์ดี และยังมีเงินเหลือสำหรับใช้มากกว่าครึ่งหนึ่งของรายรับ'
+        };
+      }
+      if (current.savingsRate >= 30) {
+        return {
+          type: 'neutral',
+          text:
+            'ภาพรวมของเดือนนี้ การเงินของคุณค่อนข้างสมดุล โดยยังมีเงินเหลือสำหรับใช้หลังหักรายจ่าย'
+        };
+      }
+      return {
+        type: 'caution',
+        text:
+          'ภาพรวมของเดือนนี้ควรจับตาเรื่องเงินคงเหลือ เพราะรายจ่ายใช้สัดส่วนค่อนข้างมากของรายรับ'
+      };
+    }
+    if (
+      current.income > 0 &&
+      current.expense === 0
+    ) {
+      return {
+        type: 'positive',
+        text:
+          'ภาพรวมของเดือนนี้ยังมีเงินเหลือจากรายรับทั้งหมด เนื่องจากยังไม่มีรายจ่ายที่บันทึกไว้'
+      };
+    }
+    if (
+      current.income === 0 &&
+      current.expense > 0
+    ) {
+      return {
+        type: 'caution',
+        text:
+          'ภาพรวมของเดือนนี้ควรจับตาเรื่องเงินคงเหลือ เนื่องจากมีรายจ่ายแต่ยังไม่มีรายรับที่บันทึกไว้'
+      };
+    }
+    return {
+      type: 'neutral',
+      text:
+        'ภาพรวมของเดือนนี้ยังมีข้อมูลไม่เพียงพอสำหรับประเมินสถานะทางการเงิน'
+    };
+  }
+  const getPercentChange = (
+    currentValue,
+    previousValue
+  ) => {
+    if (previousValue <= 0) {
+      return null; }
+    return (
+      ((currentValue - previousValue) /
+        previousValue) *
+      100
+    );
+  };
+  const incomeChange =
+    getPercentChange(
+      current.income,
+      previous.income
+    );
+  const expenseChange =
+    getPercentChange(
+      current.expense,
+      previous.expense
+    );
+  const balanceChange =
+    getPercentChange(
+      current.balance,
+      previous.balance
+    );
+  const savingsRateChange =
+    current.savingsRate !== null &&
+    previous.savingsRate !== null
+      ? current.savingsRate -
+        previous.savingsRate
+      : null;
+  if (
+    savingsRateChange !== null &&
+    savingsRateChange <= -10
+  ) {
+    return {
+      type: 'caution',
+      text:
+        'ภาพรวมของเดือนนี้ควรจับตาเรื่องเงินที่เหลือสำหรับใช้ เพราะสัดส่วนเงินคงเหลือลดลงอย่างชัดเจนจากเดือนก่อน'
+    };
+  }
+  if (
+    incomeChange !== null &&
+    expenseChange !== null &&
+    expenseChange >= 10 &&
+    expenseChange > incomeChange
+  ) {
+    return {
+      type: 'caution',
+      text:
+        'ภาพรวมของเดือนนี้ควรจับตาเรื่องรายจ่าย เพราะรายจ่ายเพิ่มขึ้นเร็วกว่ารายรับจากเดือนก่อน'
+    };
+  }
+  if (
+    balanceChange !== null &&
+    balanceChange <= -10
+  ) {
+    return {
+      type: 'caution',
+      text:
+        'ภาพรวมของเดือนนี้ควรจับตาเรื่องเงินคงเหลือ เพราะยอดเงินที่เหลือลดลงอย่างชัดเจนจากเดือนก่อน'
+    };
+  }
+  if (
+    incomeChange !== null &&
+    expenseChange !== null &&
+    incomeChange >= 10 &&
+    incomeChange > expenseChange
+  ) {
+    return {
+      type: 'positive',
+      text:
+        'ภาพรวมของเดือนนี้ การเงินของคุณอยู่ในทิศทางที่ดีขึ้น เพราะรายรับเพิ่มขึ้นเร็วกว่ารายจ่าย'
+    };
+  }
+  if (
+    expenseChange !== null &&
+    expenseChange <= -10
+  ) {
+    return {
+      type: 'positive',
+      text:
+        'ภาพรวมของเดือนนี้ การเงินของคุณดีขึ้นจากเดือนก่อน เพราะรายจ่ายลดลง'
+    };
+  }
+  if (
+    savingsRateChange !== null &&
+    savingsRateChange >= 10
+  ) {
+    return {
+      type: 'positive',
+      text:
+        'ภาพรวมของเดือนนี้ คุณจัดการเงินได้ดีขึ้น โดยมีสัดส่วนเงินคงเหลือเพิ่มขึ้นจากเดือนก่อน'
+    };
+  }
+  return {
+    type: 'neutral',
+    text:
+      'ภาพรวมของเดือนนี้ การเงินของคุณค่อนข้างทรงตัวเมื่อเทียบกับเดือนก่อน'
+   };
+  }
   function buildMonthlyTrendInsight(
   currentEntries,
   previousEntries
@@ -3155,6 +3359,16 @@ function renderExpenseTypeSummary(entries) {
       maximumFractionDigits: 2
     })}`;
   const paragraphs = [];
+    const monthlyAssessment =
+    buildMonthlyAssessment(
+      currentEntries,
+      previousMonthEntries
+    );
+  if (monthlyAssessment) {
+    paragraphs.push(
+      monthlyAssessment.text
+    );
+  }
   if (totalIncome > 0 && totalExpense > 0) {
     let overview =
       `เดือนนี้คุณมีรายรับ ${formatAmount(totalIncome)} และรายจ่าย ${formatAmount(totalExpense)} ทำให้มีเงินคงเหลือสำหรับใช้ ${formatAmount(balance)}`;
