@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Financial Overview</title>
+  
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Financial">
@@ -2968,31 +2969,28 @@ function renderExpenseTypeSummary(entries) {
       return; }
     if (paidMonths.includes(selectedKey)) {
       return; }
-    let consecutiveMissing = 0;
-    for (let i = 1; i <= 3; i++) {
-      const checkDate =
-        new Date(
-          selectedYear,
-          selectedMonthIndex - i,
-          1
-        );
-      const checkKey =
-        `${checkDate.getFullYear()}-` +
-        `${String(
-          checkDate.getMonth() + 1
-        ).padStart(2, '0')}`;
-      if (
-        paidMonths.includes(checkKey)
-      ) {
-        break; }
-      consecutiveMissing++; }
-    if (consecutiveMissing < 3) {
-      return; }
     const lastPaidMonth =
       paidMonths[paidMonths.length - 1];
+    const lastPaidDate =
+      new Date(`${lastPaidMonth}-01`);
     if (
-      lastPaidMonth >= selectedKey
+      Number.isNaN(
+        lastPaidDate.getTime()
+      )
     ) {
+      return; }
+    const completionDate =
+      new Date(
+        lastPaidDate.getFullYear(),
+        lastPaidDate.getMonth() + 3,
+        1
+      );
+    const completionKey =
+      `${completionDate.getFullYear()}-` +
+      `${String(
+        completionDate.getMonth() + 1
+      ).padStart(2, '0')}`;
+    if (selectedKey !== completionKey) {
       return; }
     results.push({
       title,
@@ -3572,8 +3570,8 @@ return Number(b.amount) - Number(a.amount); });
         <small>${err?.message || err}</small>
       </div>
     `;
-  }
-}
+    }
+   }
     // Bottom Navigation Compact State
     let scrollTicking = false;
     function updateBottomNavOnScroll() {
