@@ -3554,18 +3554,29 @@ function renderExpenseTypeSummary(entries) {
       };
     }
     return null; }
-  const getPercentChange = (
+    const getPercentChange = (
     currentValue,
     previousValue
-  ) => {
-    if (previousValue <= 0) {
-      return null; }
-    return (
-      ((currentValue - previousValue) /
-        previousValue) *
-      100
-    );
-  };
+    ) => {
+      if (
+        previousValue === 0
+        ) {
+          return null; }
+          return (
+            ((currentValue - previousValue) /
+              previousValue) *
+              100
+              );
+    };
+    const changedFromZero = (
+    currentValue,
+    previousValue
+    ) => {
+      return (
+        previousValue === 0 &&
+        currentValue > 0
+        );
+    };
   const incomeChange =
     getPercentChange(
       current.income,
@@ -3588,6 +3599,35 @@ function renderExpenseTypeSummary(entries) {
         previous.savingsRate
       : null;
   const parts = [];
+  if (
+  changedFromZero(
+    current.income,
+    previous.income
+    )
+    ) {
+  if (
+    current.expense > 0 &&
+    previous.expense === 0
+    ) {
+    parts.push(
+      `เดือนนี้มีรายรับ ${formatAmount(current.income)} หลังจากเดือนก่อนยังไม่มีรายรับที่บันทึกไว้ และมีรายจ่าย ${formatAmount(current.expense)}`
+    );
+    } else {
+    parts.push(
+      `เดือนนี้มีรายรับ ${formatAmount(current.income)} หลังจากเดือนก่อนยังไม่มีรายรับที่บันทึกไว้`
+      );
+    }
+  }
+  if (
+  changedFromZero(
+    current.expense,
+    previous.expense
+    )
+    ) {
+  parts.push(
+    `เดือนนี้มีรายจ่าย ${formatAmount(current.expense)} หลังจากเดือนก่อนยังไม่มีรายจ่ายที่บันทึกไว้`
+    );
+    }
   if (
     incomeChange !== null &&
     expenseChange !== null
