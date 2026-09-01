@@ -2889,6 +2889,105 @@ function renderExpenseTypeSummary(entries) {
     );
    });
   }
+  function findPaymentCompletionInsights(allEntries, selectedMonth) {
+  if (!Array.isArray(allEntries) || !selectedMonth) {
+    return []; }
+  const expenseEntries = allEntries.filter(
+    item => item.financial_type === 'Expense'
+  );
+  if (expenseEntries.length === 0) {
+    return []; }
+  const monthMap = {};
+  expenseEntries.forEach(item => {
+    if (!item.entry_date || !item.title) return;
+    const date = new Date(item.entry_date);
+    if (Number.isNaN(date.getTime())) return;
+    const monthKey =
+      `${date.getFullYear()}-${String(
+        date.getMonth() + 1
+      ).padStart(2, '0')}`;
+    if (!monthMap[monthKey]) {
+      monthMap[monthKey] = []; }
+    monthMap[monthKey].push(item);
+  });
+  const selectedDate =
+    new Date(`${selectedMonth}-01`);
+  if (Number.isNaN(selectedDate.getTime())) {
+    return []; }
+  const selectedYear =
+    selectedDate.getFullYear();
+  const selectedMonthIndex =
+    selectedDate.getMonth();
+  const results = [];
+  const titles = [
+    ...new Set(
+      expenseEntries
+        .map(item => item.title)
+        .filter(Boolean)
+    )
+  ];
+  titles.forEach(title => {
+    const titleEntries =
+      expenseEntries.filter(
+        item => item.title === title
+      );
+    const paidMonths = [
+      ...new Set(
+        titleEntries
+          .map(item => {
+            const date =
+              new Date(item.entry_date);
+            if (Number.isNaN(date.getTime())) {
+              return null; }
+            return (
+              date.getFullYear() +
+              '-' +
+              String(
+                date.getMonth() + 1
+              ).padStart(2, '0')
+            );
+          })
+          .filter(Boolean)
+      )
+    ].sort();
+    if (paidMonths.length < 3) {
+      return; }
+    const selectedKey =
+      `${selectedYear}-${String(
+        selectedMonthIndex + 1
+      ).padStart(2, '0')}`;
+    if (paidMonths.includes(selectedKey)) {
+      return; }
+    const selectedMonthDate =
+      new Date(
+        selectedYear,
+        selectedMonthIndex,
+        1
+      );
+    let consecutiveMissing = 0;
+    for (let i = 1; i <= 3; i++) {
+      const checkDate =
+        new Date(
+          selectedMonthDate.getFullYear(),
+          selectedMonthDate.getMonth() - i,
+          1
+        );
+      const checkKey =
+        `${checkDate.getFullYear()}-${String(
+          checkDate.getMonth() + 1
+        ).padStart(2, '0')}`;
+      if (paidMonths.includes(checkKey)) {
+        break; }
+      consecutiveMissing++; }
+    if (consecutiveMissing >= 3) {
+      results.push({
+        title,
+        lastPaidMonth:
+          paidMonths[paidMonths.length - 1]
+      });
+    }
+  });
+  return results; }
   function renderMonthlyTakeaway(entries) {
   const container =
     document.getElementById('monthlyTakeawayContent');
