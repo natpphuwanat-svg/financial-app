@@ -3321,10 +3321,6 @@ function renderExpenseTypeSummary(entries) {
       );
     }
   }
-  const deductionEntries =
-    currentEntries.filter(
-      item => item.financial_type === 'Deduction'
-    );
   const deductionInsight =
   buildDeductionInsight(
     currentEntries,
