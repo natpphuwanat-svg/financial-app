@@ -3245,16 +3245,28 @@ function renderExpenseTypeSummary(entries) {
     buildFinancialAnalysis(
       currentEntries,
       previousEntries
-    );
-  if (financialAnalysis) {
-    insights.push({
-      source: 'financial',
-      type: financialAnalysis.type || 'neutral',
-      priority: 3,
-      title: 'การเปลี่ยนแปลงทางการเงิน',
-      text: financialAnalysis.text
-    });
-  }
+      );
+  if (
+    financialAnalysis &&
+    Array.isArray(financialAnalysis.insights)
+    ) {
+      financialAnalysis.insights.forEach(
+        insight => {
+          insights.push({
+            source: insight.source || 'financial',
+            type: insight.type || 'neutral',
+            priority:
+            Number.isFinite(insight.priority)
+            ? insight.priority
+            : 3,
+            title:
+            insight.title ||
+            'การเปลี่ยนแปลงทางการเงิน',
+            text: insight.text
+          });
+        }
+      );
+    }
   const expenseEntries =
     currentEntries.filter(
       item => item.financial_type === 'Expense'
