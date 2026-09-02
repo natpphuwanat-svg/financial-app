@@ -3344,26 +3344,37 @@ function renderExpenseTypeSummary(entries) {
   );
   return insights; }
   function selectMonthlyTakeawayInsights(insights) {
-  if (!Array.isArray(insights) || insights.length === 0) {
+  if (
+    !Array.isArray(insights) ||
+    insights.length === 0
+  ) {
     return []; }
-  const selected = [...insights]
+  const typeOrder = {
+    warning: 1,
+    event: 2,
+    positive: 3,
+    neutral: 4,
+    context: 5
+  };
+  return [...insights]
     .sort((a, b) => {
-      if (a.priority !== b.priority) {
-        return a.priority - b.priority; }
-      const typeOrder = {
-        warning: 1,
-        event: 2,
-        positive: 3,
-        neutral: 4,
-        context: 5
-      };
+      const priorityA =
+        Number.isFinite(a.priority)
+          ? a.priority
+          : 99;
+      const priorityB =
+        Number.isFinite(b.priority)
+          ? b.priority
+          : 99;
+      if (priorityA !== priorityB) {
+        return priorityA - priorityB;
+      }
       return (
         (typeOrder[a.type] || 99) -
         (typeOrder[b.type] || 99)
       );
     })
-    .slice(0, 3);
-  return selected; }
+    .slice(0, 3); }
   function renderMonthlyTakeaway(entries) {
   const container =
     document.getElementById('monthlyTakeawayContent');
