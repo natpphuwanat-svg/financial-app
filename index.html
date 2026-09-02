@@ -3245,10 +3245,6 @@ function renderExpenseTypeSummary(entries) {
         </div>
   `;
   return; }
-  const incomeEntries =
-    currentEntries.filter(
-      item => item.financial_type === 'Income'
-    );
   const expenseEntries =
     currentEntries.filter(
       item => item.financial_type === 'Expense'
