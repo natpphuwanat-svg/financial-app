@@ -1308,6 +1308,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .monthly-comparison-dropdown-option.is-selected {
   color: var(--lime-400); opacity: 1; font-size: 10px;
 }
+
 .monthly-takeaway-card {
   margin: 0 2% 24px;
   padding: 0 14px;
@@ -1327,6 +1328,46 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   font-weight: 500;
   line-height: 1.65;
 }
+
+.monthly-takeaway-insight {
+  margin-bottom: 14px;
+}
+
+.monthly-takeaway-insight:last-child {
+  margin-bottom: 0;
+}
+
+.monthly-takeaway-insight-title {
+  color: var(--text-main);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.45;
+  margin-bottom: 3px;
+}
+
+.monthly-takeaway-insight-text {
+  color: var(--text-sub);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.65;
+}
+
+.monthly-takeaway-insight.warning .monthly-takeaway-insight-title {
+  color: var(--expense-color);
+}
+
+.monthly-takeaway-insight.positive .monthly-takeaway-insight-title {
+  color: var(--income-color);
+}
+
+.monthly-takeaway-insight.event .monthly-takeaway-insight-title {
+  color: var(--text-main);
+}
+
+.monthly-takeaway-insight.context .monthly-takeaway-insight-title {
+  color: var(--text-main);
+}
+
 .monthly-takeaway-empty {
   padding: 4px 2px 2px;
 }
@@ -2922,7 +2963,7 @@ function renderExpenseTypeSummary(entries) {
     );
    });
   }
-  function buildMonthlyAssessment(
+  function buildFinancialStory(
   currentEntries,
   previousEntries
 ) {
@@ -2930,7 +2971,9 @@ function renderExpenseTypeSummary(entries) {
     !Array.isArray(currentEntries) ||
     currentEntries.length === 0
   ) {
-    return null; }
+    return null;
+  }
+
   const getTotals = entries => {
     const income = entries
       .filter(
@@ -2941,6 +2984,7 @@ function renderExpenseTypeSummary(entries) {
           sum + Number(item.amount || 0),
         0
       );
+
     const expense = entries
       .filter(
         item => item.financial_type === 'Expense'
@@ -2950,12 +2994,14 @@ function renderExpenseTypeSummary(entries) {
           sum + Number(item.amount || 0),
         0
       );
-    const balance =
-      income - expense;
+
+    const balance = income - expense;
+
     const savingsRate =
       income > 0
         ? (balance / income) * 100
         : null;
+
     return {
       income,
       expense,
@@ -2963,14 +3009,70 @@ function renderExpenseTypeSummary(entries) {
       savingsRate
     };
   };
-  const current =
-    getTotals(currentEntries);
-  const previous =
+
+  const current = getTotals(currentEntries);
+
+  const hasPrevious =
     Array.isArray(previousEntries) &&
-    previousEntries.length > 0
-      ? getTotals(previousEntries)
-      : null;
-  if (!previous) {
+    previousEntries.length > 0;
+
+  const formatAmount = amount =>
+    `฿${Number(amount).toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    })}`;
+
+  /*
+   * FIRST MONTH WITH DATA
+   */
+  if (!hasPrevious) {
+
+    if (
+      current.income > 0 &&
+      current.expense > 0 &&
+      current.balance < 0
+    ) {
+      return {
+        source: 'financial-story',
+        group: 'financial',
+        type: 'warning',
+        priority: 1,
+        title: 'รายจ่ายสูงกว่ารายรับ',
+        text:
+          `เดือนนี้รายจ่ายสูงกว่ารายรับ ทำให้เงินคงเหลือติดลบ ${formatAmount(Math.abs(current.balance))}`
+      };
+    }
+
+    if (
+      current.income > 0 &&
+      current.expense === 0
+    ) {
+      return {
+        source: 'financial-story',
+        group: 'financial',
+        type: 'positive',
+        priority: 2,
+        title: 'ยังไม่มีรายจ่ายที่บันทึก',
+        text:
+          `เดือนนี้มีรายรับ ${formatAmount(current.income)} และยังไม่มีรายจ่ายที่บันทึกไว้`
+      };
+    }
+
+    if (
+      current.income === 0 &&
+      current.expense > 0
+    ) {
+      return {
+        source: 'financial-story',
+        group: 'financial',
+        type: 'warning',
+        priority: 1,
+        title: 'มีรายจ่ายแต่ยังไม่มีรายรับ',
+        text:
+          `เดือนนี้มีรายจ่าย ${formatAmount(current.expense)} แต่ยังไม่มีรายรับที่บันทึกไว้`
+      };
+    }
+
     if (
       current.income > 0 &&
       current.expense > 0 &&
@@ -2979,153 +3081,301 @@ function renderExpenseTypeSummary(entries) {
     ) {
       if (current.savingsRate >= 50) {
         return {
+          source: 'financial-story',
+          group: 'financial',
           type: 'positive',
+          priority: 2,
+          title: 'การเงินอยู่ในเกณฑ์ดี',
           text:
-            'ภาพรวมของเดือนนี้ การเงินของคุณอยู่ในเกณฑ์ดี และยังมีเงินเหลือสำหรับใช้มากกว่าครึ่งหนึ่งของรายรับ'
+            `เดือนนี้มีเงินคงเหลือ ${Math.round(current.savingsRate)}% ของรายรับ หลังหักรายจ่ายแล้ว`
         };
       }
+
       if (current.savingsRate >= 30) {
         return {
+          source: 'financial-story',
+          group: 'financial',
           type: 'neutral',
+          priority: 4,
+          title: 'การเงินค่อนข้างสมดุล',
           text:
-            'ภาพรวมของเดือนนี้ การเงินของคุณค่อนข้างสมดุล โดยยังมีเงินเหลือสำหรับใช้หลังหักรายจ่าย'
+            `เดือนนี้ยังมีเงินคงเหลือ ${Math.round(current.savingsRate)}% ของรายรับหลังหักรายจ่าย`
         };
       }
+
       return {
-        type: 'caution',
+        source: 'financial-story',
+        group: 'financial',
+        type: 'warning',
+        priority: 2,
+        title: 'เงินคงเหลือค่อนข้างต่ำ',
         text:
-          'ภาพรวมของเดือนนี้ควรจับตาเรื่องเงินคงเหลือ เพราะรายจ่ายใช้สัดส่วนค่อนข้างมากของรายรับ'
+          `เดือนนี้เหลือเงิน ${Math.round(current.savingsRate)}% ของรายรับหลังหักรายจ่าย`
       };
     }
-    if (
-      current.income > 0 &&
-      current.expense === 0
-    ) {
-      return {
-        type: 'positive',
-        text:
-          'ภาพรวมของเดือนนี้ยังมีเงินเหลือจากรายรับทั้งหมด เนื่องจากยังไม่มีรายจ่ายที่บันทึกไว้'
-      };
-    }
-    if (
-      current.income === 0 &&
-      current.expense > 0
-    ) {
-      return {
-        type: 'caution',
-        text:
-          'ภาพรวมของเดือนนี้ควรจับตาเรื่องเงินคงเหลือ เนื่องจากมีรายจ่ายแต่ยังไม่มีรายรับที่บันทึกไว้'
-      };
-    }
-    return {
-      type: 'neutral',
-      text:
-        'ภาพรวมของเดือนนี้ยังมีข้อมูลไม่เพียงพอสำหรับประเมินสถานะทางการเงิน'
-    };
+
+    return null;
   }
+
+  /*
+   * MONTH-TO-MONTH ANALYSIS
+   */
+
+  const previous = getTotals(previousEntries);
+
   const getPercentChange = (
     currentValue,
     previousValue
   ) => {
-    if (previousValue <= 0) {
-      return null; }
+    if (previousValue === 0) {
+      return null;
+    }
+
     return (
       ((currentValue - previousValue) /
-        previousValue) *
+        Math.abs(previousValue)) *
       100
     );
   };
+
   const incomeChange =
     getPercentChange(
       current.income,
       previous.income
     );
+
   const expenseChange =
     getPercentChange(
       current.expense,
       previous.expense
     );
+
   const balanceChange =
     getPercentChange(
       current.balance,
       previous.balance
     );
-  const savingsRateChange =
+
+  const savingsDifference =
     current.savingsRate !== null &&
     previous.savingsRate !== null
       ? current.savingsRate -
         previous.savingsRate
       : null;
+
+  /*
+   * 1. BALANCE CROSSING ZERO
+   * Highest importance.
+   */
+
   if (
-    savingsRateChange !== null &&
-    savingsRateChange <= -10
+    previous.balance >= 0 &&
+    current.balance < 0
   ) {
     return {
-      type: 'caution',
+      source: 'financial-story',
+      group: 'financial',
+      type: 'warning',
+      priority: 1,
+      title: 'Balance ติดลบ',
       text:
-        'ภาพรวมของเดือนนี้ควรจับตาเรื่องเงินที่เหลือสำหรับใช้ เพราะสัดส่วนเงินคงเหลือลดลงอย่างชัดเจนจากเดือนก่อน'
+        `เงินคงเหลือกลายเป็นติดลบ ${formatAmount(Math.abs(current.balance))} จากเดือนก่อนที่ยังไม่ติดลบ`
     };
   }
+
+  if (
+    previous.balance < 0 &&
+    current.balance >= 0
+  ) {
+    return {
+      source: 'financial-story',
+      group: 'financial',
+      type: 'positive',
+      priority: 1,
+      title: 'Balance กลับมาเป็นบวก',
+      text:
+        `เงินคงเหลือกลับมาเป็นบวกที่ ${formatAmount(current.balance)} จากเดือนก่อนที่ติดลบ`
+    };
+  }
+
+  /*
+   * 2. EXPENSE GROWS FASTER THAN INCOME
+   */
+
   if (
     incomeChange !== null &&
     expenseChange !== null &&
     expenseChange >= 10 &&
     expenseChange > incomeChange
   ) {
+    let text =
+      `รายรับเพิ่มขึ้น ${Math.round(Math.abs(incomeChange))}% แต่รายจ่ายเพิ่มขึ้น ${Math.round(Math.abs(expenseChange))}% จากเดือนก่อน`;
+
+    if (
+      savingsDifference !== null &&
+      savingsDifference <= -5
+    ) {
+      text +=
+        ` ทำให้ Savings Rate ลดจาก ${Math.round(previous.savingsRate)}% เหลือ ${Math.round(current.savingsRate)}%`;
+    }
+
     return {
-      type: 'caution',
-      text:
-        'ภาพรวมของเดือนนี้ควรจับตาเรื่องรายจ่าย เพราะรายจ่ายเพิ่มขึ้นเร็วกว่ารายรับจากเดือนก่อน'
+      source: 'financial-story',
+      group: 'financial',
+      type: 'warning',
+      priority: 1,
+      title: 'รายจ่ายเพิ่มเร็วกว่ารายรับ',
+      text
     };
   }
+
+  /*
+   * 3. INCOME FALLS WHILE EXPENSE DOES NOT FALL
+   */
+
   if (
-    balanceChange !== null &&
-    balanceChange <= -10
+    incomeChange !== null &&
+    incomeChange <= -10 &&
+    (
+      expenseChange === null ||
+      expenseChange >= incomeChange
+    )
   ) {
     return {
-      type: 'caution',
+      source: 'financial-story',
+      group: 'financial',
+      type: 'warning',
+      priority: 1,
+      title: 'รายรับลดลง',
       text:
-        'ภาพรวมของเดือนนี้ควรจับตาเรื่องเงินคงเหลือ เพราะยอดเงินที่เหลือลดลงอย่างชัดเจนจากเดือนก่อน'
+        `รายรับลดลง ${Math.round(Math.abs(incomeChange))}% จากเดือนก่อน ทำให้ต้องจับตาเงินคงเหลือ`
     };
   }
+
+  /*
+   * 4. SAVINGS RATE DROPS SIGNIFICANTLY
+   */
+
+  if (
+    savingsDifference !== null &&
+    savingsDifference <= -10
+  ) {
+    return {
+      source: 'financial-story',
+      group: 'financial',
+      type: 'warning',
+      priority: 1,
+      title: 'Savings Rate ลดลง',
+      text:
+        `Savings Rate ลดจาก ${Math.round(previous.savingsRate)}% เหลือ ${Math.round(current.savingsRate)}% จากเดือนก่อน`
+    };
+  }
+
+  /*
+   * 5. EXPENSE FALLS
+   */
+
+  if (
+    expenseChange !== null &&
+    expenseChange <= -10
+  ) {
+    return {
+      source: 'financial-story',
+      group: 'financial',
+      type: 'positive',
+      priority: 2,
+      title: 'รายจ่ายลดลง',
+      text:
+        `รายจ่ายลดลง ${Math.round(Math.abs(expenseChange))}% จากเดือนก่อน ทำให้เงินคงเหลือดีขึ้น`
+    };
+  }
+
+  /*
+   * 6. INCOME GROWS FASTER THAN EXPENSE
+   */
+
   if (
     incomeChange !== null &&
     expenseChange !== null &&
     incomeChange >= 10 &&
     incomeChange > expenseChange
   ) {
+    let text =
+      `รายรับเพิ่มขึ้น ${Math.round(incomeChange)}% ขณะที่รายจ่ายเพิ่มขึ้น ${Math.max(0, Math.round(expenseChange))}% จากเดือนก่อน`;
+
+    if (
+      savingsDifference !== null &&
+      savingsDifference >= 5
+    ) {
+      text +=
+        ` ทำให้ Savings Rate เพิ่มจาก ${Math.round(previous.savingsRate)}% เป็น ${Math.round(current.savingsRate)}%`;
+    }
+
     return {
+      source: 'financial-story',
+      group: 'financial',
       type: 'positive',
-      text:
-        'ภาพรวมของเดือนนี้ การเงินของคุณอยู่ในทิศทางที่ดีขึ้น เพราะรายรับเพิ่มขึ้นเร็วกว่ารายจ่าย'
+      priority: 2,
+      title: 'รายรับโตเร็วกว่ารายจ่าย',
+      text
     };
   }
+
+  /*
+   * 7. SAVINGS RATE IMPROVES
+   */
+
   if (
-    expenseChange !== null &&
-    expenseChange <= -10
+    savingsDifference !== null &&
+    savingsDifference >= 10
   ) {
     return {
+      source: 'financial-story',
+      group: 'financial',
       type: 'positive',
+      priority: 2,
+      title: 'Savings Rate เพิ่มขึ้น',
       text:
-        'ภาพรวมของเดือนนี้ การเงินของคุณดีขึ้นจากเดือนก่อน เพราะรายจ่ายลดลง'
+        `Savings Rate เพิ่มจาก ${Math.round(previous.savingsRate)}% เป็น ${Math.round(current.savingsRate)}% จากเดือนก่อน`
     };
   }
+
+  /*
+   * 8. BALANCE CHANGES MEANINGFULLY
+   */
+
   if (
-    savingsRateChange !== null &&
-    savingsRateChange >= 10
+    balanceChange !== null &&
+    Math.abs(balanceChange) >= 10
   ) {
+    if (balanceChange > 0) {
+      return {
+        source: 'financial-story',
+        group: 'financial',
+        type: 'positive',
+        priority: 3,
+        title: 'Balance ดีขึ้น',
+        text:
+          `เงินคงเหลือเพิ่มขึ้น ${Math.round(balanceChange)}% จากเดือนก่อน`
+      };
+    }
+
     return {
-      type: 'positive',
+      source: 'financial-story',
+      group: 'financial',
+      type: 'warning',
+      priority: 2,
+      title: 'Balance ลดลง',
       text:
-        'ภาพรวมของเดือนนี้ คุณจัดการเงินได้ดีขึ้น โดยมีสัดส่วนเงินคงเหลือเพิ่มขึ้นจากเดือนก่อน'
+        `เงินคงเหลือลดลง ${Math.round(Math.abs(balanceChange))}% จากเดือนก่อน`
     };
   }
-  return {
-    type: 'neutral',
-    text:
-      'ภาพรวมของเดือนนี้ การเงินของคุณค่อนข้างทรงตัวเมื่อเทียบกับเดือนก่อน'
-   };
-  }
+
+  /*
+   * Nothing meaningful enough to show.
+   */
+
+  return null; }
   function findPaymentCompletionInsights(
   allEntries,
   selectedMonth
@@ -3225,59 +3475,83 @@ function renderExpenseTypeSummary(entries) {
   previousEntries,
   paymentHistoryEntries,
   selectedMonthKey
-  ) {
+) {
   const insights = [];
-  const monthlyAssessment =
-    buildMonthlyAssessment(
+
+  /*
+   * FINANCIAL
+   * Maximum 1 candidate because
+   * Financial Story is already synthesized.
+   */
+  const financialStory =
+    buildFinancialStory(
       currentEntries,
       previousEntries
     );
-  if (monthlyAssessment) {
+
+  if (financialStory) {
+    insights.push(financialStory);
+  }
+
+  /*
+   * DEDUCTION
+   * Maximum 1 candidate.
+   */
+  const deductionInsight =
+    buildDeductionInsight(
+      currentEntries,
+      previousEntries
+    );
+
+  if (deductionInsight) {
+    insights.push(deductionInsight);
+  }
+
+  /*
+   * PAYMENT COMPLETION
+   * Existing 3-month logic is preserved.
+   */
+  const paymentCompletionInsights =
+    findPaymentCompletionInsights(
+      paymentHistoryEntries,
+      selectedMonthKey
+    );
+
+  if (
+    paymentCompletionInsights.length > 0
+  ) {
+    const firstPayment =
+      paymentCompletionInsights[0];
+
     insights.push({
-      source: 'assessment',
-      type: monthlyAssessment.type || 'neutral',
-      priority: 4,
-      title: 'ภาพรวมการเงิน',
-      text: monthlyAssessment.text
+      source: 'payment-completion',
+      group: 'payment',
+      type: 'event',
+      priority: 2,
+      title: 'Payment Completion',
+      text:
+        `“${firstPayment.title}” ไม่มีรายการชำระเงินต่อเนื่องมา 3 เดือนแล้ว ซึ่งอาจหมายความว่าภาระรายการนี้สิ้นสุดลง`
     });
   }
-  const financialAnalysis =
-    buildFinancialAnalysis(
-      currentEntries,
-      previousEntries
-      );
-  if (
-    financialAnalysis &&
-    Array.isArray(financialAnalysis.insights)
-    ) {
-      financialAnalysis.insights.forEach(
-        insight => {
-          insights.push({
-            source: insight.source || 'financial',
-            type: insight.type || 'neutral',
-            priority:
-            Number.isFinite(insight.priority)
-            ? insight.priority
-            : 3,
-            title:
-            insight.title ||
-            'การเปลี่ยนแปลงทางการเงิน',
-            text: insight.text
-          });
-        }
-      );
-    }
+
+  /*
+   * TOP EXPENSE
+   * Context / fallback only.
+   */
   const expenseEntries =
     currentEntries.filter(
-      item => item.financial_type === 'Expense'
+      item =>
+        item.financial_type === 'Expense'
     );
-  const totalExpense =
-    expenseEntries.reduce(
-      (sum, item) =>
-        sum + Number(item.amount || 0),
-      0
-    );
+
   if (expenseEntries.length > 0) {
+    const totalExpense =
+      expenseEntries.reduce(
+        (sum, item) =>
+          sum + Number(item.amount || 0),
+        0
+      );
+
     const topExpense =
       expenseEntries.reduce(
         (largest, item) =>
@@ -3286,69 +3560,94 @@ function renderExpenseTypeSummary(entries) {
             ? item
             : largest
       );
+
     const topExpenseAmount =
       Number(topExpense.amount || 0);
+
     const topExpenseName =
       topExpense.name ||
       topExpense.title ||
       topExpense.description ||
       'รายการนี้';
+
     const expenseShare =
       totalExpense > 0
-        ? (topExpenseAmount / totalExpense) * 100
-        : null;
-    if (expenseShare !== null) {
-      insights.push({
-        source: 'top-expense',
-        type: 'context',
-        priority: 5,
-        title: 'Top Expense',
-        text:
-          `รายการ “${topExpenseName}” เป็นรายจ่ายสูงสุดของเดือนนี้ จำนวน ฿${topExpenseAmount.toLocaleString('en-US', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-          })} และคิดเป็น ${Math.round(expenseShare)}% ของรายจ่ายทั้งหมด`
-      });
-    }
-  }
-  const deductionInsight =
-    buildDeductionInsight(
-      currentEntries,
-      previousEntries
-    );
-  if (deductionInsight) {
+        ? (topExpenseAmount / totalExpense) *
+          100
+        : 0;
+
     insights.push({
-      source: 'deduction',
-      type: deductionInsight.type || 'neutral',
-      priority: 3,
-      title: 'Deduction',
-      text: deductionInsight.text
+      source: 'top-expense',
+      group: 'context',
+      type: 'context',
+      priority: 5,
+      title: 'Top Expense',
+      text:
+        `“${topExpenseName}” เป็นรายจ่ายสูงสุดของเดือนนี้ ${`฿${topExpenseAmount.toLocaleString('en-US', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        })}`} และคิดเป็น ${Math.round(expenseShare)}% ของรายจ่ายทั้งหมด`
     });
   }
-  const paymentCompletionInsights =
-    findPaymentCompletionInsights(
-      paymentHistoryEntries,
-      selectedMonthKey
-    );
-  paymentCompletionInsights.forEach(
-    insight => {
-      insights.push({
-        source: 'payment-completion',
-        type: 'event',
-        priority: 2,
-        title: 'Payment Completion',
-        text:
-          `“${insight.title}” ไม่มีรายการชำระเงินต่อเนื่องมา 3 เดือนแล้ว ซึ่งอาจหมายความว่าภาระรายการนี้สิ้นสุดลง`
-      });
-    }
-  );
-  return insights; }
-  function selectMonthlyTakeawayInsights(insights) {
+
+  return insights;
+}
+
+
+function selectMonthlyTakeawayInsights(
+  insights
+) {
   if (
     !Array.isArray(insights) ||
     insights.length === 0
   ) {
-    return []; }
+    return [];
+  }
+
+  /*
+   * One insight per group.
+   */
+  const selectedByGroup = new Map();
+
+  insights.forEach(insight => {
+    if (!insight || !insight.group) {
+      return;
+    }
+
+    const existing =
+      selectedByGroup.get(
+        insight.group
+      );
+
+    if (!existing) {
+      selectedByGroup.set(
+        insight.group,
+        insight
+      );
+      return;
+    }
+
+    const currentPriority =
+      Number.isFinite(insight.priority)
+        ? insight.priority
+        : 99;
+
+    const existingPriority =
+      Number.isFinite(existing.priority)
+        ? existing.priority
+        : 99;
+
+    if (
+      currentPriority <
+      existingPriority
+    ) {
+      selectedByGroup.set(
+        insight.group,
+        insight
+      );
+    }
+  });
+
   const typeOrder = {
     warning: 1,
     event: 2,
@@ -3356,405 +3655,157 @@ function renderExpenseTypeSummary(entries) {
     neutral: 4,
     context: 5
   };
-  return [...insights]
-    .sort((a, b) => {
-      const priorityA =
-        Number.isFinite(a.priority)
-          ? a.priority
-          : 99;
-      const priorityB =
-        Number.isFinite(b.priority)
-          ? b.priority
-          : 99;
-      if (priorityA !== priorityB) {
-        return priorityA - priorityB;
-      }
+
+  const selected = [
+    ...selectedByGroup.values()
+  ];
+
+  selected.sort((a, b) => {
+
+    const priorityA =
+      Number.isFinite(a.priority)
+        ? a.priority
+        : 99;
+
+    const priorityB =
+      Number.isFinite(b.priority)
+        ? b.priority
+        : 99;
+
+    if (
+      priorityA !== priorityB
+    ) {
       return (
-        (typeOrder[a.type] || 99) -
-        (typeOrder[b.type] || 99)
+        priorityA - priorityB
       );
-    })
-    .slice(0, 3); }
-  function renderMonthlyTakeawayInsight(insight) {
-    if (!insight) return '';
-    const title =
-      insight.title ||
-      'Monthly Insight';
-    const text =
-      insight.text ||
-      '';
-      return `
-      <div class="monthly-takeaway-insight">
-       <div class="monthly-takeaway-insight-title">
-       ${title}
+    }
+
+    return (
+      (typeOrder[a.type] || 99) -
+      (typeOrder[b.type] || 99)
+    );
+  });
+
+  /*
+   * Maximum 3.
+   * It is a maximum, not a minimum.
+   */
+  return selected.slice(0, 3); }
+  function renderMonthlyTakeawayInsight(
+  insight
+) {
+  if (!insight) return '';
+  const title =
+    insight.title ||
+    'Monthly Insight';
+  const text =
+    insight.text ||
+    '';
+  const type =
+    insight.type ||
+    'neutral';
+  return `
+    <div class="monthly-takeaway-insight ${type}">
+      <div class="monthly-takeaway-insight-title">
+        ${title}
       </div>
-       <div class="monthly-takeaway-insight-text">
-       ${text}
+      <div class="monthly-takeaway-insight-text">
+        ${text}
       </div>
-     </div>
-    `;
+    </div>
+   `;
   }
   function renderMonthlyTakeaway(entries) {
   const container =
-    document.getElementById('monthlyTakeawayContent');
+    document.getElementById(
+      'monthlyTakeawayContent'
+    );
+
   if (!container) return;
-  const currentEntries = Array.isArray(entries)
-    ? entries
-    : [];
+
+  const currentEntries =
+    Array.isArray(entries)
+      ? entries
+      : [];
+
   const takeawayState =
-  getMonthlyTakeawayState(
-    currentEntries
+    getMonthlyTakeawayState(
+      currentEntries
     );
-    if (
-      takeawayState.type !== 'HAS_DATA'
-      ) {
-        container.innerHTML = `
-        <div class="monthly-takeaway-empty">
+
+  /*
+   * EMPTY STATE
+   */
+  if (
+    takeawayState.type !== 'HAS_DATA'
+  ) {
+    container.innerHTML = `
+      <div class="monthly-takeaway-empty">
         <div class="monthly-takeaway-empty-title">
-        ${takeawayState.title}
+          ${takeawayState.title}
         </div>
+
         <div class="monthly-takeaway-empty-description">
-        ${takeawayState.description}
+          ${takeawayState.description}
         </div>
-        </div>
-  `;
-  return; }
-  const expenseEntries =
-    currentEntries.filter(
-      item => item.financial_type === 'Expense'
-    );
-  const totalExpense =
-    expenseEntries.reduce(
-      (sum, item) => sum + Number(item.amount || 0),
-      0
-    );
-  const formatAmount = amount =>
-    `฿${Number(amount).toLocaleString('en-US', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    })}`;
+      </div>
+    `;
+
+    return;
+  }
+
+  /*
+   * BUILD INSIGHTS
+   */
   const selectedMonthKey =
-    `${selectedYear}-${String(selectedMonth).padStart(2, '0')}`;
+    `${selectedYear}-${String(
+      selectedMonth
+    ).padStart(2, '0')}`;
+
   const insights =
     collectMonthlyTakeawayInsights(
       currentEntries,
       previousMonthEntries,
       paymentHistoryEntries,
       selectedMonthKey
-      );
+    );
+
+  /*
+   * SELECT MAXIMUM 3 INSIGHTS
+   */
   const selectedInsights =
     selectMonthlyTakeawayInsights(
       insights
-      );
-  const takeawayInsights =
+    );
+
+  /*
+   * RENDER
+   */
+  container.innerHTML =
     selectedInsights
       .map(renderMonthlyTakeawayInsight)
       .join('');
-  container.innerHTML =
-    takeawayInsights; }
-  function buildFinancialAnalysis(
-  currentEntries,
-  previousEntries
-) {
-  const currentIncome =
-    currentEntries
-      .filter(
-        item => item.financial_type === 'Income'
-      )
-      .reduce(
-        (sum, item) =>
-          sum + Number(item.amount || 0),
-        0
-      );
-  const currentExpense =
-    currentEntries
-      .filter(
-        item => item.financial_type === 'Expense'
-      )
-      .reduce(
-        (sum, item) =>
-          sum + Number(item.amount || 0),
-        0
-      );
-  const currentBalance =
-    currentIncome - currentExpense;
-  const currentSavingsRate =
-    currentIncome > 0
-      ? (currentBalance / currentIncome) * 100
-      : 0;
-  const previousIncome =
-    previousEntries
-      .filter(
-        item => item.financial_type === 'Income'
-      )
-      .reduce(
-        (sum, item) =>
-          sum + Number(item.amount || 0),
-        0
-      );
-  const previousExpense =
-    previousEntries
-      .filter(
-        item => item.financial_type === 'Expense'
-      )
-      .reduce(
-        (sum, item) =>
-          sum + Number(item.amount || 0),
-        0
-      );
-  const previousBalance =
-    previousIncome - previousExpense;
-  const previousSavingsRate =
-    previousIncome > 0
-      ? (previousBalance / previousIncome) * 100
-      : 0;
-  const formatAmount = amount =>
-    `฿${Number(amount).toLocaleString('en-US', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    })}`;
-  const getPercentChange = (
-    current,
-    previous
-  ) => {
-    if (previous === 0) return null;
-    return (
-      ((current - previous) / Math.abs(previous)) *
-      100
-    );
-  };
-  const changedFromZero = (
-    current,
-    previous
-  ) =>
-    previous === 0 &&
-    current !== 0;
-  const insights = [];
-  if (changedFromZero(
-    currentIncome,
-    previousIncome
-  )) {
-    insights.push({
-      source: 'financial-income',
-      type:
-        currentIncome > 0
-          ? 'positive'
-          : 'neutral',
-      priority: 3,
-      title: 'Income',
-      text:
-        `เดือนนี้มีรายรับ ${formatAmount(currentIncome)} จากเดือนก่อนที่ไม่มีรายรับ`
-    });
-  } else {
-    const incomeChange =
-      getPercentChange(
-        currentIncome,
-        previousIncome
-      );
-    if (
-      incomeChange !== null &&
-      Math.abs(incomeChange) >= 10
-    ) {
-      insights.push({
-        source: 'financial-income',
-        type:
-          incomeChange > 0
-            ? 'positive'
-            : 'warning',
-        priority:
-          incomeChange > 0
-            ? 3
-            : 1,
-        title:
-          incomeChange > 0
-            ? 'Income เพิ่มขึ้น'
-            : 'Income ลดลง',
-        text:
-          incomeChange > 0
-            ? `รายรับเพิ่มขึ้น ${Math.round(Math.abs(incomeChange))}% จากเดือนก่อน`
-            : `รายรับลดลง ${Math.round(Math.abs(incomeChange))}% จากเดือนก่อน`
-      });
-    }
-  }
-  if (changedFromZero(
-    currentExpense,
-    previousExpense
-  )) {
-    insights.push({
-      source: 'financial-expense',
-      type: 'warning',
-      priority: 1,
-      title: 'Expense เพิ่มขึ้น',
-      text:
-        `เดือนนี้มีรายจ่าย ${formatAmount(currentExpense)} จากเดือนก่อนที่ไม่มีรายจ่าย`
-    });
-  } else {
-    const expenseChange =
-      getPercentChange(
-        currentExpense,
-        previousExpense
-      );
-    if (
-      expenseChange !== null &&
-      Math.abs(expenseChange) >= 10
-    ) {
-      insights.push({
-        source: 'financial-expense',
-        type:
-          expenseChange > 0
-            ? 'warning'
-            : 'positive',
-        priority:
-          expenseChange > 0
-            ? 1
-            : 2,
-        title:
-          expenseChange > 0
-            ? 'Expense เพิ่มขึ้น'
-            : 'Expense ลดลง',
-        text:
-          expenseChange > 0
-            ? `รายจ่ายเพิ่มขึ้น ${Math.round(Math.abs(expenseChange))}% จากเดือนก่อน`
-            : `รายจ่ายลดลง ${Math.round(Math.abs(expenseChange))}% จากเดือนก่อน`
-      });
-    }
-  }
-  if (
-    previousBalance === 0 &&
-    currentBalance !== 0
-  ) {
-    insights.push({
-      source: 'financial-balance',
-      type:
-        currentBalance > 0
-          ? 'positive'
-          : 'warning',
-      priority:
-        currentBalance > 0
-          ? 2
-          : 1,
-      title:
-        currentBalance > 0
-          ? 'Balance กลับมาเป็นบวก'
-          : 'Balance ติดลบ',
-      text:
-        currentBalance > 0
-          ? `เดือนนี้มีเงินคงเหลือ ${formatAmount(currentBalance)} จากเดือนก่อนที่ไม่เหลือเงิน`
-          : `เดือนนี้เงินคงเหลือติดลบ ${formatAmount(Math.abs(currentBalance))}`
-    });
-  } else if (
-    previousBalance < 0 &&
-    currentBalance >= 0
-  ) {
-    insights.push({
-      source: 'financial-balance',
-      type: 'positive',
-      priority: 1,
-      title: 'Balance กลับมาเป็นบวก',
-      text:
-        `เงินคงเหลือกลับมาเป็นบวกที่ ${formatAmount(currentBalance)} จากเดือนก่อนที่ติดลบ`
-    });
-  } else if (
-    previousBalance >= 0 &&
-    currentBalance < 0
-  ) {
-    insights.push({
-      source: 'financial-balance',
-      type: 'warning',
-      priority: 1,
-      title: 'Balance ติดลบ',
-      text:
-        `เงินคงเหลือกลายเป็นติดลบ ${formatAmount(Math.abs(currentBalance))} จากเดือนก่อนที่ยังไม่ติดลบ`
-    });
-  } else {
-    const balanceChange =
-      getPercentChange(
-        currentBalance,
-        previousBalance
-      );
-    if (
-      balanceChange !== null &&
-      Math.abs(balanceChange) >= 10
-    ) {
-      insights.push({
-        source: 'financial-balance',
-        type:
-          balanceChange > 0
-            ? 'positive'
-            : 'warning',
-        priority:
-          balanceChange > 0
-            ? 2
-            : 1,
-        title:
-          balanceChange > 0
-            ? 'Balance ดีขึ้น'
-            : 'Balance ลดลง',
-        text:
-          balanceChange > 0
-            ? `เงินคงเหลือเพิ่มขึ้น ${Math.round(Math.abs(balanceChange))}% จากเดือนก่อน`
-            : `เงินคงเหลือลดลง ${Math.round(Math.abs(balanceChange))}% จากเดือนก่อน`
-      });
-    }
-  }
-  const savingsDifference =
-    currentSavingsRate -
-    previousSavingsRate;
-  if (
-    previousIncome > 0 &&
-    currentIncome > 0 &&
-    Math.abs(savingsDifference) >= 5
-  ) {
-    insights.push({
-      source: 'financial-savings-rate',
-      type:
-        savingsDifference > 0
-          ? 'positive'
-          : 'warning',
-      priority:
-        savingsDifference > 0
-          ? 2
-          : 1,
-      title:
-        savingsDifference > 0
-          ? 'Savings Rate เพิ่มขึ้น'
-          : 'Savings Rate ลดลง',
-      text:
-        savingsDifference > 0
-          ? `Savings Rate เพิ่มจาก ${Math.round(previousSavingsRate)}% เป็น ${Math.round(currentSavingsRate)}%`
-          : `Savings Rate ลดจาก ${Math.round(previousSavingsRate)}% เหลือ ${Math.round(currentSavingsRate)}%`
-    });
-  }
-  if (insights.length === 0) {
-    insights.push({
-      source: 'financial-neutral',
-      type: 'neutral',
-      priority: 4,
-      title: 'การเงินค่อนข้างคงที่',
-      text:
-        'รายรับ รายจ่าย และเงินคงเหลือเปลี่ยนแปลงไม่มากจากเดือนก่อน'
-    });
-  }
-  return {
-    type: 'comparison',
-    insights
-  };
 }
   function buildDeductionInsight(
   currentEntries,
   previousEntries
 ) {
   if (!Array.isArray(currentEntries)) {
-    return null; }
+    return null;
+  }
+
   const currentDeductionEntries =
     currentEntries.filter(
       item =>
         item.financial_type === 'Deduction'
     );
+
   if (
     currentDeductionEntries.length === 0
   ) {
-    return null; }
+    return null;
+  }
+
   const previousDeductionEntries =
     Array.isArray(previousEntries)
       ? previousEntries.filter(
@@ -3763,38 +3814,56 @@ function renderExpenseTypeSummary(entries) {
             'Deduction'
         )
       : [];
+
   const getTitle = item =>
     item.name ||
     item.title ||
     item.description ||
     'รายการนี้';
+
   const getGroupedAmounts = entries => {
     const grouped = {};
+
     entries.forEach(item => {
       const title = getTitle(item);
+
       if (!grouped[title]) {
-        grouped[title] = 0; }
+        grouped[title] = 0;
+      }
+
       grouped[title] +=
         Number(item.amount || 0);
     });
+
     return grouped;
   };
+
   const currentGrouped =
     getGroupedAmounts(
       currentDeductionEntries
     );
+
   const previousGrouped =
     getGroupedAmounts(
       previousDeductionEntries
     );
+
   const significantChanges = [];
+
   Object.entries(currentGrouped).forEach(
     ([title, currentAmount]) => {
+
       const previousAmount =
         previousGrouped[title] || 0;
+
       const difference =
         currentAmount - previousAmount;
-      if (difference >= 100) {
+
+      /*
+       * IMPORTANT:
+       * Strictly greater than ฿100.
+       */
+      if (difference > 100) {
         significantChanges.push({
           title,
           currentAmount,
@@ -3804,6 +3873,7 @@ function renderExpenseTypeSummary(entries) {
       }
     }
   );
+
   if (
     significantChanges.length > 0
   ) {
@@ -3811,8 +3881,10 @@ function renderExpenseTypeSummary(entries) {
       (a, b) =>
         b.difference - a.difference
     );
+
     const largest =
       significantChanges[0];
+
     const formatAmount = amount =>
       `฿${Number(amount).toLocaleString(
         'en-US',
@@ -3821,24 +3893,31 @@ function renderExpenseTypeSummary(entries) {
           maximumFractionDigits: 2
         }
       )}`;
+
     return {
-      type: 'significant',
-      title: largest.title,
-      difference: largest.difference,
-      currentAmount:
-        largest.currentAmount,
-      previousAmount:
-        largest.previousAmount,
+      source: 'deduction',
+      group: 'deduction',
+      type: 'warning',
+      priority: 1,
+      title:
+        `Deduction เพิ่มขึ้น: ${largest.title}`,
       text:
-        `ยอดหักจากการทำงานเพิ่มขึ้น โดย “${largest.title}” เพิ่มขึ้น ${formatAmount(largest.difference)} จากเดือนก่อน`
+        `ยอดหักจากการทำงานของ “${largest.title}” เพิ่มขึ้น ${formatAmount(largest.difference)} จากเดือนก่อน`
     };
   }
+
+  /*
+   * Normal deduction = context only.
+   * It should not compete with important warnings.
+   */
+
   const totalDeduction =
     currentDeductionEntries.reduce(
       (sum, item) =>
         sum + Number(item.amount || 0),
       0
     );
+
   const formatAmount = amount =>
     `฿${Number(amount).toLocaleString(
       'en-US',
@@ -3847,15 +3926,17 @@ function renderExpenseTypeSummary(entries) {
         maximumFractionDigits: 2
       }
     )}`;
+
   return {
-    type: 'normal',
-    totalDeduction,
-    count:
-      currentDeductionEntries.length,
+    source: 'deduction',
+    group: 'deduction',
+    type: 'context',
+    priority: 5,
+    title: 'Deduction',
     text:
       `เดือนนี้มียอดหักจากการทำงานทั้งหมด ${formatAmount(totalDeduction)} จาก ${currentDeductionEntries.length} รายการ`
-   };
-  }
+  };
+}
   function getMonthlyTakeawayState(
   currentEntries
   ) {
