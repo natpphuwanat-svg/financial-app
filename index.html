@@ -3391,77 +3391,23 @@ function renderExpenseTypeSummary(entries) {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     })}`;
-  const paragraphs = [];
-    const monthlyAssessment =
-    buildMonthlyAssessment(
-      currentEntries,
-      previousMonthEntries
-    );
-  if (monthlyAssessment) {
-    paragraphs.push(
-      monthlyAssessment.text
-    );
-  }
-  const financialAnalysis =
-  buildFinancialAnalysis(
-    currentEntries,
-    previousMonthEntries
-  );
-  if (financialAnalysis) {
-    paragraphs.push(
-      financialAnalysis.text
-      );
-  }
-  if (expenseEntries.length > 0) {
-  const topExpense =
-    expenseEntries.reduce(
-      (largest, item) =>
-        Number(item.amount || 0) >
-        Number(largest.amount || 0)
-          ? item
-          : largest
-    );
-  const topExpenseAmount =
-    Number(topExpense.amount || 0);
-  const topExpenseName =
-    topExpense.name ||
-    topExpense.title ||
-    topExpense.description ||
-    'รายการนี้';
-  const expenseShare =
-    totalExpense > 0
-      ? (topExpenseAmount / totalExpense) * 100
-      : null;
-  if (expenseShare !== null) {
-    paragraphs.push(
-      `รายการ “${topExpenseName}” เป็นรายจ่ายสูงสุดของเดือนนี้ จำนวน ${formatAmount(topExpenseAmount)} และคิดเป็น ${Math.round(expenseShare)}% ของรายจ่ายทั้งหมด`
-      );
-    }
-  }
-  const deductionInsight =
-  buildDeductionInsight(
-    currentEntries,
-    previousMonthEntries
-  );
-  if (deductionInsight) {
-    paragraphs.push(
-      deductionInsight.text
-      );
-  }
   const selectedMonthKey =
     `${selectedYear}-${String(selectedMonth).padStart(2, '0')}`;
-  const paymentCompletionInsights =
-    findPaymentCompletionInsights(
+  const insights =
+    collectMonthlyTakeawayInsights(
+      currentEntries,
+      previousMonthEntries,
       paymentHistoryEntries,
       selectedMonthKey
-    );
-  paymentCompletionInsights.forEach(
-    insight => {
-      paragraphs.push(
-        `“${insight.title}” ไม่มีรายการชำระเงินต่อเนื่องมา 3 เดือนแล้ว ซึ่งอาจหมายความว่าภาระรายการนี้สิ้นสุดลง`
       );
-    }
-  );
+  const selectedInsights =
+    selectMonthlyTakeawayInsights(
+      insights
+      );
+  const paragraphs =
+    selectedInsights.map(
+      insight => insight.text
+      );
   container.innerHTML =
     paragraphs
       .map(text => `<p>${text}</p>`)
