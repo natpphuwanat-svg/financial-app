@@ -3375,6 +3375,25 @@ function renderExpenseTypeSummary(entries) {
       );
     })
     .slice(0, 3); }
+  function renderMonthlyTakeawayInsight(insight) {
+    if (!insight) return '';
+    const title =
+      insight.title ||
+      'Monthly Insight';
+    const text =
+      insight.text ||
+      '';
+      return `
+      <div class="monthly-takeaway-insight">
+       <div class="monthly-takeaway-insight-title">
+       ${title}
+      </div>
+       <div class="monthly-takeaway-insight-text">
+       ${text}
+      </div>
+     </div>
+    `;
+  }
   function renderMonthlyTakeaway(entries) {
   const container =
     document.getElementById('monthlyTakeawayContent');
