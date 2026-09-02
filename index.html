@@ -3331,6 +3331,27 @@ function renderExpenseTypeSummary(entries) {
     }
   );
   return insights; }
+  function selectMonthlyTakeawayInsights(insights) {
+  if (!Array.isArray(insights) || insights.length === 0) {
+    return []; }
+  const selected = [...insights]
+    .sort((a, b) => {
+      if (a.priority !== b.priority) {
+        return a.priority - b.priority; }
+      const typeOrder = {
+        warning: 1,
+        event: 2,
+        positive: 3,
+        neutral: 4,
+        context: 5
+      };
+      return (
+        (typeOrder[a.type] || 99) -
+        (typeOrder[b.type] || 99)
+      );
+    })
+    .slice(0, 3);
+  return selected; }
   function renderMonthlyTakeaway(entries) {
   const container =
     document.getElementById('monthlyTakeawayContent');
