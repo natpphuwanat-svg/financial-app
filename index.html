@@ -3411,16 +3411,6 @@ function renderExpenseTypeSummary(entries) {
       financialAnalysis.text
       );
   }
-  const monthlyTrendInsight =
-    buildMonthlyTrendInsight(
-      currentEntries,
-      previousMonthEntries
-    );
-  if (monthlyTrendInsight) {
-    paragraphs.push(
-      monthlyTrendInsight
-    );
-  }
   if (expenseEntries.length > 0) {
   const topExpense =
     expenseEntries.reduce(
