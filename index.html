@@ -3446,14 +3446,12 @@ function renderExpenseTypeSummary(entries) {
     selectMonthlyTakeawayInsights(
       insights
       );
-  const paragraphs =
-    selectedInsights.map(
-      insight => insight.text
-      );
+  const takeawayInsights =
+    selectedInsights
+      .map(renderMonthlyTakeawayInsight)
+      .join('');
   container.innerHTML =
-    paragraphs
-      .map(text => `<p>${text}</p>`)
-      .join(''); }
+    takeawayInsights;
   function buildFinancialAnalysis(
   currentEntries,
   previousEntries
