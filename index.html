@@ -3253,22 +3253,11 @@ function renderExpenseTypeSummary(entries) {
     currentEntries.filter(
       item => item.financial_type === 'Expense'
     );
-  const totalIncome =
-    incomeEntries.reduce(
-      (sum, item) => sum + Number(item.amount || 0),
-      0
-    );
   const totalExpense =
     expenseEntries.reduce(
       (sum, item) => sum + Number(item.amount || 0),
       0
     );
-  const balance =
-    totalIncome - totalExpense;
-  const savingsRate =
-    totalIncome > 0
-      ? (balance / totalIncome) * 100
-      : null;
   const formatAmount = amount =>
     `฿${Number(amount).toLocaleString('en-US', {
       minimumFractionDigits: 2,
