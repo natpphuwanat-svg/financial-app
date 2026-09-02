@@ -3220,6 +3220,117 @@ function renderExpenseTypeSummary(entries) {
     });
   });
   return results; }
+  function collectMonthlyTakeawayInsights(
+  currentEntries,
+  previousEntries,
+  paymentHistoryEntries,
+  selectedMonthKey
+  ) {
+  const insights = [];
+  const monthlyAssessment =
+    buildMonthlyAssessment(
+      currentEntries,
+      previousEntries
+    );
+  if (monthlyAssessment) {
+    insights.push({
+      source: 'assessment',
+      type: monthlyAssessment.type || 'neutral',
+      priority: 4,
+      title: 'ภาพรวมการเงิน',
+      text: monthlyAssessment.text
+    });
+  }
+  const financialAnalysis =
+    buildFinancialAnalysis(
+      currentEntries,
+      previousEntries
+    );
+  if (financialAnalysis) {
+    insights.push({
+      source: 'financial',
+      type: financialAnalysis.type || 'neutral',
+      priority: 3,
+      title: 'การเปลี่ยนแปลงทางการเงิน',
+      text: financialAnalysis.text
+    });
+  }
+  const expenseEntries =
+    currentEntries.filter(
+      item => item.financial_type === 'Expense'
+    );
+  const totalExpense =
+    expenseEntries.reduce(
+      (sum, item) =>
+        sum + Number(item.amount || 0),
+      0
+    );
+  if (expenseEntries.length > 0) {
+    const topExpense =
+      expenseEntries.reduce(
+        (largest, item) =>
+          Number(item.amount || 0) >
+          Number(largest.amount || 0)
+            ? item
+            : largest
+      );
+    const topExpenseAmount =
+      Number(topExpense.amount || 0);
+    const topExpenseName =
+      topExpense.name ||
+      topExpense.title ||
+      topExpense.description ||
+      'รายการนี้';
+    const expenseShare =
+      totalExpense > 0
+        ? (topExpenseAmount / totalExpense) * 100
+        : null;
+    if (expenseShare !== null) {
+      insights.push({
+        source: 'top-expense',
+        type: 'context',
+        priority: 5,
+        title: 'Top Expense',
+        text:
+          `รายการ “${topExpenseName}” เป็นรายจ่ายสูงสุดของเดือนนี้ จำนวน ฿${topExpenseAmount.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          })} และคิดเป็น ${Math.round(expenseShare)}% ของรายจ่ายทั้งหมด`
+      });
+    }
+  }
+  const deductionInsight =
+    buildDeductionInsight(
+      currentEntries,
+      previousEntries
+    );
+  if (deductionInsight) {
+    insights.push({
+      source: 'deduction',
+      type: deductionInsight.type || 'neutral',
+      priority: 3,
+      title: 'Deduction',
+      text: deductionInsight.text
+    });
+  }
+  const paymentCompletionInsights =
+    findPaymentCompletionInsights(
+      paymentHistoryEntries,
+      selectedMonthKey
+    );
+  paymentCompletionInsights.forEach(
+    insight => {
+      insights.push({
+        source: 'payment-completion',
+        type: 'event',
+        priority: 2,
+        title: 'Payment Completion',
+        text:
+          `“${insight.title}” ไม่มีรายการชำระเงินต่อเนื่องมา 3 เดือนแล้ว ซึ่งอาจหมายความว่าภาระรายการนี้สิ้นสุดลง`
+      });
+    }
+  );
+  return insights; }
   function renderMonthlyTakeaway(entries) {
   const container =
     document.getElementById('monthlyTakeawayContent');
