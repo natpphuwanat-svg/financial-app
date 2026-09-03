@@ -1460,7 +1460,12 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     <section>
       <div class="section-header">
         <div class="section-title">HIGHLIGHTS</div>
-        <button class="see-all-btn" type="button">SEE ALL</button>
+        <button
+          class="see-all-btn"
+          type="button"
+          onclick="goToEntriesFromOverview()">
+          SEE ALL
+        </button>
       </div>
       <div id="entryList" class="entry-list">
         <div class="loading-state">Loading data...</div>
@@ -4456,6 +4461,14 @@ return Number(b.amount) - Number(a.amount); });
       scrollTicking = false; });
       scrollTicking = true; }
     }, { passive: true });
+    function goToEntriesFromOverview() {
+      switchTab('entries');
+      renderEntriesPage(currentEntries);
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
     
       // Main Navigation
     function switchTab(tab) {
