@@ -340,9 +340,9 @@
 bottom: calc(env(safe-area-inset-bottom) + 20px);
 transform: translateX(-50%); width: min(70%, 390px); height: 64px;
 display: grid; grid-template-columns: repeat(3, 1fr); align-items: center; padding: 6px;
-background: rgba(15, 23, 42, 0.35);
-backdrop-filter: blur(30px) saturate(180%);
--webkit-backdrop-filter: blur(30px) saturate(180%);
+background: rgba(255, 255, 255, 0.15);
+backdrop-filter: blur(30px);
+-webkit-backdrop-filter: blur(30px);
 border: 1px solid rgba(255, 255, 255, 0.65); border-radius: 32px;
 box-shadow:
 0 4px 14px rgba(15, 23, 42, 0.07),
@@ -350,7 +350,7 @@ box-shadow:
 z-index: 900;
 overflow: hidden; }
 .floating-tab-bar::before { content: ""; position: absolute; inset: 0; border-radius: inherit;
-background: rgba(255, 255, 255, 0.06);
+background: transparent;
 pointer-events: none; }
 .floating-tab { position: relative; z-index: 1;
 height: 52px; width: 100%; align-self: center; display: flex;
