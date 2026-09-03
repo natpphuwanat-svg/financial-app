@@ -3533,49 +3533,47 @@ function renderExpenseTypeSummary(entries) {
         `“${firstPayment.title}” ไม่มีรายการชำระเงินต่อเนื่องมา 3 เดือนแล้ว ซึ่งอาจหมายความว่าภาระรายการนี้สิ้นสุดลง`
     });
   }
-
-  /*
-   * TOP EXPENSE
-   * Context / fallback only.
-   */
-  const expenseEntries =
-    currentEntries.filter(
-      item =>
-        item.financial_type === 'Expense'
+const expenseEntries =
+  currentEntries.filter(
+    item =>
+      item.financial_type === 'Expense'
+  );
+if (expenseEntries.length >= 2) {
+  const totalExpense =
+    expenseEntries.reduce(
+      (sum, item) =>
+        sum + Number(item.amount || 0),
+      0
     );
+  const topExpense =
+    expenseEntries.reduce(
+      (largest, item) =>
+        Number(item.amount || 0) >
+        Number(largest.amount || 0)
+          ? item
+          : largest
+    );
+  const topExpenseAmount =
+    Number(topExpense.amount || 0);
+  const topExpenseName =
+    topExpense.name ||
+    topExpense.title ||
+    topExpense.description ||
+    'รายการนี้';
+  const expenseShare =
+    totalExpense > 0
+      ? (topExpenseAmount / totalExpense) * 100
+      : 0;
+  if (expenseShare >= 30) {
 
-  if (expenseEntries.length > 0) {
-    const totalExpense =
-      expenseEntries.reduce(
-        (sum, item) =>
-          sum + Number(item.amount || 0),
-        0
-      );
-
-    const topExpense =
-      expenseEntries.reduce(
-        (largest, item) =>
-          Number(item.amount || 0) >
-          Number(largest.amount || 0)
-            ? item
-            : largest
-      );
-
-    const topExpenseAmount =
-      Number(topExpense.amount || 0);
-
-    const topExpenseName =
-      topExpense.name ||
-      topExpense.title ||
-      topExpense.description ||
-      'รายการนี้';
-
-    const expenseShare =
-      totalExpense > 0
-        ? (topExpenseAmount / totalExpense) *
-          100
-        : 0;
-
+    const formatAmount = amount =>
+      `฿${Number(amount).toLocaleString(
+        'en-US',
+        {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }
+      )}`;
     insights.push({
       source: 'top-expense',
       group: 'context',
@@ -3583,17 +3581,11 @@ function renderExpenseTypeSummary(entries) {
       priority: 5,
       title: 'Top Expense',
       text:
-        `“${topExpenseName}” เป็นรายจ่ายสูงสุดของเดือนนี้ ${`฿${topExpenseAmount.toLocaleString('en-US', {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        })}`} และคิดเป็น ${Math.round(expenseShare)}% ของรายจ่ายทั้งหมด`
+        `“${topExpenseName}” เป็นรายจ่ายสูงสุดของเดือนนี้ ${formatAmount(topExpenseAmount)} และคิดเป็น ${Math.round(expenseShare)}% ของรายจ่ายทั้งหมด`
     });
   }
-
-  return insights;
 }
-
-
+  return insights; }
 function selectMonthlyTakeawayInsights(
   insights
 ) {
