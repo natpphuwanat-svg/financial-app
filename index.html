@@ -1913,23 +1913,31 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   SUPABASE_URL,
   SUPABASE_KEY
 );
-    const realCurrentYear = new Date().getFullYear();
-    const realCurrentMonth = new Date().getMonth() + 1; // 1-12
-    let selectedYear = realCurrentYear;
-    let selectedMonth = realCurrentMonth;
-    let currentMonthSet = realCurrentMonth <= 6 ? 1 : 2; // Set 1: Jan-Jun, Set 2: Jul-Dec
-    const monthSets = {
-      1: [{ name: 'JAN', m: 1 }, { name: 'FEB', m: 2 }, { name: 'MAR', m: 3 }, { name: 'APR', m: 4 }, { name: 'MAY', m: 5 }, { name: 'JUN', m: 6 }],
-      2: [{ name: 'JUL', m: 7 }, { name: 'AUG', m: 8 }, { name: 'SEP', m: 9 }, { name: 'OCT', m: 10 }, { name: 'NOV', m: 11 }, { name: 'DEC', m: 12 }]
-    };
+  const realCurrentYear = new Date().getFullYear();
+  const realCurrentMonth = new Date().getMonth() + 1;
+  let selectedYear = realCurrentYear;
+  let selectedMonth = realCurrentMonth;
+  let monthWindowStart = Math.max(1, Math.min(realCurrentMonth - 2, 7));
+  const months = [
+    { name: 'JAN', m: 1 },
+    { name: 'FEB', m: 2 },
+    { name: 'MAR', m: 3 },
+    { name: 'APR', m: 4 },
+    { name: 'MAY', m: 5 },
+    { name: 'JUN', m: 6 },
+    { name: 'JUL', m: 7 },
+    { name: 'AUG', m: 8 },
+    { name: 'SEP', m: 9 },
+    { name: 'OCT', m: 10 },
+    { name: 'NOV', m: 11 },
+    { name: 'DEC', m: 12 } ];
     let selectedType = 'Income';
     let fetchRequestId = 0;
     let currentEntries = [];
     let currentEntryFilter = 'all';
     let lastFetchTime = 0;
     const REFRESH_THRESHOLD = 60 * 1000;
-
-    // Init
+    
     document.addEventListener("DOMContentLoaded", () => {
       applyTheme(getPreferredTheme());
       updateYearUI();
@@ -1997,43 +2005,44 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
   // Month Controller
   function renderMonthGrid() {
-  const months = monthSets[currentMonthSet];
-  const monthHTML = months.map(item => {
-  const isFuture =
-    selectedYear > realCurrentYear ||
-    (selectedYear === realCurrentYear && item.m > realCurrentMonth);
-  return `
-    <div class="month-chip
-      ${item.m === selectedMonth ? 'active' : ''}
-      ${isFuture ? 'future' : ''}"
-      onclick="selectMonth(${item.m})">
-      ${item.name}
-    </div>
-  `;
+  const visibleMonths = months.slice(
+    monthWindowStart - 1,
+    monthWindowStart + 5
+  );
+  const monthHTML = visibleMonths.map(item => {
+    const isFuture =
+      selectedYear > realCurrentYear ||
+      (
+        selectedYear === realCurrentYear &&
+        item.m > realCurrentMonth
+      );
+    return `
+      <div class="month-chip
+        ${item.m === selectedMonth ? 'active' : ''}
+        ${isFuture ? 'future' : ''}"
+        onclick="selectMonth(${item.m})">
+        ${item.name}
+      </div>
+    `;
   }).join('');
-  // Overview
   document.getElementById('monthGrid').innerHTML = monthHTML;
-  // Entries
   document.getElementById('entriesMonthGrid').innerHTML = monthHTML;
-  // Insights
   document.getElementById('insightsMonthGrid').innerHTML = monthHTML;
-  // Overview arrows
-  document.getElementById('prevMonthSetBtn').disabled = (currentMonthSet === 1);
-  document.getElementById('nextMonthSetBtn').disabled = (currentMonthSet === 2);
-  // Entries arrows
-  document.getElementById('entriesPrevMonthSetBtn').disabled = (currentMonthSet === 1);
-  document.getElementById('entriesNextMonthSetBtn').disabled = (currentMonthSet === 2);
-  // Insights arrows
-  document.getElementById('insightsPrevMonthSetBtn').disabled = (currentMonthSet === 1);
-  document.getElementById('insightsNextMonthSetBtn').disabled = (currentMonthSet === 2);
-}
- function shiftMonthSet(delta) {
-  const newSet = currentMonthSet + delta;
-  if (newSet >= 1 && newSet <= 2) {
-      currentMonthSet = newSet;
-     renderMonthGrid();
-   }
- }
+  const canGoPrevious = monthWindowStart > 1;
+  const canGoNext = monthWindowStart < 7;
+  document.getElementById('prevMonthSetBtn').disabled = !canGoPrevious;
+  document.getElementById('nextMonthSetBtn').disabled = !canGoNext;
+  document.getElementById('entriesPrevMonthSetBtn').disabled = !canGoPrevious;
+  document.getElementById('entriesNextMonthSetBtn').disabled = !canGoNext;
+  document.getElementById('insightsPrevMonthSetBtn').disabled = !canGoPrevious;
+  document.getElementById('insightsNextMonthSetBtn').disabled = !canGoNext; }
+  
+  function shiftMonthSet(delta) {
+    const newStart = monthWindowStart + delta;
+    if (newStart >= 1 && newStart <= 7) {
+      monthWindowStart = newStart;
+      renderMonthGrid(); }
+  }
   function selectMonth(m) {
   selectedMonth = m;
   selectedExpenseType = null;
@@ -2044,11 +2053,11 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   function resetToCurrent() {
   selectedYear = realCurrentYear;
   selectedMonth = realCurrentMonth;
-  currentMonthSet = realCurrentMonth <= 6 ? 1 : 2;
+  monthWindowStart =
+    Math.max(1, Math.min(realCurrentMonth - 2, 7));
   updateYearUI();
   renderMonthGrid();
-  fetchData();
-  }
+  fetchData(); }
   function isSelectedMonthFuture() {
   return (
     selectedYear > realCurrentYear ||
