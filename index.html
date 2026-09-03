@@ -122,6 +122,11 @@
       padding-bottom:8px;
     }
     .header-left { display: flex; align-items: center; gap: 12px; }
+    .top-safe-area-glass {
+      position: fixed;
+      top: 0; left: 0; right: 0; height: env(safe-area-inset-top);min-height: 20px; z-index: 999; pointer-events: none;
+      background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+      [data-theme="dark"] .top-safe-area-glass { background: rgba(11, 15, 25, 0.12); }
 
     .home-icon-box { 
       width: 42px; height: 42px; border-radius: 15px; 
