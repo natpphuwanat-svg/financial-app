@@ -2048,6 +2048,20 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 </section>
     </main>
   </div>
+  <div class="year-picker-modal" id="yearPickerModal">
+  <div class="year-picker-content">
+    <div class="year-picker-header">
+      <div class="year-picker-title">SELECT YEAR</div>
+      <button
+        type="button"
+        class="year-picker-close"
+        onclick="closeYearPicker()">
+        ✕
+      </button>
+    </div>
+    <div class="year-picker-list" id="yearPickerList"></div>
+  </div>
+</div>
   <!-- Floating Bottom Navigation -->
   <nav class="floating-tab-bar" aria-label="Main navigation">
     <button class="floating-tab active" type="button" onclick="switchTab('overview')">
@@ -2069,18 +2083,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       <div class="modal-header">
         <div class="modal-title" id="modalTitle">New Entry</div>
         <button class="close-btn" onclick="closeModal()">✕</button>
-      </div>
-      
-        <div class="year-picker-modal" id="yearPickerModal">
-    <div class="year-picker-content">
-      <div class="year-picker-header">
-        <div class="year-picker-title">SELECT YEAR</div>
-        <button
-          type="button"
-          class="year-picker-close"
-          onclick="closeYearPicker()">
-          ✕
-        </button>
       </div>
       <div class="year-picker-list" id="yearPickerList"></div>
     </div>
