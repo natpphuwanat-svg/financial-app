@@ -157,52 +157,6 @@
     .year-nav-btn svg { width: 16px; height: 16px; stroke-width: 2.2; transform: translateY(-1px);}
     .year-text-display { font-size: 18px; font-weight: 800; letter-spacing: 0.3px;
      display:flex; align-items:center; justify-content:center; line-height:1; transform:translateY(-1px); }
-    .year-native-picker {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.year-native-picker .year-text-display {
-  border: none;
-  background: transparent;
-  color: var(--text-main);
-  font-family: inherit;
-  cursor: pointer;
-  padding: 0;
-}
-
-.native-year-select {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  z-index: 2;
-  cursor: pointer;
-  -webkit-appearance: none;
-  appearance: none;
-}
-
-.year-boundary-message {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 50%;
-  transform: translateX(-50%);
-  color: var(--text-sub);
-  font-size: 10px;
-  font-weight: 700;
-  line-height: 1.2;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-}
-
-.year-boundary-message.show {
-  opacity: 1;
-}
 
     .current-btn { 
       display: flex; align-items: center; gap: 6px; 
@@ -1470,27 +1424,11 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         <button class="year-nav-btn" id="prevYearBtn" onclick="changeYear(-1)">
           <i data-lucide="chevron-left"></i>
         </button>
-        <div class="year-native-picker">
-  <button
-    type="button"
-    class="year-text-display"
-    id="selectedYear">
-    2026
-  </button>
-
-  <select
-    id="nativeYearSelect"
-    class="native-year-select"
-    aria-label="Select year"
-    onchange="handleNativeYearChange(this.value)">
-  </select>
-
-  <div
-    class="year-boundary-message"
-    id="yearBoundaryMessage">
-    Data starts from 2025
-  </div>
-</div>
+        <span class="year-text-display" id="selectedYear">2026</span>
+        <button class="year-nav-btn" id="nextYearBtn" onclick="changeYear(1)">
+          <i data-lucide="chevron-right"></i>
+        </button>
+      </div>
 
       <button class="current-btn" onclick="resetToCurrent()">
         <i data-lucide="calendar-days"></i>
@@ -2087,73 +2025,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
      localStorage.setItem("theme", next);
      localStorage.setItem("themeManual", "true");
 }
-  function populateNativeYearPicker() {
-  const select = document.getElementById('nativeYearSelect');
 
-  if (!select) return;
-
-  const minYear = 2024;
-  const maxYear = 9999;
-
-  select.innerHTML = '';
-
-  for (let year = minYear; year <= maxYear; year++) {
-    const option = document.createElement('option');
-
-    option.value = year;
-    option.textContent = year;
-
-    select.appendChild(option);
-  }
-
-  select.value = String(selectedYear);
-}
-
-function handleNativeYearChange(value) {
-  const year = Number(value);
-
-  if (!Number.isFinite(year)) return;
-
-  if (year < 2025) {
-    showYearBoundaryMessage();
-
-    const select = document.getElementById('nativeYearSelect');
-
-    if (select) {
-      select.value = '2025';
-    }
-
-    selectedYear = 2025;
-
-    updateYearUI();
-    renderMonthGrid();
-    fetchData();
-
-    return;
-  }
-
-  selectedYear = year;
-
-  updateYearUI();
-  renderMonthGrid();
-  fetchData();
-}
-
-let yearBoundaryMessageTimer = null;
-
-function showYearBoundaryMessage() {
-  const message = document.getElementById('yearBoundaryMessage');
-
-  if (!message) return;
-
-  message.classList.add('show');
-
-  clearTimeout(yearBoundaryMessageTimer);
-
-  yearBoundaryMessageTimer = setTimeout(() => {
-    message.classList.remove('show');
-  }, 1800);
-}
     // Year Controller with Limit at 2025
   function updateYearUI() {
   // Overview
@@ -5059,8 +4931,5 @@ const { error } = await supabaseClient
   </script>
   <script> lucide.createIcons();
 </script>
-<div class="year-boundary-toast" id="yearBoundaryToast">
-  ข้อมูลเริ่มต้น 2025
-</div>
 </body>
 </html>
