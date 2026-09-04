@@ -157,6 +157,57 @@
     .year-nav-btn svg { width: 16px; height: 16px; stroke-width: 2.2; transform: translateY(-1px);}
     .year-text-display { font-size: 18px; font-weight: 800; letter-spacing: 0.3px;
      display:flex; align-items:center; justify-content:center; line-height:1; transform:translateY(-1px); }
+    .year-native-picker {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .year-native-picker .year-text-display {
+      border: none;
+      background: transparent;
+      color: var(--text-main);
+      font-family: inherit;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .native-year-select {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .year-boundary-toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(92px + env(safe-area-inset-bottom));
+  transform: translateX(-50%) translateY(12px);
+  z-index: 900;
+  padding: 10px 16px;
+  border-radius: 16px;
+  background: var(--glass-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  color: var(--text-main);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.year-boundary-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
 
     .current-btn { 
       display: flex; align-items: center; gap: 6px; 
@@ -1424,7 +1475,20 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         <button class="year-nav-btn" id="prevYearBtn" onclick="changeYear(-1)">
           <i data-lucide="chevron-left"></i>
         </button>
-        <span class="year-text-display" id="selectedYear">2026</span>
+        <div class="year-native-picker">
+          <button
+            type="button"
+            class="year-text-display"
+            id="selectedYear"
+            onclick="openNativeYearPicker()">
+            2026
+          </button>
+          <select
+            id="nativeYearSelect"
+            class="native-year-select"
+            onchange="handleNativeYearChange(this.value)">
+          </select>
+        </div>
         <button class="year-nav-btn" id="nextYearBtn" onclick="changeYear(1)">
           <i data-lucide="chevron-right"></i>
         </button>
@@ -2025,7 +2089,109 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
      localStorage.setItem("theme", next);
      localStorage.setItem("themeManual", "true");
 }
+  function populateNativeYearPicker() {
+  const select = document.getElementById('nativeYearSelect');
 
+  if (!select) return;
+
+  const minYear = 2024;
+  const maxYear = realCurrentYear + 2;
+
+  select.innerHTML = '';
+
+  for (let year = minYear; year <= maxYear; year++) {
+    const option = document.createElement('option');
+
+    option.value = year;
+    option.textContent = year;
+
+    select.appendChild(option);
+  }
+
+  select.value = String(selectedYear);
+}
+
+function openNativeYearPicker() {
+  const select = document.getElementById('nativeYearSelect');
+
+  if (!select) return;
+
+  populateNativeYearPicker();
+
+  select.value = String(selectedYear);
+
+  /*
+   * iOS/Safari will open the native picker
+   * when the select receives a programmatic focus/click.
+   */
+  select.focus();
+
+  select.click();
+}
+
+function handleNativeYearChange(value) {
+  const year = Number(value);
+
+  if (!Number.isFinite(year)) return;
+
+  // Boundary year
+  if (year < 2025) {
+    showYearBoundaryMessage();
+
+    const select = document.getElementById('nativeYearSelect');
+
+    if (select) {
+      select.value = '2025';
+    }
+
+    selectedYear = 2025;
+
+    updateYearUI();
+    renderMonthGrid();
+    fetchData();
+
+    return;
+  }
+
+  const maxYear = realCurrentYear + 2;
+
+  if (year > maxYear) {
+    const select = document.getElementById('nativeYearSelect');
+
+    if (select) {
+      select.value = String(maxYear);
+    }
+
+    selectedYear = maxYear;
+
+    updateYearUI();
+    renderMonthGrid();
+    fetchData();
+
+    return;
+  }
+
+  selectedYear = year;
+
+  updateYearUI();
+  renderMonthGrid();
+  fetchData();
+}
+let yearBoundaryToastTimer = null;
+
+function showYearBoundaryMessage() {
+  const toast = document.getElementById('yearBoundaryToast');
+
+  if (!toast) return;
+
+  toast.classList.add('show');
+
+  clearTimeout(yearBoundaryToastTimer);
+
+  yearBoundaryToastTimer = setTimeout(() => {
+    toast.classList.remove('show');
+  }, 1800);
+}
     // Year Controller with Limit at 2025
   function updateYearUI() {
   // Overview
@@ -4931,5 +5097,8 @@ const { error } = await supabaseClient
   </script>
   <script> lucide.createIcons();
 </script>
+<div class="year-boundary-toast" id="yearBoundaryToast">
+  ข้อมูลเริ่มต้น 2025
+</div>
 </body>
 </html>
