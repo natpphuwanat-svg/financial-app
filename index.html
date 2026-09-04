@@ -2085,12 +2085,9 @@ yearPickerIds.forEach(id => {
      localStorage.setItem("themeManual", "true");
 }
 
-    // Year Controller with Limit at 2025
-function populateYearPickers() {
+    function populateYearPickers() {
   const minYear = 2025;
-
-  // ปีสูงสุดที่แสดงใน Picker
-  const maxYear = realCurrentYear + 5;
+  const maxYear = Math.max(selectedYear, realCurrentYear + 5);
 
   const pickerIds = [
     'selectedYear',
@@ -2103,9 +2100,9 @@ function populateYearPickers() {
 
     if (!picker) return;
 
-    // สร้างรายการปีเพียงครั้งเดียว
-    if (picker.options.length === 0) {
-      for (let year = minYear; year <= maxYear; year++) {
+    // สร้างรายการปีที่ยังไม่มี
+    for (let year = minYear; year <= maxYear; year++) {
+      if (!picker.querySelector(`option[value="${year}"]`)) {
         const option = document.createElement('option');
 
         option.value = year;
@@ -2115,11 +2112,10 @@ function populateYearPickers() {
       }
     }
 
-    // แสดงปีที่เลือกอยู่ในปัจจุบัน
+    // เลือกปีปัจจุบัน
     picker.value = selectedYear;
   });
 }
-
 
 function updateYearUI() {
   // อัปเดต Native Year Pickers
