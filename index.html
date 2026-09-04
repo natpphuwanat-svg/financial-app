@@ -157,6 +157,22 @@
     .year-nav-btn svg { width: 16px; height: 16px; stroke-width: 2.2; transform: translateY(-1px);}
     .year-text-display { font-size: 18px; font-weight: 800; letter-spacing: 0.3px;
      display:flex; align-items:center; justify-content:center; line-height:1; transform:translateY(-1px); }
+    .year-picker {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    text-align: center;
+    text-align-last: center;
+    padding: 0;
+    margin: 0;
+    cursor: pointer; }
 
     .current-btn { 
       display: flex; align-items: center; gap: 6px; 
@@ -1424,7 +1440,11 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         <button class="year-nav-btn" id="prevYearBtn" onclick="changeYear(-1)">
           <i data-lucide="chevron-left"></i>
         </button>
-        <span class="year-text-display" id="selectedYear">2026</span>
+        <select
+  class="year-text-display year-picker"
+  id="selectedYear"
+  aria-label="Select year">
+</select>
         <button class="year-nav-btn" id="nextYearBtn" onclick="changeYear(1)">
           <i data-lucide="chevron-right"></i>
         </button>
@@ -1519,7 +1539,11 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
           <button class="year-nav-btn" id="entriesPrevYearBtn" onclick="changeYear(-1)">
             <i data-lucide="chevron-left"></i>
           </button>
-          <span class="year-text-display" id="entriesSelectedYear">2026</span>
+          <select
+  class="year-text-display year-picker"
+  id="entriesSelectedYear"
+  aria-label="Select year">
+</select>
           <button class="year-nav-btn" id="entriesNextYearBtn" onclick="changeYear(1)">
             <i data-lucide="chevron-right"></i>
           </button>
@@ -1578,7 +1602,11 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
           <button class="year-nav-btn" id="insightsPrevYearBtn" onclick="changeYear(-1)">
             <i data-lucide="chevron-left"></i>
           </button>
-          <span class="year-text-display" id="insightsSelectedYear">2026</span>
+          <select
+  class="year-text-display year-picker"
+  id="insightsSelectedYear"
+  aria-label="Select year">
+</select>
           <button class="year-nav-btn" id="insightsNextYearBtn" onclick="changeYear(1)">
             <i data-lucide="chevron-right"></i>
           </button>
@@ -1985,6 +2013,37 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       updateYearUI();
       renderMonthGrid();
       fetchData();
+      const yearPickerIds = [
+  'selectedYear',
+  'entriesSelectedYear',
+  'insightsSelectedYear'
+];
+
+yearPickerIds.forEach(id => {
+  const picker = document.getElementById(id);
+
+  if (!picker) return;
+
+  picker.addEventListener('change', () => {
+    const newYear = Number(picker.value);
+
+    if (!newYear || newYear < 2025) return;
+
+    selectedYear = newYear;
+
+    updateYearUI();
+    renderMonthGrid();
+
+    // ถ้า Insights อยู่ใน YEAR mode
+    // ให้โหลดข้อมูลแบบรายปี
+    if (insightsViewMode === 'year') {
+      renderInsightsYearGrid();
+      fetchAnnualData();
+    } else {
+      fetchData();
+    }
+  });
+});
       
       document.addEventListener("visibilitychange", () => {
      if (document.visibilityState === 'visible') {
@@ -2027,16 +2086,56 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
 
     // Year Controller with Limit at 2025
-  function updateYearUI() {
+function populateYearPickers() {
+  const minYear = 2025;
+
+  // ปีสูงสุดที่แสดงใน Picker
+  const maxYear = realCurrentYear + 5;
+
+  const pickerIds = [
+    'selectedYear',
+    'entriesSelectedYear',
+    'insightsSelectedYear'
+  ];
+
+  pickerIds.forEach(id => {
+    const picker = document.getElementById(id);
+
+    if (!picker) return;
+
+    // สร้างรายการปีเพียงครั้งเดียว
+    if (picker.options.length === 0) {
+      for (let year = minYear; year <= maxYear; year++) {
+        const option = document.createElement('option');
+
+        option.value = year;
+        option.textContent = year;
+
+        picker.appendChild(option);
+      }
+    }
+
+    // แสดงปีที่เลือกอยู่ในปัจจุบัน
+    picker.value = selectedYear;
+  });
+}
+
+
+function updateYearUI() {
+  // อัปเดต Native Year Pickers
+  populateYearPickers();
+
   // Overview
-  document.getElementById('selectedYear').innerText = selectedYear;
-  document.getElementById('prevYearBtn').disabled = (selectedYear <= 2025);
+  document.getElementById('prevYearBtn').disabled =
+    (selectedYear <= 2025);
+
   // Entries
-  document.getElementById('entriesSelectedYear').innerText = selectedYear;
-  document.getElementById('entriesPrevYearBtn').disabled = (selectedYear <= 2025);
+  document.getElementById('entriesPrevYearBtn').disabled =
+    (selectedYear <= 2025);
+
   // Insights
-  document.getElementById('insightsSelectedYear').innerText = selectedYear;
-  document.getElementById('insightsPrevYearBtn').disabled = (selectedYear <= 2025);
+  document.getElementById('insightsPrevYearBtn').disabled =
+    (selectedYear <= 2025);
 }
   function changeYear(delta) {
   if (selectedYear + delta < 2025) return;
