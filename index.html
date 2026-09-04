@@ -157,6 +157,78 @@
     .year-nav-btn svg { width: 16px; height: 16px; stroke-width: 2.2; transform: translateY(-1px);}
     .year-text-display { font-size: 18px; font-weight: 800; letter-spacing: 0.3px;
      display:flex; align-items:center; justify-content:center; line-height:1; transform:translateY(-1px); }
+    .year-picker-trigger {
+  border: none;
+  background: transparent;
+  color: var(--text-main);
+  font-family: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+.year-picker-trigger:active {
+  opacity: 0.65;
+  transform: translateY(-1px) scale(0.96);
+}
+
+.inline-year-picker {
+  display: none;
+  width: 100%;
+  margin: -4px 0 16px;
+  overflow: hidden;
+}
+
+.inline-year-picker.active {
+  display: block;
+}
+
+.inline-year-picker-scroll {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 4px 2px 6px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+.inline-year-picker-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.inline-year-option {
+  flex: 0 0 auto;
+  min-width: 64px;
+  height: 38px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 14px;
+  background: transparent;
+  color: var(--text-sub);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.inline-year-option.active {
+  background: var(--lime-400);
+  color: #1A2E05;
+  font-weight: 800;
+  box-shadow: 0 4px 10px rgba(163, 230, 53, 0.18);
+}
+
+.inline-year-option:active {
+  transform: scale(0.95);
+  opacity: 0.75;
+}
 
     .current-btn { 
       display: flex; align-items: center; gap: 6px; 
@@ -1424,7 +1496,13 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         <button class="year-nav-btn" id="prevYearBtn" onclick="changeYear(-1)">
           <i data-lucide="chevron-left"></i>
         </button>
-        <span class="year-text-display" id="selectedYear">2026</span>
+        <button
+          type="button"
+          class="year-text-display year-picker-trigger"
+          id="selectedYear"
+          onclick="toggleInlineYearPicker('overview')">
+          2026
+        </button>
         <button class="year-nav-btn" id="nextYearBtn" onclick="changeYear(1)">
           <i data-lucide="chevron-right"></i>
         </button>
@@ -1435,7 +1513,9 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         CURRENT
       </button>
     </section>
-
+    <div class="inline-year-picker" id="overviewYearPicker">
+  <div class="inline-year-picker-scroll" id="overviewYearPickerList"></div>
+   </div>
     <section class="month-nav-container">
       <button class="month-arrow-btn" id="prevMonthSetBtn" onclick="shiftMonthSet(-1)">
         <i data-lucide="chevron-left"></i>
@@ -1519,7 +1599,13 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
           <button class="year-nav-btn" id="entriesPrevYearBtn" onclick="changeYear(-1)">
             <i data-lucide="chevron-left"></i>
           </button>
-          <span class="year-text-display" id="entriesSelectedYear">2026</span>
+          <button
+            type="button"
+            class="year-text-display year-picker-trigger"
+            id="entriesSelectedYear"
+            onclick="toggleInlineYearPicker('entries')">
+            2026
+          </button>
           <button class="year-nav-btn" id="entriesNextYearBtn" onclick="changeYear(1)">
             <i data-lucide="chevron-right"></i>
           </button>
@@ -1529,6 +1615,9 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
           CURRENT
         </button>
       </section>
+     <div class="inline-year-picker" id="overviewYearPicker">
+    <div class="inline-year-picker-scroll" id="overviewYearPickerList"></div>
+     </div>
       <section class="month-nav-container">
         <button class="month-arrow-btn" id="entriesPrevMonthSetBtn" onclick="shiftMonthSet(-1)">
           <i data-lucide="chevron-left"></i>
@@ -1578,7 +1667,13 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
           <button class="year-nav-btn" id="insightsPrevYearBtn" onclick="changeYear(-1)">
             <i data-lucide="chevron-left"></i>
           </button>
-          <span class="year-text-display" id="insightsSelectedYear">2026</span>
+          <button
+            type="button"
+            class="year-text-display year-picker-trigger"
+            id="insightsSelectedYear"
+            onclick="toggleInlineYearPicker('insights')">
+            2026
+          </button>
           <button class="year-nav-btn" id="insightsNextYearBtn" onclick="changeYear(1)">
             <i data-lucide="chevron-right"></i>
           </button>
@@ -1588,6 +1683,9 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
           CURRENT
         </button>
       </section>
+      <div class="inline-year-picker" id="overviewYearPicker">
+    <div class="inline-year-picker-scroll" id="overviewYearPickerList"></div>
+     </div>
       <section class="month-nav-container">
         <button class="month-arrow-btn" id="insightsPrevMonthSetBtn" onclick="shiftMonthSet(-1)">
           <i data-lucide="chevron-left"></i>
@@ -2028,21 +2126,141 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 
     // Year Controller with Limit at 2025
   function updateYearUI() {
+  const minYear = 2025;
+  const maxYear = realCurrentYear + 2;
+
   // Overview
   document.getElementById('selectedYear').innerText = selectedYear;
-  document.getElementById('prevYearBtn').disabled = (selectedYear <= 2025);
+  document.getElementById('prevYearBtn').disabled =
+    selectedYear <= minYear;
+  document.getElementById('nextYearBtn').disabled =
+    selectedYear >= maxYear;
+
   // Entries
   document.getElementById('entriesSelectedYear').innerText = selectedYear;
-  document.getElementById('entriesPrevYearBtn').disabled = (selectedYear <= 2025);
+  document.getElementById('entriesPrevYearBtn').disabled =
+    selectedYear <= minYear;
+  document.getElementById('entriesNextYearBtn').disabled =
+    selectedYear >= maxYear;
+
   // Insights
   document.getElementById('insightsSelectedYear').innerText = selectedYear;
-  document.getElementById('insightsPrevYearBtn').disabled = (selectedYear <= 2025);
+  document.getElementById('insightsPrevYearBtn').disabled =
+    selectedYear <= minYear;
+  document.getElementById('insightsNextYearBtn').disabled =
+    selectedYear >= maxYear;
+
+  renderInlineYearPicker('overview');
+  renderInlineYearPicker('entries');
+  renderInlineYearPicker('insights');
 }
-  function changeYear(delta) {
-  if (selectedYear + delta < 2025) return;
-  selectedYear += delta;
+
+function changeYear(delta) {
+  const minYear = 2025;
+  const maxYear = realCurrentYear + 2;
+  const nextYear = selectedYear + delta;
+
+  if (nextYear < minYear || nextYear > maxYear) return;
+
+  selectedYear = nextYear;
+
   updateYearUI();
   renderMonthGrid();
+
+  if (insightsViewMode === 'year') {
+    renderInsightsYearGrid();
+    fetchAnnualData();
+    return;
+  }
+
+  fetchData();
+}
+function renderInlineYearPicker(source) {
+  const picker = document.getElementById(`${source}YearPicker`);
+  const list = document.getElementById(`${source}YearPickerList`);
+
+  if (!picker || !list) return;
+
+  const minYear = 2025;
+  const maxYear = realCurrentYear + 2;
+
+  list.innerHTML = '';
+
+  for (let year = minYear; year <= maxYear; year++) {
+    const button = document.createElement('button');
+
+    button.type = 'button';
+    button.className =
+      `inline-year-option ${year === selectedYear ? 'active' : ''}`;
+
+    button.innerText = year;
+
+    button.onclick = () => {
+      selectInlineYear(year, source);
+    };
+
+    list.appendChild(button);
+  }
+}
+
+function toggleInlineYearPicker(source) {
+  const picker = document.getElementById(`${source}YearPicker`);
+
+  if (!picker) return;
+
+  const willOpen = !picker.classList.contains('active');
+
+  // Close all pickers first
+  document.querySelectorAll('.inline-year-picker').forEach(item => {
+    item.classList.remove('active');
+  });
+
+  if (!willOpen) return;
+
+  renderInlineYearPicker(source);
+
+  picker.classList.add('active');
+
+  requestAnimationFrame(() => {
+    const list = picker.querySelector('.inline-year-picker-scroll');
+    const active = picker.querySelector('.inline-year-option.active');
+
+    if (!list || !active) return;
+
+    const targetLeft =
+      active.offsetLeft -
+      (list.clientWidth / 2) +
+      (active.offsetWidth / 2);
+
+    list.scrollTo({
+      left: Math.max(0, targetLeft),
+      behavior: 'smooth'
+    });
+  });
+}
+
+function selectInlineYear(year, source) {
+  const minYear = 2025;
+  const maxYear = realCurrentYear + 2;
+
+  if (year < minYear || year > maxYear) return;
+
+  selectedYear = year;
+
+  // Close picker after selection
+  document.querySelectorAll('.inline-year-picker').forEach(item => {
+    item.classList.remove('active');
+  });
+
+  updateYearUI();
+  renderMonthGrid();
+
+  if (insightsViewMode === 'year') {
+    renderInsightsYearGrid();
+    fetchAnnualData();
+    return;
+  }
+
   fetchData();
 }
   // Month Controller
