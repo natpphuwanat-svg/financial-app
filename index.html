@@ -372,7 +372,7 @@ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10); }
 .floating-tab.active { color: var(--blue-grey);
  background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(22px) ; -webkit-backdrop-filter: blur(22px) ; }
 .floating-tab-bar { transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1); }
-.floating-tab-bar.compact { transform: translateX(-50%) scale(0.90); }
+.floating-tab-bar.compact { transform: translateX(-50%) scale(0.80); }
 @media (max-width: 360px) {
 .floating-tab-bar { width: 88%; }
 .floating-tab { font-size: 10px; }
@@ -4446,60 +4446,87 @@ return Number(b.amount) - Number(a.amount); });
     }
    }
     // Bottom Navigation Compact State
-    let scrollTicking = false;
+    const tabScrollPositions = {
+      overview: 0,
+      entries: 0,
+      insights: 0 };
+    const visitedTabs = {
+      overview: true,
+      entries: false,
+      insights: false };
+      let currentTab = 'overview';
+      let scrollTicking = false;
     function updateBottomNavOnScroll() {
       const bottomNav = document.querySelector('.floating-tab-bar');
       if (!bottomNav) return;
-      if (window.scrollY <= 0) {
-        bottomNav.classList.remove('compact'); } else {
+      const currentScrollY = window.scrollY;
+      tabScrollPositions[currentTab] = currentScrollY;
+      if (currentScrollY <= 0) {
+        bottomNav.classList.remove('compact'); 
+      } else {
         bottomNav.classList.add('compact'); }
     }
-    window.addEventListener('scroll', () => {
+     window.addEventListener('scroll', () => {
       if (!scrollTicking) {
-    window.requestAnimationFrame(() => {
-      updateBottomNavOnScroll();
-      scrollTicking = false; });
-      scrollTicking = true; }
+        window.requestAnimationFrame(() => {
+          updateBottomNavOnScroll();
+          scrollTicking = false;
+        });
+        scrollTicking = true; }
     }, { passive: true });
     function goToEntriesFromOverview() {
       switchTab('entries');
-      renderEntriesPage(currentEntries);
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    }
+      renderEntriesPage(currentEntries); }
     
       // Main Navigation
     function switchTab(tab) {
-    const bottomNav = document.querySelector('.floating-tab-bar');
-    bottomNav.classList.remove('compact');
-    const heroSection = document.querySelector('.hero-section');
-    const placeholderView = document.getElementById('placeholderView');
-    const insightsView = document.getElementById('insightsView');
-    const tabs = document.querySelectorAll('.floating-tab');
-    tabs.forEach(button => {
-      button.classList.remove('active');
-    });
-
-    if (tab === 'overview') {
-      heroSection.style.display = '';
-      placeholderView.style.display = 'none';
-      insightsView.style.display = 'none';
-      tabs[0].classList.add('active'); }
-    if (tab === 'entries') {
-      heroSection.style.display = 'none';
-      placeholderView.style.display = '';
-      insightsView.style.display = 'none';
-      tabs[1].classList.add('active'); }
-    if (tab === 'insights') {
-      heroSection.style.display = 'none';
-      placeholderView.style.display = 'none';
-      insightsView.style.display = '';
+      const bottomNav = document.querySelector('.floating-tab-bar');
+      const heroSection = document.querySelector('.hero-section');
+      const placeholderView = document.getElementById('placeholderView');
+      const insightsView = document.getElementById('insightsView');
+      const tabs = document.querySelectorAll('.floating-tab');
+      if (!bottomNav) return;
+      tabScrollPositions[currentTab] = window.scrollY;
+      currentTab = tab;
+      bottomNav.classList.remove('compact');
+      const firstVisit = !visitedTabs[tab];
+      visitedTabs[tab] = true;
+      tabs.forEach(button => {
+        button.classList.remove('active');
+      });
+      if (tab === 'overview') {
+        heroSection.style.display = '';
+        placeholderView.style.display = 'none';
+        insightsView.style.display = 'none';
+        tabs[0].classList.add('active');
+      }
+      if (tab === 'entries') {
+        heroSection.style.display = 'none';
+        placeholderView.style.display = '';
+        insightsView.style.display = 'none';
+        tabs[1].classList.add('active');
+      }
+      if (tab === 'insights') {
+        heroSection.style.display = 'none';
+        placeholderView.style.display = 'none';
+        insightsView.style.display = '';
+        requestAnimationFrame(() => {
+          updateExpenseChartCompactState();
+        });
+        tabs[2].classList.add('active');
+      }
+      lucide.createIcons();
       requestAnimationFrame(() => {
-        updateExpenseChartCompactState(); });
-      tabs[2].classList.add('active'); }
-    lucide.createIcons(); }
+        const targetScroll = firstVisit
+        ? 0
+        : tabScrollPositions[tab];
+        window.scrollTo({
+          top: targetScroll,
+          behavior: 'auto'
+        });
+        bottomNav.classList.remove('compact');
+      });
+    }
 
     // Modal Controls
     function selectType(type) {
