@@ -157,9 +157,6 @@
     .year-nav-btn svg { width: 16px; height: 16px; stroke-width: 2.2; transform: translateY(-1px);}
     .year-text-display { font-size: 18px; font-weight: 800; letter-spacing: 0.3px;
      display:flex; align-items:center; justify-content:center; line-height:1; transform:translateY(-1px); }
-    .year-picker-trigger { border: none; background: transparent; color: inherit; font: inherit;
-     padding: 0 4px; margin: 0; cursor: pointer; -webkit-appearance: none; appearance: none; }
-    .year-picker-trigger:active { opacity: 0.65; transform: translateY(-1px) scale(0.96); }
 
     .current-btn { 
       display: flex; align-items: center; gap: 6px; 
@@ -200,16 +197,16 @@
     .month-chip.future { opacity: 0.45; }
     .month-chip.future.active { opacity: 1; }
     .insights-view-mode { width: 132px; height: 40px; margin: 0 auto 18px;
-     padding: 4px; box-sizing: border-box; display: grid;
-     grid-template-columns: 1fr 1fr; align-items: center; justify-items: stretch;
+     padding: 4px; display: grid; grid-template-columns: 1fr 1fr; align-items: center;
      background: rgba(255, 255, 255, 0.10); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
-     border: 1px solid var(--glass-border); border-radius: 22px; box-shadow: var(--glass-shadow); }
-    .insights-view-mode-btn { height: 100%; min-height: 0; padding: 0;
-     border: none; border-radius: 17px; background: transparent;
-     display: flex; align-items: center; justify-content: center;
-     color: var(--text-sub); font-family: inherit; font-size: 10px; font-weight: 800;
-     letter-spacing: 0.5px; line-height: 1;
-     cursor: pointer; transition: background 0.25s ease, color 0.25s ease, transform 0.2s ease; }
+     border: 1px solid var(--glass-border); border-radius: 22px; box-shadow: var(--glass-shadow);
+    }
+    
+    .insights-view-mode-btn { height: 32px; border: none; border-radius: 17px;
+     background: transparent; color: var(--text-sub); font-family: inherit; font-size: 10px;
+     font-weight: 800; letter-spacing: 0.5px; cursor: pointer; transition: background 0.25s ease,
+     color 0.25s ease, transform 0.2s ease;
+    }
     
     .insights-view-mode-btn:active {
       transform: scale(0.95); 
@@ -315,26 +312,10 @@
     .entry-amount.deduction { color: var(--deduction-color); }
     .highlight-empty { min-height: 210px; display: flex; align-items: center; justify-content: center;
      padding: 15px 18px; color: var(--text-sub); font-size: 12px; font-weight: 600; text-align: center; }
-    
-    .year-picker-modal { display: none; position: fixed; inset: 0;
-     background: rgba(15, 23, 42, 0.28); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-     z-index: 1100; align-items: flex-end; justify-content: center; }
-    .year-picker-modal.active { display: flex; }
-    .year-picker-sheet { width: 100%; max-width: 520px; max-height: 72vh; padding: 18px 20px
-     calc(20px + env(safe-area-inset-bottom)); background: var(--glass-card); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-     border-top: 1px solid var(--glass-border); border-radius: 28px 28px 0 0; box-shadow: 0 -8px 32px rgba(15, 23, 42, 0.12); overflow: hidden; }
-    .year-picker-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-    .year-picker-title { font-size: 13px; font-weight: 800; letter-spacing: 0.8px; color: var(--text-sub); }
-    .year-picker-close { width: 32px; height: 32px; border: none; border-radius: 50%; background: rgba(255, 255, 255, 0.10);
-     color: var(--text-sub); display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; }
-    .year-picker-list { max-height: calc(72vh - 80px); overflow-y: auto; display: grid;
-     grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 2px; }
-    .year-picker-item { min-height: 44px; border: none; border-radius: 14px; background: transparent; color: var(--text-sub);
-     font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease; }
-    .year-picker-item:active { transform: scale(0.96); }
-    .year-picker-item.active { background: var(--lime-400); color: #1A2E05; font-weight: 800; box-shadow: 0 4px 10px rgba(163, 230, 53, 0.18); }
-    [data-theme="dark"] .year-picker-modal { background: rgba(0, 0, 0, 0.48); }
-    [data-theme="dark"] .year-picker-close { background: rgba(255, 255, 255, 0.08); }
+
+    /* Liquid Glass Floating Bottom Action Bar */
+
+
     /* Liquid Glass Modal */
     .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--modal-bg); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 1000; align-items: flex-end; justify-content: center; }
     .modal.active { display: flex; }
@@ -1446,13 +1427,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         <button class="year-nav-btn" id="prevYearBtn" onclick="changeYear(-1)">
           <i data-lucide="chevron-left"></i>
         </button>
-        <button
-          type="button"
-          class="year-text-display year-picker-trigger"
-          id="selectedYear"
-          onclick="openYearPicker()">
-          2026
-        </button>
+        <span class="year-text-display" id="selectedYear">2026</span>
         <button class="year-nav-btn" id="nextYearBtn" onclick="changeYear(1)">
           <i data-lucide="chevron-right"></i>
         </button>
@@ -1547,13 +1522,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
           <button class="year-nav-btn" id="entriesPrevYearBtn" onclick="changeYear(-1)">
             <i data-lucide="chevron-left"></i>
           </button>
-          <button
-            type="button"
-            class="year-text-display year-picker-trigger"
-            id="entriesSelectedYear"
-            onclick="openYearPicker()">
-            2026
-          </button>
+          <span class="year-text-display" id="entriesSelectedYear">2026</span>
           <button class="year-nav-btn" id="entriesNextYearBtn" onclick="changeYear(1)">
             <i data-lucide="chevron-right"></i>
           </button>
@@ -1612,13 +1581,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
           <button class="year-nav-btn" id="insightsPrevYearBtn" onclick="changeYear(-1)">
             <i data-lucide="chevron-left"></i>
           </button>
-          <button
-            type="button"
-            class="year-text-display year-picker-trigger"
-            id="insightsSelectedYear"
-            onclick="openYearPicker()">
-            2026
-          </button>
+          <span class="year-text-display" id="insightsSelectedYear">2026</span>
           <button class="year-nav-btn" id="insightsNextYearBtn" onclick="changeYear(1)">
             <i data-lucide="chevron-right"></i>
           </button>
@@ -1946,36 +1909,17 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   <span>Insights</span>
 </button>
   </nav>
-  <div
-  class="year-picker-modal"
-  id="yearPickerModal"
-  onclick="closeYearPicker()">
-  <div
-    class="year-picker-sheet"
-    onclick="event.stopPropagation()">
-    <div class="year-picker-header">
-      <div class="year-picker-title">SELECT YEAR</div>
-      <button
-        type="button"
-        class="year-picker-close"
-        onclick="closeYearPicker()">
-        ✕
-      </button>
-    </div>
-    <div
-      class="year-picker-list"
-      id="yearPickerList">
-    </div>
-  </div>
-</div>
+
   <div class="modal" id="entryModal">
     <div class="modal-content">
       <div class="modal-header">
         <div class="modal-title" id="modalTitle">New Entry</div>
         <button class="close-btn" onclick="closeModal()">✕</button>
       </div>
+
       <form id="recordForm" onsubmit="handleFormSubmit(event)">
         <input type="hidden" id="editRowIndex">
+
         <div class="form-group">
           <label class="form-label">Type</label>
           <div class="type-selector">
@@ -1984,23 +1928,28 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
             <div class="type-btn deduction" onclick="selectType('Deduction')">Deduction</div>
           </div>
         </div>
+
         <div class="form-group">
           <label class="form-label">Date</label>
           <input type="date" class="form-control" id="formDate" required>
         </div>
+
         <div class="form-group">
           <label class="form-label">Item Name</label>
           <input type="text" class="form-control" id="formTitle" placeholder="e.g. เงินเดือน / ค่ากาแฟ" required>
         </div>
+
         <div class="form-group">
           <label class="form-label">Amount</label>
           <input type="number" step="any" class="form-control" id="formAmount" placeholder="0.00" required>
         </div>
+
         <button type="submit" class="submit-btn" id="submitBtn">Save Entry</button>
         <button type="button" class="delete-btn" id="deleteBtn" onclick="handleDelete()">Delete Entry</button>
       </form>
     </div>
   </div>
+
   <script>
     const SUPABASE_URL = "https://kbxnrlbybkbuxoyzdecp.supabase.co";
     const SUPABASE_KEY = "sb_publishable_CMkX-fP0wMfKoaYUcI-sUg_BR2ab8PM";
@@ -2014,8 +1963,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   let selectedMonth = realCurrentMonth;
   let monthWindowStart = Math.max(1, Math.min(realCurrentMonth - 2, 7));
   let insightsViewMode = 'month';
-  const MIN_YEAR = 2025;
-  const MAX_YEAR = realCurrentYear + 2;
   const months = [
     { name: 'JAN', m: 1 },
     { name: 'FEB', m: 2 },
@@ -2035,11 +1982,13 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     let currentEntryFilter = 'all';
     let lastFetchTime = 0;
     const REFRESH_THRESHOLD = 60 * 1000;
+    
     document.addEventListener("DOMContentLoaded", () => {
       applyTheme(getPreferredTheme());
       updateYearUI();
       renderMonthGrid();
       fetchData();
+      
       document.addEventListener("visibilitychange", () => {
      if (document.visibilityState === 'visible') {
      const elapsed = Date.now() - lastFetchTime;
@@ -2080,103 +2029,25 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
      localStorage.setItem("themeManual", "true");
 }
 
-  // Year Controller with Limit at 2025
+    // Year Controller with Limit at 2025
   function updateYearUI() {
   // Overview
   document.getElementById('selectedYear').innerText = selectedYear;
-  document.getElementById('prevYearBtn').disabled =
-    selectedYear <= MIN_YEAR;
-  document.getElementById('nextYearBtn').disabled =
-    selectedYear >= MAX_YEAR;
+  document.getElementById('prevYearBtn').disabled = (selectedYear <= 2025);
   // Entries
   document.getElementById('entriesSelectedYear').innerText = selectedYear;
-  document.getElementById('entriesPrevYearBtn').disabled =
-    selectedYear <= MIN_YEAR;
-  document.getElementById('entriesNextYearBtn').disabled =
-    selectedYear >= MAX_YEAR;
+  document.getElementById('entriesPrevYearBtn').disabled = (selectedYear <= 2025);
   // Insights
   document.getElementById('insightsSelectedYear').innerText = selectedYear;
-  document.getElementById('insightsPrevYearBtn').disabled =
-    selectedYear <= MIN_YEAR;
-  document.getElementById('insightsNextYearBtn').disabled =
-    selectedYear >= MAX_YEAR; }
-    
-  function changeYear(delta) {
-  const nextYear = selectedYear + delta;
-  if (
-    nextYear < MIN_YEAR ||
-    nextYear > MAX_YEAR
-  ) {
-    return; }
-  selectedYear = nextYear;
-  updateYearUI();
-  if (insightsViewMode === 'year') {
-    renderInsightsYearGrid();
-    fetchAnnualData();
-    return; }
-  renderMonthGrid();
-  fetchData(); }
-  function openYearPicker() {
-  const modal =
-    document.getElementById('yearPickerModal');
-  const list =
-    document.getElementById('yearPickerList');
-  if (!modal || !list) return;
-  const years = [];
-  for (
-    let year = MIN_YEAR;
-    year <= MAX_YEAR;
-    year++
-  ) {
-    years.push(year); }
-  list.innerHTML = years
-    .reverse()
-    .map(year => `
-      <button
-        type="button"
-        class="year-picker-item ${
-          year === selectedYear ? 'active' : ''
-        }"
-        onclick="selectYearFromPicker(${year})">
-        ${year}
-      </button>
-    `)
-    .join('');
-  modal.classList.add('active');
-  requestAnimationFrame(() => {
-    const active =
-      list.querySelector('.year-picker-item.active');
-    if (active) {
-      active.scrollIntoView({
-        block: 'center',
-        behavior: 'auto'
-      });
-    }
-  });
+  document.getElementById('insightsPrevYearBtn').disabled = (selectedYear <= 2025);
 }
-
-function closeYearPicker() {
-  const modal =
-    document.getElementById('yearPickerModal');
-  if (!modal) return;
-  modal.classList.remove('active');}
-  
-function selectYearFromPicker(year) {
-  if (
-    year < MIN_YEAR ||
-    year > MAX_YEAR
-  ) {
-    return; }
-  selectedYear = year;
-  closeYearPicker();
+  function changeYear(delta) {
+  if (selectedYear + delta < 2025) return;
+  selectedYear += delta;
   updateYearUI();
-  if (insightsViewMode === 'year') {
-    renderInsightsYearGrid();
-    fetchAnnualData();
-    return; }
   renderMonthGrid();
-  fetchData(); }
-  
+  fetchData();
+}
   // Month Controller
   function renderMonthGrid() {
   const visibleMonths = months.slice(
@@ -2262,20 +2133,19 @@ function selectYearFromPicker(year) {
     renderMonthGrid();
     fetchData();
     return; }
-    monthNav.style.display = 'none';
-    yearGrid.style.display = 'none';
-    if (yearNav) {
-      yearNav.style.display = 'none'; }
-      fetchAnnualData();
+  // YEAR MODE
+  monthNav.style.display = 'none';
+  yearGrid.style.display = '';
+  if (yearNav) {
+    yearNav.style.display = 'none'; }
+  renderInsightsYearGrid();
+  fetchAnnualData(); }
   
   function selectInsightsYear(year) {
-  if (
-    year < MIN_YEAR ||
-    year > MAX_YEAR
-  ) {
-    return; }
+  if (year < 2025) return;
   selectedYear = year;
   updateYearUI();
+  renderInsightsYearGrid();
   fetchAnnualData(); }
   
   function shiftMonthSet(delta) {
@@ -2297,14 +2167,8 @@ function selectYearFromPicker(year) {
   selectedYear = realCurrentYear;
   selectedMonth = realCurrentMonth;
   monthWindowStart =
-    Math.max(
-      1,
-      Math.min(realCurrentMonth - 2, 7)
-    );
+    Math.max(1, Math.min(realCurrentMonth - 2, 7));
   updateYearUI();
-  if (insightsViewMode === 'year') {
-    fetchAnnualData();
-    return; }
   renderMonthGrid();
   fetchData(); }
   
