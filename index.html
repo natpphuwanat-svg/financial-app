@@ -4456,27 +4456,36 @@ return Number(b.amount) - Number(a.amount); });
       insights: false };
       let currentTab = 'overview';
       let scrollTicking = false;
-      let isRestoringTabScroll = false;
+      let floatingNavLocked = false;
+      let userIsScrolling = false;
     function updateBottomNavOnScroll() {
       const bottomNav = document.querySelector('.floating-tab-bar');
       if (!bottomNav) return;
       const currentScrollY = window.scrollY;
       tabScrollPositions[currentTab] = currentScrollY;
-      if (isRestoringTabScroll) {
-        return; }
-      if (currentScrollY <= 0) {
+      if (floatingNavLocked && !userIsScrolling) {
         bottomNav.classList.remove('compact');
-      } else {
-        bottomNav.classList.add('compact'); }
+        return; }
+      if (userIsScrolling) {
+        floatingNavLocked = false; }
+        if (currentScrollY <= 0) {
+          bottomNav.classList.remove('compact');
+        } else {
+          bottomNav.classList.add('compact'); }
     }
-     window.addEventListener('scroll', () => {
-      if (!scrollTicking) {
-        window.requestAnimationFrame(() => {
-          updateBottomNavOnScroll();
-          scrollTicking = false;
-        });
-        scrollTicking = true; }
-    }, { passive: true });
+        window.addEventListener('touchmove', () => {
+          userIsScrolling = true;
+        }, { passive: true });
+        window.addEventListener('wheel', () => {
+          userIsScrolling = true;
+        }, { passive: true });
+        window.addEventListener('scroll', () => {
+          if (!scrollTicking) {
+            window.requestAnimationFrame(() => {
+              updateBottomNavOnScroll();
+              scrollTicking = false; });
+              scrollTicking = true; }
+        }, { passive: true });
     function goToEntriesFromOverview() {
       switchTab('entries');
       renderEntriesPage(currentEntries); }
@@ -4490,6 +4499,8 @@ return Number(b.amount) - Number(a.amount); });
       const tabs = document.querySelectorAll('.floating-tab');
       if (!bottomNav) return;
       tabScrollPositions[currentTab] = window.scrollY;
+      floatingNavLocked = true;
+      userIsScrolling = false;
       currentTab = tab;
       bottomNav.classList.remove('compact');
       const firstVisit = !visitedTabs[tab];
@@ -4523,17 +4534,13 @@ return Number(b.amount) - Number(a.amount); });
         const targetScroll = firstVisit
         ? 0
         : tabScrollPositions[tab];
-        isRestoringTabScroll = true;
         window.scrollTo({
           top: targetScroll,
           behavior: 'auto'
         });
         bottomNav.classList.remove('compact');
-        requestAnimationFrame(() => {
-          isRestoringTabScroll = false;
-        });
       });
-      }
+    }
       
     // Modal Controls
     function selectType(type) {
