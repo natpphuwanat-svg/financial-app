@@ -196,6 +196,34 @@
     }
     .month-chip.future { opacity: 0.45; }
     .month-chip.future.active { opacity: 1; }
+    .insights-view-mode { width: 132px; height: 40px; margin: 0 auto 18px;
+     padding: 4px; display: grid; grid-template-columns: 1fr 1fr; align-items: center;
+     background: rgba(255, 255, 255, 0.10); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+     border: 1px solid var(--glass-border); border-radius: 22px; box-shadow: var(--glass-shadow);
+    }
+    
+    .insights-view-mode-btn { height: 32px; border: none; border-radius: 17px;
+     background: transparent; color: var(--text-sub); font-family: inherit; font-size: 10px;
+     font-weight: 800; letter-spacing: 0.5px; cursor: pointer; transition: background 0.25s ease,
+     color 0.25s ease, transform 0.2s ease;
+    }
+    
+    .insights-view-mode-btn:active {
+      transform: scale(0.95); 
+    }
+    
+    .insights-view-mode-btn.active { background: rgba(190, 190, 190, 0.15); color: var(--blue-grey);
+     backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+    }
+    
+    [data-theme="dark"] .insights-view-mode { background: rgba(25, 30, 43, 0.10); border-color: rgba(255, 255, 255, 0.15); }
+    [data-theme="dark"] .insights-view-mode-btn.active { background: rgba(255, 255, 255, 0.12); color: var(--blue-grey); }
+    
+    .insights-year-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-bottom: 16px; }
+    .insights-year-chip { background: transparent; border: none; color: var(--text-sub); padding: 10px 0; border-radius: 14px;
+     font-size: 12px; font-weight: 700; text-align: center; cursor: pointer; transition: all 0.25s ease; }
+    .insights-year-chip:active { transform: scale(0.97); opacity: 0.7; }
+    .insights-year-chip.active { background: var(--lime-400); color: #1A2E05; font-weight: 800; box-shadow: 0 4px 10px rgba(163, 230, 53, 0.18); }
     .balance-card { 
       background: var(--balance-bg);
       backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -1572,8 +1600,30 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
           <i data-lucide="chevron-right"></i>
         </button>
       </section>
+      <section class="insights-view-mode">
+        <button
+          type="button"
+          class="insights-view-mode-btn active"
+          id="insightsMonthModeBtn"
+          onclick="setInsightsViewMode('month')">
+          MONTH
+        </button>
+        <button
+          type="button"
+          class="insights-view-mode-btn"
+          id="insightsYearModeBtn"
+          onclick="setInsightsViewMode('year')">
+          YEAR
+        </button>
+      </section>
+      <section
+        class="insights-year-grid"
+        id="insightsYearGrid"
+        style="display:none;">
+      </section>
       <section class="insights-section">
-        <div class="insights-section-title">
+        <div class="insights-section-title"
+          id="insightsSummaryTitle">
           MONTHLY SUMMARY
         </div>
         <div class="monthly-summary-card" id="insightsMonthlySummaryCard">
@@ -1912,6 +1962,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   let selectedYear = realCurrentYear;
   let selectedMonth = realCurrentMonth;
   let monthWindowStart = Math.max(1, Math.min(realCurrentMonth - 2, 7));
+  let insightsViewMode = 'month';
   const months = [
     { name: 'JAN', m: 1 },
     { name: 'FEB', m: 2 },
@@ -2031,18 +2082,86 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   document.getElementById('insightsPrevMonthSetBtn').disabled = !canGoPrevious;
   document.getElementById('insightsNextMonthSetBtn').disabled = !canGoNext; }
   
+  function renderInsightsYearGrid() {
+  const grid = document.getElementById('insightsYearGrid');
+  if (!grid) return;
+  const startYear = 2025;
+  const years = [];
+  for (let year = startYear; year <= realCurrentYear + 1; year++) {
+    years.push(year); }
+  grid.innerHTML = years.map(year => `
+    <div
+      class="insights-year-chip ${year === selectedYear ? 'active' : ''}"
+      onclick="selectInsightsYear(${year})">
+      ${year}
+    </div>
+  `).join('');
+  }
+  
+  function setInsightsViewMode(mode) {
+  if (mode !== 'month' && mode !== 'year') return;
+  insightsViewMode = mode;
+  const monthModeBtn =
+    document.getElementById('insightsMonthModeBtn');
+  const yearModeBtn =
+    document.getElementById('insightsYearModeBtn');
+  const monthNav =
+    document.querySelector(
+      '#insightsView .month-nav-container'
+    );
+  const yearNav =
+    document.querySelector(
+      '#insightsView .year-current-bar'
+    );
+  const yearGrid =
+    document.getElementById('insightsYearGrid');
+  if (!monthModeBtn || !yearModeBtn || !monthNav || !yearGrid) {
+    return; }
+  monthModeBtn.classList.toggle(
+    'active',
+    mode === 'month'
+  );
+  yearModeBtn.classList.toggle(
+    'active',
+    mode === 'year'
+  );
+  if (mode === 'month') {
+    monthNav.style.display = '';
+    yearGrid.style.display = 'none';
+    if (yearNav) {
+      yearNav.style.display = ''; }
+    renderMonthGrid();
+    fetchData();
+    return; }
+  // YEAR MODE
+  monthNav.style.display = 'none';
+  yearGrid.style.display = '';
+  if (yearNav) {
+    yearNav.style.display = 'none'; }
+  renderInsightsYearGrid();
+  fetchAnnualData(); }
+  
+  function selectInsightsYear(year) {
+  if (year < 2025) return;
+  selectedYear = year;
+  updateYearUI();
+  renderInsightsYearGrid();
+  fetchAnnualData(); }
+  
   function shiftMonthSet(delta) {
     const newStart = monthWindowStart + delta;
     if (newStart >= 1 && newStart <= 7) {
       monthWindowStart = newStart;
       renderMonthGrid(); }
   }
+  
   function selectMonth(m) {
   selectedMonth = m;
   selectedExpenseType = null;
   selectedExpenseTitle = null;
   renderMonthGrid();
   fetchData(); }
+  
  // Reset to Current Datefunction resetToCurrent() {
   function resetToCurrent() {
   selectedYear = realCurrentYear;
@@ -2052,6 +2171,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   updateYearUI();
   renderMonthGrid();
   fetchData(); }
+  
   function isSelectedMonthFuture() {
   return (
     selectedYear > realCurrentYear ||
@@ -2061,6 +2181,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     )
    );
   }
+  
   function renderEntryGroup(type, items) {
   if (!items || items.length === 0) return '';
   const typeClass = type.toLowerCase();
@@ -2109,6 +2230,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     </div>
   `;
 }
+
 function renderEntriesPage(entries) {
   currentEntries = entries || [];
   let filteredEntries = currentEntries;
@@ -2146,6 +2268,7 @@ Object.keys(grouped).forEach(type => {
   `;
   lucide.createIcons();
 }
+
   function renderEntriesLoading() {
   document.getElementById('entriesList').innerHTML = `
     <div class="entries-loading">
@@ -3985,6 +4108,119 @@ function selectMonthlyTakeawayInsights(
       'ยังไม่สามารถวิเคราะห์ภาพรวมและแนวโน้มทางการเงินได้'
    };
   }
+  async function fetchAnnualData() {
+  const requestId = ++fetchRequestId;
+  try {
+    const yearStart =
+      `${selectedYear}-01-01`;
+    const nextYearStart =
+      `${selectedYear + 1}-01-01`;
+    const { data, error } =
+      await supabaseClient
+        .from('financial_entries')
+        .select('*')
+        .gte('entry_date', yearStart)
+        .lt('entry_date', nextYearStart)
+        .order('entry_date', {
+          ascending: false
+        });
+    if (error) {
+      throw error; }
+    if (requestId !== fetchRequestId) {
+      return; }
+    const entries = data || [];
+    renderAnnualSummary(entries);
+  } catch (error) {
+    if (requestId !== fetchRequestId) {
+      return; }
+    console.error(
+      'Supabase fetchAnnualData ERROR:',
+      error
+      );
+    }
+  }
+  
+  function renderAnnualSummary(entries) {
+  const totalIncome = entries
+    .filter(item =>
+      item.financial_type === 'Income'
+    )
+    .reduce(
+      (sum, item) =>
+        sum + Number(item.amount || 0),
+      0
+    );
+  const totalExpense = entries
+    .filter(item =>
+      item.financial_type === 'Expense'
+    )
+    .reduce(
+      (sum, item) =>
+        sum + Number(item.amount || 0),
+      0
+    );
+  const totalDeduction = entries
+    .filter(item =>
+      item.financial_type === 'Deduction'
+    )
+    .reduce(
+      (sum, item) =>
+        sum + Number(item.amount || 0),
+      0
+    );
+  const balance =
+    totalIncome - totalExpense;
+  const savingsRate =
+    totalIncome > 0
+      ? (balance / totalIncome) * 100
+      : 0;
+  const formatAmount = amount =>
+    '฿' +
+    Number(amount).toLocaleString(
+      'en-US',
+      {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }
+    );
+  document.getElementById(
+    'insightsSummaryTitle'
+  ).innerText = 'ANNUAL SUMMARY';
+  document.getElementById(
+    'insightsIncome'
+  ).innerText = formatAmount(totalIncome);
+  document.getElementById(
+    'insightsExpense'
+  ).innerText = formatAmount(totalExpense);
+  document.getElementById(
+    'insightsDeduction'
+  ).innerText = formatAmount(totalDeduction);
+  document.getElementById(
+    'insightsBalance'
+  ).innerText = formatAmount(balance);
+  document.getElementById(
+    'insightsSavingsRate'
+  ).innerText =
+    totalIncome > 0
+      ? `${Math.round(savingsRate)}%`
+      : 'N/A';
+  document.getElementById(
+    'insightsIncomeMoM'
+  ).innerText = 'annual total';
+  document.getElementById(
+    'insightsExpenseMoM'
+  ).innerText = 'annual total';
+  document.getElementById(
+    'insightsDeductionMoM'
+  ).innerText = 'annual total';
+  document.getElementById(
+    'insightsBalanceMoM'
+  ).innerText = 'annual total';
+  document.getElementById(
+    'insightsSavingsRateMoM'
+  ).innerText = 'annual rate';
+  }
+  
   async function fetchData() {
   const requestId = ++fetchRequestId;
   // Updating state
