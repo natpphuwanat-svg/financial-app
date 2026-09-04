@@ -158,55 +158,50 @@
     .year-text-display { font-size: 18px; font-weight: 800; letter-spacing: 0.3px;
      display:flex; align-items:center; justify-content:center; line-height:1; transform:translateY(-1px); }
     .year-native-picker {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    .year-native-picker .year-text-display {
-      border: none;
-      background: transparent;
-      color: var(--text-main);
-      font-family: inherit;
-      cursor: pointer;
-      padding: 0;
-    }
-
-    .native-year-select {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      opacity: 0;
-      pointer-events: none;
-    }
-    .year-boundary-toast {
-  position: fixed;
-  left: 50%;
-  bottom: calc(92px + env(safe-area-inset-bottom));
-  transform: translateX(-50%) translateY(12px);
-  z-index: 900;
-  padding: 10px 16px;
-  border-radius: 16px;
-  background: var(--glass-card);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
+.year-native-picker .year-text-display {
+  border: none;
+  background: transparent;
   color: var(--text-main);
-  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+.native-year-select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 2;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.year-boundary-message {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--text-sub);
+  font-size: 10px;
   font-weight: 700;
+  line-height: 1.2;
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 
-.year-boundary-toast.show {
+.year-boundary-message.show {
   opacity: 1;
-  transform: translateX(-50%) translateY(0);
 }
 
     .current-btn { 
@@ -1476,23 +1471,26 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
           <i data-lucide="chevron-left"></i>
         </button>
         <div class="year-native-picker">
-          <button
-            type="button"
-            class="year-text-display"
-            id="selectedYear"
-            onclick="openNativeYearPicker()">
-            2026
-          </button>
-          <select
-            id="nativeYearSelect"
-            class="native-year-select"
-            onchange="handleNativeYearChange(this.value)">
-          </select>
-        </div>
-        <button class="year-nav-btn" id="nextYearBtn" onclick="changeYear(1)">
-          <i data-lucide="chevron-right"></i>
-        </button>
-      </div>
+  <button
+    type="button"
+    class="year-text-display"
+    id="selectedYear">
+    2026
+  </button>
+
+  <select
+    id="nativeYearSelect"
+    class="native-year-select"
+    aria-label="Select year"
+    onchange="handleNativeYearChange(this.value)">
+  </select>
+
+  <div
+    class="year-boundary-message"
+    id="yearBoundaryMessage">
+    Data starts from 2025
+  </div>
+</div>
 
       <button class="current-btn" onclick="resetToCurrent()">
         <i data-lucide="calendar-days"></i>
@@ -2095,7 +2093,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   if (!select) return;
 
   const minYear = 2024;
-  const maxYear = realCurrentYear + 2;
+  const maxYear = 9999;
 
   select.innerHTML = '';
 
@@ -2111,30 +2109,11 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   select.value = String(selectedYear);
 }
 
-function openNativeYearPicker() {
-  const select = document.getElementById('nativeYearSelect');
-
-  if (!select) return;
-
-  populateNativeYearPicker();
-
-  select.value = String(selectedYear);
-
-  /*
-   * iOS/Safari will open the native picker
-   * when the select receives a programmatic focus/click.
-   */
-  select.focus();
-
-  select.click();
-}
-
 function handleNativeYearChange(value) {
   const year = Number(value);
 
   if (!Number.isFinite(year)) return;
 
-  // Boundary year
   if (year < 2025) {
     showYearBoundaryMessage();
 
@@ -2153,43 +2132,26 @@ function handleNativeYearChange(value) {
     return;
   }
 
-  const maxYear = realCurrentYear + 2;
-
-  if (year > maxYear) {
-    const select = document.getElementById('nativeYearSelect');
-
-    if (select) {
-      select.value = String(maxYear);
-    }
-
-    selectedYear = maxYear;
-
-    updateYearUI();
-    renderMonthGrid();
-    fetchData();
-
-    return;
-  }
-
   selectedYear = year;
 
   updateYearUI();
   renderMonthGrid();
   fetchData();
 }
-let yearBoundaryToastTimer = null;
+
+let yearBoundaryMessageTimer = null;
 
 function showYearBoundaryMessage() {
-  const toast = document.getElementById('yearBoundaryToast');
+  const message = document.getElementById('yearBoundaryMessage');
 
-  if (!toast) return;
+  if (!message) return;
 
-  toast.classList.add('show');
+  message.classList.add('show');
 
-  clearTimeout(yearBoundaryToastTimer);
+  clearTimeout(yearBoundaryMessageTimer);
 
-  yearBoundaryToastTimer = setTimeout(() => {
-    toast.classList.remove('show');
+  yearBoundaryMessageTimer = setTimeout(() => {
+    message.classList.remove('show');
   }, 1800);
 }
     // Year Controller with Limit at 2025
