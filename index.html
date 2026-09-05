@@ -134,44 +134,33 @@
     .home-icon-box svg{ width:20px; height:20px; stroke:currentColor; stroke-width:2.2; fill:none; }
     .app-title { font-size: 20px; font-weight: 800; letter-spacing: 0.3px; }
 
-    /* Period Selector */
+
 .period-bar {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   width: 100%;
-  margin-bottom: 16px;
+  margin-bottom: 21px;
 }
 
-/* Previous / Next / Current */
 .period-circle-btn,
 .current-btn {
   width: 38px;
   height: 38px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   flex-shrink: 0;
-
   padding: 0;
-
-  border: 1px solid var(--glass-border);
+  border: 1px solid rgba(255, 255, 255, 0.40);
   border-radius: 50%;
-
-  background: var(--glass-card);
-
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-
-  color: var(--text-main);
-
-  box-shadow: var(--glass-shadow);
-
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  color: var(--text-sub);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.07), 0 1px 3px rgba(15, 23, 42, 0.04);
   cursor: pointer;
-
   transition:
     transform 0.2s ease,
     opacity 0.2s ease,
@@ -200,65 +189,41 @@
   stroke-width: 2.2;
 }
 
-/* Combined Month + Year Capsule */
 .period-picker-capsule {
   width: 210px;
   height: 42px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 0 10px;
-
-  border: 1px solid var(--glass-border);
+  border: 1px solid rgba(255, 255, 255, 0.40);
   border-radius: 21px;
-
-  background: var(--glass-card);
-
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-
-  box-shadow: var(--glass-shadow);
-
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.07), 0 1px 3px rgba(15, 23, 42, 0.04);
   flex-shrink: 0;
 }
 
-/* Shared picker base */
 .period-picker {
   appearance: none;
   -webkit-appearance: none;
-
   height: 100%;
-
   background: transparent;
   border: none;
   outline: none;
-
   color: var(--text-main);
-
   font-family: inherit;
   font-size: 17px;
   font-weight: 800;
   letter-spacing: 0.2px;
-
   text-align: center;
   text-align-last: center;
-
   padding: 0;
   margin: 0;
-
   cursor: pointer;
 }
 
-/*
-  Fixed internal layout
-
-  Month always has the same area,
-  regardless of May / September.
-
-  Year also has its own fixed area.
-*/
 .month-picker {
   width: 132px;
   flex: 0 0 132px;
@@ -269,25 +234,24 @@
   flex: 0 0 58px;
 }
 
-/* Small divider between Month and Year */
 .period-picker-divider {
   width: 1px;
   height: 18px;
-
   flex-shrink: 0;
-
-  background: var(--glass-border);
-
+  background: rgba(0, 0, 0, 0.10);
   margin: 0 4px;
 }
 
-/* Dark mode refinement */
 [data-theme="dark"] .period-circle-btn,
 [data-theme="dark"] .current-btn,
 [data-theme="dark"] .period-picker-capsule {
-  background: rgba(31, 38, 55, 0.50);
-}
-
+  background: rgba(25, 30, 43, 0.10);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10); }
+  
+[data-theme="dark"] .period-picker-divider {
+  background: var(--glass-border); }
+  
 .insights-view-mode {
   width: 132px;
   height: 45px;
@@ -304,8 +268,7 @@
   border: 1px solid rgba(255, 255, 255, 0.40);
   border-radius: 22px;
   box-shadow:
-  0 4px 14px rgba(15, 23, 42, 0.07),
-  0 1px 3px rgba(15, 23, 42, 0.04);
+  0 4px 14px rgba(15, 23, 42, 0.07), 0 1px 3px rgba(15, 23, 42, 0.04);
 }
 
 .insights-view-mode-btn {
