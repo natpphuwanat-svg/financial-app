@@ -135,98 +135,33 @@
     .app-title { font-size: 20px; font-weight: 800; letter-spacing: 0.3px; }
 
     /* Year & Current Bar */
-
-.period-selector {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 18px;
-  margin-bottom: 14px;
-}
-
-.period-selector-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-}
-
-.period-arrow-btn {
-  background: none;
-  border: none;
-  color: var(--text-sub);
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  cursor: pointer;
-  transition: opacity .2s;
-}
-
-.period-arrow-btn:disabled {
-  opacity: 0.2;
-  cursor: not-allowed;
-}
-
-.period-arrow-btn svg {
-  width: 16px;
-  height: 16px;
-  stroke-width: 2.2;
-  transform: translateY(-1px);
-}
-
-.period-picker {
-  appearance: none;
-  -webkit-appearance: none;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: var(--text-main);
-  font-family: inherit;
-  font-size: 18px;
-  font-weight: 800;
-  letter-spacing: 0.3px;
-  text-align: center;
-  text-align-last: center;
-  line-height: 1;
-  padding: 0;
-  margin: 0;
-  cursor: pointer;
-}
-
-.year-picker {
-  min-width: 58px;
-}
-
-.month-picker {
-  min-width: 102px;
-}
-.current-icon-btn {
-  background: none;
-  border: none;
-  color: var(--text-sub);
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  margin-left: -2px;
-  cursor: pointer;
-  transition: opacity .2s, transform .2s;
-}
-
-.current-icon-btn:active {
-  transform: scale(0.9);
-}
-
-.current-icon-btn svg {
-  width: 18px;
-  height: 18px;
-  stroke-width: 2.1;
-}
+    .year-current-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .year-nav-transparent { display: flex; align-items: center; gap: 0px; }
+    .year-nav-btn { background: none; border: none; color: var(--text-sub); width: 28px; height: 28px;
+                    display: flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; transition: opacity .2s; }
+    .year-nav-btn:disabled { opacity: 0.2; cursor: not-allowed; }
+    .year-nav-btn svg { width: 16px; height: 16px; stroke-width: 2.2; transform: translateY(-1px);}
+    .year-text-display { font-size: 18px; font-weight: 800; letter-spacing: 0.3px;
+     display:flex; align-items:center; justify-content:center; line-height:1; transform:translateY(-1px); }
+    .year-picker {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    text-align: center;
+    text-align-last: center;
+    padding: 0;
+    margin: 0;
+    width: auto;
+    min-width: 58px;
+    cursor: pointer; 
+    }
     .current-btn { 
       display: flex; align-items: center; gap: 6px; 
       background: var(--btn-pill-bg); 
@@ -1485,89 +1420,26 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   </header>
   
   <main class="container" id="mainContent">
-<section class="period-selector">
-  <div class="period-selector-item">
-    <button
-      class="period-arrow-btn"
-      id="prevYearBtn"
-      onclick="changeYear(-1)"
-      aria-label="Previous year">
-      <i data-lucide="chevron-left"></i>
-    </button>
+    <section class="year-current-bar">
+      <div class="year-nav-transparent">
+        <button class="year-nav-btn" id="prevYearBtn" onclick="changeYear(-1)">
+          <i data-lucide="chevron-left"></i>
+        </button>
+        <select
+  class="year-text-display year-picker"
+  id="selectedYear"
+  aria-label="Select year">
+</select>
+        <button class="year-nav-btn" id="nextYearBtn" onclick="changeYear(1)">
+          <i data-lucide="chevron-right"></i>
+        </button>
+      </div>
 
-    <select
-      class="period-picker year-picker"
-      id="selectedYear"
-      aria-label="Select year">
-    </select>
-
-    <button
-      class="period-arrow-btn"
-      id="nextYearBtn"
-      onclick="changeYear(1)"
-      aria-label="Next year">
-      <i data-lucide="chevron-right"></i>
-    </button>
-  </div>
-
-  <div class="period-selector-item">
-    <button
-      class="period-arrow-btn"
-      id="prevMonthBtn"
-      onclick="changeMonth(-1)"
-      aria-label="Previous month">
-      <i data-lucide="chevron-left"></i>
-    </button>
-
-    <select
-      class="period-picker month-picker"
-      id="selectedMonth"
-      aria-label="Select month">
-    </select>
-
-    <button
-      class="period-arrow-btn"
-      id="nextMonthBtn"
-      onclick="changeMonth(1)"
-      aria-label="Next month">
-      <i data-lucide="chevron-right"></i>
-    </button>
-  </div>
-</section>
-  <section class="period-selector">
-
-  <div class="period-selector-item">
-    <button
-      class="period-arrow-btn"
-      id="prevYearBtn"
-      onclick="changeYear(-1)"
-      aria-label="Previous year">
-      <i data-lucide="chevron-left"></i>
-    </button>
-
-    <select
-      class="period-picker year-picker"
-      id="selectedYear"
-      aria-label="Select year">
-    </select>
-
-    <button
-      class="period-arrow-btn"
-      id="nextYearBtn"
-      onclick="changeYear(1)"
-      aria-label="Next year">
-      <i data-lucide="chevron-right"></i>
-    </button>
-  </div>
-
-  <button
-    class="current-icon-btn"
-    onclick="resetToCurrent()"
-    aria-label="Go to current month"
-    title="Current month">
-    <i data-lucide="circle-dot"></i>
-  </button>
-</section>
+      <button class="current-btn" onclick="resetToCurrent()">
+        <i data-lucide="calendar-days"></i>
+        CURRENT
+      </button>
+    </section>
 
     <section class="month-nav-container">
       <button class="month-arrow-btn" id="prevMonthSetBtn" onclick="shiftMonthSet(-1)">
