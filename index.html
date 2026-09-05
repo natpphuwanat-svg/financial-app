@@ -245,18 +245,19 @@
   align-items: center;
   justify-items: stretch;
   background: rgba(255, 255, 255, 0.10);
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
   border: 1px solid rgba(255, 255, 255, 0.40);
   border-radius: 22px;
-  box-shadow: var(--glass-shadow);
+  box-shadow:
+  0 4px 14px rgba(15, 23, 42, 0.07),
+  0 1px 3px rgba(15, 23, 42, 0.04);
 }
 
 .insights-view-mode-btn {
   height: 100%;
   min-height: 0;
   padding: 0;
-
   border: none;
   border-radius: 17px;
   background: transparent;
@@ -283,19 +284,18 @@
 .insights-view-mode-btn.active {
   background: rgba(190, 190, 190, 0.15);
   color: var(--blue-grey);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
 }
 
 [data-theme="dark"] .insights-view-mode {
   background: rgba(25, 30, 43, 0.10);
   border-color: rgba(255, 255, 255, 0.15);
-}
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10); }
 
 [data-theme="dark"] .insights-view-mode-btn.active {
-  background: rgba(255, 255, 255, 0.12);
-  color: var(--blue-grey);
-}
+ color: var(--blue-grey);
+ background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(22px) ; -webkit-backdrop-filter: blur(22px) ; }
 
 .insights-year-grid {
   display: grid;
