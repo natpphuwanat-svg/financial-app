@@ -2175,19 +2175,9 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       if (elapsed >= REFRESH_THRESHOLD) {
         fetchData();
       }
-    }
+     }
+    });
   });
-});
-      
-      document.addEventListener("visibilitychange", () => {
-     if (document.visibilityState === 'visible') {
-     const elapsed = Date.now() - lastFetchTime;
-     if (elapsed >= REFRESH_THRESHOLD) {
-      fetchData();
-    }
-  }
-});
-});
 
     // Theme Toggle
   function applyTheme(theme) {
@@ -2197,37 +2187,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       ? "dark"
       : "light"; }
 
-    function populateYearPickers() {
-  const minYear = 2025;
-  const maxYear = Math.max(selectedYear, realCurrentYear + 5);
-
-  const pickerIds = [
-    'selectedYear',
-    'entriesSelectedYear',
-    'insightsSelectedYear'
-  ];
-
-  pickerIds.forEach(id => {
-    const picker = document.getElementById(id);
-
-    if (!picker) return;
-
-    // สร้างรายการปีที่ยังไม่มี
-    for (let year = minYear; year <= maxYear; year++) {
-      if (!picker.querySelector(`option[value="${year}"]`)) {
-        const option = document.createElement('option');
-
-        option.value = year;
-        option.textContent = year;
-
-        picker.appendChild(option);
-      }
-    }
-
-    // เลือกปีปัจจุบัน
-    picker.value = selectedYear;
-  });
-}
   function populateYearPickers() {
   const minYear = 2025;
   const maxYear = Math.max(
