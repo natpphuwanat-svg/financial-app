@@ -1549,6 +1549,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     <button
       class="period-nav-btn"
       id="prevMonthBtn"
+      onclick="changeMonth(-1)"
       aria-label="Previous month">
       <i data-lucide="chevron-left"></i>
     </button>
@@ -1560,6 +1561,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     <button
       class="period-nav-btn"
       id="nextMonthBtn"
+      onclick="changeMonth(1)"
       aria-label="Next month">
       <i data-lucide="chevron-right"></i>
     </button>
@@ -1676,6 +1678,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     <button
       class="period-nav-btn"
       id="entriesPrevMonthBtn"
+      onclick="changeMonth(-1)"
       aria-label="Previous month">
       <i data-lucide="chevron-left"></i>
     </button>
@@ -1687,6 +1690,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     <button
       class="period-nav-btn"
       id="entriesNextMonthBtn"
+      onclick="changeMonth(1)"
       aria-label="Next month">
       <i data-lucide="chevron-right"></i>
     </button>
@@ -2186,6 +2190,30 @@ yearPickerIds.forEach(id => {
     }
   });
 });
+const monthPickerIds = [
+  'selectedMonthPicker',
+  'entriesSelectedMonthPicker'
+];
+
+monthPickerIds.forEach(id => {
+  const picker = document.getElementById(id);
+
+  if (!picker) return;
+
+  picker.addEventListener('change', () => {
+    const newMonth = Number(picker.value);
+
+    if (!newMonth || newMonth < 1 || newMonth > 12) {
+      return;
+    }
+
+    selectedMonth = newMonth;
+
+    updateYearUI();
+    renderMonthGrid();
+    fetchData();
+  });
+});
       
       document.addEventListener("visibilitychange", () => {
      if (document.visibilityState === 'visible') {
@@ -2283,16 +2311,14 @@ function populateMonthPickers() {
 function updateYearUI() {
   // อัปเดต Native Year Pickers
   populateYearPickers();
+  // อัปเดต Native Month Pickers
   populateMonthPickers();
-
   // Overview
   document.getElementById('prevYearBtn').disabled =
     (selectedYear <= 2025);
-
   // Entries
   document.getElementById('entriesPrevYearBtn').disabled =
     (selectedYear <= 2025);
-
   // Insights
   document.getElementById('insightsPrevYearBtn').disabled =
     (selectedYear <= 2025);
@@ -2300,6 +2326,26 @@ function updateYearUI() {
   function changeYear(delta) {
   if (selectedYear + delta < 2025) return;
   selectedYear += delta;
+  updateYearUI();
+  renderMonthGrid();
+  fetchData();
+}
+   function changeMonth(delta) {
+  const newDate = new Date(
+    selectedYear,
+    selectedMonth - 1 + delta,
+    1
+  );
+
+  const newYear = newDate.getFullYear();
+  const newMonth = newDate.getMonth() + 1;
+
+  // ไม่อนุญาตให้ย้อนก่อนปี 2025
+  if (newYear < 2025) return;
+
+  selectedYear = newYear;
+  selectedMonth = newMonth;
+
   updateYearUI();
   renderMonthGrid();
   fetchData();
