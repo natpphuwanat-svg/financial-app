@@ -134,81 +134,106 @@
     .home-icon-box svg{ width:20px; height:20px; stroke:currentColor; stroke-width:2.2; fill:none; }
     .app-title { font-size: 20px; font-weight: 800; letter-spacing: 0.3px; }
 
-    /* Year & Current Bar */
-    .year-current-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-    .year-nav-transparent { display: flex; align-items: center; gap: 0px; }
-    .year-nav-btn { background: none; border: none; color: var(--text-sub); width: 28px; height: 28px;
-                    display: flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; transition: opacity .2s; }
-    .year-nav-btn:disabled { opacity: 0.2; cursor: not-allowed; }
-    .year-nav-btn svg { width: 16px; height: 16px; stroke-width: 2.2; transform: translateY(-1px);}
-    .year-text-display { font-size: 18px; font-weight: 800; letter-spacing: 0.3px;
-     display:flex; align-items:center; justify-content:center; line-height:1; transform:translateY(-1px); }
-    .year-picker {
-    appearance: none;
-    -webkit-appearance: none;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--text-main);
-    font-family: inherit;
-    font-size: 18px;
-    font-weight: 800;
-    letter-spacing: 0.3px;
-    text-align: center;
-    text-align-last: center;
-    padding: 0;
-    margin: 0;
-    width: auto;
-    min-width: 58px;
-    cursor: pointer; 
-    }
-    .current-btn { 
-      display: flex; align-items: center; gap: 6px; 
-      background: var(--btn-pill-bg); 
-      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--btn-pill-border); 
-      padding: 10px 10px; min-height: 32px; border-radius: 18px; 
-      font-size: 11px; font-weight: 800; color: var(--text-main); 
-      cursor: pointer; letter-spacing: 0.6px;
-      box-shadow: 0 5px 14px rgba(0,0,0,0.05);
-      transition: all 0.2s ease;
-    }
-    .current-btn:active { transform: scale(0.95); }
-    .current-btn svg{ width:14px !important; height:14px !important; stroke:var(--lime-400); stroke-width:2.2; flex-shrink:0; }
+    /* Period Selector */
+.period-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 16px;
+  width: 100%;
+}
 
-    /* Liquid Month Selector */
-    .month-nav-container { display: flex; align-items: center; gap: 6px; margin-bottom: 16px; justify-content: space-between; }
-    .month-arrow-btn { background: none; border: none; color: var(--text-sub); width: 28px; height: 28px; display:flex; align-items: center;
-                      justify-content: center; padding: 0; cursor: pointer; }
-    .month-arrow-btn:disabled { opacity: 0.2; cursor: not-allowed; }
-    .month-arrow-btn svg { width: 16px; height: 16px; stroke-width: 2.2; }
+.period-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
 
-    .month-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; flex-grow: 1; }
-    .month-chip { 
-      background: transparent; 
-      border: none;
-      color: var(--text-sub); padding: 10px 0; border-radius: 14px; 
-      font-size: 12px; font-weight: 700; text-align: center; cursor: pointer; 
-      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .month-chip:active { transform: scale(0.97); opacity: 0.7; }
-    .month-chip.active { 
-      background: var(--lime-400);
-      color: #1A2E05;
-      font-weight: 800;
-      box-shadow: 0 4px 10px rgba(163, 230, 53, 0.18);
-    }
-    .month-chip.future { opacity: 0.45; }
-    .month-chip.future.active { opacity: 1; }
-    .insights-view-mode { width: 132px; height: 45px; margin: 0 auto 18px; padding: 4px; 
-     box-sizing: border-box; display: grid; grid-template-columns: 1fr 1fr; align-items: center;
-     justify-items: stretch; background: rgba(255, 255, 255, 0.10); backdrop-filter: blur(22px) -webkit-backdrop-filter: blur(22px);
-     border: 1px solid rgba(255, 255, 255, 0.40); border-radius: 22px; box-shadow: var(--glass-shadow); }
-    .insights-view-mode-btn { height: 100%; min-height: 0;  padding: 0; border: none; border-radius: 17px;
-     background: transparent; display: flex; align-items: center; justify-content: center; color: var(--text-sub);
-     font-family: inherit; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; line-height: 1;
-     cursor: pointer; transition: background 0.25s ease, color 0.25s ease, transform 0.2s ease;
-    }
+.period-nav-btn {
+  background: none;
+  border: none;
+  color: var(--text-sub);
+  width: 28px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity .2s, transform .2s;
+  flex-shrink: 0;
+}
+
+.period-nav-btn:active {
+  transform: scale(0.92);
+}
+
+.period-nav-btn:disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
+}
+
+.period-nav-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.2;
+}
+
+.period-picker {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  text-align: center;
+  text-align-last: center;
+  padding: 0;
+  margin: 0;
+  height: 32px;
+  cursor: pointer;
+  color-scheme: light dark;
+}
+
+.year-picker {
+  width: 58px;
+}
+
+.month-picker {
+  min-width: 112px;
+}
+
+.current-btn {
+  background: transparent;
+  border: none;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin-left: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-sub);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.current-btn:active {
+  transform: scale(0.90);
+}
+
+.current-btn svg {
+  width: 18px !important;
+  height: 18px !important;
+  stroke: var(--lime-400);
+  stroke-width: 2.2;
+}
     .insights-view-mode-btn:active {
       transform: scale(0.95); 
     }
@@ -1420,36 +1445,67 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   </header>
   
   <main class="container" id="mainContent">
-    <section class="year-current-bar">
-      <div class="year-nav-transparent">
-        <button class="year-nav-btn" id="prevYearBtn" onclick="changeYear(-1)">
-          <i data-lucide="chevron-left"></i>
-        </button>
-        <select
-  class="year-text-display year-picker"
-  id="selectedYear"
-  aria-label="Select year">
-</select>
-        <button class="year-nav-btn" id="nextYearBtn" onclick="changeYear(1)">
-          <i data-lucide="chevron-right"></i>
-        </button>
-      </div>
+    <section class="period-bar">
+  <div class="period-group">
+    <button
+      class="period-nav-btn"
+      id="prevYearBtn"
+      type="button"
+      onclick="changeYear(-1)"
+      aria-label="Previous year">
+      <i data-lucide="chevron-left"></i>
+    </button>
 
-      <button class="current-btn" onclick="resetToCurrent()">
-        <i data-lucide="calendar-days"></i>
-        CURRENT
-      </button>
-    </section>
+    <select
+      class="period-picker year-picker"
+      id="selectedYear"
+      aria-label="Select year">
+    </select>
 
-    <section class="month-nav-container">
-      <button class="month-arrow-btn" id="prevMonthSetBtn" onclick="shiftMonthSet(-1)">
-        <i data-lucide="chevron-left"></i>
-      </button>
-      <div class="month-grid" id="monthGrid"></div>
-      <button class="month-arrow-btn" id="nextMonthSetBtn" onclick="shiftMonthSet(1)">
-        <i data-lucide="chevron-right"></i>
-      </button>
-    </section>
+    <button
+      class="period-nav-btn"
+      id="nextYearBtn"
+      type="button"
+      onclick="changeYear(1)"
+      aria-label="Next year">
+      <i data-lucide="chevron-right"></i>
+    </button>
+  </div>
+
+  <div class="period-group">
+    <button
+      class="period-nav-btn"
+      id="prevMonthBtn"
+      type="button"
+      onclick="changeMonth(-1)"
+      aria-label="Previous month">
+      <i data-lucide="chevron-left"></i>
+    </button>
+
+    <select
+      class="period-picker month-picker"
+      id="selectedMonth"
+      aria-label="Select month">
+    </select>
+
+    <button
+      class="period-nav-btn"
+      id="nextMonthBtn"
+      type="button"
+      onclick="changeMonth(1)"
+      aria-label="Next month">
+      <i data-lucide="chevron-right"></i>
+    </button>
+  </div>
+
+  <button
+    class="current-btn"
+    type="button"
+    onclick="resetToCurrent()"
+    aria-label="Return to current month">
+    <i data-lucide="history"></i>
+  </button>
+</section>
 
     <section class="balance-card">
       <div class="balance-wallet">
@@ -1516,34 +1572,67 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       </div>
     </header>
     <main class="container" id="entriesContent">
-      <section class="year-current-bar">
-        <div class="year-nav-transparent">
-          <button class="year-nav-btn" id="entriesPrevYearBtn" onclick="changeYear(-1)">
-            <i data-lucide="chevron-left"></i>
-          </button>
-          <select
-  class="year-text-display year-picker"
-  id="entriesSelectedYear"
-  aria-label="Select year">
-</select>
-          <button class="year-nav-btn" id="entriesNextYearBtn" onclick="changeYear(1)">
-            <i data-lucide="chevron-right"></i>
-          </button>
-        </div>
-        <button class="current-btn" onclick="resetToCurrent()">
-          <i data-lucide="calendar-days"></i>
-          CURRENT
-        </button>
-      </section>
-      <section class="month-nav-container">
-        <button class="month-arrow-btn" id="entriesPrevMonthSetBtn" onclick="shiftMonthSet(-1)">
-          <i data-lucide="chevron-left"></i>
-        </button>
-        <div class="month-grid" id="entriesMonthGrid"></div>
-        <button class="month-arrow-btn" id="entriesNextMonthSetBtn" onclick="shiftMonthSet(1)">
-          <i data-lucide="chevron-right"></i>
-        </button>
-      </section>
+      <section class="period-bar">
+  <div class="period-group">
+    <button
+      class="period-nav-btn"
+      id="entriesPrevYearBtn"
+      type="button"
+      onclick="changeYear(-1)"
+      aria-label="Previous year">
+      <i data-lucide="chevron-left"></i>
+    </button>
+
+    <select
+      class="period-picker year-picker"
+      id="entriesSelectedYear"
+      aria-label="Select year">
+    </select>
+
+    <button
+      class="period-nav-btn"
+      id="entriesNextYearBtn"
+      type="button"
+      onclick="changeYear(1)"
+      aria-label="Next year">
+      <i data-lucide="chevron-right"></i>
+    </button>
+  </div>
+
+  <div class="period-group">
+    <button
+      class="period-nav-btn"
+      id="entriesPrevMonthBtn"
+      type="button"
+      onclick="changeMonth(-1)"
+      aria-label="Previous month">
+      <i data-lucide="chevron-left"></i>
+    </button>
+
+    <select
+      class="period-picker month-picker"
+      id="entriesSelectedMonth"
+      aria-label="Select month">
+    </select>
+
+    <button
+      class="period-nav-btn"
+      id="entriesNextMonthBtn"
+      type="button"
+      onclick="changeMonth(1)"
+      aria-label="Next month">
+      <i data-lucide="chevron-right"></i>
+    </button>
+  </div>
+
+  <button
+    class="current-btn"
+    type="button"
+    onclick="resetToCurrent()"
+    aria-label="Return to current month">
+    <i data-lucide="history"></i>
+  </button>
+</section>
       <div class="entries-filter" id="entriesFilter">
         <button class="entries-filter-btn active" type="button" data-filter="all" onclick="setEntryFilter('all')">
           <span>ALL ENTRIES</span>
@@ -1576,34 +1665,67 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       </div>
     </header>
     <main class="container" id="insightsContent">
-      <section class="year-current-bar">
-        <div class="year-nav-transparent">
-          <button class="year-nav-btn" id="insightsPrevYearBtn" onclick="changeYear(-1)">
-            <i data-lucide="chevron-left"></i>
-          </button>
-          <select
-  class="year-text-display year-picker"
-  id="insightsSelectedYear"
-  aria-label="Select year">
-</select>
-          <button class="year-nav-btn" id="insightsNextYearBtn" onclick="changeYear(1)">
-            <i data-lucide="chevron-right"></i>
-          </button>
-        </div>
-        <button class="current-btn" onclick="resetToCurrent()">
-          <i data-lucide="calendar-days"></i>
-          CURRENT
-        </button>
-      </section>
-      <section class="month-nav-container">
-        <button class="month-arrow-btn" id="insightsPrevMonthSetBtn" onclick="shiftMonthSet(-1)">
-          <i data-lucide="chevron-left"></i>
-        </button>
-        <div class="month-grid" id="insightsMonthGrid"></div>
-        <button class="month-arrow-btn" id="insightsNextMonthSetBtn" onclick="shiftMonthSet(1)">
-          <i data-lucide="chevron-right"></i>
-        </button>
-      </section>
+      <section class="period-bar">
+  <div class="period-group">
+    <button
+      class="period-nav-btn"
+      id="insightsPrevYearBtn"
+      type="button"
+      onclick="changeYear(-1)"
+      aria-label="Previous year">
+      <i data-lucide="chevron-left"></i>
+    </button>
+
+    <select
+      class="period-picker year-picker"
+      id="insightsSelectedYear"
+      aria-label="Select year">
+    </select>
+
+    <button
+      class="period-nav-btn"
+      id="insightsNextYearBtn"
+      type="button"
+      onclick="changeYear(1)"
+      aria-label="Next year">
+      <i data-lucide="chevron-right"></i>
+    </button>
+  </div>
+
+  <div class="period-group">
+    <button
+      class="period-nav-btn"
+      id="insightsPrevMonthBtn"
+      type="button"
+      onclick="changeMonth(-1)"
+      aria-label="Previous month">
+      <i data-lucide="chevron-left"></i>
+    </button>
+
+    <select
+      class="period-picker month-picker"
+      id="insightsSelectedMonth"
+      aria-label="Select month">
+    </select>
+
+    <button
+      class="period-nav-btn"
+      id="insightsNextMonthBtn"
+      type="button"
+      onclick="changeMonth(1)"
+      aria-label="Next month">
+      <i data-lucide="chevron-right"></i>
+    </button>
+  </div>
+
+  <button
+    class="current-btn"
+    type="button"
+    onclick="resetToCurrent()"
+    aria-label="Return to current month">
+    <i data-lucide="history"></i>
+  </button>
+</section>
       <section class="insights-view-mode">
         <button
           type="button"
@@ -1965,21 +2087,20 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   const realCurrentMonth = new Date().getMonth() + 1;
   let selectedYear = realCurrentYear;
   let selectedMonth = realCurrentMonth;
-  let monthWindowStart = Math.max(1, Math.min(realCurrentMonth - 2, 7));
   let insightsViewMode = 'month';
   const months = [
-    { name: 'JAN', m: 1 },
-    { name: 'FEB', m: 2 },
-    { name: 'MAR', m: 3 },
-    { name: 'APR', m: 4 },
-    { name: 'MAY', m: 5 },
-    { name: 'JUN', m: 6 },
-    { name: 'JUL', m: 7 },
-    { name: 'AUG', m: 8 },
-    { name: 'SEP', m: 9 },
-    { name: 'OCT', m: 10 },
-    { name: 'NOV', m: 11 },
-    { name: 'DEC', m: 12 } ];
+  { name: 'January', m: 1 },
+  { name: 'February', m: 2 },
+  { name: 'March', m: 3 },
+  { name: 'April', m: 4 },
+  { name: 'May', m: 5 },
+  { name: 'June', m: 6 },
+  { name: 'July', m: 7 },
+  { name: 'August', m: 8 },
+  { name: 'September', m: 9 },
+  { name: 'October', m: 10 },
+  { name: 'November', m: 11 },
+  { name: 'December', m: 12 } ];
     let selectedType = 'Income';
     let fetchRequestId = 0;
     let currentEntries = [];
@@ -1988,38 +2109,72 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     const REFRESH_THRESHOLD = 60 * 1000;
     
     document.addEventListener("DOMContentLoaded", () => {
-      applyTheme(getPreferredTheme());
-      updateYearUI();
-      renderMonthGrid();
+  applyTheme(getPreferredTheme());
+  updatePeriodUI();
+  fetchData();
+
+  const yearPickerIds = [
+    'selectedYear',
+    'entriesSelectedYear',
+    'insightsSelectedYear'
+  ];
+
+  yearPickerIds.forEach(id => {
+    const picker = document.getElementById(id);
+
+    if (!picker) return;
+
+    picker.addEventListener('change', () => {
+      const newYear = Number(picker.value);
+
+      if (!newYear || newYear < 2025) return;
+
+      selectedYear = newYear;
+
+      updatePeriodUI();
+
+      if (insightsViewMode === 'year') {
+        renderInsightsYearGrid();
+        fetchAnnualData();
+      } else {
+        fetchData();
+      }
+    });
+  });
+
+  const monthPickerIds = [
+    'selectedMonth',
+    'entriesSelectedMonth',
+    'insightsSelectedMonth'
+  ];
+
+  monthPickerIds.forEach(id => {
+    const picker = document.getElementById(id);
+
+    if (!picker) return;
+
+    picker.addEventListener('change', () => {
+      const newMonth = Number(picker.value);
+
+      if (!newMonth || newMonth < 1 || newMonth > 12) return;
+
+      selectedMonth = newMonth;
+
+      selectedExpenseType = null;
+      selectedExpenseTitle = null;
+
+      updatePeriodUI();
       fetchData();
-      const yearPickerIds = [
-  'selectedYear',
-  'entriesSelectedYear',
-  'insightsSelectedYear'
-];
+    });
+  });
 
-yearPickerIds.forEach(id => {
-  const picker = document.getElementById(id);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === 'visible') {
+      const elapsed = Date.now() - lastFetchTime;
 
-  if (!picker) return;
-
-  picker.addEventListener('change', () => {
-    const newYear = Number(picker.value);
-
-    if (!newYear || newYear < 2025) return;
-
-    selectedYear = newYear;
-
-    updateYearUI();
-    renderMonthGrid();
-
-    // ถ้า Insights อยู่ใน YEAR mode
-    // ให้โหลดข้อมูลแบบรายปี
-    if (insightsViewMode === 'year') {
-      renderInsightsYearGrid();
-      fetchAnnualData();
-    } else {
-      fetchData();
+      if (elapsed >= REFRESH_THRESHOLD) {
+        fetchData();
+      }
     }
   });
 });
@@ -2073,63 +2228,172 @@ yearPickerIds.forEach(id => {
     picker.value = selectedYear;
   });
 }
+  function populateYearPickers() {
+  const minYear = 2025;
+  const maxYear = Math.max(
+    selectedYear,
+    realCurrentYear + 5
+  );
 
-function updateYearUI() {
-  // อัปเดต Native Year Pickers
-  populateYearPickers();
+  const pickerIds = [
+    'selectedYear',
+    'entriesSelectedYear',
+    'insightsSelectedYear'
+  ];
 
-  // Overview
-  document.getElementById('prevYearBtn').disabled =
-    (selectedYear <= 2025);
+  pickerIds.forEach(id => {
+    const picker = document.getElementById(id);
 
-  // Entries
-  document.getElementById('entriesPrevYearBtn').disabled =
-    (selectedYear <= 2025);
+    if (!picker) return;
 
-  // Insights
-  document.getElementById('insightsPrevYearBtn').disabled =
-    (selectedYear <= 2025);
+    for (let year = minYear; year <= maxYear; year++) {
+      if (!picker.querySelector(`option[value="${year}"]`)) {
+        const option = document.createElement('option');
+
+        option.value = year;
+        option.textContent = year;
+
+        picker.appendChild(option);
+      }
+    }
+
+    picker.value = selectedYear;
+  });
 }
-  function changeYear(delta) {
-  if (selectedYear + delta < 2025) return;
-  selectedYear += delta;
-  updateYearUI();
-  renderMonthGrid();
+
+function populateMonthPickers() {
+  const pickerIds = [
+    'selectedMonth',
+    'entriesSelectedMonth',
+    'insightsSelectedMonth'
+  ];
+
+  pickerIds.forEach(id => {
+    const picker = document.getElementById(id);
+
+    if (!picker) return;
+
+    if (picker.options.length !== months.length) {
+      picker.innerHTML = months.map(item => `
+        <option value="${item.m}">
+          ${item.name}
+        </option>
+      `).join('');
+    }
+
+    picker.value = selectedMonth;
+  });
+}
+
+function updatePeriodUI() {
+  populateYearPickers();
+  populateMonthPickers();
+
+  const canGoPreviousYear = selectedYear > 2025;
+
+  const canGoPreviousMonth =
+    selectedYear > 2025 ||
+    selectedMonth > 1;
+
+  const yearPrevIds = [
+    'prevYearBtn',
+    'entriesPrevYearBtn',
+    'insightsPrevYearBtn'
+  ];
+
+  const yearNextIds = [
+    'nextYearBtn',
+    'entriesNextYearBtn',
+    'insightsNextYearBtn'
+  ];
+
+  const monthPrevIds = [
+    'prevMonthBtn',
+    'entriesPrevMonthBtn',
+    'insightsPrevMonthBtn'
+  ];
+
+  const monthNextIds = [
+    'nextMonthBtn',
+    'entriesNextMonthBtn',
+    'insightsNextMonthBtn'
+  ];
+
+  yearPrevIds.forEach(id => {
+    const button = document.getElementById(id);
+
+    if (button) {
+      button.disabled = !canGoPreviousYear;
+    }
+  });
+
+  yearNextIds.forEach(id => {
+    const button = document.getElementById(id);
+
+    if (button) {
+      button.disabled = false;
+    }
+  });
+
+  monthPrevIds.forEach(id => {
+    const button = document.getElementById(id);
+
+    if (button) {
+      button.disabled = !canGoPreviousMonth;
+    }
+  });
+
+  monthNextIds.forEach(id => {
+    const button = document.getElementById(id);
+
+    if (button) {
+      button.disabled = false;
+    }
+  });
+}
+
+function changeYear(delta) {
+  const newYear = selectedYear + delta;
+
+  if (newYear < 2025) return;
+
+  selectedYear = newYear;
+
+  updatePeriodUI();
+
+  if (insightsViewMode === 'year') {
+    renderInsightsYearGrid();
+    fetchAnnualData();
+  } else {
+    fetchData();
+  }
+}
+
+function changeMonth(delta) {
+  const currentDate = new Date(
+    selectedYear,
+    selectedMonth - 1,
+    1
+  );
+
+  currentDate.setMonth(
+    currentDate.getMonth() + delta
+  );
+
+  const newYear = currentDate.getFullYear();
+  const newMonth = currentDate.getMonth() + 1;
+
+  if (newYear < 2025) return;
+
+  selectedYear = newYear;
+  selectedMonth = newMonth;
+
+  selectedExpenseType = null;
+  selectedExpenseTitle = null;
+
+  updatePeriodUI();
   fetchData();
 }
-  // Month Controller
-  function renderMonthGrid() {
-  const visibleMonths = months.slice(
-    monthWindowStart - 1,
-    monthWindowStart + 5
-  );
-  const monthHTML = visibleMonths.map(item => {
-    const isFuture =
-      selectedYear > realCurrentYear ||
-      (
-        selectedYear === realCurrentYear &&
-        item.m > realCurrentMonth
-      );
-    return `
-      <div class="month-chip
-        ${item.m === selectedMonth ? 'active' : ''}
-        ${isFuture ? 'future' : ''}"
-        onclick="selectMonth(${item.m})">
-        ${item.name}
-      </div>
-    `;
-  }).join('');
-  document.getElementById('monthGrid').innerHTML = monthHTML;
-  document.getElementById('entriesMonthGrid').innerHTML = monthHTML;
-  document.getElementById('insightsMonthGrid').innerHTML = monthHTML;
-  const canGoPrevious = monthWindowStart > 1;
-  const canGoNext = monthWindowStart < 7;
-  document.getElementById('prevMonthSetBtn').disabled = !canGoPrevious;
-  document.getElementById('nextMonthSetBtn').disabled = !canGoNext;
-  document.getElementById('entriesPrevMonthSetBtn').disabled = !canGoPrevious;
-  document.getElementById('entriesNextMonthSetBtn').disabled = !canGoNext;
-  document.getElementById('insightsPrevMonthSetBtn').disabled = !canGoPrevious;
-  document.getElementById('insightsNextMonthSetBtn').disabled = !canGoNext; }
   
   function renderInsightsYearGrid() {
   const grid = document.getElementById('insightsYearGrid');
@@ -2149,77 +2413,65 @@ function updateYearUI() {
   
   function setInsightsViewMode(mode) {
   if (mode !== 'month' && mode !== 'year') return;
+
   insightsViewMode = mode;
+
   const monthModeBtn =
     document.getElementById('insightsMonthModeBtn');
+
   const yearModeBtn =
     document.getElementById('insightsYearModeBtn');
-  const monthNav =
+
+  const periodNav =
     document.querySelector(
-      '#insightsView .month-nav-container'
+      '#insightsView .period-bar'
     );
-  const yearNav =
-    document.querySelector(
-      '#insightsView .year-current-bar'
-    );
+
   const yearGrid =
     document.getElementById('insightsYearGrid');
-  if (!monthModeBtn || !yearModeBtn || !monthNav || !yearGrid) {
-    return; }
+
+  if (!monthModeBtn || !yearModeBtn || !periodNav || !yearGrid) {
+    return;
+  }
+
   monthModeBtn.classList.toggle(
     'active',
     mode === 'month'
   );
+
   yearModeBtn.classList.toggle(
     'active',
     mode === 'year'
   );
+
   if (mode === 'month') {
-    monthNav.style.display = '';
+    periodNav.style.display = '';
     yearGrid.style.display = 'none';
-    if (yearNav) {
-      yearNav.style.display = ''; }
-    renderMonthGrid();
+    updatePeriodUI();
     fetchData();
     return; }
   // YEAR MODE
-  monthNav.style.display = 'none';
+  periodNav.style.display = 'none';
   yearGrid.style.display = '';
-  if (yearNav) {
-    yearNav.style.display = 'none'; }
   renderInsightsYearGrid();
   fetchAnnualData(); }
   
   function selectInsightsYear(year) {
   if (year < 2025) return;
   selectedYear = year;
-  updateYearUI();
+  updatePeriodUI();
   renderInsightsYearGrid();
   fetchAnnualData(); }
-  
-  function shiftMonthSet(delta) {
-    const newStart = monthWindowStart + delta;
-    if (newStart >= 1 && newStart <= 7) {
-      monthWindowStart = newStart;
-      renderMonthGrid(); }
-  }
-  
-  function selectMonth(m) {
-  selectedMonth = m;
-  selectedExpenseType = null;
-  selectedExpenseTitle = null;
-  renderMonthGrid();
-  fetchData(); }
   
  // Reset to Current Datefunction resetToCurrent() {
   function resetToCurrent() {
   selectedYear = realCurrentYear;
   selectedMonth = realCurrentMonth;
-  monthWindowStart =
-    Math.max(1, Math.min(realCurrentMonth - 2, 7));
-  updateYearUI();
-  renderMonthGrid();
-  fetchData(); }
+  selectedExpenseType = null;
+  selectedExpenseTitle = null;
+  updatePeriodUI();
+  fetchData();
+}
   
   function isSelectedMonthFuture() {
   return (
