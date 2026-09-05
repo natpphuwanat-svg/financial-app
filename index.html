@@ -4315,19 +4315,46 @@ function selectMonthlyTakeawayInsights(
       'ยังไม่สามารถวิเคราะห์ภาพรวมและแนวโน้มทางการเงินได้'
    };
   }
+  function getSelectedYearState(
+  selectedYearEntries
+) {
+  const currentYear =
+    new Date().getFullYear();
+  const hasData =
+    selectedYearEntries.length > 0;
+  if (selectedYear > currentYear) {
+    return 'FUTURE'; }
+  if (
+    selectedYear === currentYear &&
+    !hasData
+  ) {
+    return 'CURRENT_EMPTY'; }
+  if (
+    selectedYear < currentYear &&
+    !hasData
+  ) {
+    return 'PAST_EMPTY'; }
+  return 'HAS_DATA'; }
   async function fetchAnnualData() {
   const requestId = ++fetchRequestId;
   try {
-    const yearStart =
-      `${selectedYear}-01-01`;
+    const previousYear = selectedYear - 1;
+    const previousYearStart =
+      `${previousYear}-01-01`;
     const nextYearStart =
       `${selectedYear + 1}-01-01`;
     const { data, error } =
       await supabaseClient
         .from('financial_entries')
         .select('*')
-        .gte('entry_date', yearStart)
-        .lt('entry_date', nextYearStart)
+        .gte(
+          'entry_date',
+          previousYearStart
+        )
+        .lt(
+          'entry_date',
+          nextYearStart
+        )
         .order('entry_date', {
           ascending: false
         });
@@ -4335,52 +4362,92 @@ function selectMonthlyTakeawayInsights(
       throw error; }
     if (requestId !== fetchRequestId) {
       return; }
-    const entries = data || [];
-    renderAnnualSummary(entries);
+    const allEntries = data || [];
+    const selectedYearEntries =
+      allEntries.filter(item =>
+        new Date(
+          item.entry_date
+        ).getFullYear() === selectedYear
+      );
+    const previousYearEntries =
+      allEntries.filter(item =>
+        new Date(
+          item.entry_date
+        ).getFullYear() === previousYear
+      );
+    renderAnnualSummary(
+      selectedYearEntries,
+      previousYearEntries
+    );
   } catch (error) {
     if (requestId !== fetchRequestId) {
-      return; }
+      return;
+    }
     console.error(
       'Supabase fetchAnnualData ERROR:',
       error
-      );
-    }
+    );
   }
+}
   
-  function renderAnnualSummary(entries) {
-  const totalIncome = entries
-    .filter(item =>
-      item.financial_type === 'Income'
-    )
-    .reduce(
-      (sum, item) =>
-        sum + Number(item.amount || 0),
-      0
-    );
-  const totalExpense = entries
-    .filter(item =>
-      item.financial_type === 'Expense'
-    )
-    .reduce(
-      (sum, item) =>
-        sum + Number(item.amount || 0),
-      0
-    );
-  const totalDeduction = entries
-    .filter(item =>
-      item.financial_type === 'Deduction'
-    )
-    .reduce(
-      (sum, item) =>
-        sum + Number(item.amount || 0),
-      0
-    );
+  function renderAnnualSummary(
+  entries,
+  previousEntries
+) {
+  const getTotal = (
+    source,
+    financialType
+  ) => {
+    return source
+      .filter(
+        item =>
+          item.financial_type ===
+          financialType
+      )
+      .reduce(
+        (sum, item) =>
+          sum + Number(item.amount || 0),
+        0
+      );
+  };
+  const totalIncome =
+    getTotal(entries, 'Income');
+  const totalExpense =
+    getTotal(entries, 'Expense');
+  const totalDeduction =
+    getTotal(entries, 'Deduction');
   const balance =
     totalIncome - totalExpense;
   const savingsRate =
     totalIncome > 0
       ? (balance / totalIncome) * 100
-      : 0;
+      : null;
+  const previousIncome =
+    getTotal(
+      previousEntries,
+      'Income'
+    );
+  const previousExpense =
+    getTotal(
+      previousEntries,
+      'Expense'
+    );
+  const previousDeduction =
+    getTotal(
+      previousEntries,
+      'Deduction'
+    );
+  const previousBalance =
+    previousIncome - previousExpense;
+  const previousSavingsRate =
+    previousIncome > 0
+      ? (
+          previousBalance /
+          previousIncome
+        ) * 100
+      : null;
+  const yearState =
+    getSelectedYearState(entries);
   const formatAmount = amount =>
     '฿' +
     Number(amount).toLocaleString(
@@ -4392,41 +4459,188 @@ function selectMonthlyTakeawayInsights(
     );
   document.getElementById(
     'insightsSummaryTitle'
-  ).innerText = 'ANNUAL SUMMARY';
+  ).innerText =
+    'ANNUAL SUMMARY';
   document.getElementById(
     'insightsIncome'
-  ).innerText = formatAmount(totalIncome);
+  ).innerText =
+    formatAmount(totalIncome);
   document.getElementById(
     'insightsExpense'
-  ).innerText = formatAmount(totalExpense);
+  ).innerText =
+    formatAmount(totalExpense);
   document.getElementById(
     'insightsDeduction'
-  ).innerText = formatAmount(totalDeduction);
+  ).innerText =
+    formatAmount(totalDeduction);
   document.getElementById(
     'insightsBalance'
-  ).innerText = formatAmount(balance);
+  ).innerText =
+    formatAmount(balance);
   document.getElementById(
     'insightsSavingsRate'
   ).innerText =
-    totalIncome > 0
+    savingsRate !== null
       ? `${Math.round(savingsRate)}%`
       : 'N/A';
-  document.getElementById(
-    'insightsIncomeMoM'
-  ).innerText = 'annual total';
-  document.getElementById(
-    'insightsExpenseMoM'
-  ).innerText = 'annual total';
-  document.getElementById(
-    'insightsDeductionMoM'
-  ).innerText = 'annual total';
-  document.getElementById(
-    'insightsBalanceMoM'
-  ).innerText = 'annual total';
-  document.getElementById(
-    'insightsSavingsRateMoM'
-  ).innerText = 'annual rate';
-  }
+  renderYoY(
+    'insightsIncomeMoM',
+    totalIncome,
+    previousIncome,
+    yearState,
+    'income'
+  );
+  renderYoY(
+    'insightsExpenseMoM',
+    totalExpense,
+    previousExpense,
+    yearState,
+    'expense'
+  );
+  renderYoY(
+    'insightsDeductionMoM',
+    totalDeduction,
+    previousDeduction,
+    yearState,
+    'deduction'
+  );
+  renderYoY(
+    'insightsBalanceMoM',
+    balance,
+    previousBalance,
+    yearState,
+    'balance'
+  );
+  renderSavingsRateYoY(
+    savingsRate,
+    previousSavingsRate,
+    yearState
+  );
+}
+  function renderYoY(
+  elementId,
+  currentValue,
+  previousValue,
+  yearState,
+  type
+  ) {
+  const element =
+    document.getElementById(elementId);
+  if (yearState === 'FUTURE') {
+    element.innerText = '';
+    element.className =
+      'monthly-summary-mom neutral';
+    return; }
+  if (
+    yearState === 'CURRENT_EMPTY' ||
+    yearState === 'PAST_EMPTY'
+  ) {
+    element.innerText =
+      'no data';
+    element.className =
+      'monthly-summary-mom neutral';
+    return; }
+  if (
+    previousValue === null ||
+    previousValue === undefined ||
+    previousValue === 0
+  ) {
+    element.innerText =
+      'no prev. data';
+    element.className =
+      'monthly-summary-mom neutral';
+    return; }
+  const difference =
+    currentValue - previousValue;
+  const percent =
+    Math.round(
+      (
+        difference /
+        Math.abs(previousValue)
+      ) * 100
+    );
+  let threshold = 6000;
+  if (type === 'deduction') {
+    threshold = 1200; }
+  if (
+    Math.abs(difference) <=
+    threshold
+  ) {
+    element.innerText =
+      `→ ${Math.abs(percent)}% vs last year`;
+    element.className =
+      'monthly-summary-mom neutral';
+    return; }
+  if (difference > 0) {
+    element.innerText =
+      `↑ ${Math.abs(percent)}% vs last year`;
+    element.className =
+      'monthly-summary-mom up';
+    return; }
+  element.innerText =
+    `↓ ${Math.abs(percent)}% vs last year`;
+  element.className =
+    'monthly-summary-mom down'; }
+  function renderSavingsRateYoY(
+  currentRate,
+  previousRate,
+  yearState
+  ) {
+  const element =
+    document.getElementById(
+      'insightsSavingsRateMoM'
+    );
+  if (
+    yearState === 'FUTURE'
+  ) {
+    element.innerText = '';
+    element.className =
+      'monthly-summary-mom neutral';
+    return; }
+  if (
+    yearState === 'CURRENT_EMPTY' ||
+    yearState === 'PAST_EMPTY' ||
+    currentRate === null
+  ) {
+    element.innerText =
+      'no data';
+    element.className =
+      'monthly-summary-mom neutral';
+    return;}
+  if (
+    previousRate === null ||
+    previousRate === 0
+  ) {
+    element.innerText =
+      'no prev. data';
+    element.className =
+      'monthly-summary-mom neutral';
+    return; }
+  const difference =
+    currentRate - previousRate;
+  const percentChange =
+    Math.round(
+      (
+        difference /
+        Math.abs(previousRate)
+      ) * 100
+    );
+  if (difference > 0) {
+    element.innerText =
+      `↑ ${Math.abs(percentChange)}% vs last year`;
+    element.className =
+      'monthly-summary-mom up';
+    return; }
+  if (difference < 0) {
+    element.innerText =
+      `↓ ${Math.abs(percentChange)}% vs last year`;
+    element.className =
+      'monthly-summary-mom down';
+    return; }
+  element.innerText =
+    '→ 0% vs last year';
+  element.className =
+    'monthly-summary-mom neutral'; }
   
   async function fetchData() {
   const requestId = ++fetchRequestId;
