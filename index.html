@@ -139,99 +139,153 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
-  margin-bottom: 16px;
+  gap: 10px;
   width: 100%;
+  margin-bottom: 16px;
 }
 
-.period-group {
+/* Previous / Next / Current */
+.period-circle-btn,
+.current-btn {
+  width: 38px;
+  height: 38px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0;
-}
 
-.period-nav-btn {
-  background: none;
-  border: none;
-  color: var(--text-sub);
-  width: 28px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  cursor: pointer;
-  transition: opacity .2s, transform .2s;
   flex-shrink: 0;
+
+  padding: 0;
+
+  border: 1px solid var(--glass-border);
+  border-radius: 50%;
+
+  background: var(--glass-card);
+
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  color: var(--text-main);
+
+  box-shadow: var(--glass-shadow);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease,
+    background 0.2s ease;
 }
 
-.period-nav-btn:active {
+.period-circle-btn:active,
+.current-btn:active {
   transform: scale(0.92);
 }
 
-.period-nav-btn:disabled {
-  opacity: 0.2;
+.period-circle-btn:disabled {
+  opacity: 0.28;
   cursor: not-allowed;
 }
 
-.period-nav-btn svg {
-  width: 16px;
-  height: 16px;
+.period-circle-btn svg {
+  width: 17px;
+  height: 17px;
+  stroke-width: 2.3;
+}
+
+.current-btn svg {
+  width: 18px;
+  height: 18px;
   stroke-width: 2.2;
 }
 
+/* Combined Month + Year Capsule */
+.period-picker-capsule {
+  width: 210px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 10px;
+
+  border: 1px solid var(--glass-border);
+  border-radius: 21px;
+
+  background: var(--glass-card);
+
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  box-shadow: var(--glass-shadow);
+
+  flex-shrink: 0;
+}
+
+/* Shared picker base */
 .period-picker {
   appearance: none;
   -webkit-appearance: none;
+
+  height: 100%;
+
   background: transparent;
   border: none;
   outline: none;
+
   color: var(--text-main);
+
   font-family: inherit;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 800;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
+
   text-align: center;
   text-align-last: center;
+
   padding: 0;
   margin: 0;
-  height: 32px;
+
   cursor: pointer;
+}
+
+/*
+  Fixed internal layout
+
+  Month always has the same area,
+  regardless of May / September.
+
+  Year also has its own fixed area.
+*/
+.month-picker {
+  width: 132px;
+  flex: 0 0 132px;
 }
 
 .year-picker {
   width: 58px;
+  flex: 0 0 58px;
 }
 
-.month-picker {
-  min-width: 112px;
-}
+/* Small divider between Month and Year */
+.period-picker-divider {
+  width: 1px;
+  height: 18px;
 
-.current-btn {
-  background: transparent;
-  border: none;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  margin-left: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-sub);
-  cursor: pointer;
   flex-shrink: 0;
+
+  background: var(--glass-border);
+
+  margin: 0 4px;
 }
 
-.current-btn:active {
-  transform: scale(0.90);
-}
-
-.current-btn svg {
-  width: 18px !important;
-  height: 18px !important;
-  stroke: var(--text-main);
-  stroke-width: 2.2;
+/* Dark mode refinement */
+[data-theme="dark"] .period-circle-btn,
+[data-theme="dark"] .current-btn,
+[data-theme="dark"] .period-picker-capsule {
+  background: rgba(31, 38, 55, 0.50);
 }
 
 .insights-view-mode {
@@ -1524,58 +1578,35 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   
   <main class="container" id="mainContent">
     <section class="period-bar">
-  <div class="period-group">
-    <button
-      class="period-nav-btn"
-      id="prevYearBtn"
-      type="button"
-      onclick="changeYear(-1)"
-      aria-label="Previous year">
-      <i data-lucide="chevron-left"></i>
-    </button>
-
-    <select
-      class="period-picker year-picker"
-      id="selectedYear"
-      aria-label="Select year">
-    </select>
-
-    <button
-      class="period-nav-btn"
-      id="nextYearBtn"
-      type="button"
-      onclick="changeYear(1)"
-      aria-label="Next year">
-      <i data-lucide="chevron-right"></i>
-    </button>
-  </div>
-
-  <div class="period-group">
-    <button
-      class="period-nav-btn"
-      id="prevMonthBtn"
-      type="button"
-      onclick="changeMonth(-1)"
-      aria-label="Previous month">
-      <i data-lucide="chevron-left"></i>
-    </button>
-
+  <button
+    class="period-circle-btn"
+    id="prevMonthBtn"
+    type="button"
+    onclick="changeMonth(-1)"
+    aria-label="Previous month">
+    <i data-lucide="chevron-left"></i>
+  </button>
+  <div class="period-picker-capsule">
     <select
       class="period-picker month-picker"
       id="selectedMonth"
       aria-label="Select month">
     </select>
-
-    <button
-      class="period-nav-btn"
-      id="nextMonthBtn"
-      type="button"
-      onclick="changeMonth(1)"
-      aria-label="Next month">
-      <i data-lucide="chevron-right"></i>
-    </button>
+    <div class="period-picker-divider"></div>
+    <select
+      class="period-picker year-picker"
+      id="selectedYear"
+      aria-label="Select year">
+    </select>
   </div>
-
+  <button
+    class="period-circle-btn"
+    id="nextMonthBtn"
+    type="button"
+    onclick="changeMonth(1)"
+    aria-label="Next month">
+    <i data-lucide="chevron-right"></i>
+  </button>
   <button
     class="current-btn"
     type="button"
@@ -1583,7 +1614,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     aria-label="Return to current month">
     <i data-lucide="history"></i>
   </button>
-</section>
+   </section>
 
     <section class="balance-card">
       <div class="balance-wallet">
@@ -1651,58 +1682,35 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     </header>
     <main class="container" id="entriesContent">
       <section class="period-bar">
-  <div class="period-group">
-    <button
-      class="period-nav-btn"
-      id="entriesPrevYearBtn"
-      type="button"
-      onclick="changeYear(-1)"
-      aria-label="Previous year">
-      <i data-lucide="chevron-left"></i>
-    </button>
-
-    <select
-      class="period-picker year-picker"
-      id="entriesSelectedYear"
-      aria-label="Select year">
-    </select>
-
-    <button
-      class="period-nav-btn"
-      id="entriesNextYearBtn"
-      type="button"
-      onclick="changeYear(1)"
-      aria-label="Next year">
-      <i data-lucide="chevron-right"></i>
-    </button>
-  </div>
-
-  <div class="period-group">
-    <button
-      class="period-nav-btn"
-      id="entriesPrevMonthBtn"
-      type="button"
-      onclick="changeMonth(-1)"
-      aria-label="Previous month">
-      <i data-lucide="chevron-left"></i>
-    </button>
-
+  <button
+    class="period-circle-btn"
+    id="entriesPrevMonthBtn"
+    type="button"
+    onclick="changeMonth(-1)"
+    aria-label="Previous month">
+    <i data-lucide="chevron-left"></i>
+  </button>
+  <div class="period-picker-capsule">
     <select
       class="period-picker month-picker"
       id="entriesSelectedMonth"
       aria-label="Select month">
     </select>
-
-    <button
-      class="period-nav-btn"
-      id="entriesNextMonthBtn"
-      type="button"
-      onclick="changeMonth(1)"
-      aria-label="Next month">
-      <i data-lucide="chevron-right"></i>
-    </button>
+    <div class="period-picker-divider"></div>
+    <select
+      class="period-picker year-picker"
+      id="entriesSelectedYear"
+      aria-label="Select year">
+    </select>
   </div>
-
+  <button
+    class="period-circle-btn"
+    id="entriesNextMonthBtn"
+    type="button"
+    onclick="changeMonth(1)"
+    aria-label="Next month">
+    <i data-lucide="chevron-right"></i>
+  </button>
   <button
     class="current-btn"
     type="button"
@@ -1710,7 +1718,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     aria-label="Return to current month">
     <i data-lucide="history"></i>
   </button>
-</section>
+   </section>
       <div class="entries-filter" id="entriesFilter">
         <button class="entries-filter-btn active" type="button" data-filter="all" onclick="setEntryFilter('all')">
           <span>ALL ENTRIES</span>
@@ -1744,58 +1752,35 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     </header>
     <main class="container" id="insightsContent">
       <section class="period-bar">
-  <div class="period-group">
     <button
-      class="period-nav-btn"
-      id="insightsPrevYearBtn"
-      type="button"
-      onclick="changeYear(-1)"
-      aria-label="Previous year">
-      <i data-lucide="chevron-left"></i>
-    </button>
-
-    <select
-      class="period-picker year-picker"
-      id="insightsSelectedYear"
-      aria-label="Select year">
-    </select>
-
-    <button
-      class="period-nav-btn"
-      id="insightsNextYearBtn"
-      type="button"
-      onclick="changeYear(1)"
-      aria-label="Next year">
-      <i data-lucide="chevron-right"></i>
-    </button>
-  </div>
-
-  <div class="period-group">
-    <button
-      class="period-nav-btn"
-      id="insightsPrevMonthBtn"
-      type="button"
-      onclick="changeMonth(-1)"
-      aria-label="Previous month">
-      <i data-lucide="chevron-left"></i>
-    </button>
-
+    class="period-circle-btn"
+    id="insightsPrevMonthBtn"
+    type="button"
+    onclick="changeMonth(-1)"
+    aria-label="Previous month">
+    <i data-lucide="chevron-left"></i>
+  </button>
+  <div class="period-picker-capsule">
     <select
       class="period-picker month-picker"
       id="insightsSelectedMonth"
       aria-label="Select month">
     </select>
-
-    <button
-      class="period-nav-btn"
-      id="insightsNextMonthBtn"
-      type="button"
-      onclick="changeMonth(1)"
-      aria-label="Next month">
-      <i data-lucide="chevron-right"></i>
-    </button>
+    <div class="period-picker-divider"></div>
+    <select
+      class="period-picker year-picker"
+      id="insightsSelectedYear"
+      aria-label="Select year">
+    </select>
   </div>
-
+  <button
+    class="period-circle-btn"
+    id="insightsNextMonthBtn"
+    type="button"
+    onclick="changeMonth(1)"
+    aria-label="Next month">
+    <i data-lucide="chevron-right"></i>
+  </button>
   <button
     class="current-btn"
     type="button"
@@ -1803,7 +1788,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     aria-label="Return to current month">
     <i data-lucide="history"></i>
   </button>
-</section>
+   </section>
       <section class="insights-view-mode">
         <button
           type="button"
@@ -2326,23 +2311,9 @@ function updatePeriodUI() {
   populateYearPickers();
   populateMonthPickers();
 
-  const canGoPreviousYear = selectedYear > 2025;
-
   const canGoPreviousMonth =
     selectedYear > 2025 ||
     selectedMonth > 1;
-
-  const yearPrevIds = [
-    'prevYearBtn',
-    'entriesPrevYearBtn',
-    'insightsPrevYearBtn'
-  ];
-
-  const yearNextIds = [
-    'nextYearBtn',
-    'entriesNextYearBtn',
-    'insightsNextYearBtn'
-  ];
 
   const monthPrevIds = [
     'prevMonthBtn',
@@ -2356,21 +2327,6 @@ function updatePeriodUI() {
     'insightsNextMonthBtn'
   ];
 
-  yearPrevIds.forEach(id => {
-    const button = document.getElementById(id);
-
-    if (button) {
-      button.disabled = !canGoPreviousYear;
-    }
-  });
-
-  yearNextIds.forEach(id => {
-    const button = document.getElementById(id);
-
-    if (button) {
-      button.disabled = false;
-    }
-  });
 
   monthPrevIds.forEach(id => {
     const button = document.getElementById(id);
@@ -2380,6 +2336,7 @@ function updatePeriodUI() {
     }
   });
 
+
   monthNextIds.forEach(id => {
     const button = document.getElementById(id);
 
@@ -2387,23 +2344,6 @@ function updatePeriodUI() {
       button.disabled = false;
     }
   });
-}
-
-function changeYear(delta) {
-  const newYear = selectedYear + delta;
-
-  if (newYear < 2025) return;
-
-  selectedYear = newYear;
-
-  updatePeriodUI();
-
-  if (insightsViewMode === 'year') {
-    renderInsightsYearGrid();
-    fetchAnnualData();
-  } else {
-    fetchData();
-  }
 }
 
 function changeMonth(delta) {
