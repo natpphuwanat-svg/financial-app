@@ -201,20 +201,22 @@
   background: rgba(255, 255, 255, 0.10);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.07), 0 1px 3px rgba(15, 23, 42, 0.04);
+  box-shadow:
+    0 4px 14px rgba(15, 23, 42, 0.07),
+    0 1px 3px rgba(15, 23, 42, 0.04);
   flex-shrink: 0;
-  ransition: width 0.22s ease;
+  transition: width 0.22s ease;
 }
 
 #insightsView .period-picker-capsule.is-year-mode {
-  width: 84px; }
+  width: 100px; }
 #insightsView .period-picker-capsule.is-year-mode .month-picker,
 #insightsView .period-picker-capsule.is-year-mode .period-picker-divider {
   display: none; }
 
 #insightsView .period-picker-capsule.is-year-mode .year-picker {
-  width: 58px;
-  flex: 0 0 58px; }
+  width: 72px;
+  flex: 0 0 72px; }
 
 .period-picker {
   appearance: none;
@@ -236,8 +238,8 @@
 }
 
 .month-picker {
-  width: 132px;
-  flex: 0 0 132px;
+  width: 124px;
+  flex: 0 0 124px;
 }
 
 .year-picker {
@@ -250,7 +252,7 @@
   height: 18px;
   flex-shrink: 0;
   background: rgba(0, 0, 0, 0.07);
-  margin: 0 4px;
+  margin: 0 9px;
 }
 
 [data-theme="dark"] .period-circle-btn,
@@ -266,7 +268,7 @@
 .insights-view-mode {
   width: 132px;
   height: 45px;
-  margin: 0 auto 18px;
+  margin: 0 0 18px;
   padding: 4px;
   box-sizing: border-box;
   display: grid;
@@ -2250,40 +2252,44 @@ function populateMonthPickers() {
 function updatePeriodUI() {
   populateYearPickers();
   populateMonthPickers();
-
   const canGoPreviousMonth =
     selectedYear > 2025 ||
     selectedMonth > 1;
-
+  const canGoPreviousYear =
+    selectedYear > 2025;
   const monthPrevIds = [
     'prevMonthBtn',
-    'entriesPrevMonthBtn',
-    'insightsPrevMonthBtn'
+    'entriesPrevMonthBtn'
   ];
-
   const monthNextIds = [
     'nextMonthBtn',
-    'entriesNextMonthBtn',
-    'insightsNextMonthBtn'
+    'entriesNextMonthBtn'
   ];
-
-
   monthPrevIds.forEach(id => {
     const button = document.getElementById(id);
-
     if (button) {
       button.disabled = !canGoPreviousMonth;
     }
   });
-
-
   monthNextIds.forEach(id => {
     const button = document.getElementById(id);
-
     if (button) {
       button.disabled = false;
     }
   });
+  const insightsPrevBtn =
+    document.getElementById('insightsPrevMonthBtn');
+  const insightsNextBtn =
+    document.getElementById('insightsNextMonthBtn');
+  if (insightsPrevBtn) {
+    insightsPrevBtn.disabled =
+      insightsViewMode === 'year'
+        ? !canGoPreviousYear
+        : !canGoPreviousMonth;
+  }
+  if (insightsNextBtn) {
+    insightsNextBtn.disabled = false;
+  }
 }
 
 function changeMonth(delta) {
