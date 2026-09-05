@@ -325,37 +325,6 @@
  color: var(--blue-grey);
  background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(22px) ; -webkit-backdrop-filter: blur(22px) ; }
 
-.insights-year-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px;
-  margin-bottom: 16px;
-}
-
-.insights-year-chip {
-  background: transparent;
-  border: none;
-  color: var(--text-sub);
-  padding: 10px 0;
-  border-radius: 14px;
-  font-size: 12px;
-  font-weight: 700;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-
-.insights-year-chip:active {
-  transform: scale(0.97);
-  opacity: 0.7;
-}
-
-.insights-year-chip.active {
-  background: var(--lime-400);
-  color: #1A2E05;
-  font-weight: 800;
-  box-shadow: 0 4px 10px rgba(163, 230, 53, 0.18);
-}
     .balance-card { 
       background: var(--balance-bg);
       backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -2165,14 +2134,16 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 
       updatePeriodUI();
 
-      if (insightsViewMode === 'year') {
-        renderInsightsYearGrid();
-        fetchAnnualData();
-      } else {
-        fetchData();
-      }
-    });
-  });
+      if (
+        insightsViewMode === 'year' &&
+        document.getElementById('insightsView')?.style.display !== 'none'
+        ) {
+          fetchAnnualData();
+        } else {
+          fetchData();
+        }
+     });
+   });
 
   const monthPickerIds = [
     'selectedMonth',
@@ -2340,83 +2311,66 @@ function changeMonth(delta) {
   updatePeriodUI();
   fetchData();
 }
-  
-  function renderInsightsYearGrid() {
-  const grid = document.getElementById('insightsYearGrid');
-  if (!grid) return;
-  const startYear = 2025;
-  const years = [];
-  for (let year = startYear; year <= realCurrentYear + 1; year++) {
-    years.push(year); }
-  grid.innerHTML = years.map(year => `
-    <div
-      class="insights-year-chip ${year === selectedYear ? 'active' : ''}"
-      onclick="selectInsightsYear(${year})">
-      ${year}
-    </div>
-  `).join('');
+function changeInsightsPeriod(delta) {
+  if (insightsViewMode === 'year') {
+    const newYear = selectedYear + delta;
+    if (newYear < 2025) return;
+    selectedYear = newYear;
+    updatePeriodUI();
+    fetchAnnualData();
+    return;
   }
+  changeMonth(delta);
+}
   
   function setInsightsViewMode(mode) {
   if (mode !== 'month' && mode !== 'year') return;
-
   insightsViewMode = mode;
-
   const monthModeBtn =
     document.getElementById('insightsMonthModeBtn');
-
   const yearModeBtn =
     document.getElementById('insightsYearModeBtn');
-
-  const periodNav =
+  const periodCapsule =
     document.querySelector(
-      '#insightsView .period-bar'
+      '#insightsView .period-picker-capsule'
     );
-
-  const yearGrid =
-    document.getElementById('insightsYearGrid');
-
-  if (!monthModeBtn || !yearModeBtn || !periodNav || !yearGrid) {
+  if (!monthModeBtn || !yearModeBtn || !periodCapsule) {
     return;
   }
-
   monthModeBtn.classList.toggle(
     'active',
     mode === 'month'
   );
-
   yearModeBtn.classList.toggle(
     'active',
     mode === 'year'
   );
-
-  if (mode === 'month') {
-    periodNav.style.display = '';
-    yearGrid.style.display = 'none';
-    updatePeriodUI();
-    fetchData();
-    return; }
-  // YEAR MODE
-  periodNav.style.display = 'none';
-  yearGrid.style.display = '';
-  renderInsightsYearGrid();
-  fetchAnnualData(); }
-  
-  function selectInsightsYear(year) {
-  if (year < 2025) return;
-  selectedYear = year;
+  periodCapsule.classList.toggle(
+    'is-year-mode',
+    mode === 'year'
+  );
   updatePeriodUI();
-  renderInsightsYearGrid();
-  fetchAnnualData(); }
+  if (mode === 'month') {
+    fetchData();
+  } else {
+    fetchAnnualData();
+  }
+}
   
- // Reset to Current Datefunction resetToCurrent() {
   function resetToCurrent() {
   selectedYear = realCurrentYear;
   selectedMonth = realCurrentMonth;
   selectedExpenseType = null;
   selectedExpenseTitle = null;
   updatePeriodUI();
-  fetchData();
+  if (
+    insightsViewMode === 'year' &&
+    document.getElementById('insightsView')?.style.display !== 'none'
+  ) {
+    fetchAnnualData();
+  } else {
+    fetchData();
+  }
 }
   
   function isSelectedMonthFuture() {
