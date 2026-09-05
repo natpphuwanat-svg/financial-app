@@ -2068,24 +2068,9 @@ yearPickerIds.forEach(id => {
    });
    lucide.createIcons(); }
    function getPreferredTheme() {
-     const manual = localStorage.getItem("themeManual");
-     if (manual === "true") {
-         return localStorage.getItem("theme") || "light";
-     }
-     return window.matchMedia("(prefers-color-scheme: dark)").matches
-         ? "dark"
-         : "light";
-}
-   function toggleTheme() {
-     const current =
-       document.body.getAttribute("data-theme") || "light";
-     const next = current === "dark"
-       ? "light"
-       : "dark";
-     applyTheme(next);
-     localStorage.setItem("theme", next);
-     localStorage.setItem("themeManual", "true");
-}
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light"; }
 
     function populateYearPickers() {
   const minYear = 2025;
@@ -5022,9 +5007,8 @@ const { error } = await supabaseClient
 }
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     media.addEventListener("change", (e) => {
-      if (localStorage.getItem("themeManual") === "true") return;
       applyTheme(e.matches ? "dark" : "light");
-});
+    });
   </script>
   <script> lucide.createIcons();
 </script>
