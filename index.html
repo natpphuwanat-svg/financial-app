@@ -2235,10 +2235,54 @@ yearPickerIds.forEach(id => {
     picker.value = selectedYear;
   });
 }
+function populateMonthPickers() {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
+
+  const pickerIds = [
+    "selectedMonthPicker",
+    "entriesSelectedMonthPicker"
+  ];
+
+  pickerIds.forEach(id => {
+    const picker = document.getElementById(id);
+
+    if (!picker) return;
+
+    // สร้างรายการเดือนเพียงครั้งเดียว
+    if (picker.options.length === 0) {
+      months.forEach((month, index) => {
+        const option = document.createElement("option");
+
+        // ใช้ index 0-11 เป็น value
+        option.value = index;
+        option.textContent = month;
+
+        picker.appendChild(option);
+      });
+    }
+
+    // แสดงเดือนที่เลือกอยู่ในปัจจุบัน
+    picker.value = selectedMonth;
+  });
+}
 
 function updateYearUI() {
   // อัปเดต Native Year Pickers
   populateYearPickers();
+  populateMonthPickers();
 
   // Overview
   document.getElementById('prevYearBtn').disabled =
