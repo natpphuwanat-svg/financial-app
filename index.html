@@ -203,7 +203,18 @@
   -webkit-backdrop-filter: blur(30px);
   box-shadow: 0 4px 14px rgba(15, 23, 42, 0.07), 0 1px 3px rgba(15, 23, 42, 0.04);
   flex-shrink: 0;
+  ransition: width 0.22s ease;
 }
+
+#insightsView .period-picker-capsule.is-year-mode {
+  width: 84px; }
+#insightsView .period-picker-capsule.is-year-mode .month-picker,
+#insightsView .period-picker-capsule.is-year-mode .period-picker-divider {
+  display: none; }
+
+#insightsView .period-picker-capsule.is-year-mode .year-picker {
+  width: 58px;
+  flex: 0 0 58px; }
 
 .period-picker {
   appearance: none;
@@ -1714,13 +1725,29 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       </div>
     </header>
     <main class="container" id="insightsContent">
-      <section class="period-bar">
-    <button
+      <section class="insights-view-mode">
+  <button
+    type="button"
+    class="insights-view-mode-btn active"
+    id="insightsMonthModeBtn"
+    onclick="setInsightsViewMode('month')">
+    MONTH
+  </button>
+  <button
+    type="button"
+    class="insights-view-mode-btn"
+    id="insightsYearModeBtn"
+    onclick="setInsightsViewMode('year')">
+    YEAR
+  </button>
+</section>
+<section class="period-bar">
+  <button
     class="period-circle-btn"
     id="insightsPrevMonthBtn"
     type="button"
-    onclick="changeMonth(-1)"
-    aria-label="Previous month">
+    onclick="changeInsightsPeriod(-1)"
+    aria-label="Previous period">
     <i data-lucide="chevron-left"></i>
   </button>
   <div class="period-picker-capsule">
@@ -1740,39 +1767,18 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     class="period-circle-btn"
     id="insightsNextMonthBtn"
     type="button"
-    onclick="changeMonth(1)"
-    aria-label="Next month">
+    onclick="changeInsightsPeriod(1)"
+    aria-label="Next period">
     <i data-lucide="chevron-right"></i>
   </button>
   <button
     class="current-btn"
     type="button"
     onclick="resetToCurrent()"
-    aria-label="Return to current month">
+    aria-label="Return to current period">
     <i data-lucide="history"></i>
   </button>
-   </section>
-      <section class="insights-view-mode">
-        <button
-          type="button"
-          class="insights-view-mode-btn active"
-          id="insightsMonthModeBtn"
-          onclick="setInsightsViewMode('month')">
-          MONTH
-        </button>
-        <button
-          type="button"
-          class="insights-view-mode-btn"
-          id="insightsYearModeBtn"
-          onclick="setInsightsViewMode('year')">
-          YEAR
-        </button>
-      </section>
-      <section
-        class="insights-year-grid"
-        id="insightsYearGrid"
-        style="display:none;">
-      </section>
+</section>
       <section class="insights-section">
         <div class="insights-section-title"
           id="insightsSummaryTitle">
