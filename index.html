@@ -231,25 +231,104 @@
 .current-btn svg {
   width: 18px !important;
   height: 18px !important;
-  stroke: var(--lime-400);
+  stroke: var(--color-main);
   stroke-width: 2.2;
 }
-    .insights-view-mode-btn:active {
-      transform: scale(0.95); 
-    }
-    
-    .insights-view-mode-btn.active { background: rgba(190, 190, 190, 0.15); color: var(--blue-grey);
-     backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
-    }
-    
-    [data-theme="dark"] .insights-view-mode { background: rgba(25, 30, 43, 0.10); border-color: rgba(255, 255, 255, 0.15); }
-    [data-theme="dark"] .insights-view-mode-btn.active { background: rgba(255, 255, 255, 0.12); color: var(--blue-grey); }
-    
-    .insights-year-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-bottom: 16px; }
-    .insights-year-chip { background: transparent; border: none; color: var(--text-sub); padding: 10px 0; border-radius: 14px;
-     font-size: 12px; font-weight: 700; text-align: center; cursor: pointer; transition: all 0.25s ease; }
-    .insights-year-chip:active { transform: scale(0.97); opacity: 0.7; }
-    .insights-year-chip.active { background: var(--lime-400); color: #1A2E05; font-weight: 800; box-shadow: 0 4px 10px rgba(163, 230, 53, 0.18); }
+
+.insights-view-mode {
+  width: 132px;
+  height: 45px;
+  margin: 0 auto 18px;
+  padding: 4px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-items: stretch;
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid rgba(255, 255, 255, 0.40);
+  border-radius: 22px;
+  box-shadow: var(--glass-shadow);
+}
+
+.insights-view-mode-btn {
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+
+  border: none;
+  border-radius: 17px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-sub);
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.2s ease;
+}
+
+.insights-view-mode-btn:active {
+  transform: scale(0.95);
+}
+
+.insights-view-mode-btn.active {
+  background: rgba(190, 190, 190, 0.15);
+  color: var(--blue-grey);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+[data-theme="dark"] .insights-view-mode {
+  background: rgba(25, 30, 43, 0.10);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .insights-view-mode-btn.active {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--blue-grey);
+}
+
+.insights-year-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.insights-year-chip {
+  background: transparent;
+  border: none;
+  color: var(--text-sub);
+  padding: 10px 0;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.insights-year-chip:active {
+  transform: scale(0.97);
+  opacity: 0.7;
+}
+
+.insights-year-chip.active {
+  background: var(--lime-400);
+  color: #1A2E05;
+  font-weight: 800;
+  box-shadow: 0 4px 10px rgba(163, 230, 53, 0.18);
+}
     .balance-card { 
       background: var(--balance-bg);
       backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
