@@ -1420,27 +1420,54 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   </header>
   
   <main class="container" id="mainContent">
-    <section class="year-current-bar">
-      <div class="year-nav-transparent">
-        <button class="year-nav-btn" id="prevYearBtn" onclick="changeYear(-1)">
-          <i data-lucide="chevron-left"></i>
-        </button>
-        <select
-  class="year-text-display year-picker"
-  id="selectedYear"
-  aria-label="Select year">
-</select>
-        <button class="year-nav-btn" id="nextYearBtn" onclick="changeYear(1)">
-          <i data-lucide="chevron-right"></i>
-        </button>
-      </div>
-
-      <button class="current-btn" onclick="resetToCurrent()">
-        <i data-lucide="calendar-days"></i>
-        CURRENT
-      </button>
-    </section>
-
+    <section class="period-selector-bar">
+  <div class="period-selector">
+    <button
+      class="period-nav-btn"
+      id="entriesPrevYearBtn"
+      onclick="changeYear(-1)"
+      aria-label="Previous year">
+      <i data-lucide="chevron-left"></i>
+    </button>
+    <select
+      class="period-picker year-picker"
+      id="entriesSelectedYear"
+      aria-label="Select year">
+    </select>
+    <button
+      class="period-nav-btn"
+      id="entriesNextYearBtn"
+      onclick="changeYear(1)"
+      aria-label="Next year">
+      <i data-lucide="chevron-right"></i>
+    </button>
+  </div>
+  <div class="period-selector">
+    <button
+      class="period-nav-btn"
+      id="entriesPrevMonthBtn"
+      aria-label="Previous month">
+      <i data-lucide="chevron-left"></i>
+    </button>
+    <select
+      class="period-picker month-picker"
+      id="entriesSelectedMonthPicker"
+      aria-label="Select month">
+    </select>
+    <button
+      class="period-nav-btn"
+      id="entriesNextMonthBtn"
+      aria-label="Next month">
+      <i data-lucide="chevron-right"></i>
+    </button>
+  </div>
+  <button
+    class="current-icon-btn"
+    onclick="resetToCurrent()"
+    aria-label="Back to current month">
+    <i data-lucide="history"></i>
+  </button>
+  </section>
     <section class="month-nav-container">
       <button class="month-arrow-btn" id="prevMonthSetBtn" onclick="shiftMonthSet(-1)">
         <i data-lucide="chevron-left"></i>
@@ -1516,25 +1543,58 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       </div>
     </header>
     <main class="container" id="entriesContent">
-      <section class="year-current-bar">
-        <div class="year-nav-transparent">
-          <button class="year-nav-btn" id="entriesPrevYearBtn" onclick="changeYear(-1)">
-            <i data-lucide="chevron-left"></i>
-          </button>
-          <select
-  class="year-text-display year-picker"
-  id="entriesSelectedYear"
-  aria-label="Select year">
-</select>
-          <button class="year-nav-btn" id="entriesNextYearBtn" onclick="changeYear(1)">
-            <i data-lucide="chevron-right"></i>
-          </button>
-        </div>
-        <button class="current-btn" onclick="resetToCurrent()">
-          <i data-lucide="calendar-days"></i>
-          CURRENT
-        </button>
-      </section>
+      <section class="period-selector-bar">
+
+  <!-- Year Selector -->
+  <div class="period-selector">
+    <button
+      class="period-nav-btn"
+      id="entriesPrevYearBtn"
+      onclick="changeYear(-1)"
+      aria-label="Previous year">
+      <i data-lucide="chevron-left"></i>
+    </button>
+
+    <select
+      class="period-picker year-picker"
+      id="entriesSelectedYear"
+      aria-label="Select year">
+    </select>
+
+    <button
+      class="period-nav-btn"
+      id="entriesNextYearBtn"
+      onclick="changeYear(1)"
+      aria-label="Next year">
+      <i data-lucide="chevron-right"></i>
+    </button>
+  </div>
+  <div class="period-selector">
+    <button
+      class="period-nav-btn"
+      id="entriesPrevMonthBtn"
+      aria-label="Previous month">
+      <i data-lucide="chevron-left"></i>
+    </button>
+    <select
+      class="period-picker month-picker"
+      id="entriesSelectedMonthPicker"
+      aria-label="Select month">
+    </select>
+    <button
+      class="period-nav-btn"
+      id="entriesNextMonthBtn"
+      aria-label="Next month">
+      <i data-lucide="chevron-right"></i>
+    </button>
+  </div>
+  <button
+    class="current-icon-btn"
+    onclick="resetToCurrent()"
+    aria-label="Back to current month">
+    <i data-lucide="history"></i>
+  </button>
+   </section>
       <section class="month-nav-container">
         <button class="month-arrow-btn" id="entriesPrevMonthSetBtn" onclick="shiftMonthSet(-1)">
           <i data-lucide="chevron-left"></i>
