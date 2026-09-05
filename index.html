@@ -135,12 +135,6 @@
     .app-title { font-size: 20px; font-weight: 800; letter-spacing: 0.3px; }
 
     /* Year & Current Bar */
-    .period-current-bar {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-bottom: 14px;
-}
 
 .period-selector {
   display: flex;
@@ -208,6 +202,30 @@
 
 .month-picker {
   min-width: 102px;
+}
+.current-icon-btn {
+  background: none;
+  border: none;
+  color: var(--text-sub);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin-left: -2px;
+  cursor: pointer;
+  transition: opacity .2s, transform .2s;
+}
+
+.current-icon-btn:active {
+  transform: scale(0.9);
+}
+
+.current-icon-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2.1;
 }
     .current-btn { 
       display: flex; align-items: center; gap: 6px; 
@@ -1467,13 +1485,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   </header>
   
   <main class="container" id="mainContent">
-    <section class="period-current-bar">
-  <button class="current-btn" onclick="resetToCurrent()">
-    <i data-lucide="calendar-days"></i>
-    CURRENT
-  </button>
-</section>
-
 <section class="period-selector">
   <div class="period-selector-item">
     <button
@@ -1522,6 +1533,64 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       <i data-lucide="chevron-right"></i>
     </button>
   </div>
+</section>
+  <section class="period-selector">
+
+  <div class="period-selector-item">
+    <button
+      class="period-arrow-btn"
+      id="prevYearBtn"
+      onclick="changeYear(-1)"
+      aria-label="Previous year">
+      <i data-lucide="chevron-left"></i>
+    </button>
+
+    <select
+      class="period-picker year-picker"
+      id="selectedYear"
+      aria-label="Select year">
+    </select>
+
+    <button
+      class="period-arrow-btn"
+      id="nextYearBtn"
+      onclick="changeYear(1)"
+      aria-label="Next year">
+      <i data-lucide="chevron-right"></i>
+    </button>
+  </div>
+
+  <div class="period-selector-item">
+    <button
+      class="period-arrow-btn"
+      id="prevMonthBtn"
+      onclick="changeMonth(-1)"
+      aria-label="Previous month">
+      <i data-lucide="chevron-left"></i>
+    </button>
+
+    <select
+      class="period-picker month-picker"
+      id="selectedMonth"
+      aria-label="Select month">
+    </select>
+
+    <button
+      class="period-arrow-btn"
+      id="nextMonthBtn"
+      onclick="changeMonth(1)"
+      aria-label="Next month">
+      <i data-lucide="chevron-right"></i>
+    </button>
+  </div>
+
+  <button
+    class="current-icon-btn"
+    onclick="resetToCurrent()"
+    aria-label="Go to current month"
+    title="Current month">
+    <i data-lucide="circle-dot"></i>
+  </button>
 </section>
 
     <section class="month-nav-container">
