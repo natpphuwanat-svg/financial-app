@@ -133,20 +133,6 @@
     }
     .home-icon-box svg{ width:20px; height:20px; stroke:currentColor; stroke-width:2.2; fill:none; }
     .app-title { font-size: 20px; font-weight: 800; letter-spacing: 0.3px; }
-    
-    .theme-toggle-btn { 
-      background: var(--btn-pill-bg); 
-      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--btn-pill-border); 
-      border-radius: 50%; width: 40px; height: 40px; 
-      display: flex; align-items: center; justify-content: center; 
-      cursor: pointer; font-size: 16px; color: var(--text-main); 
-      box-shadow: 0 6px 16px rgba(0,0,0,0.06);
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .theme-toggle-btn:active { transform: scale(0.9); }
-    .theme-toggle-btn svg{ width:20px; height:20px; stroke:currentColor; stroke-width:2;
-    }
 
     /* Year & Current Bar */
     .year-current-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
@@ -1431,9 +1417,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 </div>
 <div class="app-title">OVERVIEW</div>
     </div>
-    <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()">
-      <i data-lucide="moon-star"></i>
-  </button>
   </header>
   
   <main class="container" id="mainContent">
@@ -1530,9 +1513,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         <div class="app-title">ENTRIES</div>
       </div>
       <div class="header-right">
-        <button class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme">
-          <i data-lucide="moon-star"></i>
-        </button>
       </div>
     </header>
     <main class="container" id="entriesContent">
@@ -1593,9 +1573,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         <div class="app-title">INSIGHTS</div>
       </div>
       <div class="header-right">
-        <button class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme">
-          <i data-lucide="moon-star"></i>
-        </button>
       </div>
     </header>
     <main class="container" id="insightsContent">
@@ -2059,14 +2036,7 @@ yearPickerIds.forEach(id => {
 
     // Theme Toggle
   function applyTheme(theme) {
-   document.body.setAttribute('data-theme', theme);
-   document.querySelectorAll('.theme-toggle-btn').forEach(btn => {
-   btn.innerHTML =
-      theme === "dark"
-        ? '<i data-lucide="sun"></i>'
-        : '<i data-lucide="moon-star"></i>';
-   });
-   lucide.createIcons(); }
+   document.body.setAttribute('data-theme', theme); }
    function getPreferredTheme() {
   return window.matchMedia("(prefers-color-scheme: dark)").matches
       ? "dark"
