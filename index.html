@@ -585,7 +585,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 [data-theme="dark"] .monthly-summary-row.savings-row { background: rgba(114, 152, 199, 0.10); }
 .monthly-summary-row.savings-row .monthly-summary-value.savings { font-size: 17px; font-weight: 900; }
 .monthly-summary-value-group { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
-.monthly-summary-mom { display: block; font-size: 9px; font-weight: 700; letter-spacing: 0.2px; color: var(--text-sub); white-space: nowrap; }
+.monthly-summary-mom { font-size: 9px; font-weight: 700; letter-spacing: 0.2px; color: var(--text-sub); white-space: nowrap; }
 .monthly-summary-mom.positive { color: #16a34a; }
 .monthly-summary-mom.negative { color: #ef4444; }
 .monthly-summary-mom.neutral { color: var(--text-sub); }
@@ -4672,7 +4672,7 @@ function applyInsightsSummaryFutureState(
     );
   if (yearState === 'FUTURE') {
     element.innerText = '';
-    element.style.display = '';
+    element.style.display = 'none';
     element.className =
       'monthly-summary-mom neutral';
     return; }
@@ -5051,7 +5051,7 @@ function renderMoM(elementId, currentValue, previousValue, isFuture) {
     );
   if (isFuture) {
     element.innerText = '';
-    element.style.display = '';
+    element.style.display = 'none';
     element.className =
       'monthly-summary-mom neutral';
     return; }
