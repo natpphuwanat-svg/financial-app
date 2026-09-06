@@ -2587,9 +2587,15 @@ function changeInsightsPeriod(delta) {
     document.querySelector(
       '#insightsView .period-picker-capsule'
     );
-  if (!monthModeBtn || !yearModeBtn || !periodCapsule) {
-    return;
-  }
+  const insightsContent =
+    document.getElementById('insightsContent');
+  if (
+    !monthModeBtn ||
+    !yearModeBtn ||
+    !periodCapsule ||
+    !insightsContent
+  ) {
+    return; }
   monthModeBtn.classList.toggle(
     'active',
     mode === 'month'
@@ -2602,6 +2608,11 @@ function changeInsightsPeriod(delta) {
     'is-year-mode',
     mode === 'year'
   );
+  insightsContent.classList.toggle(
+    'is-year-mode',
+    mode === 'year'
+  );
+  closeAnnualExpenseTrendTooltip();
   updatePeriodUI();
   if (mode === 'month') {
     fetchData();
