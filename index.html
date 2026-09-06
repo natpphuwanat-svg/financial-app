@@ -2371,6 +2371,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       const newYear = Number(picker.value);
       if (!newYear || newYear < 2025) return;
       selectedYear = newYear;
+      if (insightsViewMode === 'year') {
+        closeAnnualExpenseTrendTooltip(); }
       updatePeriodUI();
       if (
         insightsViewMode === 'year' &&
@@ -2572,6 +2574,7 @@ function changeInsightsPeriod(delta) {
     const newYear = selectedYear + delta;
     if (newYear < 2025) return;
     selectedYear = newYear;
+    closeAnnualExpenseTrendTooltip();
     updatePeriodUI();
     fetchAnnualData();
     return;
@@ -2629,6 +2632,7 @@ function changeInsightsPeriod(delta) {
   selectedMonth = realCurrentMonth;
   selectedExpenseType = null;
   selectedExpenseTitle = null;
+  closeAnnualExpenseTrendTooltip();
   updatePeriodUI();
   if (
     insightsViewMode === 'year' &&
