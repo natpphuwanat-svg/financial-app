@@ -2172,17 +2172,35 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       fetchData();
     });
   });
-
-  document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === 'visible') {
-      const elapsed = Date.now() - lastFetchTime;
-
-      if (elapsed >= REFRESH_THRESHOLD) {
-        fetchData();
-      }
-     }
-    });
-  });
+      document.addEventListener(
+        'visibilitychange',
+        () => {
+          if (
+            document.visibilityState !==
+            'visible'
+          ) {
+            return; }
+          const elapsed =
+            Date.now() - lastFetchTime;
+          if (
+            elapsed < REFRESH_THRESHOLD
+          ) {
+            return; }
+          const insightsView =
+            document.getElementById(
+              'insightsView' );
+          const isInsightsVisible =
+            insightsView &&
+            insightsView.style.display !==
+            'none';
+          if (isInsightsVisible) {
+          if (insightsViewMode === 'year' ) {
+            fetchAnnualData();
+          } else {
+            fetchData(); }
+            return; }
+          fetchData(); } 
+      );
 
     // Theme Toggle
   function applyTheme(theme) {
