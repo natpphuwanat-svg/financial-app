@@ -2173,37 +2173,65 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     });
   });
       document.addEventListener(
-        'visibilitychange',
-        () => {
-          if (
-            document.visibilityState !==
-            'visible'
-          ) {
-            return; }
-          const elapsed =
-            Date.now() - lastFetchTime;
-          if (
-            elapsed < REFRESH_THRESHOLD
-          ) {
-            return; }
-          const insightsView =
-            document.getElementById(
-              'insightsView' );
-          const isInsightsVisible =
-            insightsView &&
-            insightsView.style.display !==
-            'none';
-          if (isInsightsVisible) {
-          if (insightsViewMode === 'year' ) {
-            fetchAnnualData();
-          } else {
-            fetchData(); }
-            return; }
-          fetchData();
-          }
-         }
-        } 
+  'visibilitychange',
+  () => {
+
+    if (
+      document.visibilityState !==
+      'visible'
+    ) {
+      return;
+    }
+
+
+    const elapsed =
+      Date.now() - lastFetchTime;
+
+
+    if (
+      elapsed < REFRESH_THRESHOLD
+    ) {
+      return;
+    }
+
+
+    const insightsView =
+      document.getElementById(
+        'insightsView'
       );
+
+
+    const isInsightsVisible =
+      insightsView &&
+      insightsView.style.display !==
+      'none';
+
+
+    // =========================
+    // INSIGHTS
+    // =========================
+
+    if (isInsightsVisible) {
+
+      if (
+        insightsViewMode === 'year'
+      ) {
+        fetchAnnualData();
+      } else {
+        fetchData();
+      }
+
+      return;
+    }
+
+
+    // =========================
+    // OTHER APP STATES
+    // =========================
+
+    fetchData();
+  }
+);
 
     // Theme Toggle
   function applyTheme(theme) {
