@@ -4653,6 +4653,7 @@ function applyInsightsSummaryFutureState(
     `↓ ${Math.abs(percent)}% vs last year`;
   element.className =
     'monthly-summary-mom down'; }
+    
   function renderSavingsRateYoY(
   currentRate,
   previousRate,
@@ -4662,13 +4663,13 @@ function applyInsightsSummaryFutureState(
     document.getElementById(
       'insightsSavingsRateMoM'
     );
-  if (
-    yearState === 'FUTURE'
-  ) {
+  if (yearState === 'FUTURE') {
     element.innerText = '';
+    element.style.display = 'none';
     element.className =
       'monthly-summary-mom neutral';
     return; }
+  element.style.display = '';
   if (
     yearState === 'CURRENT_EMPTY' ||
     yearState === 'PAST_EMPTY' ||
@@ -4678,7 +4679,7 @@ function applyInsightsSummaryFutureState(
       'no data';
     element.className =
       'monthly-summary-mom neutral';
-    return;}
+    return; }
   if (
     previousRate === null ||
     previousRate === 0
