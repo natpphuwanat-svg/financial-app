@@ -2071,7 +2071,10 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     </div>
   </div>
 </section>
-<section class="insights-section">
+   <section
+    class="insights-section"
+    data-insights-mode="month"
+    >
   <div class="insights-section-title">
     MONTHLY COMPARISON
   </div>
@@ -4702,7 +4705,10 @@ function applyInsightsSummaryFutureState(
     renderAnnualSummary(
       selectedYearEntries,
       previousYearEntries
-    );
+      );
+      renderAnnualExpenseTrend(
+        selectedYearEntries
+        );
   } catch (error) {
     if (requestId !== fetchRequestId) {
       return; }
