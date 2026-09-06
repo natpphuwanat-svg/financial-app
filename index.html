@@ -4835,6 +4835,10 @@ function applyInsightsSummaryFutureState(
     const balanceMoM = calculateMoM(balance, previousBalance);
     const deductionMoM = calculateMoM(totalDeduction, previousDeduction);
     const isFuture = isSelectedMonthFuture();
+    resetInsightsSummaryState();
+    applyInsightsSummaryFutureState(
+      isFuture
+      );
     lastFetchTime = Date.now();
     // 8. Remove updating state
     document.getElementById('balanceAmount').classList.remove('updating');
