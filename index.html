@@ -6091,7 +6091,10 @@ return Number(b.amount) - Number(a.amount); });
               updateBottomNavOnScroll();
               scrollTicking = false; });
               scrollTicking = true; }
+          if (annualExpenseTrendSelectedMonth !== null) {
+            closeAnnualExpenseTrendTooltip(); }
         }, { passive: true });
+        
     function goToEntriesFromOverview() {
       switchTab('entries');
       renderEntriesPage(currentEntries); }
