@@ -4335,6 +4335,69 @@ function selectMonthlyTakeawayInsights(
   ) {
     return 'PAST_EMPTY'; }
   return 'HAS_DATA'; }
+  
+  function resetInsightsSummaryState() {
+  const summaryCard =
+    document.getElementById(
+      'insightsMonthlySummaryCard'
+    );
+  const upcomingState =
+    document.getElementById(
+      'insightsUpcomingState'
+    );
+  const savingsComparison =
+    document.getElementById(
+      'insightsSavingsRateMoM'
+    );
+  if (summaryCard) {
+    summaryCard.classList.remove(
+      'future-state'
+    );
+  }
+  if (upcomingState) {
+    upcomingState.style.display = 'none'; }
+  if (savingsComparison) {
+    savingsComparison.style.display = '';
+    savingsComparison.innerText = '';
+    savingsComparison.className =
+      'monthly-summary-mom neutral';
+  }
+}
+function applyInsightsSummaryFutureState(
+  isFuture
+  ) {
+  const summaryCard =
+    document.getElementById(
+      'insightsMonthlySummaryCard'
+    );
+  const upcomingState =
+    document.getElementById(
+      'insightsUpcomingState'
+    );
+  const savingsComparison =
+    document.getElementById(
+      'insightsSavingsRateMoM'
+    );
+  if (!summaryCard) return;
+  summaryCard.classList.toggle(
+    'future-state',
+    isFuture
+  );
+  if (!isFuture) {
+    if (upcomingState) {
+      upcomingState.style.display = 'none'; }
+    if (savingsComparison) {
+      savingsComparison.style.display = ''; }
+    return; }
+  if (upcomingState) {
+    upcomingState.style.display = 'flex'; }
+  if (savingsComparison) {
+    savingsComparison.style.display = 'none';
+    savingsComparison.innerText = '';
+    savingsComparison.className =
+      'monthly-summary-mom neutral';
+    }
+  }
   async function fetchAnnualData() {
   const requestId = ++fetchRequestId;
   try {
