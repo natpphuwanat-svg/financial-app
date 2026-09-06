@@ -568,6 +568,215 @@ background: rgba(148, 163, 184, 0.10); }
 background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), transparent ); }
 .insights-section { margin-bottom: 28px; }
 .insights-section-title { font-size: 13px; font-weight: 800; letter-spacing: 0.8px; color: var(--text-sub); text-transform: uppercase; margin-bottom: 14px; }
+
+#insightsContent.is-year-mode
+[data-insights-mode="month"] {
+  display: none;
+}
+
+#insightsContent:not(.is-year-mode)
+[data-insights-mode="year"] {
+  display: none;
+}
+
+.annual-expense-trend-card {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
+
+.annual-expense-trend-chart {
+  position: relative;
+  width: 100%;
+  height: 286px;
+  overflow: visible;
+}
+
+.annual-expense-trend-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  touch-action: manipulation;
+}
+
+.annual-expense-trend-grid-line {
+  stroke: var(--glass-border);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.annual-expense-trend-axis-label {
+  fill: var(--text-sub);
+  opacity: 0.72;
+  font-family: 'Inter', 'Noto Sans Thai', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-anchor: end;
+  dominant-baseline: middle;
+}
+
+.annual-expense-trend-month-label {
+  fill: var(--text-sub);
+  opacity: 0.82;
+  font-family: 'Inter', 'Noto Sans Thai', sans-serif;
+  font-size: 9px;
+  font-weight: 800;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.annual-expense-trend-line {
+  fill: none;
+  stroke: var(--text-sub);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.72;
+  vector-effect: non-scaling-stroke;
+}
+
+.annual-expense-trend-point {
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    opacity 0.18s ease;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.annual-expense-trend-point-dot {
+  transition:
+    r 0.18s ease,
+    stroke-width 0.18s ease;
+}
+
+.annual-expense-trend-point.is-selected
+.annual-expense-trend-point-dot {
+  stroke: var(--bg-color);
+  stroke-width: 3;
+}
+
+.annual-expense-trend-point.is-selected
+.annual-expense-trend-point-ring {
+  opacity: 1;
+}
+
+.annual-expense-trend-point-ring {
+  fill: none;
+  stroke-width: 2;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+  vector-effect: non-scaling-stroke;
+}
+
+.annual-expense-trend-point.zero
+.annual-expense-trend-point-dot {
+  fill: var(--bg-color);
+  stroke-width: 2.2;
+}
+
+.annual-expense-trend-point.zero
+.annual-expense-trend-point-ring {
+  display: none;
+}
+
+.annual-expense-trend-tooltip {
+  position: absolute;
+  z-index: 20;
+  min-width: 0;
+  width: max-content;
+  max-width: calc(100% - 20px);
+  padding: 9px 12px 10px;
+  border-radius: 13px;
+  background: var(--glass-card);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  box-shadow: var(--glass-shadow);
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 4px) scale(0.96);
+  transform-origin: center bottom;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+}
+
+.annual-expense-trend-tooltip.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+}
+
+.annual-expense-trend-tooltip.is-below {
+  transform-origin: center top;
+  transform: translate(-50%, -4px) scale(0.96);
+}
+
+.annual-expense-trend-tooltip.is-below.is-visible {
+  transform: translate(-50%, 0) scale(1);
+}
+
+.annual-expense-trend-tooltip-month {
+  font-size: 9px;
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: var(--text-sub);
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.annual-expense-trend-tooltip-amount {
+  margin-top: 3px;
+  font-size: 13px;
+  line-height: 1.15;
+  font-weight: 900;
+  color: var(--text-main);
+  white-space: nowrap;
+  text-align: center;
+}
+
+.annual-expense-trend-empty {
+  min-height: 286px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.annual-expense-trend-empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 24px;
+}
+
+.annual-expense-trend-empty-title {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.9px;
+  color: var(--text-sub);
+}
+
+.annual-expense-trend-empty-description {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--text-sub);
+  opacity: 0.78;
+}
+
+[data-theme="dark"]
+.annual-expense-trend-grid-line {
+  stroke: rgba(148, 163, 184, 0.10);
+}
+
+[data-theme="dark"]
+.annual-expense-trend-line {
+  opacity: 0.62;
+}
 .monthly-summary-card { background: var(--glass-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); overflow: hidden; }
 .monthly-summary-row { display: flex; align-items: center; justify-content: space-between; min-height: 58px; padding: 12px 18px; }
 .monthly-summary-row + .monthly-summary-row { position: relative; }
@@ -1819,17 +2028,48 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         </div>
       </section>
       <section class="insights-section">
+  <section
+  class="insights-section"
+  data-insights-mode="month"
+>
   <div class="insights-section-title">
     EXPENSE BREAKDOWN
   </div>
-  <div class="expense-type-summary" id="expenseTypeSummary"></div>
-  <div class="expense-chart" id="expenseBreakdownList">
-   <div class="expense-chart-track"></div>
+  <div
+    class="expense-type-summary"
+    id="expenseTypeSummary"
+  ></div>
+  <div
+    class="expense-chart"
+    id="expenseBreakdownList"
+  >
+    <div class="expense-chart-track"></div>
   </div>
-<div class="top-spending-section" id="topSpendingSection">
-  <div class="top-spending-title">TOP SPENDING</div>
-  <div class="top-spending-list" id="topSpendingList"></div>
-</div>
+  <div
+    class="top-spending-section"
+    id="topSpendingSection"
+  >
+    <div class="top-spending-title">
+      TOP SPENDING
+    </div>
+    <div
+      class="top-spending-list"
+      id="topSpendingList"
+    ></div>
+  </div>
+</section>
+<section
+  class="insights-section"
+  data-insights-mode="year"
+  id="annualExpenseTrendSection"
+>
+  <div class="insights-section-title">
+    EXPENSE BREAKDOWN
+  </div>
+  <div class="annual-expense-trend-card">
+    <div class="annual-expense-trend-chart" id="annualExpenseTrendChart">
+    </div>
+  </div>
 </section>
 <section class="insights-section">
   <div class="insights-section-title">
@@ -2545,6 +2785,7 @@ Object.keys(grouped).forEach(type => {
   const expenseColorMap = {};
   let selectedExpenseTitle = null;
   let selectedExpenseType = null;
+  let annualExpenseTrendSelectedMonth = null;
   let monthlyComparisonType = 'Expense';
   let monthlyComparisonPeriod = 3;
   let paymentHistoryEntries = [];
