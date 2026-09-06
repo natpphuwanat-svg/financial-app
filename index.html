@@ -2121,21 +2121,14 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     'entriesSelectedYear',
     'insightsSelectedYear'
   ];
-
   yearPickerIds.forEach(id => {
     const picker = document.getElementById(id);
-
     if (!picker) return;
-
     picker.addEventListener('change', () => {
       const newYear = Number(picker.value);
-
       if (!newYear || newYear < 2025) return;
-
       selectedYear = newYear;
-
       updatePeriodUI();
-
       if (
         insightsViewMode === 'year' &&
         document.getElementById('insightsView')?.style.display !== 'none'
@@ -2146,93 +2139,58 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         }
      });
    });
-
   const monthPickerIds = [
     'selectedMonth',
     'entriesSelectedMonth',
     'insightsSelectedMonth'
   ];
-
   monthPickerIds.forEach(id => {
     const picker = document.getElementById(id);
-
     if (!picker) return;
-
     picker.addEventListener('change', () => {
       const newMonth = Number(picker.value);
-
       if (!newMonth || newMonth < 1 || newMonth > 12) return;
-
       selectedMonth = newMonth;
-
       selectedExpenseType = null;
       selectedExpenseTitle = null;
-
       updatePeriodUI();
       fetchData();
+      });
     });
   });
-      document.addEventListener(
+  document.addEventListener(
   'visibilitychange',
   () => {
-
     if (
       document.visibilityState !==
       'visible'
     ) {
-      return;
-    }
-
-
+      return; }
     const elapsed =
       Date.now() - lastFetchTime;
-
-
     if (
       elapsed < REFRESH_THRESHOLD
     ) {
-      return;
-    }
-
-
+      return; }
     const insightsView =
       document.getElementById(
         'insightsView'
       );
-
-
     const isInsightsVisible =
       insightsView &&
       insightsView.style.display !==
       'none';
-
-
-    // =========================
-    // INSIGHTS
-    // =========================
-
     if (isInsightsVisible) {
-
       if (
         insightsViewMode === 'year'
       ) {
         fetchAnnualData();
       } else {
-        fetchData();
-      }
-
-      return;
-    }
-
-
-    // =========================
-    // OTHER APP STATES
-    // =========================
-
+        fetchData(); }
+      return; }
     fetchData();
   }
 );
-
     // Theme Toggle
   function applyTheme(theme) {
    document.body.setAttribute('data-theme', theme); }
