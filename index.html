@@ -213,17 +213,10 @@
 #insightsView .period-picker-capsule.is-year-mode .month-picker,
 #insightsView .period-picker-capsule.is-year-mode .period-picker-divider {
   display: none; }
+
 #insightsView .period-picker-capsule.is-year-mode .year-picker {
   width: 72px;
   flex: 0 0 72px; }
-#insightsView .period-picker-capsule.is-year-mode {
-  width: 100px; }
-#insightsView .period-picker-capsule.is-year-mode .month-picker {
-  display: none !important; }
-#insightsView .period-picker-capsule.is-year-mode .period-picker-divider {
-  display: none !important; }
-#insightsView .period-picker-capsule.is-year-mode .year-picker {
-  display: block; width: 72px; flex: 0 0 72px; }
 
 .period-picker {
   appearance: none;
@@ -2089,15 +2082,10 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   <script>
     const SUPABASE_URL = "https://kbxnrlbybkbuxoyzdecp.supabase.co";
     const SUPABASE_KEY = "sb_publishable_CMkX-fP0wMfKoaYUcI-sUg_BR2ab8PM";
-    let supabaseClient = null;
-    if (typeof supabase !== 'undefined' && supabase?.createClient) {
-      supabaseClient = supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-        );
-    } else {
-      console.error('Supabase library failed to load.'); }
-      
+    const supabaseClient = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
   const realCurrentYear = new Date().getFullYear();
   const realCurrentMonth = new Date().getMonth() + 1;
   let selectedYear = realCurrentYear;
@@ -2122,28 +2110,11 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     let currentEntryFilter = 'all';
     let lastFetchTime = 0;
     const REFRESH_THRESHOLD = 60 * 1000;
-  
-  function refreshCurrentView() {
-  if (!supabaseClient) {
-    console.error('Supabase client is not available.');
-    return; }
-  const insightsView = document.getElementById('insightsView');
-  const isInsightsVisible =
-    insightsView &&
-    insightsView.style.display !== 'none';
-  if (isInsightsVisible) {
-    if (insightsViewMode === 'year') {
-      fetchAnnualData();
-    } else {
-      fetchData(); }
-    return; }
-  fetchData(); }
     
     document.addEventListener("DOMContentLoaded", () => {
-    applyTheme(getPreferredTheme());
-    updatePeriodUI();
-    if (supabaseClient) {
-      refreshCurrentView(); }
+  applyTheme(getPreferredTheme());
+  updatePeriodUI();
+  fetchData();
 
   const yearPickerIds = [
     'selectedYear',
@@ -2152,49 +2123,62 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   ];
 
   yearPickerIds.forEach(id => {
-  const picker = document.getElementById(id);
-  if (!picker) return;
-  picker.addEventListener('change', () => {
-    const newYear = Number(picker.value);
-    if (!newYear || newYear < 2025) return;
-    selectedYear = newYear;
-    selectedExpenseType = null;
-    selectedExpenseTitle = null;
-    updatePeriodUI();
-    refreshCurrentView();
+    const picker = document.getElementById(id);
+
+    if (!picker) return;
+
+    picker.addEventListener('change', () => {
+      const newYear = Number(picker.value);
+
+      if (!newYear || newYear < 2025) return;
+
+      selectedYear = newYear;
+
+      updatePeriodUI();
+
+      if (
+        insightsViewMode === 'year' &&
+        document.getElementById('insightsView')?.style.display !== 'none'
+        ) {
+          fetchAnnualData();
+        } else {
+          fetchData();
+        }
+     });
    });
-  });
+
   const monthPickerIds = [
     'selectedMonth',
     'entriesSelectedMonth',
     'insightsSelectedMonth'
   ];
-  
+
   monthPickerIds.forEach(id => {
-  const picker = document.getElementById(id);
-  if (!picker) return;
-  picker.addEventListener('change', () => {
-    const newMonth = Number(picker.value);
-    if (!newMonth || newMonth < 1 || newMonth > 12) {
-      return; }
-    selectedMonth = newMonth;
-    selectedExpenseType = null;
-    selectedExpenseTitle = null;
-    updatePeriodUI();
-    if (
-      id === 'insightsSelectedMonth' &&
-      insightsViewMode === 'year'
-    ) {
-      return; }
-    refreshCurrentView();
-   });
- });
+    const picker = document.getElementById(id);
+
+    if (!picker) return;
+
+    picker.addEventListener('change', () => {
+      const newMonth = Number(picker.value);
+
+      if (!newMonth || newMonth < 1 || newMonth > 12) return;
+
+      selectedMonth = newMonth;
+
+      selectedExpenseType = null;
+      selectedExpenseTitle = null;
+
+      updatePeriodUI();
+      fetchData();
+    });
+  });
 
   document.addEventListener(
   'visibilitychange',
   () => {
     if (
-      document.visibilityState !== 'visible'
+      document.visibilityState !==
+      'visible'
     ) {
       return; }
     const elapsed =
@@ -2203,9 +2187,24 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       elapsed < REFRESH_THRESHOLD
     ) {
       return; }
-    refreshCurrentView();
-   }
-  );
+    const insightsView =
+      document.getElementById(
+        'insightsView'
+      );
+    const isInsightsVisible =
+      insightsView &&
+      insightsView.style.display !==
+      'none';
+    if (isInsightsVisible) {
+      if (
+        insightsViewMode === 'year'
+      ) {
+        fetchAnnualData();
+      } else {
+        fetchData(); }
+      return; }
+    fetchData(); }
+    );
 
     // Theme Toggle
   function applyTheme(theme) {
@@ -2301,24 +2300,19 @@ function updatePeriodUI() {
     }
   });
   const insightsPrevBtn =
-  document.getElementById('insightsPrevMonthBtn');
+    document.getElementById('insightsPrevMonthBtn');
   const insightsNextBtn =
-  document.getElementById('insightsNextMonthBtn');
-  if (insightsPrevBtn) {
-    insightsPrevBtn.disabled =
-    insightsViewMode === 'year'
-      ? selectedYear <= 2025
-      : !canGoPreviousMonth; }
-  if (insightsNextBtn) {
-    insightsNextBtn.disabled = false; }
+    document.getElementById('insightsNextMonthBtn');
   if (insightsPrevBtn) {
     insightsPrevBtn.disabled =
       insightsViewMode === 'year'
         ? !canGoPreviousYear
-        : !canGoPreviousMonth; }
+        : !canGoPreviousMonth;
+  }
   if (insightsNextBtn) {
-    insightsNextBtn.disabled = false; }
- }
+    insightsNextBtn.disabled = false;
+  }
+}
 
 function changeMonth(delta) {
   const currentDate = new Date(
@@ -2326,55 +2320,40 @@ function changeMonth(delta) {
     selectedMonth - 1,
     1
   );
+
   currentDate.setMonth(
     currentDate.getMonth() + delta
   );
+
   const newYear = currentDate.getFullYear();
   const newMonth = currentDate.getMonth() + 1;
+
   if (newYear < 2025) return;
+
   selectedYear = newYear;
   selectedMonth = newMonth;
+
   selectedExpenseType = null;
   selectedExpenseTitle = null;
+
   updatePeriodUI();
-  if (
-    document.getElementById('insightsView')?.style.display !== 'none' &&
-    insightsViewMode === 'year'
-  ) {
-    return; }
-  fetchData(); }
-  
+  fetchData();
+}
 function changeInsightsPeriod(delta) {
   if (insightsViewMode === 'year') {
     const newYear = selectedYear + delta;
     if (newYear < 2025) return;
     selectedYear = newYear;
-    selectedExpenseType = null;
-    selectedExpenseTitle = null;
     updatePeriodUI();
     fetchAnnualData();
-    return; }
-  const currentDate = new Date(
-    selectedYear,
-    selectedMonth - 1,
-    1
-  );
-  currentDate.setMonth(
-    currentDate.getMonth() + delta
-  );
-  const newYear = currentDate.getFullYear();
-  const newMonth = currentDate.getMonth() + 1;
-  if (newYear < 2025) return;
-  selectedYear = newYear;
-  selectedMonth = newMonth;
-  selectedExpenseType = null;
-  selectedExpenseTitle = null;
-  updatePeriodUI();
-  fetchData(); }
+    return;
+  }
+  changeMonth(delta);
+}
   
   function setInsightsViewMode(mode) {
-  if (mode !== 'month' && mode !== 'year') {
-    return; }
+  if (mode !== 'month' && mode !== 'year') return;
+  insightsViewMode = mode;
   const monthModeBtn =
     document.getElementById('insightsMonthModeBtn');
   const yearModeBtn =
@@ -2383,13 +2362,9 @@ function changeInsightsPeriod(delta) {
     document.querySelector(
       '#insightsView .period-picker-capsule'
     );
-  if (
-    !monthModeBtn ||
-    !yearModeBtn ||
-    !periodCapsule
-  ) {
-    return; }
-  insightsViewMode = mode;
+  if (!monthModeBtn || !yearModeBtn || !periodCapsule) {
+    return;
+  }
   monthModeBtn.classList.toggle(
     'active',
     mode === 'month'
@@ -2402,13 +2377,11 @@ function changeInsightsPeriod(delta) {
     'is-year-mode',
     mode === 'year'
   );
-  selectedExpenseType = null;
-  selectedExpenseTitle = null;
   updatePeriodUI();
-  if (mode === 'year') {
-    fetchAnnualData();
-  } else {
+  if (mode === 'month') {
     fetchData();
+  } else {
+    fetchAnnualData();
   }
 }
   
@@ -2418,11 +2391,15 @@ function changeInsightsPeriod(delta) {
   selectedExpenseType = null;
   selectedExpenseTitle = null;
   updatePeriodUI();
-  if (insightsViewMode === 'year') {
+  if (
+    insightsViewMode === 'year' &&
+    document.getElementById('insightsView')?.style.display !== 'none'
+  ) {
     fetchAnnualData();
   } else {
-    fetchData(); }
+    fetchData();
   }
+}
   
   function isSelectedMonthFuture() {
   return (
@@ -4408,30 +4385,6 @@ function selectMonthlyTakeawayInsights(
       'monthly-summary-mom neutral'; }
  }
 
-function resetAnnualSummaryState() {
-  const summaryCard =
-    document.getElementById(
-      'insightsMonthlySummaryCard'
-    );
-  const upcomingState =
-    document.getElementById(
-      'insightsUpcomingState'
-    );
-  const savingsComparison =
-    document.getElementById(
-      'insightsSavingsRateMoM'
-    );
-  if (summaryCard) {
-    summaryCard.classList.remove('future-state'); }
-  if (upcomingState) {
-    upcomingState.style.display = 'none'; }
-  if (savingsComparison) {
-    savingsComparison.style.display = '';
-    savingsComparison.innerText = '';
-    savingsComparison.className =
-      'monthly-summary-mom neutral'; }
-}
-
 function applyInsightsSummaryFutureState(
   isFuture
 ) {
@@ -4468,13 +4421,6 @@ function applyInsightsSummaryFutureState(
   }
   
   async function fetchAnnualData() {
-    const insightsView =
-    document.getElementById('insightsView');
-    if (
-      insightsView?.style.display === 'none' ||
-      insightsViewMode !== 'year'
-      ) {
-        return; }
   const requestId = ++fetchRequestId;
   try {
     const previousYear =
@@ -4535,7 +4481,7 @@ function applyInsightsSummaryFutureState(
   entries,
   previousEntries
   ) {
-  resetAnnualSummaryState();
+  resetInsightsSummaryState();
   const getTotal = (
     source,
     financialType
@@ -4793,11 +4739,6 @@ function applyInsightsSummaryFutureState(
     'monthly-summary-mom neutral';}
   
   async function fetchData() {
-  if (
-    insightsViewMode === 'year' &&
-    document.getElementById('insightsView')?.style.display !== 'none'
-    ) {
-    return; }
   const requestId = ++fetchRequestId;
   // Updating state
   document.getElementById('balanceAmount').classList.add('updating');
@@ -5470,7 +5411,7 @@ function getEntryIcon(title) {
     if (error) {
       throw error; }
       closeModal();
-      refreshCurrentView();
+      fetchData();
       return; }
    // EDIT Supabase
 const { error } = await supabaseClient
@@ -5487,7 +5428,7 @@ const { error } = await supabaseClient
   if (error) {
   throw error; }
       closeModal();
-      refreshCurrentView();
+      fetchData();
   } catch (err) {
     console.error('Save entry error:', err);
     alert('Error saving entry.');
@@ -5507,7 +5448,7 @@ const { error } = await supabaseClient
   if (error) {
       throw error; }
     closeModal();
-    refreshCurrentView();
+    fetchData();
   } catch (err) {
     console.error('Delete entry error:', err);
     alert('Error deleting entry.');
