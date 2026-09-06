@@ -2173,16 +2173,38 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     });
   });
 
-  document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === 'visible') {
-      const elapsed = Date.now() - lastFetchTime;
-
-      if (elapsed >= REFRESH_THRESHOLD) {
-        fetchData();
-      }
-     }
-    });
-  });
+  document.addEventListener(
+  'visibilitychange',
+  () => {
+    if (
+      document.visibilityState !==
+      'visible'
+    ) {
+      return; }
+    const elapsed =
+      Date.now() - lastFetchTime;
+    if (
+      elapsed < REFRESH_THRESHOLD
+    ) {
+      return; }
+    const insightsView =
+      document.getElementById(
+        'insightsView'
+      );
+    const isInsightsVisible =
+      insightsView &&
+      insightsView.style.display !==
+      'none';
+    if (isInsightsVisible) {
+      if (
+        insightsViewMode === 'year'
+      ) {
+        fetchAnnualData();
+      } else {
+        fetchData(); }
+      return; }
+    fetchData(); }
+    );
 
     // Theme Toggle
   function applyTheme(theme) {
@@ -4335,10 +4357,74 @@ function selectMonthlyTakeawayInsights(
   ) {
     return 'PAST_EMPTY'; }
   return 'HAS_DATA'; }
+  
+  function resetInsightsSummaryState() {
+  const summaryCard =
+    document.getElementById(
+      'insightsMonthlySummaryCard'
+    );
+  const upcomingState =
+    document.getElementById(
+      'insightsUpcomingState'
+    );
+  const savingsComparison =
+    document.getElementById(
+      'insightsSavingsRateMoM'
+    );
+  if (summaryCard) {
+    summaryCard.classList.remove(
+      'future-state'
+    );
+  }
+  if (upcomingState) {
+    upcomingState.style.display = 'none'; }
+  if (savingsComparison) {
+    savingsComparison.style.display = '';
+    savingsComparison.innerText = '';
+    savingsComparison.className =
+      'monthly-summary-mom neutral'; }
+ }
+
+function applyInsightsSummaryFutureState(
+  isFuture
+) {
+  const summaryCard =
+    document.getElementById(
+      'insightsMonthlySummaryCard'
+    );
+  const upcomingState =
+    document.getElementById(
+      'insightsUpcomingState'
+    );
+  const savingsComparison =
+    document.getElementById(
+      'insightsSavingsRateMoM'
+    );
+  if (!summaryCard) return;
+  summaryCard.classList.toggle(
+    'future-state',
+    isFuture
+  );
+  if (!isFuture) {
+    if (upcomingState) {
+      upcomingState.style.display = 'none'; }
+    if (savingsComparison) {
+      savingsComparison.style.display = ''; }
+    return; }
+  if (upcomingState) {
+    upcomingState.style.display = 'flex'; }
+  if (savingsComparison) {
+    savingsComparison.style.display = 'none';
+    savingsComparison.innerText = '';
+    savingsComparison.className =
+      'monthly-summary-mom neutral'; }
+  }
+  
   async function fetchAnnualData() {
   const requestId = ++fetchRequestId;
   try {
-    const previousYear = selectedYear - 1;
+    const previousYear =
+      selectedYear - 1;
     const previousYearStart =
       `${previousYear}-01-01`;
     const nextYearStart =
@@ -4375,25 +4461,27 @@ function selectMonthlyTakeawayInsights(
           item.entry_date
         ).getFullYear() === previousYear
       );
+    lastFetchTime = Date.now();
     renderAnnualSummary(
       selectedYearEntries,
       previousYearEntries
     );
+
   } catch (error) {
     if (requestId !== fetchRequestId) {
-      return;
-    }
+      return; }
     console.error(
       'Supabase fetchAnnualData ERROR:',
       error
     );
-  }
-}
+   }
+ }
   
   function renderAnnualSummary(
   entries,
   previousEntries
-) {
+  ) {
+  resetInsightsSummaryState();
   const getTotal = (
     source,
     financialType
@@ -4438,7 +4526,8 @@ function selectMonthlyTakeawayInsights(
       'Deduction'
     );
   const previousBalance =
-    previousIncome - previousExpense;
+    previousIncome -
+    previousExpense;
   const previousSavingsRate =
     previousIncome > 0
       ? (
@@ -4448,6 +4537,11 @@ function selectMonthlyTakeawayInsights(
       : null;
   const yearState =
     getSelectedYearState(entries);
+  const isFutureYear =
+    yearState === 'FUTURE';
+  applyInsightsSummaryFutureState(
+    isFutureYear
+  );
   const formatAmount = amount =>
     '฿' +
     Number(amount).toLocaleString(
@@ -4517,6 +4611,7 @@ function selectMonthlyTakeawayInsights(
     yearState
   );
 }
+
   function renderYoY(
   elementId,
   currentValue,
@@ -4581,6 +4676,7 @@ function selectMonthlyTakeawayInsights(
     `↓ ${Math.abs(percent)}% vs last year`;
   element.className =
     'monthly-summary-mom down'; }
+    
   function renderSavingsRateYoY(
   currentRate,
   previousRate,
@@ -4590,13 +4686,13 @@ function selectMonthlyTakeawayInsights(
     document.getElementById(
       'insightsSavingsRateMoM'
     );
-  if (
-    yearState === 'FUTURE'
-  ) {
+  if (yearState === 'FUTURE') {
     element.innerText = '';
+    element.style.display = 'none';
     element.className =
       'monthly-summary-mom neutral';
     return; }
+  element.style.display = '';
   if (
     yearState === 'CURRENT_EMPTY' ||
     yearState === 'PAST_EMPTY' ||
@@ -4606,7 +4702,7 @@ function selectMonthlyTakeawayInsights(
       'no data';
     element.className =
       'monthly-summary-mom neutral';
-    return;}
+    return; }
   if (
     previousRate === null ||
     previousRate === 0
@@ -4640,7 +4736,7 @@ function selectMonthlyTakeawayInsights(
   element.innerText =
     '→ 0% vs last year';
   element.className =
-    'monthly-summary-mom neutral'; }
+    'monthly-summary-mom neutral';}
   
   async function fetchData() {
   const requestId = ++fetchRequestId;
@@ -4762,7 +4858,11 @@ function selectMonthlyTakeawayInsights(
     const balanceMoM = calculateMoM(balance, previousBalance);
     const deductionMoM = calculateMoM(totalDeduction, previousDeduction);
     const isFuture = isSelectedMonthFuture();
-    lastFetchTime = Date.now();
+    resetInsightsSummaryState();
+    applyInsightsSummaryFutureState(
+      isFuture
+      );
+      lastFetchTime = Date.now();
     // 8. Remove updating state
     document.getElementById('balanceAmount').classList.remove('updating');
     document.getElementById('balanceChange').classList.remove('updating');
@@ -4954,51 +5054,66 @@ function renderMoM(elementId, currentValue, previousValue, isFuture) {
     element.className = 'monthly-summary-mom down';
   }
 }
-function renderSavingsRateMoM(currentRate, previousRate, isFuture) {
-  const element = document.getElementById('insightsSavingsRateMoM');
-  const upcomingState = document.getElementById('insightsUpcomingState');
-  const monthlySummaryCard = document.getElementById('insightsMonthlySummaryCard');
-  monthlySummaryCard.classList.toggle('future-state', isFuture);
-  upcomingState.style.display = 'none';
-  element.style.display = '';
-  // เดือนอนาคตที่ยังไม่มีข้อมูล
+
+function renderSavingsRateMoM(
+  currentRate,
+  previousRate,
+  isFuture
+  ) {
+  const element =
+    document.getElementById(
+      'insightsSavingsRateMoM'
+    );
   if (isFuture && totalIncome <= 0) {
-  upcomingState.style.display = 'flex';
-  element.style.display = 'none';
-  element.innerText = '';
-  return; }
-  // เดือนนี้ไม่มี Income → Savings Rate คำนวณไม่ได้
+    element.innerText = '';
+    element.style.display = 'none';
+    element.className =
+      'monthly-summary-mom neutral';
+    return; }
+  element.style.display = '';
   if (totalIncome <= 0) {
-    element.innerText = 'no data';
-    element.className = 'monthly-summary-mom neutral';
+    element.innerText =
+      'no data';
+    element.className =
+      'monthly-summary-mom neutral';
     return; }
-  // เดือนก่อนหน้าไม่มี Income
-  if (previousRate === null) {
-    element.innerText = 'no prev. last month';
-    element.className = 'monthly-summary-mom neutral';
+  if (
+    previousRate === null ||
+    previousRate === 0
+  ) {
+    element.innerText =
+      'no prev. last month';
+    element.className =
+      'monthly-summary-mom neutral';
     return; }
-  // Savings Rate เดือนก่อน = 0%
-  // ไม่สามารถคำนวณ % change ได้
-  if (previousRate === 0) {
-    element.innerText = 'no prev. last month';
-    element.className = 'monthly-summary-mom neutral';
-    return; }
-  const difference = currentRate - previousRate;
-  const percentChange = (difference / Math.abs(previousRate)) * 100;
+  const difference =
+    currentRate - previousRate;
+  const percentChange =
+    (
+      difference /
+      Math.abs(previousRate)
+    ) * 100;
   if (difference > 0) {
+    element.innerText =
+      `↑ ${Math.round(
+        Math.abs(percentChange)
+      )}% vs last month`;
+    element.className =
+      'monthly-summary-mom up';
+    return; }
+  if (difference < 0) {
+    element.innerText =
+      `↓ ${Math.round(
+        Math.abs(percentChange)
+      )}% vs last month`;
+    element.className =
+      'monthly-summary-mom down';
+    return; }
   element.innerText =
-    `↑ ${Math.round(Math.abs(percentChange))}% vs last month`;
-  element.className = 'monthly-summary-mom up';
-  } else if (difference < 0) {
-  element.innerText =
-    `↓ ${Math.round(Math.abs(percentChange))}% vs last month`;
-  element.className = 'monthly-summary-mom down';
-  } else {
-  element.innerText =
-    `→ 0% vs last month`;
-  element.className = 'monthly-summary-mom neutral';
-  }
-}
+    '→ 0% vs last month';
+  element.className =
+    'monthly-summary-mom neutral'; }
+    
 renderMoM( 'insightsIncomeMoM', totalIncome, previousIncome, isFuture );
 renderMoM( 'insightsExpenseMoM', totalExpense, previousExpense, isFuture );
 renderMoM( 'insightsDeductionMoM', totalDeduction, previousDeduction, isFuture );
