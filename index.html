@@ -4401,7 +4401,8 @@ function applyInsightsSummaryFutureState(
   async function fetchAnnualData() {
   const requestId = ++fetchRequestId;
   try {
-    const previousYear = selectedYear - 1;
+    const previousYear =
+      selectedYear - 1;
     const previousYearStart =
       `${previousYear}-01-01`;
     const nextYearStart =
@@ -4438,14 +4439,14 @@ function applyInsightsSummaryFutureState(
           item.entry_date
         ).getFullYear() === previousYear
       );
+    lastFetchTime = Date.now();
     renderAnnualSummary(
       selectedYearEntries,
       previousYearEntries
     );
   } catch (error) {
     if (requestId !== fetchRequestId) {
-      return;
-    }
+      return; }
     console.error(
       'Supabase fetchAnnualData ERROR:',
       error
