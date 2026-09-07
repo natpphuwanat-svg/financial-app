@@ -579,6 +579,19 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   display: none;
 }
 
+.annual-expense-trend-subtitle {
+  margin: 2px 0 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  color: var(--text-sub);
+  text-transform: uppercase;
+}
+
+.annual-top-spending-section {
+  margin-top: 32px;
+}
+
 .annual-expense-trend-card {
   position: relative;
   width: 100%;
@@ -634,7 +647,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   stroke-width: 1.25;
   stroke-linecap: round;
   stroke-linejoin: round;
-  opacity: 0.42;
+  opacity: 0.28;
   vector-effect: non-scaling-stroke;
 }
 
@@ -812,7 +825,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 
 [data-theme="dark"]
 .annual-expense-trend-line {
-  opacity: 0.38;
+  opacity: 0.28;
 }
 .monthly-summary-card { background: var(--glass-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); overflow: hidden; }
 .monthly-summary-row { display: flex; align-items: center; justify-content: space-between; min-height: 58px; padding: 12px 18px; }
@@ -2102,9 +2115,33 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   <div class="insights-section-title">
     EXPENSE BREAKDOWN
   </div>
+  <div
+    class="expense-type-summary"
+    id="annualExpenseTypeSummary"
+  ></div>
+  <div class="annual-expense-trend-subtitle">
+    Expense Trend
+  </div>
   <div class="annual-expense-trend-card">
-    <div class="annual-expense-trend-chart" id="annualExpenseTrendChart">
+    <div
+      class="annual-expense-trend-chart"
+      id="annualExpenseTrendChart"
+    ></div>
+  </div>
+  <div
+    class="top-spending-section annual-top-spending-section"
+    id="annualTopSpendingSection"
+  >
+    <div
+      class="top-spending-title"
+      id="annualTopSpendingTitle"
+    >
+      TOP SPENDING
     </div>
+    <div
+      class="top-spending-list"
+      id="annualTopSpendingList"
+    ></div>
   </div>
 </section>
    <section
@@ -2386,6 +2423,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     let selectedType = 'Income';
     let fetchRequestId = 0;
     let currentEntries = [];
+    let currentAnnualEntries = [];
     let currentEntryFilter = 'all';
     let lastFetchTime = 0;
     const REFRESH_THRESHOLD = 60 * 1000;
@@ -4891,6 +4929,172 @@ function applyInsightsSummaryFutureState(
     savingsRate,
     previousSavingsRate,
     yearState
+  );
+}
+
+function renderAnnualExpenseTypeSummary(entries) {
+  const container =
+    document.getElementById(
+      'annualExpenseTypeSummary'
+    );
+  if (!container) return;
+  const expenses =
+    (entries || [])
+      .filter(
+        item =>
+          item.financial_type === 'Expense'
+      );
+  const isFuture =
+    selectedYear > realCurrentYear;
+  const hasExpense =
+    expenses.length > 0;
+  let fixedTotal = 0;
+  let variableTotal = 0;
+  expenses.forEach(item => {
+    const amount =
+      Number(item.amount || 0);
+    const type =
+      getExpenseType(item.title);
+    if (type === 'Fixed') {
+      fixedTotal += amount;
+    }
+    if (type === 'Variable') {
+      variableTotal += amount;
+    }
+  });
+  const totalExpense =
+    expenses.reduce(
+      (sum, item) =>
+        sum + Number(item.amount || 0),
+      0
+    );
+  const fixedPercent =
+    totalExpense > 0
+      ? Math.round(
+          (fixedTotal / totalExpense) * 100
+        )
+      : 0;
+  const variablePercent =
+    totalExpense > 0
+      ? Math.round(
+          (variableTotal / totalExpense) * 100
+        )
+      : 0;
+  const emptyState =
+    !hasExpense;
+  container.innerHTML = `
+    <div
+      class="
+        expense-type-card
+        fixed
+        ${selectedExpenseType === 'Fixed'
+          ? 'is-active'
+          : ''}
+        ${selectedExpenseType === 'Variable'
+          ? 'is-dimmed'
+          : ''}
+        ${emptyState ? 'is-empty' : ''}
+        ${isFuture && !hasExpense
+          ? 'future-state'
+          : ''}
+      "
+      ${isFuture
+        ? ''
+        : `onclick="selectAnnualExpenseType('Fixed')"`
+      }
+      role="button"
+      aria-label="Show Fixed expenses"
+    >
+      <div class="expense-type-top">
+        <div class="expense-type-label">
+          FIXED
+        </div>
+        <div class="expense-type-percent">
+          ${fixedPercent}%
+        </div>
+      </div>
+      <div class="expense-type-amount">
+        ฿${fixedTotal.toLocaleString(
+          'en-US',
+          {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          }
+        )}
+      </div>
+      <div class="expense-type-progress">
+        <div
+          class="expense-type-progress-bar"
+          style="width: ${fixedPercent}%"
+        ></div>
+      </div>
+    </div>
+    <div
+      class="
+        expense-type-card
+        variable
+        ${selectedExpenseType === 'Variable'
+          ? 'is-active'
+          : ''}
+        ${selectedExpenseType === 'Fixed'
+          ? 'is-dimmed'
+          : ''}
+        ${emptyState ? 'is-empty' : ''}
+        ${isFuture && !hasExpense
+          ? 'future-state'
+          : ''}
+      "
+      ${isFuture
+      ? ''
+      : `onclick="selectAnnualExpenseType('Variable')"`
+      }
+      role="button"
+      aria-label="Show Variable expenses"
+      >
+      <div class="expense-type-top">
+        <div class="expense-type-label">
+          VARIABLE
+        </div>
+        <div class="expense-type-percent">
+          ${variablePercent}%
+        </div>
+      </div>
+      <div class="expense-type-amount">
+        ฿${variableTotal.toLocaleString(
+          'en-US',
+          {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          }
+        )}
+      </div>
+      <div class="expense-type-progress">
+        <div
+          class="expense-type-progress-bar"
+          style="width: ${variablePercent}%"
+        ></div>
+      </div>
+    </div>
+  `;
+}
+
+function selectAnnualExpenseType(type) {
+  if (
+    selectedExpenseType === type
+  ) {
+    selectedExpenseType = null;
+  } else {
+    selectedExpenseType = type;
+  }
+  selectedExpenseTitle = null;
+  renderAnnualExpenseTypeSummary(
+    currentAnnualEntries
+  );
+  renderAnnualExpenseTrend(
+    currentAnnualEntries
+  );
+  renderAnnualTopSpending(
+    currentAnnualEntries
   );
 }
 
