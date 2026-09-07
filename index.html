@@ -594,7 +594,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .annual-expense-trend-scroll {
   position: absolute;
   top: 0;
-  right: 0;
+  right: 12px;
   bottom: 0;
   left: 64px;
   overflow-x: auto;
@@ -639,7 +639,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
 
 .annual-expense-trend-grid-line {
-  stroke: var(--glass-border);
+  stroke: rgba(100, 116, 139, 0.055);
   stroke-width: 1;
   vector-effect: non-scaling-stroke;
 }
@@ -807,7 +807,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 
 [data-theme="dark"]
 .annual-expense-trend-grid-line {
-  stroke: rgba(148, 163, 184, 0.10);
+  stroke: rgba(148, 163, 184, 0.12);
 }
 
 [data-theme="dark"]
@@ -5130,8 +5130,8 @@ function renderAnnualExpenseTrend(entries) {
     );
   const chartWidth = 720;
   const chartHeight = 286;
-  const plotLeft = 24;
-  const plotRight = 696;
+  const plotLeft = 8;
+  const plotRight = 704;
   const plotTop = 22;
   const plotBottom = 226;
   const plotHeight =
