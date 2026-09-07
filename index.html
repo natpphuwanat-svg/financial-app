@@ -5080,6 +5080,8 @@ function applyInsightsSummaryFutureState(
       'Supabase fetchAnnualData ERROR:',
       error
     );
+    finishInsightsContentLoading(
+      requestId );
   }
 }
   
@@ -6787,6 +6789,8 @@ return Number(b.amount) - Number(a.amount); });
         <small>${err?.message || err}</small>
       </div>
     `;
+    finishInsightsContentLoading(
+      requestId );
     }
    }
     // Bottom Navigation Compact State
