@@ -2445,6 +2445,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       const newYear = Number(picker.value);
       if (!newYear || newYear < 2025) return;
       selectedYear = newYear;
+      selectedExpenseType = null;
+      selectedExpenseTitle = null;
       if (insightsViewMode === 'year') {
         closeAnnualExpenseTrendTooltip(); }
       updatePeriodUI();
@@ -2648,6 +2650,8 @@ function changeInsightsPeriod(delta) {
     const newYear = selectedYear + delta;
     if (newYear < 2025) return;
     selectedYear = newYear;
+    selectedExpenseType = null;
+    selectedExpenseTitle = null;
     closeAnnualExpenseTrendTooltip();
     updatePeriodUI();
     fetchAnnualData();
@@ -4780,13 +4784,21 @@ function applyInsightsSummaryFutureState(
         ).getFullYear() === previousYear
       );
     lastFetchTime = Date.now();
+    currentAnnualEntries =
+    selectedYearEntries;
     renderAnnualSummary(
-      selectedYearEntries,
-      previousYearEntries
-      );
-      renderAnnualExpenseTrend(
-        selectedYearEntries
-        );
+    selectedYearEntries,
+    previousYearEntries
+    );
+    renderAnnualExpenseTypeSummary(
+    selectedYearEntries
+    );
+    renderAnnualExpenseTrend(
+    selectedYearEntries
+    );
+    renderAnnualTopSpending(
+    selectedYearEntries
+    );
   } catch (error) {
     if (requestId !== fetchRequestId) {
       return; }
@@ -5195,27 +5207,44 @@ function buildAnnualExpenseTrendData(entries) {
             item.financial_type ===
             'Expense'
         );
-      const expense =
-        expenseEntries.reduce(
-          (sum, item) =>
-            sum +
-            Number(item.amount || 0),
-          0
-        );
+      let amount = 0;
+      if (selectedExpenseType) {
+        amount =
+          expenseEntries
+            .filter(
+              item =>
+                getExpenseType(item.title) ===
+                selectedExpenseType
+            )
+            .reduce(
+              (sum, item) =>
+                sum +
+                Number(item.amount || 0),
+              0
+            );
+      } else {
+        amount =
+          expenseEntries.reduce(
+            (sum, item) =>
+              sum +
+              Number(item.amount || 0),
+            0
+          );
+      }
       let state = 'NO_DATA';
-      if (
+      const isFutureMonth =
         selectedYear > currentYear ||
         (
           selectedYear === currentYear &&
           month > currentMonth
-        )
-      ) {
+        );
+      if (isFutureMonth) {
         state = 'FUTURE';
       } else if (
         monthEntries.length > 0
       ) {
         state =
-          expense > 0
+          amount > 0
             ? 'HAS_EXPENSE'
             : 'ZERO_EXPENSE';
       }
@@ -5228,8 +5257,10 @@ function buildAnnualExpenseTrendData(entries) {
           (
             months[index]?.name ||
             ''
-          ).slice(0, 3).toUpperCase(),
-        amount: expense,
+          )
+            .slice(0, 3)
+            .toUpperCase(),
+        amount,
         state,
         color:
           expenseBarPalette[
@@ -5248,6 +5279,24 @@ function renderAnnualExpenseTrend(entries) {
     );
   if (!container) return;
   closeAnnualExpenseTrendTooltip();
+  const subtitle =
+  document.querySelector(
+    '.annual-expense-trend-subtitle'
+    );
+  if (subtitle) {
+  if (selectedExpenseType === 'Fixed') {
+    subtitle.innerText =
+    'Fixed Expense Trend';
+  } else if (
+    selectedExpenseType === 'Variable'
+    ) {
+      subtitle.innerText =
+      'Variable Expense Trend';
+    } else {
+      subtitle.innerText =
+      'Expense Trend';
+    }
+  }
   const trendData =
     buildAnnualExpenseTrendData(
       entries
@@ -5752,6 +5801,106 @@ const axisLabels =
     }
    );
   }
+  
+  function renderAnnualTopSpending(entries) {
+  const container =
+    document.getElementById(
+      'annualTopSpendingList'
+    );
+  const title =
+    document.getElementById(
+      'annualTopSpendingTitle'
+    );
+  if (!container || !title) {
+    return; }
+  const trendData =
+    buildAnnualExpenseTrendData(
+      entries
+    );
+  const knownMonths =
+    trendData
+      .filter(
+        item =>
+          item.state === 'HAS_EXPENSE' ||
+          item.state === 'ZERO_EXPENSE'
+      )
+      .sort(
+        (a, b) =>
+          Number(b.amount || 0) -
+          Number(a.amount || 0)
+      );
+  if (selectedExpenseType === 'Fixed') {
+    title.innerText =
+      'TOP FIXED MONTHS';
+  } else if (
+    selectedExpenseType === 'Variable'
+  ) {
+    title.innerText =
+      'TOP VARIABLE MONTHS';
+  } else {
+    title.innerText =
+      'TOP SPENDING MONTHS'; }
+  const topMonths =
+    knownMonths.slice(0, 3);
+  if (topMonths.length === 0) {
+    const isFuture =
+      selectedYear > realCurrentYear;
+    let emptyText =
+      'No expense data for this year';
+    if (
+      selectedExpenseType === 'Fixed'
+    ) {
+      emptyText =
+        'No fixed expenses for this year';
+    } else if (
+      selectedExpenseType === 'Variable'
+    ) {
+      emptyText =
+        'No variable expenses for this year'; }
+    if (isFuture) {
+      emptyText =
+        'No expense data yet for this year'; }
+    container.innerHTML = `
+      <div class="top-spending-empty">
+        ${emptyText}
+      </div>
+    `;
+    return; }
+  const rankColor =
+    selectedExpenseType === 'Fixed'
+      ? '#A3CA7E'
+      : selectedExpenseType === 'Variable'
+        ? '#B0CBE7'
+        : 'var(--text-sub)';
+  container.innerHTML =
+    topMonths
+      .map((item, index) => `
+        <div class="top-spending-item">
+          <div
+            class="top-spending-rank"
+            style="color: ${rankColor};"
+          >
+            ${String(index + 1).padStart(2, '0')}
+          </div>
+          <div class="top-spending-name">
+            ${item.name}
+          </div>
+          <div class="top-spending-amount">
+            ฿${Number(
+              item.amount || 0
+            ).toLocaleString(
+              'en-US',
+              {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              }
+            )}
+          </div>
+        </div>
+      `)
+      .join('');
+  }
+  
   function renderYoY(
   elementId,
   currentValue,
