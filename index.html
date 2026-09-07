@@ -2923,7 +2923,9 @@ function changeInsightsPeriod(delta) {
     mode === 'year'
   );
   const handleTransitionEnd = event => {
-    if (event.propertyName !== 'width') {
+    if (
+      event.propertyName !== 'width'
+    ) {
       return; }
     if (
       event.target !== periodCapsule
@@ -2944,6 +2946,7 @@ function changeInsightsPeriod(delta) {
       'active',
       mode === 'year'
     );
+    beginInsightsContentLoading();
     insightsContent.classList.toggle(
       'is-year-mode',
       mode === 'year'
@@ -2958,18 +2961,20 @@ function changeInsightsPeriod(delta) {
     }
   };
   periodCapsule.addEventListener(
-  'transitionend',
-  handleTransitionEnd
+    'transitionend',
+    handleTransitionEnd
   );
   window.setTimeout(() => {
-    if (insightsViewModeTransitioning) {
+    if (
+      insightsViewModeTransitioning
+    ) {
       handleTransitionEnd({
         propertyName: 'width',
         target: periodCapsule
       });
     }
   }, 450);
-  }
+}
   
   function resetToCurrent() {
   selectedYear = realCurrentYear;
