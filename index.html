@@ -2663,6 +2663,8 @@ function changeInsightsPeriod(delta) {
   function setInsightsViewMode(mode) {
   if (mode !== 'month' && mode !== 'year') return;
   insightsViewMode = mode;
+  selectedExpenseType = null;
+  selectedExpenseTitle = null;
   const monthModeBtn =
     document.getElementById('insightsMonthModeBtn');
   const yearModeBtn =
