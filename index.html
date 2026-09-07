@@ -4,11 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Financial Overview</title>
+  
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Financial">
   <link rel="apple-touch-icon" href="icon.png">
   <link rel="icon" type="image/png" href="icon.png">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -660,16 +662,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   font-weight: 800;
   text-anchor: middle;
   dominant-baseline: middle;
-}
-
-.annual-expense-trend-line {
-  fill: none;
-  stroke: var(--text-sub);
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  opacity: 0.72;
-  vector-effect: non-scaling-stroke;
 }
 
 .annual-expense-trend-point {
@@ -2072,7 +2064,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         </div>
         </div>
       </section>
-      <section class="insights-section">
   <section
   class="insights-section"
   data-insights-mode="month"
@@ -5137,10 +5128,10 @@ function renderAnnualExpenseTrend(entries) {
     getAnnualTrendAxisMax(
       maxExpense
     );
-  const chartWidth = 1440;
+  const chartWidth = 720;
   const chartHeight = 286;
-  const plotLeft = 26;
-  const plotRight = 1414;
+  const plotLeft = 24;
+  const plotRight = 696;
   const plotTop = 22;
   const plotBottom = 226;
   const plotHeight =
