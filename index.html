@@ -825,9 +825,21 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
 
 .annual-expense-trend-point-dot {
+  opacity: 1;
   transition:
     r 0.18s ease,
-    stroke-width 0.18s ease;
+    stroke-width 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.annual-expense-trend-point.is-dimmed
+.annual-expense-trend-point-dot {
+  opacity: 0.28;
+}
+
+.annual-expense-trend-point.is-selected
+.annual-expense-trend-point-dot {
+  opacity: 1;
 }
 
 .annual-expense-trend-point.is-selected
@@ -5540,10 +5552,14 @@ function buildAnnualExpenseTrendData(entries) {
         amount,
         state,
         color:
-          expenseBarPalette[
-            index %
-            expenseBarPalette.length
-          ]
+           selectedExpenseType === 'Fixed'
+             ? '#A3CA7E'
+             : selectedExpenseType === 'Variable'
+               ? '#B0CBE7'
+               : expenseBarPalette[
+                   index %
+                   expenseBarPalette.length
+              ]
       };
     }
   );
@@ -5649,6 +5665,28 @@ function renderAnnualExpenseTrend(entries) {
           item.state === 'ZERO_EXPENSE'
       )
       .map(item => item.amount);
+  const topTrendMonths =
+    selectedExpenseType
+    ? trendData
+        .filter(
+          item =>
+            item.state === 'HAS_EXPENSE' ||
+            item.state === 'ZERO_EXPENSE'
+        )
+        .sort(
+          (a, b) =>
+            Number(b.amount || 0) -
+            Number(a.amount || 0)
+        )
+        .slice(0, 3)
+    : [];
+
+  const topTrendMonthSet =
+    new Set(
+    topTrendMonths.map(
+      item => item.month
+    )
+   );
   const maxExpense =
     Math.max(
       ...knownValues,
@@ -5827,11 +5865,21 @@ const axisLabels =
         const isZero =
           point.state ===
           'ZERO_EXPENSE';
+        const isTopTrendMonth =
+        !selectedExpenseType ||
+        topTrendMonthSet.has(
+          point.month
+          );
         return `
           <g
             class="
               annual-expense-trend-point
               ${isZero ? 'zero' : ''}
+              ${
+                !isTopTrendMonth
+                  ? 'is-dimmed'
+                  : ''
+              }
             "
             data-month="${point.month}"
             data-month-name="${point.name}"
