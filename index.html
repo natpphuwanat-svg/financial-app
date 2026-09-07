@@ -6726,14 +6726,18 @@ if (typeOrder[typeA] !== typeOrder[typeB]) {
 return typeOrder[typeA] - typeOrder[typeB]; }
 return Number(b.amount) - Number(a.amount); });
     if (highlights.length === 0) {
-  document.getElementById('entryList').innerHTML = `
-    <div class="highlight-card">
+      document.getElementById('entryList').innerHTML = `
+      <div class="highlight-card">
       <div class="highlight-empty">
-        No highlights yet.
+      No highlights yet.
       </div>
     </div>
-  `;
-  return; }
+    `;
+    finishInsightsContentLoading(
+      requestId
+      );
+      return; }
+      
     document.getElementById('entryList').innerHTML = `
       <div class="highlight-card">
         ${highlights.map(item => `
