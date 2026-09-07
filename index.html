@@ -5070,6 +5070,9 @@ function applyInsightsSummaryFutureState(
     renderAnnualTopSpending(
     selectedYearEntries
     );
+    finishInsightsContentLoading(
+    requestId
+    );
   } catch (error) {
     if (requestId !== fetchRequestId) {
       return; }
