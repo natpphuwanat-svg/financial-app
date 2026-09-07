@@ -582,22 +582,60 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .annual-expense-trend-card {
   position: relative;
   width: 100%;
-  overflow: visible;
 }
 
 .annual-expense-trend-chart {
   position: relative;
   width: 100%;
   height: 286px;
-  overflow: visible;
+  overflow: hidden;
+}
+
+.annual-expense-trend-scroll {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 64px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  touch-action: pan-x;
+}
+
+.annual-expense-trend-scroll::-webkit-scrollbar {
+  display: none;
 }
 
 .annual-expense-trend-svg {
   display: block;
-  width: 100%;
+  width: 720px;
+  min-width: 720px;
   height: 100%;
   overflow: visible;
-  touch-action: manipulation;
+  touch-action: pan-x;
+}
+
+.annual-expense-trend-y-axis {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 64px;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+  background: var(--bg-color);
+}
+
+.annual-expense-trend-line {
+  fill: none;
+  stroke: var(--text-sub);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.42;
+  vector-effect: non-scaling-stroke;
 }
 
 .annual-expense-trend-grid-line {
@@ -768,6 +806,15 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   opacity: 0.78;
 }
 
+.annual-expense-trend-axis-label-html {
+  color: var(--text-sub);
+  opacity: 0.72;
+  font-family: 'Inter', 'Noto Sans Thai', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 [data-theme="dark"]
 .annual-expense-trend-grid-line {
   stroke: rgba(148, 163, 184, 0.10);
@@ -775,7 +822,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 
 [data-theme="dark"]
 .annual-expense-trend-line {
-  opacity: 0.62;
+  opacity: 0.38;
 }
 .monthly-summary-card { background: var(--glass-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); overflow: hidden; }
 .monthly-summary-row { display: flex; align-items: center; justify-content: space-between; min-height: 58px; padding: 12px 18px; }
@@ -5092,10 +5139,10 @@ function renderAnnualExpenseTrend(entries) {
     getAnnualTrendAxisMax(
       maxExpense
     );
-  const chartWidth = 1000;
+  const chartWidth = 1440;
   const chartHeight = 286;
-  const plotLeft = 76;
-  const plotRight = 976;
+  const plotLeft = 26;
+  const plotRight = 1414;
   const plotTop = 22;
   const plotBottom = 226;
   const plotHeight =
@@ -5130,37 +5177,57 @@ function renderAnnualExpenseTrend(entries) {
     );
   const gridCount = 4;
   const gridLines =
-    Array.from(
-      { length: gridCount + 1 },
-      (_, index) => {
-        const ratio =
-          index / gridCount;
-        const value =
-          axisMax * (1 - ratio);
-        const y =
-          plotTop +
-          (
-            plotHeight *
-            ratio
-          );
-        return `
-          <line
-            class="annual-expense-trend-grid-line"
-            x1="${plotLeft}"
-            y1="${y}"
-            x2="${plotRight}"
-            y2="${y}"
-          ></line>
-          <text
-            class="annual-expense-trend-axis-label"
-            x="${plotLeft - 10}"
-            y="${y}"
-          >
-            ${formatAnnualTrendAxisAmount(value)}
-          </text>
-        `;
-      }
-    ).join('');
+  Array.from(
+    { length: gridCount + 1 },
+    (_, index) => {
+      const ratio =
+        index / gridCount;
+      const y =
+        plotTop +
+        (
+          plotHeight *
+          ratio
+        );
+      return `
+        <line
+          class="annual-expense-trend-grid-line"
+          x1="${plotLeft}"
+          y1="${y}"
+          x2="${plotRight}"
+          y2="${y}"
+        ></line>
+      `;
+    }
+  ).join('');
+const axisLabels =
+  Array.from(
+    { length: gridCount + 1 },
+    (_, index) => {
+      const ratio =
+        index / gridCount;
+      const value =
+        axisMax * (1 - ratio);
+      const y =
+        plotTop +
+        (
+          plotHeight *
+          ratio
+        );
+      return `
+        <div
+          class="annual-expense-trend-axis-label-html"
+          style="
+            position: absolute;
+            top: ${y}px;
+            right: 8px;
+            transform: translateY(-50%);
+          "
+        >
+          ${formatAnnualTrendAxisAmount(value)}
+        </div>
+      `;
+    }
+  ).join('');
   const monthLabels =
     points.map(point => `
       <text
@@ -5259,11 +5326,15 @@ function renderAnnualExpenseTrend(entries) {
         `;
       }).join('');
   container.innerHTML = `
-    <div class="annual-expense-trend-chart">
+  <div class="annual-expense-trend-chart">
+    <div
+      class="annual-expense-trend-y-axis"
+      id="annualExpenseTrendYAxis"
+    ></div>
+    <div class="annual-expense-trend-scroll">
       <svg
         class="annual-expense-trend-svg"
         viewBox="0 0 ${chartWidth} ${chartHeight}"
-        preserveAspectRatio="none"
         aria-label="Annual expense trend"
       >
         ${gridLines}
@@ -5271,21 +5342,29 @@ function renderAnnualExpenseTrend(entries) {
         ${pointMarkup}
         ${monthLabels}
       </svg>
-      <div
-        class="annual-expense-trend-tooltip"
-        id="annualExpenseTrendTooltip"
-      >
-        <div
-          class="annual-expense-trend-tooltip-month"
-          id="annualExpenseTrendTooltipMonth"
-        ></div>
-        <div
-          class="annual-expense-trend-tooltip-amount"
-          id="annualExpenseTrendTooltipAmount"
-        ></div>
-      </div>
     </div>
-  `;
+    <div
+      class="annual-expense-trend-tooltip"
+      id="annualExpenseTrendTooltip"
+    >
+      <div
+        class="annual-expense-trend-tooltip-month"
+        id="annualExpenseTrendTooltipMonth"
+      ></div>
+      <div
+        class="annual-expense-trend-tooltip-amount"
+        id="annualExpenseTrendTooltipAmount"
+      ></div>
+    </div>
+  </div>
+`;
+  const yAxis =
+  container.querySelector(
+    '#annualExpenseTrendYAxis'
+    );
+    if (yAxis) {
+      yAxis.innerHTML = axisLabels; }
+      
   const chart =
     container.querySelector(
       '.annual-expense-trend-chart'
@@ -5298,6 +5377,23 @@ function renderAnnualExpenseTrend(entries) {
     container.querySelector(
       '#annualExpenseTrendTooltip'
     );
+  const scrollArea =
+  container.querySelector(
+    '.annual-expense-trend-scroll'
+  );
+  if (scrollArea) {
+  scrollArea.addEventListener(
+    'scroll',
+    () => {
+      if (
+        annualExpenseTrendSelectedMonth !== null
+      ) {
+        closeAnnualExpenseTrendTooltip();
+      }
+    },
+    { passive: true }
+   );
+  }
   if (!chart || !svg || !tooltip) {
     return; }
   function showTooltip(pointElement) {
@@ -5341,42 +5437,41 @@ function renderAnnualExpenseTrend(entries) {
           point.amount
         );
     }
-    const svgRect =
-      svg.getBoundingClientRect();
+    const pointDot =
+    pointElement.querySelector(
+      '.annual-expense-trend-point-dot'
+      );
+      if (!pointDot) return;
+    const pointRect =
+    pointDot.getBoundingClientRect();
     const chartRect =
-      chart.getBoundingClientRect();
-    const xRatio =
-      point.x / chartWidth;
-    const yRatio =
-      point.y / chartHeight;
+    chart.getBoundingClientRect();
     const pointX =
-      (
-        svgRect.left -
-        chartRect.left
+    (
+      pointRect.left -
+      chartRect.left
       ) +
-      (
-        svgRect.width *
-        xRatio
+    (
+      pointRect.width / 2
       );
     const pointY =
-      (
-        svgRect.top -
-        chartRect.top
+    (
+      pointRect.top -
+      chartRect.top
       ) +
-      (
-        svgRect.height *
-        yRatio
+    (
+      pointRect.height / 2
       );
-    tooltip.classList.remove(
-      'is-below'
-    );
-    tooltip.style.left =
-      `${pointX}px`;
-    tooltip.style.top =
-      `${Math.max(
-        8,
-        pointY - 10
-      )}px`;
+      tooltip.classList.remove(
+        'is-below'
+        );
+        tooltip.style.left =
+        `${pointX}px`;
+        tooltip.style.top =
+        `${Math.max(
+          8,
+          pointY - 10
+          )}px`;
     requestAnimationFrame(() => {
       const tooltipRect =
         tooltip.getBoundingClientRect();
