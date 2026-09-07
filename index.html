@@ -208,15 +208,64 @@
   transition: width 0.38s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+#insightsView .period-picker-capsule {
+  overflow: hidden;
+}
+
+#insightsView .period-picker-capsule .month-picker {
+  width: 124px;
+  flex: 0 0 124px;
+  opacity: 1;
+  transition:
+    width 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    flex-basis 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.16s ease;
+}
+
+#insightsView .period-picker-capsule .period-picker-divider {
+  width: 1px;
+  flex: 0 0 1px;
+  margin-left: 9px;
+  margin-right: 9px;
+  opacity: 1;
+  transition:
+    width 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    flex-basis 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    margin 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.16s ease;
+}
+
+#insightsView .period-picker-capsule .year-picker {
+  width: 58px;
+  flex: 0 0 58px;
+  opacity: 1;
+  transition:
+    width 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    flex-basis 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 #insightsView .period-picker-capsule.is-year-mode {
-  width: 100px; }
-#insightsView .period-picker-capsule.is-year-mode .month-picker,
+  width: 100px;
+}
+
+#insightsView .period-picker-capsule.is-year-mode .month-picker {
+  width: 0;
+  flex-basis: 0;
+  opacity: 0;
+}
+
 #insightsView .period-picker-capsule.is-year-mode .period-picker-divider {
-  display: none; }
+  width: 0;
+  flex-basis: 0;
+  margin-left: 0;
+  margin-right: 0;
+  opacity: 0;
+}
 
 #insightsView .period-picker-capsule.is-year-mode .year-picker {
   width: 72px;
-  flex: 0 0 72px; }
+  flex-basis: 72px;
+}
 
 .period-picker {
   appearance: none;
@@ -2407,6 +2456,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   let selectedYear = realCurrentYear;
   let selectedMonth = realCurrentMonth;
   let insightsViewMode = 'month';
+  let insightsViewModeTransitioning = false;
   const months = [
   { name: 'January', m: 1 },
   { name: 'February', m: 2 },
@@ -2655,26 +2705,37 @@ function changeInsightsPeriod(delta) {
     closeAnnualExpenseTrendTooltip();
     updatePeriodUI();
     fetchAnnualData();
-    return;
+    return; }
+    changeMonth(delta);
   }
-  changeMonth(delta);
-}
   
   function setInsightsViewMode(mode) {
-  if (mode !== 'month' && mode !== 'year') return;
-  insightsViewMode = mode;
-  selectedExpenseType = null;
-  selectedExpenseTitle = null;
+  if (
+    mode !== 'month' &&
+    mode !== 'year'
+  ) {
+    return; }
+  if (
+    mode === insightsViewMode ||
+    insightsViewModeTransitioning
+  ) {
+    return; }
   const monthModeBtn =
-    document.getElementById('insightsMonthModeBtn');
+    document.getElementById(
+      'insightsMonthModeBtn'
+    );
   const yearModeBtn =
-    document.getElementById('insightsYearModeBtn');
+    document.getElementById(
+      'insightsYearModeBtn'
+    );
   const periodCapsule =
     document.querySelector(
       '#insightsView .period-picker-capsule'
     );
   const insightsContent =
-    document.getElementById('insightsContent');
+    document.getElementById(
+      'insightsContent'
+    );
   if (
     !monthModeBtn ||
     !yearModeBtn ||
@@ -2682,30 +2743,59 @@ function changeInsightsPeriod(delta) {
     !insightsContent
   ) {
     return; }
-  monthModeBtn.classList.toggle(
-    'active',
-    mode === 'month'
-  );
-  yearModeBtn.classList.toggle(
-    'active',
-    mode === 'year'
-  );
+  insightsViewModeTransitioning = true;
   periodCapsule.classList.toggle(
     'is-year-mode',
     mode === 'year'
   );
-  insightsContent.classList.toggle(
-    'is-year-mode',
-    mode === 'year'
+  const handleTransitionEnd = event => {
+    if (event.propertyName !== 'width') {
+      return; }
+    if (
+      event.target !== periodCapsule
+    ) {
+      return; }
+    periodCapsule.removeEventListener(
+      'transitionend',
+      handleTransitionEnd
+    );
+    insightsViewMode = mode;
+    selectedExpenseType = null;
+    selectedExpenseTitle = null;
+    monthModeBtn.classList.toggle(
+      'active',
+      mode === 'month'
+    );
+    yearModeBtn.classList.toggle(
+      'active',
+      mode === 'year'
+    );
+    insightsContent.classList.toggle(
+      'is-year-mode',
+      mode === 'year'
+    );
+    closeAnnualExpenseTrendTooltip();
+    updatePeriodUI();
+    insightsViewModeTransitioning = false;
+    if (mode === 'month') {
+      fetchData();
+    } else {
+      fetchAnnualData();
+    }
+  };
+  periodCapsule.addEventListener(
+  'transitionend',
+  handleTransitionEnd
   );
-  closeAnnualExpenseTrendTooltip();
-  updatePeriodUI();
-  if (mode === 'month') {
-    fetchData();
-  } else {
-    fetchAnnualData();
+  window.setTimeout(() => {
+    if (insightsViewModeTransitioning) {
+      handleTransitionEnd({
+        propertyName: 'width',
+        target: periodCapsule
+      });
+    }
+  }, 450);
   }
-}
   
   function resetToCurrent() {
   selectedYear = realCurrentYear;
