@@ -6775,8 +6775,10 @@ return Number(b.amount) - Number(a.amount); });
         `).join('')}
       </div>
     `;
-    lucide.createIcons();  
-  } catch (err) {
+    lucide.createIcons();
+    finishInsightsContentLoading(
+      requestId );
+    } catch (err) {
     if (requestId !== fetchRequestId) { return; }
     console.error('Supabase fetchData ERROR:', err);
     document.getElementById('entryList').innerHTML = `
