@@ -628,6 +628,94 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   display: none;
 }
 
+#insightsContent {
+  position: relative;
+  transition:
+    opacity 0.14s ease,
+    transform 0.14s ease;
+}
+
+#insightsContent.is-content-transitioning {
+  opacity: 0.35;
+  transform: translateY(2px);
+}
+
+#insightsContent.is-content-loading::after {
+  content: "";
+  position: absolute;
+  top: 126px;
+  left: 20px;
+  right: 20px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(114, 152, 199, 0.08) 18%,
+    rgba(114, 152, 199, 0.55) 50%,
+    rgba(114, 152, 199, 0.08) 82%,
+    transparent 100%
+  );
+  background-size: 220% 100%;
+  animation: insightsLoadingLine 1.05s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 20;
+}
+
+@keyframes insightsLoadingLine {
+  0% {
+    background-position: 100% 0;
+    opacity: 0.35;
+  }
+
+  50% {
+    background-position: 0% 0;
+    opacity: 0.85;
+  }
+
+  100% {
+    background-position: -100% 0;
+    opacity: 0.35;
+  }
+}
+
+#insightsContent.is-content-revealing {
+  animation: insightsContentReveal
+    0.26s
+    cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes insightsContentReveal {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #insightsContent {
+    transition: none;
+  }
+
+  #insightsContent.is-content-transitioning {
+    opacity: 0.55;
+    transform: none;
+  }
+
+  #insightsContent.is-content-loading::after {
+    animation: none;
+  }
+
+  #insightsContent.is-content-revealing {
+    animation: none;
+  }
+}
+
 .annual-expense-trend-subtitle {
   margin: 2px 0 8px;
   font-size: 11px;
@@ -2457,6 +2545,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   let selectedMonth = realCurrentMonth;
   let insightsViewMode = 'month';
   let insightsViewModeTransitioning = false;
+  let insightsContentTransitioning = false;
+  let insightsContentTransitionStartedAt = 0;
   const months = [
   { name: 'January', m: 1 },
   { name: 'February', m: 2 },
@@ -2668,6 +2758,90 @@ function updatePeriodUI() {
   if (insightsNextBtn) {
     insightsNextBtn.disabled = false;
   }
+}
+
+function beginInsightsContentLoading() {
+  const insightsContent =
+    document.getElementById(
+      'insightsContent'
+    );
+
+  if (!insightsContent) {
+    return;
+  }
+
+  insightsContentTransitioning = true;
+  insightsContentTransitionStartedAt =
+    Date.now();
+
+  insightsContent.classList.remove(
+    'is-content-revealing'
+  );
+
+  insightsContent.classList.add(
+    'is-content-transitioning'
+  );
+
+  insightsContent.classList.add(
+    'is-content-loading'
+  );
+}
+
+ function finishInsightsContentLoading(
+  requestId
+  ) {
+  if (
+    requestId !== fetchRequestId
+  ) {
+    return; }
+  if (
+    !insightsContentTransitioning
+  ) {
+    return; }
+  const insightsContent =
+    document.getElementById(
+      'insightsContent'
+    );
+  if (!insightsContent) {
+    return; }
+  const elapsed =
+    Date.now() -
+    insightsContentTransitionStartedAt;
+  const minimumLoadingTime = 180;
+  const remainingTime =
+    Math.max(
+      0,
+      minimumLoadingTime - elapsed
+    );
+  window.setTimeout(() => {
+    if (
+      requestId !== fetchRequestId
+    ) {
+      return; }
+    if (
+      !insightsContentTransitioning
+    ) {
+      return; }
+    insightsContent.classList.remove(
+      'is-content-loading'
+    );
+    insightsContent.classList.remove(
+      'is-content-transitioning'
+    );
+    requestAnimationFrame(() => {
+      insightsContent.classList.add(
+        'is-content-revealing'
+      );
+      window.setTimeout(() => {
+        insightsContent.classList.remove(
+          'is-content-revealing'
+        );
+      }, 280);
+    });
+    insightsContentTransitioning =
+      false;
+    insightsContentTransitionStartedAt = 0;
+  }, remainingTime);
 }
 
 function changeMonth(delta) {
