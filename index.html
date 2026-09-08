@@ -824,6 +824,10 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   transform-origin: center;
 }
 
+.annual-expense-trend-point-line-mask {
+  pointer-events: none;
+}
+
 .annual-expense-trend-point-dot {
   opacity: 1;
   transition:
@@ -866,6 +870,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   fill: var(--bg-color);
   stroke-width: 2.2;
 }
+
 
 .annual-expense-trend-point.zero
 .annual-expense-trend-point-ring {
@@ -5817,89 +5822,56 @@ const axisLabels =
       currentSegment
     );
   }
-  const trendDotRadius = 5.5;
-  const trendLineGap = 1.5;
   const trendLines =
-    segments
-    .filter(
-      segment =>
-        segment.length >= 2
-    )
-    .map(segment => {
-      const pathParts = [];
-      for (
-        let i = 1;
-        i < segment.length;
-        i++
-      ) {
-        const previous =
-          segment[i - 1];
-        const current =
-          segment[i];
-        const dx =
-          current.x -
-          previous.x;
-        const dy =
-          current.y -
-          previous.y;
-        const distance =
-          Math.sqrt(
-            (dx * dx) +
-            (dy * dy)
-          );
-        if (
-          distance === 0
-        ) {
-          continue; }
-        const unitX =
-          dx / distance;
-        const unitY =
-          dy / distance;
-        const gap =
-          trendDotRadius +
-          trendLineGap;
-        const startX =
-          previous.x +
-          (unitX * gap);
-        const startY =
-          previous.y +
-          (unitY * gap);
-        const endX =
-          current.x -
-          (unitX * gap);
-        const endY =
-          current.y -
-          (unitY * gap);
-        const controlOffset =
-          dx * 0.38;
-        const cp1x =
-          startX +
-          controlOffset;
-        const cp1y =
-          previous.y;
-        const cp2x =
-          endX -
-          controlOffset;
-        const cp2y =
-          current.y;
-        pathParts.push(`
-          M ${startX} ${startY}
-          C
-          ${cp1x} ${cp1y},
-          ${cp2x} ${cp2y},
-          ${endX} ${endY}
-        `);
-      }
-      return pathParts
-        .map(path => `
-          <path
-            class="annual-expense-trend-line"
-            d="${path}"
-          ></path>
-        `)
-        .join('');
-    })
-    .join('');
+  segments
+  .filter(
+    segment =>
+      segment.length >= 2
+  )
+  .map(segment => {
+    const pathParts = [];
+    for (
+      let i = 1;
+      i < segment.length;
+      i++
+    ) {
+      const previous =
+        segment[i - 1];
+      const current =
+        segment[i];
+      const dx =
+        current.x -
+        previous.x;
+      const controlOffset =
+        dx * 0.38;
+      const cp1x =
+        previous.x +
+        controlOffset;
+      const cp1y =
+        previous.y;
+      const cp2x =
+        current.x -
+        controlOffset;
+      const cp2y =
+        current.y;
+      pathParts.push(`
+        M ${previous.x} ${previous.y}
+        C
+        ${cp1x} ${cp1y},
+        ${cp2x} ${cp2y},
+        ${current.x} ${current.y}
+      `);
+    }
+    return pathParts
+      .map(path => `
+        <path
+          class="annual-expense-trend-line"
+          d="${path}"
+        ></path>
+      `)
+      .join('');
+  })
+  .join('');
   const pointMarkup =
     points
       .filter(
@@ -5933,6 +5905,13 @@ const axisLabels =
             data-month-name="${point.name}"
             data-amount="${point.amount}"
           >
+            <circle
+            class="annual-expense-trend-point-line-mask"
+            cx="${point.x}"
+            cy="${point.y}"
+            r="6.5"
+            fill="var(--bg-color)"
+          ></circle>
             ${
               !isZero
                 ? `
