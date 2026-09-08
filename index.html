@@ -834,7 +834,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 
 .annual-expense-trend-point.is-dimmed
 .annual-expense-trend-point-dot {
-  opacity: 0.35;
+  opacity: 0.60;
 }
 
 .annual-expense-trend-point.is-selected
@@ -887,7 +887,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   box-shadow: var(--glass-shadow);
   pointer-events: none;
   opacity: 0;
-  transform: translate(-50%, 4px) scale(0.96);
+  transform: translate(-50%, 6px) scale(0.96);
   transform-origin: center bottom;
   transition:
     opacity 0.18s ease,
@@ -901,7 +901,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 
 .annual-expense-trend-tooltip.is-below {
   transform-origin: center top;
-  transform: translate(-50%, -4px) scale(0.96);
+  transform: translate(-50%, -6px) scale(0.96);
 }
 
 .annual-expense-trend-tooltip.is-below.is-visible {
@@ -5817,39 +5817,87 @@ const axisLabels =
       currentSegment
     );
   }
+  const trendDotRadius = 5.5;
+  const trendLineGap = 1.5;
   const trendLines =
-  segments
-    .filter(segment =>
-      segment.length >= 2
+    segments
+    .filter(
+      segment =>
+        segment.length >= 2
     )
     .map(segment => {
-      let path = `M ${segment[0].x} ${segment[0].y}`;
-      for (let i = 1; i < segment.length; i++) {
-        const previous = segment[i - 1];
-        const current = segment[i];
-        const dx = current.x - previous.x;
-        const controlOffset = dx * 0.38;
+      const pathParts = [];
+      for (
+        let i = 1;
+        i < segment.length;
+        i++
+      ) {
+        const previous =
+          segment[i - 1];
+        const current =
+          segment[i];
+        const dx =
+          current.x -
+          previous.x;
+        const dy =
+          current.y -
+          previous.y;
+        const distance =
+          Math.sqrt(
+            (dx * dx) +
+            (dy * dy)
+          );
+        if (
+          distance === 0
+        ) {
+          continue; }
+        const unitX =
+          dx / distance;
+        const unitY =
+          dy / distance;
+        const gap =
+          trendDotRadius +
+          trendLineGap;
+        const startX =
+          previous.x +
+          (unitX * gap);
+        const startY =
+          previous.y +
+          (unitY * gap);
+        const endX =
+          current.x -
+          (unitX * gap);
+        const endY =
+          current.y -
+          (unitY * gap);
+        const controlOffset =
+          dx * 0.38;
         const cp1x =
-          previous.x + controlOffset;
+          startX +
+          controlOffset;
         const cp1y =
           previous.y;
         const cp2x =
-          current.x - controlOffset;
+          endX -
+          controlOffset;
         const cp2y =
           current.y;
-        path += `
+        pathParts.push(`
+          M ${startX} ${startY}
           C
           ${cp1x} ${cp1y},
           ${cp2x} ${cp2y},
-          ${current.x} ${current.y}
-        `;
+          ${endX} ${endY}
+        `);
       }
-      return `
-        <path
-          class="annual-expense-trend-line"
-          d="${path}"
-        ></path>
-      `;
+      return pathParts
+        .map(path => `
+          <path
+            class="annual-expense-trend-line"
+            d="${path}"
+          ></path>
+        `)
+        .join('');
     })
     .join('');
   const pointMarkup =
@@ -6049,31 +6097,52 @@ const axisLabels =
       tooltip.classList.remove(
         'is-below'
         );
-        tooltip.style.left =
+      tooltip.style.left =
         `${pointX}px`;
-        tooltip.style.top =
+      const pointClearance = 17;
+      tooltip.style.top =
         `${Math.max(
           8,
-          pointY - 10
+          pointY - pointClearance
           )}px`;
     requestAnimationFrame(() => {
       const tooltipRect =
-        tooltip.getBoundingClientRect();
+    tooltip.getBoundingClientRect();
       const chartRectNow =
-        chart.getBoundingClientRect();
-      const spaceAbove =
-        pointY;
+    chart.getBoundingClientRect();
       const tooltipHeight =
-        tooltipRect.height;
+    tooltipRect.height;
+      const tooltipGap = 8;
+      const preferredTop =
+      pointY -
+      9 -
+      tooltipGap -
+      tooltipHeight;
+      const spaceAbove =
+      pointY -
+      9;
       if (
-        spaceAbove <
-        tooltipHeight + 14
-      ) {
-        tooltip.classList.add(
-          'is-below'
+        spaceAbove >=
+        tooltipHeight +
+        tooltipGap +
+        8
+        ) {
+      tooltip.classList.remove(
+        'is-below'
         );
-        tooltip.style.top =
-          `${pointY + 10}px`; }
+      tooltip.style.top =
+        `${preferredTop}px`;
+      } else {
+      tooltip.classList.add(
+        'is-below'
+        );
+      tooltip.style.top =
+        `${
+        pointY +
+        9 +
+        tooltipGap
+        }px`;
+      }
       const halfWidth =
         tooltipRect.width / 2;
       const minX =
@@ -6084,19 +6153,18 @@ const axisLabels =
         6;
       const clampedX =
         Math.max(
-          minX,
-          Math.min(
-            maxX,
-            pointX
-          )
-        );
+        minX,
+        Math.min(
+        maxX,
+        pointX
+        )
+      );
       tooltip.style.left =
         `${clampedX}px`;
       tooltip.classList.add(
         'is-visible'
-      );
+        );
     });
-  }
   svg.addEventListener(
     'click',
     event => {
