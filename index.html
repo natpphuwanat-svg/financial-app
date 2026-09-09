@@ -3601,11 +3601,6 @@ Object.keys(grouped).forEach(type => {
   let paymentHistoryEntries = [];
   let previousMonthEntries = [];
   let monthlyComparisonResizeObserver = null;
-  let annualComparisonType = 'Expense';
-  let annualComparisonYears = [];
-  let annualComparisonEntries = [];
-  let annualComparisonAnchorYear = null;
-  const ANNUAL_COMPARISON_MAX_YEARS = 5;
   const monthlyComparisonTypeBtn =
   document.getElementById('monthlyComparisonTypeBtn');
   const monthlyComparisonTypeLabel =
@@ -4195,6 +4190,464 @@ function buildMonthlyComparisonRows(months, type) {
     });
   });
   return Object.values(groups); }
+
+function getAnnualComparisonDefaultYears(
+  anchorYear
+) {
+  return [
+    anchorYear - 1,
+    anchorYear
+  ];
+}
+
+function resetAnnualComparisonYears() {
+  annualComparisonAnchorYear =
+    selectedYear;
+  annualComparisonYears =
+    getAnnualComparisonDefaultYears(
+      selectedYear
+    );
+  updateAnnualComparisonYearLabel();
+  renderAnnualComparisonYearMenu(); }
+
+function updateAnnualComparisonYearLabel() {
+  const label =
+    document.getElementById(
+      'annualComparisonYearLabel'
+    );
+  if (!label) {
+    return; }
+  const count =
+    annualComparisonYears.length;
+  label.innerText =
+    `${count} ${count === 1 ? 'YEAR' : 'YEARS'}`; }
+
+function getAnnualComparisonAvailableYears() {
+  const minimumYear = 2025;
+  const currentYear =
+    new Date().getFullYear();
+  const futureBuffer = 10;
+  const maximumYear =
+    Math.max(
+      currentYear + futureBuffer,
+      selectedYear + futureBuffer
+    );
+  const years = [];
+  for (
+    let year = minimumYear;
+    year <= maximumYear;
+    year++
+  ) {
+    years.push(year);
+  }
+  return years; }
+
+function renderAnnualComparisonYearMenu() {
+  const menu =
+    document.getElementById(
+      'annualComparisonYearMenu'
+    );
+  if (!menu) {
+    return; }
+  const years =
+    getAnnualComparisonAvailableYears();
+  menu.innerHTML =
+    years
+      .map(year => {
+        const isSelected =
+          annualComparisonYears.includes(year);
+        const isAnchor =
+          year === annualComparisonAnchorYear;
+        const hasReachedLimit =
+          annualComparisonYears.length >=
+          ANNUAL_COMPARISON_MAX_YEARS;
+        const isDisabled =
+          !isSelected &&
+          hasReachedLimit;
+        return `
+          <button
+            type="button"
+            class="
+              annual-comparison-option
+              ${isAnchor ? 'is-anchor' : ''}
+              ${isDisabled ? 'is-disabled' : ''}
+            "
+            data-annual-year="${year}"
+            ${isDisabled ? 'disabled' : ''}
+          >
+            <span
+              class="
+                annual-comparison-year-check
+                ${isSelected ? '' : 'is-empty'}
+              "
+            >
+              ✓
+            </span>
+            <span>
+              ${year}
+            </span>
+          </button>
+        `;
+      })
+      .join('');
+  bindAnnualComparisonYearOptions();
+}
+
+function bindAnnualComparisonYearOptions() {
+  const options =
+    document.querySelectorAll(
+      '#annualComparisonYearMenu [data-annual-year]'
+    );
+  options.forEach(option => {
+    option.addEventListener(
+      'click',
+      async () => {
+        const year =
+          Number(
+            option.dataset.annualYear
+          );
+        await toggleAnnualComparisonYear(
+          year
+        );
+      }
+    );
+  });
+}
+
+async function toggleAnnualComparisonYear(year) {
+  const isSelected =
+    annualComparisonYears.includes(year);
+  const isAnchor =
+    year === annualComparisonAnchorYear;
+  if (isAnchor && isSelected) {
+    return; }
+  if (isSelected) {
+    annualComparisonYears =
+      annualComparisonYears.filter(
+        selectedComparisonYear =>
+          selectedComparisonYear !== year
+      );
+  } else {
+    if (
+      annualComparisonYears.length >=
+      ANNUAL_COMPARISON_MAX_YEARS
+    ) {
+      return; }
+    annualComparisonYears.push(year); }
+  annualComparisonYears.sort(
+    (a, b) => a - b
+  );
+  updateAnnualComparisonYearLabel();
+  renderAnnualComparisonYearMenu();
+  await loadAnnualComparisonData();
+}
+
+async function loadAnnualComparisonData() {
+  if (
+    !Array.isArray(
+      annualComparisonYears
+    ) ||
+    annualComparisonYears.length === 0
+  ) {
+    annualComparisonEntries = [];
+    renderAnnualComparison();
+    return; }
+  const sortedYears =
+    [...annualComparisonYears]
+      .sort((a, b) => a - b);
+  const firstYear =
+    sortedYears[0];
+  const lastYear =
+    sortedYears[
+      sortedYears.length - 1
+    ];
+  const startDate =
+    `${firstYear}-01-01`;
+  const endDate =
+    `${lastYear + 1}-01-01`;
+  try {
+    const { data, error } =
+      await supabaseClient
+        .from('financial_entries')
+        .select('*')
+        .gte(
+          'entry_date',
+          startDate
+        )
+        .lt(
+          'entry_date',
+          endDate
+        )
+        .order(
+          'entry_date',
+          {
+            ascending: false
+          }
+        );
+    if (error) {
+      throw error; }
+    annualComparisonEntries =
+      data || [];
+    renderAnnualComparison();
+  } catch (error) {
+    console.error(
+      'Annual Comparison error:',
+      error
+    );
+    annualComparisonEntries = [];
+    renderAnnualComparison();
+  }
+}
+
+function buildAnnualComparisonRows(
+  entries,
+  years,
+  type
+) {
+  const groups = {};
+  years.forEach(year => {
+    const yearEntries =
+      (entries || [])
+        .filter(item => {
+          const entryYear =
+            new Date(
+              item.entry_date
+            ).getFullYear();
+          return (
+            entryYear === year &&
+            item.financial_type === type
+          );
+        });
+    yearEntries.forEach(item => {
+      const title =
+        item.title || 'Untitled';
+      if (!groups[title]) {
+        groups[title] = {
+          title,
+          years: {}
+        };
+      }
+      if (
+        groups[title].years[year] ===
+        undefined
+      ) {
+        groups[title].years[year] = 0; }
+      groups[title].years[year] +=
+        Number(item.amount || 0);
+    });
+  });
+  return Object.values(groups);
+}
+
+function renderAnnualComparison() {
+  const table =
+    document.getElementById(
+      'annualComparisonTable'
+    );
+  const header =
+    document.getElementById(
+      'annualComparisonHeader'
+    );
+  const body =
+    document.getElementById(
+      'annualComparisonBody'
+    );
+  const tableWrap =
+    document.getElementById(
+      'annualComparisonTableWrap'
+    );
+  if (
+    !table ||
+    !header ||
+    !body ||
+    !tableWrap
+  ) {
+    return; }
+  const years =
+    [...annualComparisonYears]
+      .sort((a, b) => a - b);
+  tableWrap.scrollLeft = 0;
+  table.classList.remove(
+    'has-three-years',
+    'has-four-years',
+    'has-five-years'
+  );
+  if (years.length === 3) {
+    table.classList.add(
+      'has-three-years'
+    );
+  }
+  if (years.length === 4) {
+    table.classList.add(
+      'has-four-years'
+    );
+  }
+  if (years.length === 5) {
+    table.classList.add(
+      'has-five-years'
+    );
+  }
+  tableWrap.classList.toggle(
+    'is-scrollable',
+    years.length >= 3
+  );
+  header.innerHTML = `
+    <div
+      class="
+        annual-comparison-item-header
+      "
+    >
+      Item
+    </div>
+    ${years
+      .map(
+        year => `
+          <div
+            class="
+              annual-comparison-year
+            "
+          >
+            ${year}
+          </div>
+        `
+      )
+      .join('')}
+    <div
+      class="
+        annual-comparison-total
+      "
+    >
+      TOTAL
+    </div>
+  `;
+  if (years.length === 0) {
+    body.innerHTML = '';
+    return; }
+  const rows =
+    buildAnnualComparisonRows(
+      annualComparisonEntries,
+      years,
+      annualComparisonType
+    );
+  rows.sort(
+    (a, b) => {
+      const totalA =
+        years.reduce(
+          (sum, year) =>
+            sum +
+            Number(
+              a.years[year] || 0
+            ),
+          0
+        );
+      const totalB =
+        years.reduce(
+          (sum, year) =>
+            sum +
+            Number(
+              b.years[year] || 0
+            ),
+          0
+        );
+      return totalB - totalA;
+    }
+  );
+  if (rows.length === 0) {
+    body.innerHTML = '';
+    return; }
+  body.innerHTML =
+    rows
+      .map(row => {
+        const yearValues =
+          years
+            .map(year => {
+              const amount =
+                row.years[year];
+              if (
+                amount === undefined ||
+                amount === null
+              ) {
+                return `
+                  <div
+                    class="
+                      annual-comparison-value
+                      is-empty
+                    "
+                  >
+                    —
+                  </div>
+                `;
+              }
+              return `
+                <div
+                  class="
+                    annual-comparison-value
+                  "
+                >
+                  ${Number(
+                    amount
+                  ).toLocaleString(
+                    'en-US',
+                    {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2
+                    }
+                  )}
+                </div>
+              `;
+            })
+            .join('');
+        const total =
+          years.reduce(
+            (sum, year) => {
+              const amount =
+                row.years[year];
+              if (
+                amount === undefined ||
+                amount === null
+              ) {
+                return sum; }
+              return (
+                sum +
+                Number(amount || 0)
+              );
+            },
+            0
+          );
+        return `
+          <div
+            class="
+              annual-comparison-row
+            "
+          >
+            <div
+              class="
+                annual-comparison-item
+              "
+            >
+              ${row.title}
+            </div>
+            ${yearValues}
+            <div
+              class="
+                annual-comparison-value
+                annual-total
+              "
+            >
+              ${total.toLocaleString(
+                'en-US',
+                {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                }
+              )}
+            </div>
+          </div>
+        `;
+      })
+      .join('');
+}
+
 function renderExpenseTypeSummary(entries) {
   const container =
     document.getElementById('expenseTypeSummary');
