@@ -1815,6 +1815,235 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   font-size: 8px;
   font-weight: 600;
 }
+
+.annual-comparison-table-wrap {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  border-top: 1px solid var(--glass-border);
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
+}
+
+.annual-comparison-table-wrap.is-scrollable {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: none;
+  scrollbar-width: none;
+}
+
+.annual-comparison-table-wrap.is-scrollable::-webkit-scrollbar {
+  display: none;
+}
+
+.annual-comparison-table {
+  width: max-content;
+  min-width: 100%;
+  padding-left: 0;
+}
+
+.annual-comparison-header,
+.annual-comparison-row {
+  display: grid;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.annual-comparison-header.is-two-years,
+.annual-comparison-row.is-two-years {
+  grid-template-columns:
+    92px
+    repeat(2, minmax(0, 1fr))
+    92px;
+}
+
+.annual-comparison-header.is-three-years,
+.annual-comparison-row.is-three-years {
+  grid-template-columns:
+    92px
+    repeat(3, 85px)
+    92px;
+}
+
+.annual-comparison-header.is-four-years,
+.annual-comparison-row.is-four-years {
+  grid-template-columns:
+    92px
+    repeat(4, 85px)
+    92px;
+}
+
+.annual-comparison-header.is-five-years,
+.annual-comparison-row.is-five-years {
+  grid-template-columns:
+    92px
+    repeat(5, 85px)
+    92px;
+}
+
+.annual-comparison-row:last-child {
+  border-bottom: 0;
+}
+
+.annual-comparison-header > div,
+.annual-comparison-row > div {
+  min-width: 0;
+  border-right: 1px solid var(--glass-border);
+}
+
+.annual-comparison-header > div:last-child,
+.annual-comparison-row > div:last-child {
+  border-right: none;
+}
+
+.annual-comparison-year,
+.annual-comparison-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0 6px;
+  color: var(--text-sub);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+
+.annual-comparison-item-header {
+  justify-content: flex-start;
+  padding-left: 14px;
+}
+
+.annual-comparison-total {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0 6px;
+  color: var(--text-sub);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+
+.annual-comparison-item-header,
+.annual-comparison-item {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  background: var(--bg-color);
+}
+
+.annual-comparison-item {
+  display: flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 0 12px 0 14px;
+  color: var(--text-main);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.annual-comparison-value {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 38px;
+  padding: 0 8px;
+  color: var(--text-main);
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.annual-comparison-value.is-empty {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+  color: var(--text-sub);
+  font-size: 8px;
+  font-weight: 600;
+}
+
+.annual-comparison-value.period-total {
+  font-weight: 800;
+}
+
+.annual-comparison-year-menu {
+  width: 92px;
+  max-height: 325px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+
+.annual-comparison-year-menu::-webkit-scrollbar {
+  display: none;
+}
+
+.annual-comparison-year-option {
+  position: relative;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  align-items: center;
+  width: 100%;
+  min-height: 32px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.annual-comparison-year-option:active {
+  transform: scale(0.98);
+}
+
+.annual-comparison-year-option .checkmark {
+  width: 18px;
+  color: var(--lime-400);
+  font-size: 10px;
+  font-weight: 900;
+  text-align: left;
+}
+
+.annual-comparison-year-option.is-selected {
+  opacity: 1;
+}
+
+.annual-comparison-year-option:not(.is-selected) {
+  opacity: 0.55;
+}
+
+.annual-comparison-year-option.is-disabled {
+  opacity: 0.22;
+  cursor: not-allowed;
+}
+
+.annual-comparison-year-option.is-anchor {
+  cursor: default;
+}
+
+.annual-comparison-year-option.is-anchor .checkmark {
+  color: var(--lime-400);
+}
+
 .monthly-comparison-dropdown {
   position: relative;
 }
@@ -2517,6 +2746,113 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     </div>
   </div>
 </section>
+   <section
+  class="insights-section"
+  data-insights-mode="year"
+>
+  <div class="insights-section-title">
+    ANNUAL COMPARISON
+  </div>
+  <div class="monthly-comparison-card" id="annualComparisonCard">
+    <div class="monthly-comparison-controls">
+      <div class="monthly-comparison-dropdown">
+        <button
+          type="button"
+          class="monthly-comparison-select"
+          id="annualComparisonTypeBtn"
+          aria-label="Select comparison type"
+        >
+          <span id="annualComparisonTypeLabel">
+            EXPENSE
+          </span>
+          <i data-lucide="chevron-down"></i>
+        </button>
+        <div
+          class="monthly-comparison-dropdown-menu"
+          id="annualComparisonTypeMenu"
+          hidden
+        >
+          <button
+            type="button"
+            class="monthly-comparison-dropdown-option"
+            data-annual-type="Income"
+          >
+            INCOME
+          </button>
+          <button
+            type="button"
+            class="monthly-comparison-dropdown-option is-selected"
+            data-annual-type="Expense"
+          >
+            EXPENSE
+          </button>
+          <button
+            type="button"
+            class="monthly-comparison-dropdown-option"
+            data-annual-type="Deduction"
+          >
+            DEDUCTION
+          </button>
+        </div>
+      </div>
+      <div class="monthly-comparison-dropdown is-right">
+        <button
+          type="button"
+          class="monthly-comparison-select"
+          id="annualComparisonYearBtn"
+          aria-label="Select comparison years"
+        >
+          <span id="annualComparisonYearLabel">
+            —
+          </span>
+          <i data-lucide="chevron-down"></i>
+        </button>
+        <div
+          class="
+            monthly-comparison-dropdown-menu
+            annual-comparison-year-menu
+          "
+          id="annualComparisonYearMenu"
+          hidden
+        ></div>
+      </div>
+    </div>
+    <div
+      class="annual-comparison-table-wrap"
+      id="annualComparisonTableWrap"
+    >
+      <div
+        class="annual-comparison-table"
+        id="annualComparisonTable"
+      >
+        <div
+  class="
+    annual-comparison-header
+    is-two-years
+  "
+  id="annualComparisonHeader"
+>
+  <div class="annual-comparison-item-header">
+    Item
+  </div>
+  <div class="annual-comparison-year">
+    —
+  </div>
+  <div class="annual-comparison-year">
+    —
+  </div>
+  <div class="annual-comparison-total">
+    Total
+  </div>
+    </div>
+        <div
+          class="monthly-comparison-body"
+          id="annualComparisonBody"
+        ></div>
+      </div>
+    </div>
+  </div>
+</section>
     </main>
   </div>
   <!-- Floating Bottom Navigation -->
@@ -2588,6 +2924,9 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   let selectedMonth = realCurrentMonth;
   let insightsViewMode = 'month';
   let insightsViewModeTransitioning = false;
+  let annualComparisonYears = [
+  realCurrentYear - 1,
+  realCurrentYear ];
   let insightsContentTransitioning = false;
   let insightsContentTransitionStartedAt = 0;
   const months = [
@@ -2628,6 +2967,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       const newYear = Number(picker.value);
       if (!newYear || newYear < 2025) return;
       selectedYear = newYear;
+      resetAnnualComparisonYears();
       selectedExpenseType = null;
       selectedExpenseTitle = null;
       if (insightsViewMode === 'year') {
@@ -2758,6 +3098,137 @@ function populateMonthPickers() {
 
     picker.value = selectedMonth;
   });
+}
+
+function resetAnnualComparisonYears() {
+  const anchorYear = selectedYear;
+  const previousYear = anchorYear - 1;
+  annualComparisonYears =
+    previousYear >= 2025
+      ? [previousYear, anchorYear]
+      : [anchorYear];
+}
+
+function renderAnnualComparisonYearMenu() {
+  const menu =
+    document.getElementById(
+      'annualComparisonYearMenu'
+    );
+  if (!menu) {
+    return; }
+  const anchorYear = selectedYear;
+  const minYear =
+    Math.min(2025, anchorYear - 1);
+  const maxYear =
+    Math.max(
+      realCurrentYear + 10,
+      anchorYear + 10
+    );
+  const selectedSet =
+    new Set(annualComparisonYears);
+  const isMaxReached =
+    annualComparisonYears.length >= 5;
+  menu.innerHTML = '';
+  for (
+    let year = minYear;
+    year <= maxYear;
+    year++
+  ) {
+    const isSelected =
+      selectedSet.has(year);
+    const isAnchor =
+      year === anchorYear;
+    const isDisabled =
+      !isSelected &&
+      !isAnchor &&
+      isMaxReached;
+    const option =
+      document.createElement('button');
+    option.type = 'button';
+    option.className =
+      'annual-comparison-year-option';
+    if (isSelected) {
+      option.classList.add(
+        'is-selected'
+      );
+    }
+    if (isDisabled) {
+      option.classList.add(
+        'is-disabled'
+      );
+    }
+    if (isAnchor) {
+      option.classList.add(
+        'is-anchor'
+      );
+    }
+    option.dataset.year = year;
+    option.innerHTML = `
+      <span class="checkmark">
+        ${isSelected ? '✓' : ''}
+      </span>
+      <span>${year}</span>
+    `;
+    if (!isDisabled && !isAnchor) {
+      option.addEventListener(
+        'click',
+        async event => {
+          event.stopPropagation();
+          toggleAnnualComparisonYear(
+            year
+          );
+        }
+      );
+    }
+    menu.appendChild(option);
+  }
+}
+
+async function toggleAnnualComparisonYear(
+  year
+  ) {
+  const anchorYear = selectedYear;
+  if (year === anchorYear) {
+    return; }
+  const selectedIndex =
+    annualComparisonYears.indexOf(year);
+  if (selectedIndex !== -1) {
+    annualComparisonYears.splice(
+      selectedIndex,
+      1
+    );
+  } else {
+    if (
+      annualComparisonYears.length >= 5
+    ) {
+      return; }
+    annualComparisonYears.push(
+      year
+    );
+  }
+  annualComparisonYears.sort(
+    (a, b) => a - b
+  );
+  renderAnnualComparisonYearMenu();
+  updateAnnualComparisonYearLabel();
+  if (annualComparisonYearMenu) {
+    annualComparisonYearMenu.hidden =
+      false; }
+  await fetchAnnualComparison();
+}
+
+function updateAnnualComparisonYearLabel() {
+  const label =
+    document.getElementById(
+      'annualComparisonYearLabel'
+    );
+  if (!label) {
+    return; }
+  const years =
+    [...annualComparisonYears]
+      .sort((a, b) => a - b);
+  label.innerText =
+    years.join(', ');
 }
 
 function updatePeriodUI() {
@@ -2917,6 +3388,7 @@ function changeInsightsPeriod(delta) {
     const newYear = selectedYear + delta;
     if (newYear < 2025) return;
     selectedYear = newYear;
+    resetAnnualComparisonYears();
     selectedExpenseType = null;
     selectedExpenseTitle = null;
     closeAnnualExpenseTrendTooltip();
@@ -3000,6 +3472,16 @@ function changeInsightsPeriod(delta) {
     if (mode === 'month') {
       fetchData();
     } else {
+      resetAnnualComparisonYears();
+      renderAnnualComparisonYearMenu();
+      updateAnnualComparisonYearLabel();
+    const annualTypeLabel =
+    document.getElementById(
+      'annualComparisonTypeLabel'
+      );
+    if (annualTypeLabel) {
+      annualTypeLabel.innerText =
+      monthlyComparisonType.toUpperCase(); }
       fetchAnnualData();
     }
   };
@@ -3021,6 +3503,7 @@ function changeInsightsPeriod(delta) {
   
   function resetToCurrent() {
   selectedYear = realCurrentYear;
+  resetAnnualComparisonYears();
   selectedMonth = realCurrentMonth;
   selectedExpenseType = null;
   selectedExpenseTitle = null;
@@ -3209,6 +3692,18 @@ Object.keys(grouped).forEach(type => {
   document.getElementById('monthlyComparisonPeriodBtn');
   const monthlyComparisonPeriodLabel =
   document.getElementById('monthlyComparisonPeriodLabel');
+  const annualComparisonTypeBtn =
+  document.getElementById('annualComparisonTypeBtn');
+  const annualComparisonTypeLabel =
+  document.getElementById('annualComparisonTypeLabel');
+  const annualComparisonYearBtn =
+  document.getElementById('annualComparisonYearBtn');
+  const annualComparisonYearLabel =
+  document.getElementById('annualComparisonYearLabel');
+  const annualComparisonTypeMenu =
+  document.getElementById('annualComparisonTypeMenu');
+  const annualComparisonYearMenu =
+  document.getElementById('annualComparisonYearMenu');
   if (monthlyComparisonPeriodBtn) {
   monthlyComparisonPeriodBtn.addEventListener(
     'click',
@@ -3223,6 +3718,20 @@ Object.keys(grouped).forEach(type => {
     }
    );
   }
+  if (annualComparisonYearBtn) {
+  annualComparisonYearBtn.addEventListener(
+    'click',
+    event => {
+      event.stopPropagation();
+      renderAnnualComparisonYearMenu();
+      updateAnnualComparisonYearLabel();
+      if (annualComparisonYearMenu) {
+        annualComparisonYearMenu.hidden =
+          !annualComparisonYearMenu.hidden;
+      }
+     }
+   );
+  }
   if (monthlyComparisonTypeBtn) {
   monthlyComparisonTypeBtn.addEventListener(
     'click',
@@ -3234,6 +3743,18 @@ Object.keys(grouped).forEach(type => {
       if (!menu) {
         return; }
       menu.hidden = !menu.hidden;
+    }
+   );
+  }
+  if (annualComparisonTypeBtn) {
+  annualComparisonTypeBtn.addEventListener(
+    'click',
+    event => {
+      event.stopPropagation();
+      if (!annualComparisonTypeMenu) {
+        return; }
+      annualComparisonTypeMenu.hidden =
+        !annualComparisonTypeMenu.hidden;
     }
    );
   }
@@ -3290,6 +3811,18 @@ Object.keys(grouped).forEach(type => {
     )?.closest(
       '.monthly-comparison-dropdown'
     );
+  const annualTypeDropdown =
+    document.querySelector(
+      '#annualComparisonTypeBtn'
+    )?.closest(
+      '.monthly-comparison-dropdown'
+    );
+  const annualYearDropdown =
+    document.querySelector(
+      '#annualComparisonYearBtn'
+    )?.closest(
+      '.monthly-comparison-dropdown'
+    );
   if (
     typeDropdown &&
     !typeDropdown.contains(target)
@@ -3309,6 +3842,30 @@ Object.keys(grouped).forEach(type => {
     const menu =
       document.getElementById(
         'monthlyComparisonPeriodMenu'
+      );
+    if (menu) {
+      menu.hidden = true;
+    }
+  }
+  if (
+    annualTypeDropdown &&
+    !annualTypeDropdown.contains(target)
+  ) {
+    const menu =
+      document.getElementById(
+        'annualComparisonTypeMenu'
+      );
+    if (menu) {
+      menu.hidden = true;
+    }
+  }
+  if (
+    annualYearDropdown &&
+    !annualYearDropdown.contains(target)
+  ) {
+    const menu =
+      document.getElementById(
+        'annualComparisonYearMenu'
       );
     if (menu) {
       menu.hidden = true;
@@ -3790,6 +4347,288 @@ function buildMonthlyComparisonRows(months, type) {
     });
   });
   return Object.values(groups); }
+  
+async function fetchAnnualComparison(
+  requestId = null
+) {
+  const years =
+    [...annualComparisonYears]
+      .sort((a, b) => a - b);
+  if (years.length === 0) {
+    renderAnnualComparison([]);
+    return; }
+  const minYear =
+    Math.min(...years);
+  const maxYear =
+    Math.max(...years);
+  const start =
+    `${minYear}-01-01`;
+  const end =
+    `${maxYear + 1}-01-01`;
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from('financial_entries')
+    .select('*')
+    .gte('entry_date', start)
+    .lt('entry_date', end)
+    .order('entry_date', {
+      ascending: false
+    });
+  if (error) {
+    console.error(
+      'Annual Comparison fetch ERROR:',
+      error
+    );
+    renderAnnualComparison([]);
+    return; }
+  if (
+    requestId !== null &&
+    requestId !== fetchRequestId
+  ) {
+    return; }
+  renderAnnualComparison(
+    data || []
+  );
+}
+
+function buildAnnualComparisonRows(
+  entries,
+  years,
+  type
+  ) {
+  const groups = {};
+  (entries || [])
+    .filter(
+      item =>
+        item.financial_type === type
+    )
+    .forEach(item => {
+      const title =
+        item.title || 'Untitled';
+      const year =
+        new Date(
+          item.entry_date
+        ).getFullYear();
+      if (!years.includes(year)) {
+        return; }
+      if (!groups[title]) {
+        groups[title] = {
+          title,
+          years: {}
+        };
+      }
+      if (
+        !Object.prototype.hasOwnProperty.call(
+          groups[title].years,
+          year
+        )
+      ) {
+        groups[title].years[year] = 0; }
+      groups[title].years[year] +=
+        Number(item.amount || 0);
+    });
+  return Object.values(groups);
+}
+
+function renderAnnualComparison(
+  entries
+  ) {
+  const table =
+    document.getElementById(
+      'annualComparisonTable'
+    );
+  const tableWrap =
+    document.getElementById(
+      'annualComparisonTableWrap'
+    );
+  const header =
+    document.getElementById(
+      'annualComparisonHeader'
+    );
+  const body =
+    document.getElementById(
+      'annualComparisonBody'
+    );
+  if (
+    !table ||
+    !tableWrap ||
+    !header ||
+    !body
+  ) {
+    return; }
+  const years =
+    [...annualComparisonYears]
+      .sort((a, b) => a - b);
+  if (years.length === 0) {
+    body.innerHTML = '';
+    return; }
+  tableWrap.classList.toggle(
+    'is-scrollable',
+    years.length >= 3
+  );
+  header.classList.remove(
+    'is-two-years',
+    'is-three-years',
+    'is-four-years',
+    'is-five-years'
+  );
+  if (years.length === 2) {
+    header.classList.add(
+      'is-two-years'
+    );
+  } else if (years.length === 3) {
+    header.classList.add(
+      'is-three-years'
+    );
+  } else if (years.length === 4) {
+    header.classList.add(
+      'is-four-years'
+    );
+  } else {
+    header.classList.add(
+      'is-five-years'
+    );
+  }
+  header.innerHTML = `
+    <div class="annual-comparison-item-header">
+      Item
+    </div>
+
+    ${years
+      .map(
+        year => `
+          <div class="annual-comparison-year">
+            ${year}
+          </div>
+        `
+      )
+      .join('')}
+    <div class="annual-comparison-total">
+      Total
+    </div>
+  `;
+  const rows =
+    buildAnnualComparisonRows(
+      entries,
+      years,
+      monthlyComparisonType
+    );
+  rows.sort((a, b) => {
+    const aValue =
+      Number(
+        a.years[selectedYear] ?? 0
+      );
+    const bValue =
+      Number(
+        b.years[selectedYear] ?? 0
+      );
+    return bValue - aValue;
+  });
+  if (rows.length === 0) {
+    body.innerHTML = '';
+    return; }
+  body.innerHTML =
+    rows
+      .map(row => {
+        const values =
+          years.map(year => {
+            const hasData =
+              Object.prototype.hasOwnProperty.call(
+                row.years,
+                year
+              );
+            if (!hasData) {
+              return `
+                <div
+                  class="
+                    annual-comparison-value
+                    is-empty
+                  "
+                >
+                  —
+                </div>
+              `;
+            }
+            return `
+              <div
+                class="
+                  annual-comparison-value
+                "
+              >
+                ${Number(
+                  row.years[year]
+                ).toLocaleString(
+                  'en-US',
+                  {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                  }
+                )}
+              </div>
+            `;
+          });
+        const total =
+          years.reduce(
+            (sum, year) => {
+              if (
+                !Object.prototype.hasOwnProperty.call(
+                  row.years,
+                  year
+                )
+              ) {
+                return sum; }
+              return (
+                sum +
+                Number(
+                  row.years[year] || 0
+                )
+              );
+            },
+            0
+          );
+        values.push(`
+          <div
+            class="
+              annual-comparison-value
+              period-total
+            "
+          >
+            ${total.toLocaleString(
+              'en-US',
+              {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              }
+            )}
+          </div>
+        `);
+        return `
+          <div
+            class="
+              annual-comparison-row
+              ${
+                years.length === 2
+                  ? 'is-two-years'
+                  : years.length === 3
+                    ? 'is-three-years'
+                    : years.length === 4
+                      ? 'is-four-years'
+                      : 'is-five-years'
+              }
+            "
+          >
+            <div class="annual-comparison-item">
+              ${row.title}
+            </div>
+            ${values.join('')}
+          </div>
+        `;
+      })
+      .join('');
+  }
+
 function renderExpenseTypeSummary(entries) {
   const container =
     document.getElementById('expenseTypeSummary');
@@ -5319,6 +6158,7 @@ function applyInsightsSummaryFutureState(
     renderAnnualTopSpending(
     selectedYearEntries
     );
+    await fetchAnnualComparison();
     finishInsightsContentLoading(
     requestId
     );
