@@ -1677,7 +1677,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   grid-template-columns:
     92px
     repeat(3, var(--monthly-comparison-month-width))
-    100px;
+    95px;
   border-bottom: 1px solid var(--glass-border);
 }
 
@@ -1690,7 +1690,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   grid-template-columns:
     92px
     repeat(6, 85px)
-    100px;
+    95px;
 }
 
 .monthly-comparison-table.is-nine-months .monthly-comparison-header,
@@ -1698,7 +1698,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   grid-template-columns:
     92px
     repeat(9, 85px)
-    100px;
+    95px;
 }
 
 .monthly-comparison-table.is-twelve-months .monthly-comparison-header,
@@ -1706,7 +1706,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   grid-template-columns:
     92px
     repeat(12, 85px)
-    100px;
+    95px;
 }
 
 .monthly-comparison-header > div,
@@ -3200,6 +3200,7 @@ Object.keys(grouped).forEach(type => {
   let monthlyComparisonPeriod = 3;
   let paymentHistoryEntries = [];
   let previousMonthEntries = [];
+  let monthlyComparisonResizeObserver = null;
   const monthlyComparisonTypeBtn =
   document.getElementById('monthlyComparisonTypeBtn');
   const monthlyComparisonTypeLabel =
@@ -3420,6 +3421,39 @@ function formatMonthlyComparisonMonth(
     String(monthData.year).slice(-2);
   return `${monthName} ’${shortYear}`; }
   
+function updateMonthlyComparisonThreeMonthLayout() {
+  const table =
+    document.getElementById(
+      'monthlyComparisonTable'
+    );
+  const tableWrap =
+    document.querySelector(
+      '.monthly-comparison-table-wrap'
+    );
+  if (
+    !table ||
+    !tableWrap ||
+    monthlyComparisonPeriod !== 3
+  ) {
+    return; }
+  const viewportWidth =
+    tableWrap.clientWidth;
+  if (viewportWidth <= 0) {
+    return; }
+  const itemWidth = 92;
+  const periodTotalWidth = 110;
+  const monthWidth =
+    (viewportWidth - itemWidth) / 3;
+  if (monthWidth <= 0) {
+    return; }
+  table.style.setProperty(
+    '--monthly-comparison-month-width',
+    `${monthWidth}px`
+  );
+  table.style.width =
+    `${viewportWidth + periodTotalWidth}px`;
+}
+  
 function renderMonthlyComparison(months) {
   const body =
     document.getElementById('monthlyComparisonBody');
@@ -3497,28 +3531,13 @@ function renderMonthlyComparison(months) {
       'is-twelve-months',
       isTwelveMonths
     );
-    if (isThreeMonths && tableWrap) {
-      const viewportWidth =
-        tableWrap.clientWidth;
-      const itemWidth = 92;
-      const periodTotalWidth = 110;
-      const monthWidth =
-        Math.max(
-          1,
-          (viewportWidth - itemWidth) / 3
-        );
-      table.style.setProperty(
-        '--monthly-comparison-month-width',
-        `${monthWidth}px`
-      );
-      table.style.width =
-        `${viewportWidth + periodTotalWidth}px`;
+    if (isThreeMonths) {
+      updateMonthlyComparisonThreeMonthLayout();
     } else {
       table.style.removeProperty(
         '--monthly-comparison-month-width'
-      );
-      table.style.removeProperty('width');
-    }
+        );
+      table.style.removeProperty('width'); }
   }
   if (
     !Array.isArray(months) ||
@@ -3659,39 +3678,34 @@ function renderMonthlyComparison(months) {
         `;
       })
       .join('');
+      if (isThreeMonths) {
+        requestAnimationFrame(() => {
+          updateMonthlyComparisonThreeMonthLayout();
+        });
+      }
 }
 
-window.addEventListener('resize', () => {
-  const table =
-    document.getElementById(
-      'monthlyComparisonTable'
-    );
+function setupMonthlyComparisonResizeObserver() {
   const tableWrap =
     document.querySelector(
       '.monthly-comparison-table-wrap'
     );
-  if (
-    !table ||
-    !tableWrap ||
-    monthlyComparisonPeriod !== 3
-  ) {
+  if (!tableWrap) {
     return; }
-  const viewportWidth =
-    tableWrap.clientWidth;
-  const itemWidth = 92;
-  const periodTotalWidth = 110;
-  const monthWidth =
-    Math.max(
-      1,
-      (viewportWidth - itemWidth) / 3
-    );
-  table.style.setProperty(
-    '--monthly-comparison-month-width',
-    `${monthWidth}px`
+  if (monthlyComparisonResizeObserver) {
+    monthlyComparisonResizeObserver.disconnect(); }
+    monthlyComparisonResizeObserver =
+    new ResizeObserver(() => {
+      if (monthlyComparisonPeriod !== 3) {
+        return; }
+      updateMonthlyComparisonThreeMonthLayout();
+    });
+  monthlyComparisonResizeObserver.observe(
+    tableWrap
   );
-  table.style.width =
-    `${viewportWidth + periodTotalWidth}px`;
-});
+}
+
+setupMonthlyComparisonResizeObserver();
 
 async function fetchPaymentHistory() {
   const { data, error } =
@@ -3707,6 +3721,7 @@ async function fetchPaymentHistory() {
   if (error) {
     throw error; }
   return data || []; }
+  
 async function fetchMonthlyComparisonMonths(period = 3) {
   const months = [];
   for (
@@ -3748,6 +3763,7 @@ async function fetchMonthlyComparisonMonths(period = 3) {
     });
   }
   return months; }
+  
 function buildMonthlyComparisonRows(months, type) {
   const groups = {};
   months.forEach(monthData => {
