@@ -1451,11 +1451,11 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 10px;
+  gap: 9px;
   width: auto;
-  margin-bottom: 8px;
+  margin: 0 0 8px;
   padding: 0;
-  border: none;
+  border: 0;
   background: transparent;
   font-family: inherit;
   font-size: 13px;
@@ -1471,6 +1471,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 
 .top-spending-title-label {
   display: inline-block;
+  line-height: 1.2;
 }
 
 .top-spending-title-chevron,
@@ -1478,21 +1479,29 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 auto;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: rgba(100, 116, 139, 0.10);
-  border: 1px solid rgba(100, 116, 139, 0.08);
-  color: var(--text-sub);
-  font-size: 15px;
-  font-weight: 500;
-  line-height: 1;
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
+  border-radius: 50%;
+  background: rgba(100, 116, 139, 0.055);
+  border: 1px solid rgba(100, 116, 139, 0.045);
+  color: var(--text-sub);
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: center;
+  overflow: hidden;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
-.top-spending-title-chevron {
-  transform: translateY(-1px);
+.top-spending-title-chevron,
+.top-spending-item-chevron {
+  transform: translateY(-0.5px);
 }
 
 .annual-top-spending-title {
@@ -1503,64 +1512,24 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
 
 .annual-top-spending-title:active {
-  transform: scale(0.97);
+  transform: scale(0.975);
 }
 
+.annual-top-spending-title
 .top-spending-title-chevron {
-  transition:
-    background 0.18s ease,
-    border-color 0.18s ease,
-    transform 0.18s ease;
-}
-
-.annual-top-spending-title-chevron {
-  font-size: 14px;
-  transform: translateY(-1px);
-}
-
-.annual-top-spending-title[aria-expanded="true"]
-.top-spending-title-chevron {
-  transform: translateY(-1px);
-}
-
-.annual-top-spending-section
-.top-spending-item.is-clickable {
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.annual-top-spending-section
-.top-spending-item.is-clickable:active {
-  transform: scale(0.985);
-}
-
-.top-spending-item-chevron {
-  margin-left: 0;
-  font-size: 14px;
-  align-self: start;
-  margin-top: 1px;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 20px;
+  transform: translateY(-0.5px);
 }
 
 [data-theme="dark"]
 .top-spending-title-chevron,
 [data-theme="dark"]
 .top-spending-item-chevron {
-  background: rgba(148, 163, 184, 0.10);
-  border-color: rgba(148, 163, 184, 0.10);
-}
-
-.annual-top-spending-title {
-  cursor: pointer;
-}
-
-.annual-top-spending-title:active {
-  transform: scale(0.985);
-}
-
-.annual-top-spending-title .top-spending-title-chevron {
-  transition:
-    transform 0.2s ease,
-    opacity 0.2s ease;
+  background: rgba(148, 163, 184, 0.055);
+  border-color: rgba(148, 163, 184, 0.055);
 }
 
 .top-spending-list {
@@ -1576,7 +1545,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   grid-template-columns:
     23px
     minmax(0, 1fr)
-    auto;
+    20px;
   grid-template-rows:
     auto
     auto;
@@ -1608,11 +1577,13 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   font-weight: 700;
   line-height: 1.25;
   color: var(--text-main);
+  text-align: left;
 }
 
 .top-spending-amount {
   grid-column: 2;
   grid-row: 2;
+  min-width: 0;
   font-size: 12px;
   font-weight: 800;
   line-height: 1.2;
@@ -1625,57 +1596,26 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   grid-column: 3;
   grid-row: 1;
   align-self: start;
+  justify-self: end;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  transform: translateY(-0.5px);
 }
 
 .annual-top-spending-section
 .top-spending-item.is-clickable {
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 0.16s ease,
+    opacity 0.16s ease;
 }
 
 .annual-top-spending-section
 .top-spending-item.is-clickable:active {
   transform: scale(0.985);
-}
-
-.top-spending-item-chevron {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
-  margin-left: 2px;
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 1;
-  color: var(--text-sub);
-  opacity: 0.78;
-}
-
-.top-spending-rank {
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--text-sub);
-  line-height: 1;
-  text-align: left;
-}
-
-.top-spending-name {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text-main);
-}
-
-.top-spending-amount {
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--text-main);
-  white-space: nowrap;
-  text-align: right;
 }
 
 .top-spending-empty {
