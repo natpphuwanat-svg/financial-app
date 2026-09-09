@@ -1674,7 +1674,10 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .monthly-comparison-header,
 .monthly-comparison-row {
   display: grid;
-  grid-template-columns: 92px repeat(3, 1fr);
+  grid-template-columns:
+    92px
+    repeat(3, var(--monthly-comparison-month-width))
+    110px;
   border-bottom: 1px solid var(--glass-border);
 }
 
@@ -1684,15 +1687,26 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 
 .monthly-comparison-table.is-six-months .monthly-comparison-header,
 .monthly-comparison-table.is-six-months .monthly-comparison-row {
-  grid-template-columns: 92px repeat(6, 85px);
+  grid-template-columns:
+    92px
+    repeat(6, 85px)
+    110px;
 }
-.monthly-comparison-table.is-nine-months  .monthly-comparison-header,
-.monthly-comparison-table.is-nine-months  .monthly-comparison-row {
-  grid-template-columns: 92px repeat(9, 85px);
+
+.monthly-comparison-table.is-nine-months .monthly-comparison-header,
+.monthly-comparison-table.is-nine-months .monthly-comparison-row {
+  grid-template-columns:
+    92px
+    repeat(9, 85px)
+    110px;
 }
-.monthly-comparison-table.is-twelve-months  .monthly-comparison-header,
-.monthly-comparison-table.is-twelve-months  .monthly-comparison-row {
-  grid-template-columns: 92px repeat(12, 85px);
+
+.monthly-comparison-table.is-twelve-months .monthly-comparison-header,
+.monthly-comparison-table.is-twelve-months .monthly-comparison-row {
+  grid-template-columns:
+    92px
+    repeat(12, 85px)
+    110px;
 }
 
 .monthly-comparison-header > div,
@@ -1721,6 +1735,22 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .monthly-comparison-month {
   justify-content: center;
   padding: 0 6px;
+}
+
+.monthly-comparison-total {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  color: var(--text-sub);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+
+.monthly-comparison-value.period-total {
+  font-weight: 800;
 }
 
 .monthly-comparison-header {
@@ -1776,15 +1806,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .monthly-comparison-row > div:last-child {
   border-right: none;
 }
-.monthly-comparison-table:not(.is-six-months) .monthly-comparison-header > div:nth-child(4) {
-  border-right: none;
-}
-.monthly-comparison-table.is-six-months .monthly-comparison-header > div:nth-child(4) {
-  border-right: 1px solid var(--glass-border);
-}
-.monthly-comparison-table.is-six-months .monthly-comparison-header > div:last-child {
-  border-right: none;
-}
+
 .monthly-comparison-value.is-empty {
   justify-content: center;
   color: var(--text-sub);
@@ -2472,6 +2494,9 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         id="monthlyComparisonMonth12"
       >
         —
+      </div>
+      <div class="monthly-comparison-total">
+        PERIOD TOTAL
       </div>
     </div>
     <div
@@ -3394,32 +3419,69 @@ function formatMonthlyComparisonMonth(
   const shortYear =
     String(monthData.year).slice(-2);
   return `${monthName} ’${shortYear}`; }
+  
 function renderMonthlyComparison(months) {
-  const body = document.getElementById('monthlyComparisonBody');
-  const month1 = document.getElementById('monthlyComparisonMonth1');
-  const month2 = document.getElementById('monthlyComparisonMonth2');
-  const month3 = document.getElementById('monthlyComparisonMonth3');
-  const month4 = document.getElementById('monthlyComparisonMonth4');
-  const month5 = document.getElementById('monthlyComparisonMonth5');
-  const month6 = document.getElementById('monthlyComparisonMonth6');
-  const month7 = document.getElementById('monthlyComparisonMonth7');
-  const month8 = document.getElementById('monthlyComparisonMonth8');
-  const month9 = document.getElementById('monthlyComparisonMonth9');
-  const month10 = document.getElementById('monthlyComparisonMonth10');
-  const month11 = document.getElementById('monthlyComparisonMonth11');
-  const month12 = document.getElementById('monthlyComparisonMonth12');
-  const table = document.getElementById('monthlyComparisonTable');
-  const tableWrap = document.querySelector('.monthly-comparison-table-wrap');
-  if (!body || !month1 || !month2 || !month3 || !month4 || !month5 || !month6 ||
-                !month7 || !month8 || !month9 || !month10 || !month11 || !month12 ) return;
-  const isSixMonths = months && months.length === 6;
-  const isNineMonths = months && months.length === 9;
-  const isTwelveMonths = months && months.length === 12;
+  const body =
+    document.getElementById('monthlyComparisonBody');
+  const month1 =
+    document.getElementById('monthlyComparisonMonth1');
+  const month2 =
+    document.getElementById('monthlyComparisonMonth2');
+  const month3 =
+    document.getElementById('monthlyComparisonMonth3');
+  const month4 =
+    document.getElementById('monthlyComparisonMonth4');
+  const month5 =
+    document.getElementById('monthlyComparisonMonth5');
+  const month6 =
+    document.getElementById('monthlyComparisonMonth6');
+  const month7 =
+    document.getElementById('monthlyComparisonMonth7');
+  const month8 =
+    document.getElementById('monthlyComparisonMonth8');
+  const month9 =
+    document.getElementById('monthlyComparisonMonth9');
+  const month10 =
+    document.getElementById('monthlyComparisonMonth10');
+  const month11 =
+    document.getElementById('monthlyComparisonMonth11');
+  const month12 =
+    document.getElementById('monthlyComparisonMonth12');
+  const table =
+    document.getElementById('monthlyComparisonTable');
+  const tableWrap =
+    document.querySelector(
+      '.monthly-comparison-table-wrap'
+    );
+  if (
+    !body ||
+    !month1 ||
+    !month2 ||
+    !month3 ||
+    !month4 ||
+    !month5 ||
+    !month6 ||
+    !month7 ||
+    !month8 ||
+    !month9 ||
+    !month10 ||
+    !month11 ||
+    !month12
+  ) {
+    return; }
+  const isThreeMonths =
+    months && months.length === 3;
+  const isSixMonths =
+    months && months.length === 6;
+  const isNineMonths =
+    months && months.length === 9;
+  const isTwelveMonths =
+    months && months.length === 12;
   if (tableWrap) {
     tableWrap.scrollLeft = 0;
     tableWrap.classList.toggle(
       'is-scrollable',
-      months && months.length > 3
+      months && months.length >= 3
     );
   }
   if (table) {
@@ -3435,49 +3497,202 @@ function renderMonthlyComparison(months) {
       'is-twelve-months',
       isTwelveMonths
     );
+    if (isThreeMonths && tableWrap) {
+      const viewportWidth =
+        tableWrap.clientWidth;
+      const itemWidth = 92;
+      const periodTotalWidth = 110;
+      const monthWidth =
+        Math.max(
+          1,
+          (viewportWidth - itemWidth) / 3
+        );
+      table.style.setProperty(
+        '--monthly-comparison-month-width',
+        `${monthWidth}px`
+      );
+      table.style.width =
+        `${viewportWidth + periodTotalWidth}px`;
+    } else {
+      table.style.removeProperty(
+        '--monthly-comparison-month-width'
+      );
+      table.style.removeProperty('width');
+    }
   }
-  if (!Array.isArray(months) || ![3, 6, 9, 12].includes(months.length)) {
+  if (
+    !Array.isArray(months) ||
+    ![3, 6, 9, 12].includes(months.length)
+  ) {
     body.innerHTML = '';
     return; }
-  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  const monthElements = [month1, month2, month3, month4, month5, month6, month7, month8, month9, month10, month11, month12 ];
-  monthElements.forEach((element, index) => {
-    if (months[index]) {
-      element.innerText = formatMonthlyComparisonMonth (months[index], months, monthNames);
-      element.style.display = 'flex';
-    } else {
-      element.innerText = '';
-      element.style.display = 'none';
+  const monthNames = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'
+  ];
+  const monthElements = [
+    month1,
+    month2,
+    month3,
+    month4,
+    month5,
+    month6,
+    month7,
+    month8,
+    month9,
+    month10,
+    month11,
+    month12
+  ];
+  monthElements.forEach(
+    (element, index) => {
+      if (months[index]) {
+        element.innerText =
+          formatMonthlyComparisonMonth(
+            months[index],
+            months,
+            monthNames
+          );
+        element.style.display = 'flex';
+      } else {
+        element.innerText = '';
+        element.style.display = 'none';
+      }
     }
-  });
-  const rows = buildMonthlyComparisonRows(months, monthlyComparisonType);
+  );
+  const rows =
+    buildMonthlyComparisonRows(
+      months,
+      monthlyComparisonType
+    );
   if (rows.length === 0) {
     body.innerHTML = '';
     return; }
-  const lastMonth = months[months.length - 1];
-  const lastMonthKey = `${lastMonth.year}-${lastMonth.month}`;
-  rows.sort((a, b) => Number(b.months[lastMonthKey] || 0) - Number(a.months[lastMonthKey] || 0));
-  body.innerHTML = rows.map(row => {
-    const values = months.map(monthData => {
-      const key = `${monthData.year}-${monthData.month}`;
-      const amount = row.months[key];
-      if (amount === undefined || amount === null) {
-        return `<div class="monthly-comparison-value is-empty">—</div>`;
-      }
-      return `
-        <div class="monthly-comparison-value">
-          ${Number(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-        </div>
-      `;
-    });
-    return `
-      <div class="monthly-comparison-row">
-        <div class="monthly-comparison-item">${row.title}</div>
-        ${values.join('')}
-      </div>
-    `;
-  }).join('');
+  const lastMonth =
+    months[months.length - 1];
+  const lastMonthKey =
+    `${lastMonth.year}-${lastMonth.month}`;
+  rows.sort(
+    (a, b) =>
+      Number(
+        b.months[lastMonthKey] || 0
+      ) -
+      Number(
+        a.months[lastMonthKey] || 0
+      )
+  );
+  body.innerHTML =
+    rows
+      .map(row => {
+        const values =
+          months.map(monthData => {
+            const key =
+              `${monthData.year}-${monthData.month}`;
+            const amount =
+              row.months[key];
+            if (
+              amount === undefined ||
+              amount === null
+            ) {
+              return `
+                <div class="monthly-comparison-value is-empty">
+                  —
+                </div>
+              `;
+            }
+            return `
+              <div class="monthly-comparison-value">
+                ${Number(amount).toLocaleString(
+                  'en-US',
+                  {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                  }
+                )}
+              </div>
+            `;
+          });
+        const periodTotal =
+          months.reduce(
+            (sum, monthData) => {
+              const key =
+                `${monthData.year}-${monthData.month}`;
+              const amount =
+                row.months[key];
+              if (
+                amount === undefined ||
+                amount === null
+              ) {
+                return sum; }
+              return sum + Number(amount || 0);
+            },
+            0
+          );
+        values.push(`
+          <div class="monthly-comparison-value period-total">
+            ${periodTotal.toLocaleString(
+              'en-US',
+              {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              }
+            )}
+          </div>
+        `);
+        return `
+          <div class="monthly-comparison-row">
+            <div class="monthly-comparison-item">
+              ${row.title}
+            </div>
+            ${values.join('')}
+          </div>
+        `;
+      })
+      .join('');
 }
+
+window.addEventListener('resize', () => {
+  const table =
+    document.getElementById(
+      'monthlyComparisonTable'
+    );
+  const tableWrap =
+    document.querySelector(
+      '.monthly-comparison-table-wrap'
+    );
+  if (
+    !table ||
+    !tableWrap ||
+    monthlyComparisonPeriod !== 3
+  ) {
+    return; }
+  const viewportWidth =
+    tableWrap.clientWidth;
+  const itemWidth = 92;
+  const periodTotalWidth = 110;
+  const monthWidth =
+    Math.max(
+      1,
+      (viewportWidth - itemWidth) / 3
+    );
+  table.style.setProperty(
+    '--monthly-comparison-month-width',
+    `${monthWidth}px`
+  );
+  table.style.width =
+    `${viewportWidth + periodTotalWidth}px`;
+});
+
 async function fetchPaymentHistory() {
   const { data, error } =
     await supabaseClient
