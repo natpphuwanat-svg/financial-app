@@ -1865,6 +1865,294 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   color: var(--lime-400); opacity: 1; font-size: 10px;
 }
 
+.annual-comparison-card {
+  overflow: visible;
+}
+
+.annual-comparison-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.annual-comparison-dropdown {
+  position: relative;
+}
+
+.annual-comparison-dropdown.is-right {
+  margin-left: auto;
+}
+
+.annual-comparison-select {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: max-content;
+  min-height: 30px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.annual-comparison-select svg {
+  width: 13px;
+  height: 13px;
+  stroke-width: 2.5;
+  opacity: 0.7;
+}
+
+.annual-comparison-select:active {
+  transform: scale(0.97);
+}
+
+.annual-comparison-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: max-content;
+  min-width: 0;
+  padding: 5px;
+  border-radius: 12px;
+  background: var(--bg-color);
+  border: 1px solid rgba(127, 127, 127, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 100;
+}
+
+.annual-comparison-dropdown.is-right
+.annual-comparison-dropdown-menu {
+  left: auto;
+  right: 0;
+}
+
+.annual-comparison-dropdown-menu.is-year-picker {
+  width: 150px;
+  max-height: 320px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+.annual-comparison-dropdown-menu.is-year-picker::-webkit-scrollbar {
+  display: none;
+}
+
+.annual-comparison-option {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 32px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.annual-comparison-option:active {
+  transform: scale(0.98);
+}
+
+.annual-comparison-option.is-disabled {
+  opacity: 0.28;
+  cursor: not-allowed;
+}
+
+.annual-comparison-option.is-anchor {
+  color: var(--lime-400);
+}
+
+.annual-comparison-year-check {
+  width: 18px;
+  flex: 0 0 18px;
+  margin-right: 4px;
+  color: var(--lime-400);
+  font-size: 12px;
+  font-weight: 900;
+  text-align: left;
+}
+
+.annual-comparison-year-check.is-empty {
+  opacity: 0;
+}
+
+.annual-comparison-table-wrap {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  border-top: 1px solid var(--glass-border);
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
+}
+
+.annual-comparison-table-wrap.is-scrollable {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: none;
+  scrollbar-width: none;
+}
+
+.annual-comparison-table-wrap.is-scrollable::-webkit-scrollbar {
+  display: none;
+}
+
+.annual-comparison-table {
+  width: max-content;
+  min-width: 100%;
+}
+
+.annual-comparison-header,
+.annual-comparison-row {
+  display: grid;
+  grid-template-columns:
+    92px
+    repeat(2, 1fr)
+    92px;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.annual-comparison-table.has-three-years
+.annual-comparison-header,
+.annual-comparison-table.has-three-years
+.annual-comparison-row {
+  grid-template-columns:
+    92px
+    repeat(3, 85px)
+    92px;
+}
+
+.annual-comparison-table.has-four-years
+.annual-comparison-header,
+.annual-comparison-table.has-four-years
+.annual-comparison-row {
+  grid-template-columns:
+    92px
+    repeat(4, 85px)
+    92px;
+}
+
+.annual-comparison-table.has-five-years
+.annual-comparison-header,
+.annual-comparison-table.has-five-years
+.annual-comparison-row {
+  grid-template-columns:
+    92px
+    repeat(5, 85px)
+    92px;
+}
+
+.annual-comparison-header > div,
+.annual-comparison-row > div {
+  min-width: 0;
+  border-right: 1px solid var(--glass-border);
+}
+
+.annual-comparison-header > div:last-child,
+.annual-comparison-row > div:last-child {
+  border-right: none;
+}
+
+.annual-comparison-header {
+  height: 34px;
+}
+
+.annual-comparison-item-header,
+.annual-comparison-year,
+.annual-comparison-total {
+  display: flex;
+  align-items: center;
+  line-height: 34px;
+  color: var(--text-sub);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  box-sizing: border-box;
+}
+
+.annual-comparison-item-header {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  justify-content: flex-start;
+  background: var(--bg-color);
+  padding: 0 10px 0 14px;
+  box-shadow: inset 0 -1px 0 var(--glass-border);
+}
+
+.annual-comparison-year,
+.annual-comparison-total {
+  justify-content: center;
+  padding: 0 6px;
+  white-space: nowrap;
+}
+
+.annual-comparison-row {
+  min-height: 38px;
+}
+
+.annual-comparison-item {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  display: block;
+  background: var(--bg-color);
+  line-height: 38px;
+  padding: 0 12px 0 14px;
+  color: var(--text-main);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+.annual-comparison-value {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 8px;
+  color: var(--text-main);
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.annual-comparison-value.is-empty {
+  justify-content: center;
+  color: var(--text-sub);
+  padding-left: 0;
+  padding-right: 0;
+  font-size: 8px;
+  font-weight: 600;
+}
+
+.annual-comparison-value.annual-total {
+  font-weight: 800;
+}
 .monthly-takeaway-card {
   margin: 0 2% 24px;
   padding: 0 14px;
@@ -2319,6 +2607,118 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       class="top-spending-list"
       id="annualTopSpendingList"
     ></div>
+  </div>
+</section>
+  <section
+  class="insights-section"
+  data-insights-mode="year"
+  id="annualComparisonSection"
+>
+  <div class="insights-section-title">
+    ANNUAL COMPARISON
+  </div>
+  <div
+    class="monthly-comparison-card annual-comparison-card"
+    id="annualComparisonCard"
+  >
+    <div class="annual-comparison-controls">
+      <div class="annual-comparison-dropdown">
+        <button
+          type="button"
+          class="annual-comparison-select"
+          id="annualComparisonTypeBtn"
+          aria-label="Select annual comparison type"
+        >
+          <span id="annualComparisonTypeLabel">
+            EXPENSE
+          </span>
+          <i
+            data-lucide="chevron-down"
+          ></i>
+        </button>
+        <div
+          class="annual-comparison-dropdown-menu"
+          id="annualComparisonTypeMenu"
+          hidden
+        >
+          <button
+            type="button"
+            class="annual-comparison-option"
+            data-annual-type="Income"
+          >
+            INCOME
+          </button>
+          <button
+            type="button"
+            class="annual-comparison-option is-selected"
+            data-annual-type="Expense"
+          >
+            EXPENSE
+          </button>
+          <button
+            type="button"
+            class="annual-comparison-option"
+            data-annual-type="Deduction"
+          >
+            DEDUCTION
+          </button>
+        </div>
+      </div>
+      <div
+        class="
+          annual-comparison-dropdown
+          is-right
+        "
+      >
+        <button
+          type="button"
+          class="annual-comparison-select"
+          id="annualComparisonYearBtn"
+          aria-label="Select comparison years"
+        >
+          <span id="annualComparisonYearLabel">
+            2 YEARS
+          </span>
+          <i
+            data-lucide="chevron-down"
+          ></i>
+        </button>
+        <div
+          class="
+            annual-comparison-dropdown-menu
+            is-year-picker
+          "
+          id="annualComparisonYearMenu"
+          hidden
+        ></div>
+      </div>
+    </div>
+    <div
+      class="annual-comparison-table-wrap"
+      id="annualComparisonTableWrap"
+    >
+      <div
+        class="annual-comparison-table"
+        id="annualComparisonTable"
+      >
+        <div
+          class="annual-comparison-header"
+          id="annualComparisonHeader"
+        >
+          <div
+            class="
+              annual-comparison-item-header
+            "
+          >
+            Item
+          </div>
+        </div>
+        <div
+          class="annual-comparison-body"
+          id="annualComparisonBody"
+        ></div>
+      </div>
+    </div>
   </div>
 </section>
    <section
