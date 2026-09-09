@@ -3728,6 +3728,18 @@ Object.keys(grouped).forEach(type => {
     )?.closest(
       '.monthly-comparison-dropdown'
     );
+    const annualTypeDropdown =
+    document.querySelector(
+      '#annualComparisonTypeBtn'
+    )?.closest(
+      '.annual-comparison-dropdown'
+    );
+    const annualYearDropdown =
+    document.querySelector(
+      '#annualComparisonYearBtn'
+    )?.closest(
+      '.annual-comparison-dropdown'
+    );
   if (
     typeDropdown &&
     !typeDropdown.contains(target)
@@ -3752,6 +3764,30 @@ Object.keys(grouped).forEach(type => {
       menu.hidden = true;
     }
    }
+    if (
+    annualTypeDropdown &&
+    !annualTypeDropdown.contains(target)
+  ) {
+    const menu =
+      document.getElementById(
+        'annualComparisonTypeMenu'
+      );
+    if (menu) {
+      menu.hidden = true;
+    }
+  }
+  if (
+    annualYearDropdown &&
+    !annualYearDropdown.contains(target)
+  ) {
+    const menu =
+      document.getElementById(
+        'annualComparisonYearMenu'
+      );
+    if (menu) {
+      menu.hidden = true;
+    }
+  }
   });
   const monthlyComparisonTypeOptions =
   document.querySelectorAll(
