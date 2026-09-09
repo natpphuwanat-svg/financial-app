@@ -3609,6 +3609,18 @@ Object.keys(grouped).forEach(type => {
   document.getElementById('monthlyComparisonPeriodBtn');
   const monthlyComparisonPeriodLabel =
   document.getElementById('monthlyComparisonPeriodLabel');
+  const annualComparisonTypeBtn =
+  document.getElementById('annualComparisonTypeBtn');
+  const annualComparisonTypeLabel =
+  document.getElementById('annualComparisonTypeLabel');
+  const annualComparisonTypeMenu =
+  document.getElementById('annualComparisonTypeMenu');
+  const annualComparisonYearBtn =
+  document.getElementById('annualComparisonYearBtn');
+  const annualComparisonYearLabel =
+  document.getElementById('annualComparisonYearLabel');
+  const annualComparisonYearMenu =
+  document.getElementById('annualComparisonYearMenu');
   if (monthlyComparisonPeriodBtn) {
   monthlyComparisonPeriodBtn.addEventListener(
     'click',
@@ -3623,6 +3635,18 @@ Object.keys(grouped).forEach(type => {
     }
    );
   }
+  if (annualComparisonYearBtn) {
+  annualComparisonYearBtn.addEventListener(
+    'click',
+    () => {
+      if (!annualComparisonYearMenu) {
+        return; }
+      renderAnnualComparisonYearMenu();
+      annualComparisonYearMenu.hidden =
+        !annualComparisonYearMenu.hidden;
+    }
+   );
+  }
   if (monthlyComparisonTypeBtn) {
   monthlyComparisonTypeBtn.addEventListener(
     'click',
@@ -3630,6 +3654,20 @@ Object.keys(grouped).forEach(type => {
       const menu =
         document.getElementById(
           'monthlyComparisonTypeMenu'
+        );
+      if (!menu) {
+        return; }
+      menu.hidden = !menu.hidden;
+    }
+   );
+  }
+  if (annualComparisonTypeBtn) {
+  annualComparisonTypeBtn.addEventListener(
+    'click',
+    () => {
+      const menu =
+        document.getElementById(
+          'annualComparisonTypeMenu'
         );
       if (!menu) {
         return; }
@@ -3752,6 +3790,38 @@ Object.keys(grouped).forEach(type => {
           monthlyComparisonPeriod
         );
       renderMonthlyComparison(months);
+    }
+   );
+  });
+  const annualComparisonTypeOptions =
+  document.querySelectorAll(
+    '#annualComparisonTypeMenu [data-annual-type]'
+  );
+  annualComparisonTypeOptions.forEach(option => {
+  option.addEventListener(
+    'click',
+    async () => {
+      const selectedType =
+        option.dataset.annualType;
+      if (!selectedType) {
+        return; }
+      annualComparisonType =
+        selectedType;
+      if (annualComparisonTypeLabel) {
+        annualComparisonTypeLabel.innerText =
+          selectedType.toUpperCase(); }
+      annualComparisonTypeOptions.forEach(
+        item => {
+          item.classList.toggle(
+            'is-selected',
+            item === option
+          );
+        }
+      );
+      if (annualComparisonTypeMenu) {
+        annualComparisonTypeMenu.hidden = true; }
+      await loadAnnualComparisonData();
+      renderAnnualComparison();
     }
    );
   });
