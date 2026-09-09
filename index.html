@@ -3601,6 +3601,11 @@ Object.keys(grouped).forEach(type => {
   let paymentHistoryEntries = [];
   let previousMonthEntries = [];
   let monthlyComparisonResizeObserver = null;
+  let annualComparisonType = 'Expense';
+  let annualComparisonYears = [];
+  let annualComparisonEntries = [];
+  let annualComparisonAnchorYear = null;
+  const ANNUAL_COMPARISON_MAX_YEARS = 5;
   const monthlyComparisonTypeBtn =
   document.getElementById('monthlyComparisonTypeBtn');
   const monthlyComparisonTypeLabel =
