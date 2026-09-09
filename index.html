@@ -6228,6 +6228,11 @@ function applyInsightsSummaryFutureState(
   }
   async function fetchAnnualData() {
   const requestId = ++fetchRequestId;
+  if (
+  annualComparisonAnchorYear !==
+  selectedYear
+  ) {
+  resetAnnualComparisonYears(); }
   try {
     const previousYear =
       selectedYear - 1;
@@ -6283,6 +6288,7 @@ function applyInsightsSummaryFutureState(
     renderAnnualTopSpending(
     selectedYearEntries
     );
+    await loadAnnualComparisonData();
     finishInsightsContentLoading(
     requestId
     );
