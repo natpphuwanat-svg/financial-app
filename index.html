@@ -1448,12 +1448,64 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
 
 .top-spending-title {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
   margin-bottom: 8px;
+  padding: 0;
+
+  border: none;
+  background: transparent;
+
+  font-family: inherit;
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.8px;
+  line-height: 1.2;
+
   color: var(--text-sub);
   text-transform: uppercase;
+
+  text-align: left;
+  cursor: default;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+.top-spending-title-chevron {
+  flex: 0 0 auto;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 18px;
+  height: 18px;
+
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1;
+
+  color: var(--text-sub);
+
+  opacity: 0.82;
+}
+
+.annual-top-spending-title {
+  cursor: pointer;
+}
+
+.annual-top-spending-title:active {
+  transform: scale(0.985);
+}
+
+.annual-top-spending-title .top-spending-title-chevron {
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .top-spending-list {
@@ -1470,6 +1522,31 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   align-items: center;
   column-gap: 9px;
   min-height: 30px;
+}
+
+.annual-top-spending-section
+.top-spending-item.is-clickable {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.annual-top-spending-section
+.top-spending-item.is-clickable:active {
+  transform: scale(0.985);
+}
+
+.top-spending-item-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-left: 2px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--text-sub);
+  opacity: 0.78;
 }
 
 .top-spending-rank {
@@ -2250,17 +2327,25 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     <div class="expense-chart-track"></div>
   </div>
   <div
-    class="top-spending-section"
-    id="topSpendingSection"
-  >
-    <div class="top-spending-title">
+  class="top-spending-section"
+  id="topSpendingSection"
+>
+  <div class="top-spending-title">
+    <span class="top-spending-title-label">
       TOP SPENDING
-    </div>
-    <div
-      class="top-spending-list"
-      id="topSpendingList"
-    ></div>
+    </span>
+    <span
+      class="top-spending-title-chevron"
+      aria-hidden="true"
+    >
+      ›
+    </span>
   </div>
+  <div
+    class="top-spending-list"
+    id="topSpendingList"
+  ></div>
+</div>
 </section>
 <section
   class="insights-section"
@@ -2284,20 +2369,34 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     ></div>
   </div>
   <div
-    class="top-spending-section annual-top-spending-section"
-    id="annualTopSpendingSection"
+  class="top-spending-section annual-top-spending-section"
+  id="annualTopSpendingSection"
+>
+  <button
+    type="button"
+    class="top-spending-title annual-top-spending-title"
+    id="annualTopSpendingTitle"
+    aria-expanded="false"
   >
-    <div
-      class="top-spending-title"
-      id="annualTopSpendingTitle"
+    <span
+      class="top-spending-title-label"
+      id="annualTopSpendingTitleLabel"
     >
-      TOP SPENDING
-    </div>
-    <div
-      class="top-spending-list"
-      id="annualTopSpendingList"
-    ></div>
-  </div>
+      TOP SPENDING MONTHS
+    </span>
+    <span
+      class="top-spending-title-chevron"
+      id="annualTopSpendingTitleChevron"
+      aria-hidden="true"
+    >
+      ›
+    </span>
+  </button>
+  <div
+    class="top-spending-list"
+    id="annualTopSpendingList"
+  ></div>
+</div>
 </section>
    <section
     class="insights-section"
@@ -3171,6 +3270,7 @@ Object.keys(grouped).forEach(type => {
   let selectedExpenseTitle = null;
   let selectedExpenseType = null;
   let annualExpenseTrendSelectedMonth = null;
+  let annualTopSpendingExpanded = false;
   let monthlyComparisonType = 'Expense';
   let monthlyComparisonPeriod = 3;
   let paymentHistoryEntries = [];
@@ -5033,6 +5133,7 @@ function applyInsightsSummaryFutureState(
   }
   async function fetchAnnualData() {
   const requestId = ++fetchRequestId;
+  annualTopSpendingExpanded = false;
   try {
     const previousYear =
       selectedYear - 1;
@@ -6184,7 +6285,20 @@ const axisLabels =
     document.getElementById(
       'annualTopSpendingTitle'
     );
-  if (!container || !title) {
+  const titleLabel =
+    document.getElementById(
+      'annualTopSpendingTitleLabel'
+    );
+  const titleChevron =
+    document.getElementById(
+      'annualTopSpendingTitleChevron'
+    );
+  if (
+    !container ||
+    !title ||
+    !titleLabel ||
+    !titleChevron
+  ) {
     return; }
   const trendData =
     buildAnnualExpenseTrendData(
@@ -6203,19 +6317,22 @@ const axisLabels =
           Number(a.amount || 0)
       );
   if (selectedExpenseType === 'Fixed') {
-    title.innerText =
+    titleLabel.innerText =
       'TOP FIXED MONTHS';
   } else if (
     selectedExpenseType === 'Variable'
   ) {
-    title.innerText =
+    titleLabel.innerText =
       'TOP VARIABLE MONTHS';
   } else {
-    title.innerText =
+    titleLabel.innerText =
       'TOP SPENDING MONTHS'; }
-  const topMonths =
-    knownMonths.slice(0, 3);
-  if (topMonths.length === 0) {
+  if (knownMonths.length === 0) {
+    titleChevron.innerText = '›';
+    title.setAttribute(
+      'aria-expanded',
+      'false'
+    );
     const isFuture =
       selectedYear > realCurrentYear;
     let emptyText =
@@ -6238,7 +6355,28 @@ const axisLabels =
         ${emptyText}
       </div>
     `;
+    titleChevron.style.visibility =
+      'hidden';
     return; }
+  titleChevron.style.visibility =
+    'visible';
+  const visibleMonths =
+    annualTopSpendingExpanded
+      ? knownMonths
+      : knownMonths.slice(0, 3);
+  if (annualTopSpendingExpanded) {
+    titleChevron.innerText = '⌃';
+    title.setAttribute(
+      'aria-expanded',
+      'true'
+    );
+  } else {
+    titleChevron.innerText = '›';
+    title.setAttribute(
+      'aria-expanded',
+      'false'
+    );
+  }
   const rankColor =
     selectedExpenseType === 'Fixed'
       ? '#A3CA7E'
@@ -6246,9 +6384,23 @@ const axisLabels =
         ? '#B0CBE7'
         : 'var(--text-sub)';
   container.innerHTML =
-    topMonths
+    visibleMonths
       .map((item, index) => `
-        <div class="top-spending-item">
+        <div
+          class="
+            top-spending-item
+            ${
+              annualTopSpendingExpanded
+                ? 'is-clickable'
+                : ''
+            }
+          "
+          ${
+            annualTopSpendingExpanded
+              ? `data-annual-month="${item.month}"`
+              : ''
+          }
+        >
           <div
             class="top-spending-rank"
             style="color: ${rankColor};"
@@ -6258,7 +6410,9 @@ const axisLabels =
           <div class="top-spending-name">
             ${item.name}
           </div>
-          <div class="top-spending-amount">
+          <div
+            class="top-spending-amount"
+          >
             ฿${Number(
               item.amount || 0
             ).toLocaleString(
@@ -6269,9 +6423,85 @@ const axisLabels =
               }
             )}
           </div>
+          ${
+            annualTopSpendingExpanded
+              ? `
+                <div
+                  class="top-spending-item-chevron"
+                  aria-hidden="true"
+                >
+                  ›
+                </div>
+              `
+              : ''
+          }
         </div>
       `)
       .join('');
+  }
+  
+  const annualTopSpendingTitle =
+  document.getElementById(
+    'annualTopSpendingTitle'
+  );
+  if (annualTopSpendingTitle) {
+  annualTopSpendingTitle.addEventListener(
+    'click',
+    () => {
+      if (
+        !Array.isArray(
+          currentAnnualEntries
+        )
+      ) {
+        return; }
+      const trendData =
+        buildAnnualExpenseTrendData(
+          currentAnnualEntries
+        );
+      const knownMonths =
+        trendData.filter(
+          item =>
+            item.state === 'HAS_EXPENSE' ||
+            item.state === 'ZERO_EXPENSE'
+        );
+      if (knownMonths.length === 0) {
+        return; }
+      annualTopSpendingExpanded =
+        !annualTopSpendingExpanded;
+      renderAnnualTopSpending(
+        currentAnnualEntries
+      );
+    }
+   );
+  }
+  
+  const annualTopSpendingList =
+  document.getElementById(
+    'annualTopSpendingList'
+  );
+  if (annualTopSpendingList) {
+    annualTopSpendingList.addEventListener(
+    'click',
+    event => {
+      const row =
+        event.target.closest(
+          '.top-spending-item.is-clickable'
+        );
+      if (!row) {
+        return; }
+      const month =
+        Number(
+          row.dataset.annualMonth
+        );
+      if (!month) {
+        return; }
+      console.log(
+        'Annual Top Spending month selected:',
+        selectedYear,
+        month
+      );
+     }
+   );
   }
   
   function renderYoY(
