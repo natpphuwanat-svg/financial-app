@@ -4467,6 +4467,25 @@ async function loadAnnualComparisonData() {
     sortedYears[
       sortedYears.length - 1
     ];
+  const defaultYears =
+    [
+      annualComparisonAnchorYear - 1,
+      annualComparisonAnchorYear
+    ].sort((a, b) => a - b);
+  const isDefaultSelection =
+    sortedYears.length ===
+      defaultYears.length &&
+    sortedYears.every(
+      (year, index) =>
+        year === defaultYears[index]
+    );
+  if (
+    isDefaultSelection &&
+    Array.isArray(annualComparisonEntries) &&
+    annualComparisonEntries.length > 0
+  ) {
+    renderAnnualComparison();
+    return; }
   const startDate =
     `${firstYear}-01-01`;
   const endDate =
@@ -4500,7 +4519,6 @@ async function loadAnnualComparisonData() {
       'Annual Comparison error:',
       error
     );
-    annualComparisonEntries = [];
     renderAnnualComparison();
   }
 }
@@ -6260,6 +6278,8 @@ function applyInsightsSummaryFutureState(
     if (requestId !== fetchRequestId) {
       return; }
     const allEntries = data || [];
+    annualComparisonEntries =
+    allEntries;
     const selectedYearEntries =
       allEntries.filter(item =>
         new Date(
@@ -6288,7 +6308,9 @@ function applyInsightsSummaryFutureState(
     renderAnnualTopSpending(
     selectedYearEntries
     );
-    await loadAnnualComparisonData();
+    annualComparisonEntries =
+    allEntries;
+    renderAnnualComparison();
     finishInsightsContentLoading(
     requestId
     );
