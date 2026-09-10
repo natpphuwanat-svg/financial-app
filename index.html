@@ -814,6 +814,39 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   text-anchor: middle;
   dominant-baseline: middle;
 }
+.annual-expense-trend-chart.is-future-empty
+.annual-expense-trend-grid-line {
+  opacity: 0.11;
+}
+
+.annual-expense-trend-chart.is-future-empty
+.annual-expense-trend-axis-label-html {
+  opacity: 0.62;
+}
+
+.annual-expense-trend-future-label {
+  opacity: 0.82;
+  letter-spacing: 0.45px;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+[data-theme="dark"]
+.annual-expense-trend-chart.is-future-empty
+.annual-expense-trend-grid-line {
+  opacity: 0.20;
+}
+
+[data-theme="dark"]
+.annual-expense-trend-chart.is-future-empty
+.annual-expense-trend-axis-label-html {
+  opacity: 0.68;
+}
+
+[data-theme="dark"]
+.annual-expense-trend-future-label {
+  opacity: 0.86;
+}
 
 .annual-expense-trend-point {
   cursor: pointer;
@@ -6708,23 +6741,9 @@ function renderAnnualExpenseTrend(entries) {
       </div>
     `;
     return; }
-  if (
+  const isFutureEmpty =
     !hasKnownData &&
-    yearState === 'FUTURE'
-  ) {
-    container.innerHTML = `
-      <div class="annual-expense-trend-empty">
-        <div class="annual-expense-trend-empty-content">
-          <div class="annual-expense-trend-empty-title">
-            NO DATA YET
-          </div>
-          <div class="annual-expense-trend-empty-description">
-            No expense data yet for ${selectedYear}
-          </div>
-        </div>
-      </div>
-    `;
-    return; }
+    yearState === 'FUTURE';
   const knownValues =
     trendData
       .filter(
@@ -6855,15 +6874,25 @@ const axisLabels =
     }
   ).join('');
   const monthLabels =
-    points.map(point => `
+  isFutureEmpty
+    ? `
       <text
-        class="annual-expense-trend-month-label"
-        x="${point.x}"
+        class="annual-expense-trend-month-label annual-expense-trend-future-label"
+        x="${(plotLeft + plotRight) / 2}"
         y="254"
       >
-        ${point.shortName}
+        NO EXPENSE DATA YET FOR ${selectedYear}
       </text>
-    `).join('');
+    `
+    : points.map(point => `
+        <text
+          class="annual-expense-trend-month-label"
+          x="${point.x}"
+          y="254"
+        >
+          ${point.shortName}
+        </text>
+      `).join('');
   const segments = [];
   let currentSegment = [];
   points.forEach(point => {
@@ -6887,54 +6916,56 @@ const axisLabels =
   }
   const trendLines =
   segments
-  .filter(
-    segment =>
-      segment.length >= 2
-  )
-  .map(segment => {
-    const pathParts = [];
-    for (
-      let i = 1;
-      i < segment.length;
-      i++
-    ) {
-      const previous =
-        segment[i - 1];
-      const current =
-        segment[i];
-      const dx =
-        current.x -
-        previous.x;
-      const controlOffset =
-        dx * 0.38;
-      const cp1x =
-        previous.x +
-        controlOffset;
-      const cp1y =
-        previous.y;
-      const cp2x =
-        current.x -
-        controlOffset;
-      const cp2y =
-        current.y;
-      pathParts.push(`
-        M ${previous.x} ${previous.y}
-        C
-        ${cp1x} ${cp1y},
-        ${cp2x} ${cp2y},
-        ${current.x} ${current.y}
-      `);
-    }
-    return pathParts
-      .map(path => `
-        <path
-          class="annual-expense-trend-line"
-          d="${path}"
-        ></path>
-      `)
-      .join('');
-  })
-  .join('');
+    .filter(
+      segment =>
+        segment.length >= 2
+    )
+    .map(segment => {
+      const pathParts = [];
+      for (
+        let i = 1;
+        i < segment.length;
+        i++
+      ) {
+        const previous =
+          segment[i - 1];
+        const current =
+          segment[i];
+        const dx =
+          current.x -
+          previous.x;
+        const controlOffset =
+          dx * 0.38;
+        const cp1x =
+          previous.x +
+          controlOffset;
+        const cp1y =
+          previous.y;
+        const cp2x =
+          current.x -
+          controlOffset;
+        const cp2y =
+          current.y;
+        pathParts.push(`
+          M ${previous.x} ${previous.y}
+          C
+          ${cp1x} ${cp1y},
+          ${cp2x} ${cp2y},
+          ${current.x} ${current.y}
+        `);
+      }
+      return pathParts
+        .map(path => `
+          <path
+            class="annual-expense-trend-line"
+            d="${path}"
+          ></path>
+        `)
+        .join('');
+    })
+    .join('');
+  const finalTrendLines =
+  isFutureEmpty ? '' : trendLines;
   const pointMarkup =
     points
       .filter(
@@ -6999,8 +7030,10 @@ const axisLabels =
           </g>
         `;
       }).join('');
+  const finalPointMarkup =
+  isFutureEmpty ? '' : pointMarkup;
   container.innerHTML = `
-  <div class="annual-expense-trend-chart">
+  <div class="annual-expense-trend-chart${isFutureEmpty ? ' is-future-empty' : ''}">
     <div
       class="annual-expense-trend-y-axis"
       id="annualExpenseTrendYAxis"
@@ -7011,10 +7044,10 @@ const axisLabels =
         viewBox="0 0 ${chartWidth} ${chartHeight}"
         aria-label="Annual expense trend"
       >
-        ${gridLines}
-        ${trendLines}
-        ${pointMarkup}
-        ${monthLabels}
+       ${gridLines}
+       ${finalTrendLines}
+       ${pointMarkup}
+       ${monthLabels}
       </svg>
     </div>
     <div
@@ -7279,29 +7312,45 @@ const axisLabels =
   const topMonths =
     knownMonths.slice(0, 3);
   if (topMonths.length === 0) {
-    const isFuture =
-      selectedYear > realCurrentYear;
-    let emptyText =
-      'No expense data for this year';
-    if (
-      selectedExpenseType === 'Fixed'
-    ) {
-      emptyText =
-        'No fixed expenses for this year';
-    } else if (
-      selectedExpenseType === 'Variable'
-    ) {
-      emptyText =
-        'No variable expenses for this year'; }
-    if (isFuture) {
-      emptyText =
-        'No expense data yet for this year'; }
+  const isFuture =
+    selectedYear > realCurrentYear;
+  if (isFuture) {
     container.innerHTML = `
-      <div class="top-spending-empty">
-        ${emptyText}
+      <div class="top-spending-placeholder">
+        <div class="top-spending-placeholder-row">
+          <div class="top-spending-placeholder-rank">01</div>
+          <div class="top-spending-placeholder-name"></div>
+          <div class="top-spending-placeholder-amount"></div>
+        </div>
+        <div class="top-spending-placeholder-row">
+          <div class="top-spending-placeholder-rank">02</div>
+          <div class="top-spending-placeholder-name"></div>
+          <div class="top-spending-placeholder-amount"></div>
+        </div>
+        <div class="top-spending-placeholder-row">
+          <div class="top-spending-placeholder-rank">03</div>
+          <div class="top-spending-placeholder-name"></div>
+          <div class="top-spending-placeholder-amount"></div>
+        </div>
       </div>
     `;
-    return; }
+    return;}
+  let emptyText =
+    'No expense data for this year';
+  if (selectedExpenseType === 'Fixed') {
+    emptyText =
+      'No fixed expenses for this year';
+  } else if (
+    selectedExpenseType === 'Variable'
+  ) {
+    emptyText =
+      'No variable expenses for this year'; }
+  container.innerHTML = `
+    <div class="top-spending-empty">
+      ${emptyText}
+    </div>
+  `;
+  return; }
   const rankColor =
     selectedExpenseType === 'Fixed'
       ? '#A3CA7E'
