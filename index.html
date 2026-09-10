@@ -1978,9 +1978,9 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 }
 
 .annual-comparison-year-menu {
-  width: 132px !important;
-  min-width: 132px !important;
-  max-width: 132px !important;
+  width: 100px !important;
+  min-width: 100px !important;
+  max-width: 100px !important;
   max-height: 170px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -2844,7 +2844,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     —
   </div>
   <div class="annual-comparison-total">
-    Total
+    PERIOD TOTAL
   </div>
     </div>
         <div
@@ -3232,7 +3232,7 @@ function updateAnnualComparisonYearLabel() {
     [...annualComparisonYears]
       .sort((a, b) => a - b);
   label.innerText =
-    years.join(', ');
+    `${years.length} YEARS`;
 }
 
 function updatePeriodUI() {
@@ -4510,7 +4510,7 @@ function renderAnnualComparison(
       )
       .join('')}
     <div class="annual-comparison-total">
-      Total
+    PERIOD TOTAL
     </div>
   `;
   const rows =
