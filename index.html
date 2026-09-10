@@ -725,15 +725,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   }
 }
 
-.annual-expense-trend-subtitle {
-  margin: 2px 0 8px;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.6px;
-  color: var(--text-sub);
-  text-transform: uppercase;
-}
-
 .annual-top-spending-section {
   margin-top: 32px;
 }
@@ -760,7 +751,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  touch-action: pan-x;
+  touch-action: auto;
+  overscroll-behavior-x: contain;
 }
 
 .annual-expense-trend-scroll::-webkit-scrollbar {
@@ -773,7 +765,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   min-width: 720px;
   height: 100%;
   overflow: visible;
-  touch-action: pan-x;
+  touch-action: auto;
 }
 
 .annual-expense-trend-y-axis {
@@ -6666,24 +6658,6 @@ function renderAnnualExpenseTrend(entries) {
     );
   if (!container) return;
   closeAnnualExpenseTrendTooltip();
-  const subtitle =
-  document.querySelector(
-    '.annual-expense-trend-subtitle'
-    );
-  if (subtitle) {
-  if (selectedExpenseType === 'Fixed') {
-    subtitle.innerText =
-    'Fixed Expense Trend';
-  } else if (
-    selectedExpenseType === 'Variable'
-    ) {
-      subtitle.innerText =
-      'Variable Expense Trend';
-    } else {
-      subtitle.innerText =
-      'Expense Trend';
-    }
-  }
   const trendData =
     buildAnnualExpenseTrendData(
       entries
