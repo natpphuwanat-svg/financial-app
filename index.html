@@ -767,6 +767,20 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   overflow: visible;
   touch-action: auto;
 }
+.annual-expense-trend-chart.is-future-empty
+.annual-expense-trend-scroll {
+  overflow-x: hidden;
+  overflow-y: hidden;
+  touch-action: none;
+  -webkit-overflow-scrolling: auto;
+}
+
+.annual-expense-trend-chart.is-future-empty
+.annual-expense-trend-svg {
+  width: 100%;
+  min-width: 100%;
+  touch-action: none;
+}
 
 .annual-expense-trend-y-axis {
   position: absolute;
@@ -814,10 +828,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   text-anchor: middle;
   dominant-baseline: middle;
 }
-.annual-expense-trend-chart.is-future-empty
-.annual-expense-trend-grid-line {
-  opacity: 0.11;
-}
 
 .annual-expense-trend-chart.is-future-empty
 .annual-expense-trend-axis-label-html {
@@ -829,12 +839,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   letter-spacing: 0.45px;
   font-size: 9px;
   font-weight: 800;
-}
-
-[data-theme="dark"]
-.annual-expense-trend-chart.is-future-empty
-.annual-expense-trend-grid-line {
-  opacity: 0.20;
 }
 
 [data-theme="dark"]
@@ -2566,9 +2570,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     class="expense-type-summary"
     id="annualExpenseTypeSummary"
   ></div>
-  <div class="annual-expense-trend-subtitle">
-    Expense Trend
-  </div>
   <div class="annual-expense-trend-card">
     <div
       class="annual-expense-trend-chart"
