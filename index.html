@@ -445,11 +445,19 @@
     .see-all-btn { background: none; border: none; color: #84CC16; /* Lime 500 — Light */; font-size: 13px; font-weight: 800; cursor: pointer; padding: 4px 0; }
      [data-theme="dark"] .see-all-btn { color: var(--lime-400); }
 
-    .highlight-card {
-     background: var(--glass-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-     border-radius: 20px; border: 1px solid var(--glass-border);
-     box-shadow: var(--glass-shadow); overflow: hidden; }
+    .highlight-card { background: var(--glass-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);border-radius: 20px;
+     border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); overflow: hidden; min-height: 420px; }
+    .highlight-card-content { min-height: 420px; animation: highlightContentFade 0.18s ease both; }
+    @keyframes highlightContentFade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+    }
+    .highlight-state-loading,
+    .highlight-state-empty,
+    .highlight-state-future,
+    .highlight-state-error { min-height: 420px; display: flex; align-items: center; justify-content: center; }
     .highlight-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 18px; min-height: 70px; }
+    .highlight-empty { min-height: 420px; display: flex; align-items: center; justify-content: center; padding: 15px 18px; color: var(--text-sub); font-size: 12px; font-weight: 600; text-align: center; }
     .entry-left { display: flex; align-items: center; gap: 14px; }
     .entry-badge { width: 40px; height: 40px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
     .entry-badge.income { background: var(--income-bg); color: var(--income-color); }
@@ -2274,8 +2282,14 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
           SEE ALL
         </button>
       </div>
-      <div id="entryList" class="entry-list">
-        <div class="loading-state">Loading data...</div>
+       <div id="entryList" class="entry-list">
+         <div class="highlight-card">
+           <div class="highlight-card-content highlight-state-loading">
+             <div class="highlight-empty">
+              Loading data...
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </main>
@@ -7475,6 +7489,110 @@ const axisLabels =
   element.className =
     'monthly-summary-mom neutral'; }
   
+  function ensureHighlightCard() {
+  const entryList = document.getElementById('entryList');
+  if (!entryList) return null;
+  let card = entryList.querySelector('.highlight-card');
+  if (!card) {
+    entryList.innerHTML = `
+      <div class="highlight-card">
+        <div class="highlight-card-content highlight-state-loading">
+          <div class="highlight-empty">
+            Loading data...
+          </div>
+        </div>
+      </div>
+    `;
+    card = entryList.querySelector('.highlight-card');
+  }
+  return card; }
+function renderHighlightState(state, highlights = []) {
+  const card = ensureHighlightCard();
+  if (!card) return;
+  let content = '';
+  if (state === 'loading') {
+    content = `
+      <div class="highlight-card-content highlight-state-loading">
+        <div class="highlight-empty">
+          Loading data...
+        </div>
+      </div>
+    `;
+  }
+  if (state === 'empty') {
+    content = `
+      <div class="highlight-card-content highlight-state-empty">
+        <div class="highlight-empty">
+          No highlights yet.
+        </div>
+      </div>
+    `;
+  }
+  if (state === 'future') {
+    content = `
+      <div class="highlight-card-content highlight-state-future">
+        <div class="highlight-empty">
+          Upcoming
+        </div>
+      </div>
+    `;
+  }
+  if (state === 'error') {
+    content = `
+      <div class="highlight-card-content highlight-state-error">
+        <div class="highlight-empty">
+          Error loading data.
+        </div>
+      </div>
+    `;
+  }
+  if (state === 'data') {
+    content = `
+      <div class="highlight-card-content">
+        ${highlights.map(item => `
+          <div
+            class="highlight-item"
+            onclick='openModal("edit", ${JSON.stringify({
+              rowIndex: item.id,
+              rawDate: item.entry_date,
+              title: item.title,
+              amount: Number(item.amount),
+              type: item.financial_type.toLowerCase(),
+              financialType: item.financial_type,
+              icon: item.icon
+            })})'
+          >
+            <div class="entry-left">
+              <div class="entry-badge ${item.financial_type.toLowerCase()}">
+                <i data-lucide="${item.icon || 'circle'}"></i>
+              </div>
+              <div>
+                <div class="entry-title">
+                  ${item.title}
+                </div>
+                <div class="entry-date">
+                  ${item.financial_type.toUpperCase()}
+                </div>
+              </div>
+            </div>
+            <div class="entry-right">
+              <div class="entry-amount ${item.financial_type.toLowerCase()}">
+                ฿${Number(item.amount).toLocaleString('en-US', {
+                  minimumFractionDigits: 2
+                })}
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+  card.innerHTML = content;
+  if (state === 'data') {
+    lucide.createIcons();
+  }
+ }
+  
   async function fetchData() {
   const requestId = ++fetchRequestId;
   // Updating state
@@ -7487,7 +7605,7 @@ const axisLabels =
   document.getElementById('expenseChange').classList.add('updating');
   document.getElementById('deductionAmount').classList.add('updating');
   document.getElementById('deductionChange').classList.add('updating');
-  document.getElementById('entryList').innerHTML = `<div class="loading-state">Loading data...</div>`;
+  renderHighlightState('loading');
   if (document.getElementById('placeholderView').style.display !== 'none') {
   renderEntriesLoading(); }
   try {
@@ -7899,68 +8017,28 @@ const typeB = b.financial_type.toLowerCase();
 if (typeOrder[typeA] !== typeOrder[typeB]) {
 return typeOrder[typeA] - typeOrder[typeB]; }
 return Number(b.amount) - Number(a.amount); });
+    if (isFuture && entries.length === 0) {
+      renderHighlightState('future');
+      finishInsightsContentLoading(
+        requestId
+        );
+    return; }
     if (highlights.length === 0) {
-      document.getElementById('entryList').innerHTML = `
-      <div class="highlight-card">
-      <div class="highlight-empty">
-      No highlights yet.
-      </div>
-    </div>
-    `;
-    finishInsightsContentLoading(
-      requestId
+      renderHighlightState('empty');
+      finishInsightsContentLoading(
+        requestId );
+    return; }
+    renderHighlightState(
+      'data',
+      highlights
       );
-      return; }
-      
-    document.getElementById('entryList').innerHTML = `
-      <div class="highlight-card">
-        ${highlights.map(item => `
-          <div class="highlight-item"
-               onclick='openModal("edit", ${JSON.stringify({
-                 rowIndex: item.id,
-                 rawDate: item.entry_date,
-                 title: item.title,
-                 amount: Number(item.amount),
-                 type: item.financial_type.toLowerCase(),
-                 financialType: item.financial_type,
-                 icon: item.icon
-               })})'>
-            <div class="entry-left">
-              <div class="entry-badge ${item.financial_type.toLowerCase()}">
-                <i data-lucide="${item.icon || 'circle'}"></i>
-              </div>
-              <div>
-                <div class="entry-title">
-                  ${item.title}
-                </div>
-                <div class="entry-date">
-                  ${item.financial_type.toUpperCase()}
-                </div>
-              </div>
-            </div>
-            <div class="entry-right">
-              <div class="entry-amount ${item.financial_type.toLowerCase()}">
-                ฿${Number(item.amount).toLocaleString('en-US', {
-                  minimumFractionDigits: 2
-                })}
-              </div>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    `;
-    lucide.createIcons();
-    finishInsightsContentLoading(
-      requestId );
+      finishInsightsContentLoading(
+        requestId
+    );
     } catch (err) {
     if (requestId !== fetchRequestId) { return; }
     console.error('Supabase fetchData ERROR:', err);
-    document.getElementById('entryList').innerHTML = `
-      <div class="loading-state">
-        Error loading data.<br>
-        <small>${err?.message || err}</small>
-      </div>
-    `;
+    renderHighlightState('error');
     finishInsightsContentLoading(
       requestId );
     }
