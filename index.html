@@ -777,8 +777,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 
 .annual-expense-trend-chart.is-future-empty
 .annual-expense-trend-svg {
-  width: 100%;
-  min-width: 100%;
+  width: 720px;
+  min-width: 720px;
   touch-action: none;
 }
 
@@ -790,7 +790,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   height: 100%;
   z-index: 3;
   pointer-events: none;
-  background: var(--bg-color);
+  background: transparent;
 }
 
 .annual-expense-trend-line {
@@ -6880,7 +6880,7 @@ const axisLabels =
       <text
         class="annual-expense-trend-month-label annual-expense-trend-future-label"
         x="${(plotLeft + plotRight) / 2}"
-        y="254"
+        y="262"
       >
         NO EXPENSE DATA YET FOR ${selectedYear}
       </text>
@@ -7047,7 +7047,7 @@ const axisLabels =
       >
        ${gridLines}
        ${finalTrendLines}
-       ${pointMarkup}
+       ${finalPointMarkup}
        ${monthLabels}
       </svg>
     </div>
