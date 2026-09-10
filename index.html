@@ -771,15 +771,15 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 .annual-expense-trend-scroll {
   overflow-x: hidden;
   overflow-y: hidden;
-  touch-action: none;
+  touch-action: pan-y;
   -webkit-overflow-scrolling: auto;
 }
 
 .annual-expense-trend-chart.is-future-empty
 .annual-expense-trend-svg {
-  width: 720px;
-  min-width: 720px;
-  touch-action: none;
+  width: 100%;
+  min-width: 100%;
+  touch-action: pan-y;
 }
 
 .annual-expense-trend-y-axis {
