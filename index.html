@@ -1977,9 +1977,13 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   font-weight: 800;
 }
 
+#annualComparisonYearBtn {
+  min-width: 132px;
+}
+
 .annual-comparison-year-menu {
-  width: 92px;
-  max-height: 325px;
+  width: 132px;
+  max-height: 170px;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: none;
@@ -3189,22 +3193,24 @@ async function toggleAnnualComparisonYear(
   ) {
   const anchorYear = selectedYear;
   if (year === anchorYear) {
-    return; }
+  return; }
   const selectedIndex =
-    annualComparisonYears.indexOf(year);
+  annualComparisonYears.indexOf(year);
   if (selectedIndex !== -1) {
-    annualComparisonYears.splice(
-      selectedIndex,
-      1
-    );
+  if (annualComparisonYears.length <= 2) {
+    return; }
+  annualComparisonYears.splice(
+    selectedIndex,
+    1
+  );
   } else {
-    if (
-      annualComparisonYears.length >= 5
-    ) {
-      return; }
-    annualComparisonYears.push(
-      year
-    );
+  if (
+    annualComparisonYears.length >= 5
+  ) {
+    return; }
+  annualComparisonYears.push(
+    year
+  );
   }
   annualComparisonYears.sort(
     (a, b) => a - b
