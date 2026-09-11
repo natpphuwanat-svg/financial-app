@@ -6789,6 +6789,11 @@ function renderAnnualExpenseTrend(entries) {
   const chartWidth = 720;
   const chartHeight = 286;
   const plotLeft = 8;
+  const futureLabelX =
+  Math.max(
+    0,
+    (container.clientWidth - 60) / 2
+  );
   const plotRight = 704;
   const plotTop = 22;
   const plotBottom = 226;
@@ -6881,7 +6886,7 @@ const axisLabels =
     ? `
       <text
         class="annual-expense-trend-month-label annual-expense-trend-future-label"
-        x="${(plotLeft + plotRight) / 2}"
+        x="${futureLabelX}"
         y="262"
       >
         NO EXPENSE DATA YET FOR ${selectedYear}
