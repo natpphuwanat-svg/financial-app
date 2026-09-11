@@ -3012,6 +3012,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       if (!newYear || newYear < 2025) return;
       selectedYear = newYear;
       resetAnnualComparisonYears();
+      renderAnnualComparisonYearMenu();
+      updateAnnualComparisonYearLabel();
       selectedExpenseType = null;
       selectedExpenseTitle = null;
       if (insightsViewMode === 'year') {
@@ -3147,10 +3149,10 @@ function populateMonthPickers() {
 function resetAnnualComparisonYears() {
   const anchorYear = selectedYear;
   const previousYear = anchorYear - 1;
-  annualComparisonYears =
-    previousYear >= 2025
-      ? [previousYear, anchorYear]
-      : [anchorYear];
+  annualComparisonYears = [
+    previousYear,
+    anchorYear
+  ];
 }
 
 function renderAnnualComparisonYearMenu() {
