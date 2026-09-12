@@ -1116,17 +1116,53 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   box-sizing: border-box;
 }
 .expense-chart-empty {
+  position: relative;
   align-items: center;
   justify-content: center;
   padding: 0 12px;
 }
 
 .expense-chart-empty-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  text-align: center;
+}
+
+.expense-chart-empty-title {
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.9px;
+  line-height: 1.2;
   color: var(--text-sub);
-  opacity: 0.85;
+  opacity: 0.9;
+}
+
+.expense-chart-empty-description {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.25px;
+  line-height: 1.3;
+  color: var(--text-sub);
+  opacity: 0.65;
+}
+
+.expense-chart-future-message {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 0;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.65px;
+  line-height: 1.25;
+  color: var(--text-sub);
+  opacity: 0.65;
+  pointer-events: none;
 }
 
 .expense-chart-item {
@@ -1148,20 +1184,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   background: var(--text-sub);
   opacity: 0.15;
   border-radius: 999px;
-}
-      
-.expense-chart-icon.future-placeholder-dot {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  width: 16px;
-  height: 16px;
-  margin: 0;
-  padding: 0;
-  border-radius: 50%;
-  background: var(--text-sub);
-  opacity: 0.12;
-  transform: translateX(-50%);
 }
 
 .expense-chart-bar-wrap {
@@ -4786,139 +4808,223 @@ function renderExpenseTypeSummary(entries) {
   renderExpenseTypeSummary(currentEntries);
   renderExpenseBreakdown(currentEntries);
   renderTopSpending(currentEntries); }
+  
   function renderExpenseBreakdown(entries) {
   const container =
     document.getElementById('expenseBreakdownList');
   const expenses = (entries || [])
-    .filter(item => item.financial_type === 'Expense')
-    .sort((a, b) => Number(b.amount) - Number(a.amount));
+    .filter(
+      item =>
+        item.financial_type === 'Expense'
+    )
+    .sort(
+      (a, b) =>
+        Number(b.amount) -
+        Number(a.amount)
+    );
   if (expenses.length === 0) {
-  const isFuture = isSelectedMonthFuture();
-  selectedExpenseTitle = null;
-  if (isFuture) {
-    selectedExpenseType = null; }
-  container.innerHTML = `
-    <div class="expense-chart-track expense-chart-empty">
-  ${
-    isFuture
-      ? Array.from({ length: 6 }, () => `
-          <div class="expense-chart-item future-placeholder">
-            <div class="expense-chart-bar-wrap">
-              <div class="expense-chart-bar future-placeholder-bar"></div>
-            </div>
-            <div class="expense-chart-icon future-placeholder-dot"></div>
-          </div>
-        `).join('')
-      : `
-          <div class="expense-chart-empty-label">
-            NO EXPENSE
-          </div>
-        `
-      }
-    </div>
-  `;
-  return; }
+    const isFuture =
+      isSelectedMonthFuture();
+    const selectedMonthInfo =
+      months.find(
+        item =>
+          item.m === selectedMonth
+      );
+    const selectedMonthName =
+      selectedMonthInfo
+        ? selectedMonthInfo.name
+        : '';
+    const selectedPeriodLabel =
+      `${selectedMonthName} ${selectedYear}`;
+    selectedExpenseTitle = null;
+    if (isFuture) {
+      selectedExpenseType = null; }
+    container.innerHTML = `
+      <div class="expense-chart-track expense-chart-empty">
+        ${
+          isFuture
+            ? `
+              ${Array.from(
+                { length: 6 },
+                () => `
+                  <div class="expense-chart-item future-placeholder">
+                    <div class="expense-chart-bar-wrap">
+                      <div class="expense-chart-bar future-placeholder-bar"></div>
+                    </div>
+                  </div>
+                `
+              ).join('')}
+              <div class="expense-chart-future-message">
+                NO EXPENSE DATA YET FOR ${selectedPeriodLabel.toUpperCase()}
+              </div>
+            `
+            : `
+              <div class="expense-chart-empty-label">
+                <div class="expense-chart-empty-title">
+                  NO EXPENSE DATA
+                </div>
+                <div class="expense-chart-empty-description">
+                  No expense records for ${selectedPeriodLabel}
+                </div>
+              </div>
+            `
+        }
+      </div>
+    `;
+    return; }
   if (selectedExpenseType) {
     selectedExpenseTitle = null; }
-  const totalExpense = expenses.reduce(
-    (sum, item) => sum + Number(item.amount || 0),
-    0
-  );
-  const contextualExpenses = selectedExpenseType
-    ? expenses.filter(
-        item => getExpenseType(item.title) === selectedExpenseType
+  const totalExpense =
+    expenses.reduce(
+      (sum, item) =>
+        sum +
+        Number(item.amount || 0),
+      0
+    );
+  const contextualExpenses =
+    selectedExpenseType
+      ? expenses.filter(
+          item =>
+            getExpenseType(item.title) ===
+            selectedExpenseType
+        )
+      : expenses;
+  const contextTotal =
+    selectedExpenseType
+      ? contextualExpenses.reduce(
+          (sum, item) =>
+            sum +
+            Number(item.amount || 0),
+          0
+        )
+      : totalExpense;
+  const maxAmount =
+    Math.max(
+      ...expenses.map(
+        item =>
+          Number(item.amount || 0)
       )
-    : expenses;
-  const contextTotal = selectedExpenseType
-    ? contextualExpenses.reduce(
-        (sum, item) => sum + Number(item.amount || 0),
-        0
-      )
-    : totalExpense;
-  const maxAmount = Math.max(
-    ...expenses.map(item => Number(item.amount || 0))
-  );
+    );
   container.innerHTML = `
-    <div class="expense-chart-track ${selectedExpenseType ? 'sub-mode' : ''}">
-      ${expenses.map((item) => {
-        const amount = Number(item.amount || 0);
-        const height = maxAmount > 0
-          ? (amount / maxAmount) * 93
-          : 0;
-        const itemType = getExpenseType(item.title);
-        const percent =
-          selectedExpenseType
-            ? (
-                itemType === selectedExpenseType &&
-                contextTotal > 0
-                  ? Math.round((amount / contextTotal) * 100)
-                  : 0
-              )
-            : (
-                totalExpense > 0
-                  ? Math.round((amount / totalExpense) * 100)
-                  : 0
-              );
-        const normalColor =
-          getExpenseBarColor(item.title);
-        let barColor = normalColor;
-        if (selectedExpenseType) {
-          if (itemType === 'Fixed') {
-            barColor = '#A3CA7E';
-          } else if (itemType === 'Variable') {
-            barColor = '#B0CBE7';
-          } else {
-            barColor = normalColor;
+    <div
+      class="expense-chart-track ${
+        selectedExpenseType
+          ? 'sub-mode'
+          : ''
+      }"
+    >
+      ${expenses
+        .map(item => {
+          const amount =
+            Number(
+              item.amount || 0
+            );
+          const height =
+            maxAmount > 0
+              ? (amount / maxAmount) * 93
+              : 0;
+          const itemType =
+            getExpenseType(
+              item.title
+            );
+          const percent =
+            selectedExpenseType
+              ? (
+                  itemType ===
+                    selectedExpenseType &&
+                  contextTotal > 0
+                    ? Math.round(
+                        (amount /
+                          contextTotal) *
+                          100
+                      )
+                    : 0
+                )
+              : (
+                  totalExpense > 0
+                    ? Math.round(
+                        (amount /
+                          totalExpense) *
+                          100
+                      )
+                    : 0
+                );
+          const normalColor =
+            getExpenseBarColor(
+              item.title
+            );
+          let barColor =
+            normalColor;
+          if (
+            selectedExpenseType
+          ) {
+            if (
+              itemType ===
+              'Fixed'
+            ) {
+              barColor =
+                '#A3CA7E';
+            } else if (
+              itemType ===
+              'Variable'
+            ) {
+              barColor =
+                '#B0CBE7';
+            } else {
+              barColor =
+                normalColor;
+            }
           }
-        }
-        const isDimmed =
-          selectedExpenseType &&
-          itemType !== selectedExpenseType;
-        return `
-          <div
-            class="expense-chart-item ${isDimmed ? 'is-type-dimmed' : ''}"
-            data-expense-title="${item.title}"
-          >
-            <div class="expense-chart-bar-wrap">
-              <div
-                class="expense-chart-bar"
-                style="
-                  height: ${height}%;
-                  background: ${barColor};
-                "
-              >
+          const isDimmed =
+            selectedExpenseType &&
+            itemType !==
+              selectedExpenseType;
+          return `
+            <div
+              class="expense-chart-item ${
+                isDimmed
+                  ? 'is-type-dimmed'
+                  : ''
+              }"
+              data-expense-title="${item.title}"
+            >
+              <div class="expense-chart-bar-wrap">
                 <div
-                  class="expense-chart-percent"
-                  style="background: ${barColor};"
+                  class="expense-chart-bar"
+                  style="
+                    height: ${height}%;
+                    background: ${barColor};
+                  "
                 >
-                  ${percent}%
+                  <div
+                    class="expense-chart-percent"
+                    style="
+                      background: ${barColor};
+                    "
+                  >
+                    ${percent}%
+                  </div>
+                  <div class="expense-chart-dot"></div>
                 </div>
-                <div class="expense-chart-dot"></div>
-                <div class="expense-chart-selected-icon">
-                  <i data-lucide="${item.icon || 'circle'}"></i>
-                </div>
-              </div>
-            </div>
-            <div class="expense-chart-label">
-              <div class="expense-chart-amount">
-                ฿${amount.toLocaleString('en-US', {
-                  minimumFractionDigits: 2
-                })}
               </div>
               <div class="expense-chart-icon">
-                <i data-lucide="${item.icon || 'circle'}"></i>
+                ${
+                  getExpenseIcon(
+                    item.title
+                  )
+                }
               </div>
             </div>
-          </div>
-        `;
-      }).join('')}
+          `;
+        })
+        .join('')}
     </div>
   `;
-  lucide.createIcons();
-    requestAnimationFrame(() => {
-      updateExpenseChartCompactState();
-    }); 
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
   }
+ }
+
   function renderTopSpending(entries) {
   const container =
     document.getElementById('topSpendingList');
