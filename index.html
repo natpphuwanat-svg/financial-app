@@ -112,7 +112,7 @@
     .hero-section > *{
       position: relative;
       z-index: 1;
-    }
+}
       
     .app-header { 
       display: flex; justify-content: space-between; align-items: center; 
@@ -120,10 +120,6 @@
       padding-right:20px;
       padding-left:20px;
       padding-bottom:8px;
-    }
-    
-    .entries-header {
-      position: relative;
     }
     .header-left { display: flex; align-items: center; gap: 12px; }
     
@@ -580,30 +576,20 @@ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10); }
 }
 
 .insight-context-back {
-  position: absolute;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 3px;
-
   height: 34px;
   padding: 0 2px;
-
   border: 0;
   background: transparent;
-
   color: var(--blue-grey);
-
   font-family: inherit;
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.3px;
   line-height: 1;
-
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
@@ -619,7 +605,7 @@ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10); }
 }
 
 .insight-context-back:active {
-  transform: translateY(-50%) scale(0.95);
+  transform: scale(0.95);
 }
 
 .entries-expense-filter {
@@ -2663,7 +2649,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 </div>
     <!-- Entries Page -->
   <div id="placeholderView" style="display:none;">
-    <header class="app-header entries-header">
+    <header class="app-header">
   <div class="header-left">
     <div class="home-icon-box">
       <i data-lucide="list-todo"></i>
