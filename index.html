@@ -9726,6 +9726,7 @@ return Number(b.amount) - Number(a.amount); });
         mode: insightsViewMode,
         sourceYear: selectedYear,
         sourceMonth: selectedMonth,
+        sourceExpenseType: selectedExpenseType,
         year: selectedYear,
         month: selectedMonth,
         expenseType: selectedExpenseType,
@@ -9797,59 +9798,60 @@ return Number(b.amount) - Number(a.amount); });
       fetchData();
     }
     
-    function returnToInsightContext() {
-      if (!insightContext) {
-      return; }
-      const context = { ...insightContext };
-      insightContext = null;
-      insightContextEntriesActive = false;
-      currentEntryFilter = 'all';
-      currentExpenseEntryFilter = 'all';
-      selectedYear = context.year;
-      selectedMonth = context.month;
-      selectedExpenseType = context.expenseType;
-      selectedExpenseTitle = null;
-      const backButton =
-        document.getElementById('insightContextBack');
-      if (backButton) {
-        backButton.hidden = true; }
-        updatePeriodUI();
-      const bottomNav =
-        document.querySelector('.floating-tab-bar');
-      const heroSection =
-        document.querySelector('.hero-section');
-      const placeholderView =
-        document.getElementById('placeholderView');
-      const insightsView =
-        document.getElementById('insightsView');
-      const tabs =
-        document.querySelectorAll('.floating-tab');
-        currentTab = 'insights';
-        visitedTabs.insights = true;
-        floatingNavLocked = true;
-        userIsScrolling = false;
-        tabs.forEach(button => {
-          button.classList.remove('active');
-        });
-        tabs[2]?.classList.add('active');
-      if (heroSection) {
-        heroSection.style.display = 'none'; }
-      if (placeholderView) {
-        placeholderView.style.display = 'none'; }
-      if (insightsView) {
-        insightsView.style.display = ''; }
-      if (bottomNav) {
-        bottomNav.classList.remove('compact'); }
-      requestAnimationFrame(() => {
-      window.scrollTo({
+  function returnToInsightContext() {
+  if (!insightContext) {
+    return; }
+  const context = { ...insightContext };
+  fetchRequestId++;
+  insightContext = null;
+  insightContextEntriesActive = false;
+  currentEntryFilter = 'all';
+  currentExpenseEntryFilter = 'all';
+  selectedYear = context.sourceYear;
+  selectedMonth = context.sourceMonth;
+  selectedExpenseType =
+    context.sourceExpenseType ?? context.expenseType;
+  selectedExpenseTitle = null;
+  const backButton =
+    document.getElementById('insightContextBack');
+  if (backButton) {
+    backButton.hidden = true; }
+  updatePeriodUI();
+  const bottomNav =
+    document.querySelector('.floating-tab-bar');
+  const heroSection =
+    document.querySelector('.hero-section');
+  const placeholderView =
+    document.getElementById('placeholderView');
+  const insightsView =
+    document.getElementById('insightsView');
+  const tabs =
+    document.querySelectorAll('.floating-tab');
+  currentTab = 'insights';
+  visitedTabs.insights = true;
+  if (heroSection) {
+    heroSection.style.display = 'none'; }
+  if (placeholderView) {
+    placeholderView.style.display = 'none'; }
+  if (insightsView) {
+    insightsView.style.display = ''; }
+  tabs.forEach(button => {
+    button.classList.remove('active');
+  });
+  tabs[2]?.classList.add('active');
+  if (bottomNav) {
+    bottomNav.classList.remove('compact'); }
+  floatingNavLocked = true;
+  userIsScrolling = false;
+  requestAnimationFrame(() => {
+    window.scrollTo({
       top: context.scrollY || 0,
       behavior: 'auto'
-      });
-      if (bottomNav) {
+    });
+    if (bottomNav) {
       bottomNav.classList.remove('compact'); }
-      });
-      fetchData();
-    }
+  });
+  fetchData(); }
         
     function goToEntriesFromOverview() {
       switchTab('entries');
