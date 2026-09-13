@@ -567,23 +567,196 @@ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10); }
 }
 .placeholder-page { min-height: 60vh; display: flex; align-items: center; justify-content: center; }
 .placeholder-title { font-size: 24px; font-weight: 800; color: var(--text-main); letter-spacing: 0.3px; }
-.entries-filter { display: flex; width: 100%; margin-bottom: 22px; gap: 0; }
-.entries-expense-filter { display: flex; width: 100%; margin-top: -10px; margin-bottom: 22px; gap: 0; }
-.entries-expense-filter[hidden] { display: none; }
-.entries-expense-filter .entries-filter-btn { flex: 1; }
-.entries-expense-filter .entries-filter-btn.active span::after { background: var(--expense-color); }
-.entries-filter-btn { position: relative; flex: 1; appearance: none; -webkit-appearance: none;
- border: none; outline: none; background: transparent; color: var(--text-sub); padding: 8px 2px 10px;
- font-family: inherit; font-size: 11px; font-weight: 800; letter-spacing: 0.3px;
- text-align: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-.entries-filter-btn span { position: relative; display: inline-block; }
-.entries-filter-btn.active span { transform: scale(1.10); }
-.entries-filter-btn.active span::after { content: ""; position: absolute; left: 0; right: 0;
- bottom: -5px; height: 2px; border-radius: 2px; background: var(--blue-grey); }
-.entries-filter-btn.active[data-filter="all"] span::after { background: var(--blue-grey); }
-.entries-filter-btn.active[data-filter="income"] span::after {background: var(--income-color); }
-.entries-filter-btn.active[data-filter="expense"] span::after { background: var(--expense-color); }
-.entries-filter-btn.active[data-filter="deduction"] span::after { background: var(--deduction-color); }
+/* =========================================================
+   Entries Filter — Capsule / Pill Buttons
+   ========================================================= */
+
+.entries-filter {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 22px;
+  gap: 7px;
+}
+
+.entries-expense-filter {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-top: -10px;
+  margin-bottom: 22px;
+  gap: 7px;
+}
+
+.entries-expense-filter[hidden] {
+  display: none;
+}
+
+.entries-filter-btn {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 34px;
+  padding: 0 8px;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  border: 1px solid rgba(100, 116, 139, 0.22);
+  outline: none;
+  border-radius: 999px;
+
+  background: transparent;
+  color: var(--text-sub);
+
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.25px;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.16s ease;
+}
+
+.entries-filter-btn span {
+  display: block;
+  position: relative;
+  transform: none;
+}
+
+.entries-filter-btn:active {
+  transform: scale(0.95);
+}
+
+/* ---------------------------------------------------------
+   ENTRIES — Normal
+   --------------------------------------------------------- */
+
+.entries-filter-btn[data-filter="all"],
+.entries-filter-btn[data-filter="income"],
+.entries-filter-btn[data-filter="expense"],
+.entries-filter-btn[data-filter="deduction"] {
+  background: transparent;
+  color: var(--text-sub);
+}
+
+/* ---------------------------------------------------------
+   ENTRIES — Active
+   --------------------------------------------------------- */
+
+.entries-filter-btn.active[data-filter="all"] {
+  background: rgba(114, 152, 199, 0.16);
+  border-color: var(--blue-grey);
+  color: var(--blue-grey);
+}
+
+.entries-filter-btn.active[data-filter="income"] {
+  background: var(--income-bg);
+  border-color: var(--income-color);
+  color: var(--income-color);
+}
+
+.entries-filter-btn.active[data-filter="expense"] {
+  background: var(--expense-bg);
+  border-color: var(--expense-color);
+  color: var(--expense-color);
+}
+
+.entries-filter-btn.active[data-filter="deduction"] {
+  background: var(--deduction-bg);
+  border-color: var(--deduction-color);
+  color: var(--deduction-color);
+}
+
+/* ---------------------------------------------------------
+   EXPENSE — ALL / FIXED / VARIABLE
+   --------------------------------------------------------- */
+
+.entries-expense-filter .entries-filter-btn {
+  flex: 1 1 0;
+}
+
+/* ALL = all expenses → Expense Red */
+.entries-expense-filter
+.entries-filter-btn.active[data-expense-filter="all"] {
+  background: var(--expense-bg);
+  border-color: var(--expense-color);
+  color: var(--expense-color);
+}
+
+/* FIXED */
+.entries-expense-filter
+.entries-filter-btn.active[data-expense-filter="fixed"] {
+  background: rgba(163, 202, 126, 0.16);
+  border-color: #A3CA7E;
+  color: #A3CA7E;
+}
+
+/* VARIABLE */
+.entries-expense-filter
+.entries-filter-btn.active[data-expense-filter="variable"] {
+  background: rgba(176, 203, 231, 0.18);
+  border-color: #B0CBE7;
+  color: #B0CBE7;
+}
+
+/* ---------------------------------------------------------
+   Dark Mode
+   Keep the capsule transparent in normal state.
+   Active fills remain subtle.
+   --------------------------------------------------------- */
+
+[data-theme="dark"] .entries-filter-btn {
+  border-color: rgba(148, 163, 184, 0.20);
+  color: var(--text-sub);
+}
+
+[data-theme="dark"]
+.entries-filter-btn.active[data-filter="all"] {
+  background: rgba(114, 152, 199, 0.18);
+}
+
+[data-theme="dark"]
+.entries-filter-btn.active[data-filter="income"] {
+  background: rgba(59, 177, 67, 0.17);
+}
+
+[data-theme="dark"]
+.entries-filter-btn.active[data-filter="expense"] {
+  background: rgba(244, 63, 94, 0.17);
+}
+
+[data-theme="dark"]
+.entries-filter-btn.active[data-filter="deduction"] {
+  background: rgba(217, 119, 6, 0.17);
+}
+
+[data-theme="dark"]
+.entries-expense-filter
+.entries-filter-btn.active[data-expense-filter="all"] {
+  background: rgba(244, 63, 94, 0.17);
+}
+
+[data-theme="dark"]
+.entries-expense-filter
+.entries-filter-btn.active[data-expense-filter="fixed"] {
+  background: rgba(163, 202, 126, 0.17);
+}
+
+[data-theme="dark"]
+.entries-expense-filter
+.entries-filter-btn.active[data-expense-filter="variable"] {
+  background: rgba(176, 203, 231, 0.18);
+}
 .entries-total { margin: 0 2% 19px; padding: 0; font-size: 12px; font-weight: 800; letter-spacing: 0.5px; color: var(--text-sub); }
 .entry-group { margin: 0 0 32px; padding: 0; }
 .entry-group-header { display: flex; align-items: center; justify-content: space-between; margin: 0 2% 6px; padding: 0; }
