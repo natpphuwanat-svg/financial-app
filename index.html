@@ -567,10 +567,6 @@ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10); }
 }
 .placeholder-page { min-height: 60vh; display: flex; align-items: center; justify-content: center; }
 .placeholder-title { font-size: 24px; font-weight: 800; color: var(--text-main); letter-spacing: 0.3px; }
-/* =========================================================
-   Entries Filter — Capsule / Pill Buttons
-   ========================================================= */
-
 .entries-filter {
   display: flex;
   align-items: center;
@@ -582,6 +578,7 @@ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10); }
 .entries-expense-filter {
   display: flex;
   align-items: center;
+  justify-content: center;
   width: 100%;
   margin-top: -10px;
   margin-bottom: 22px;
@@ -637,10 +634,6 @@ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10); }
   transform: scale(0.95);
 }
 
-/* ---------------------------------------------------------
-   ENTRIES — Normal
-   --------------------------------------------------------- */
-
 .entries-filter-btn[data-filter="all"],
 .entries-filter-btn[data-filter="income"],
 .entries-filter-btn[data-filter="expense"],
@@ -648,10 +641,6 @@ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10); }
   background: transparent;
   color: var(--text-sub);
 }
-
-/* ---------------------------------------------------------
-   ENTRIES — Active
-   --------------------------------------------------------- */
 
 .entries-filter-btn.active[data-filter="all"] {
   background: rgba(114, 152, 199, 0.16);
@@ -677,15 +666,10 @@ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10); }
   color: var(--deduction-color);
 }
 
-/* ---------------------------------------------------------
-   EXPENSE — ALL / FIXED / VARIABLE
-   --------------------------------------------------------- */
-
 .entries-expense-filter .entries-filter-btn {
-  flex: 1 1 0;
+  flex: 0 0 auto;
+  width: 82px;
 }
-
-/* ALL = all expenses → Expense Red */
 .entries-expense-filter
 .entries-filter-btn.active[data-expense-filter="all"] {
   background: var(--expense-bg);
@@ -693,7 +677,6 @@ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10); }
   color: var(--expense-color);
 }
 
-/* FIXED */
 .entries-expense-filter
 .entries-filter-btn.active[data-expense-filter="fixed"] {
   background: rgba(163, 202, 126, 0.16);
@@ -701,19 +684,12 @@ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10); }
   color: #A3CA7E;
 }
 
-/* VARIABLE */
 .entries-expense-filter
 .entries-filter-btn.active[data-expense-filter="variable"] {
   background: rgba(176, 203, 231, 0.18);
   border-color: #B0CBE7;
   color: #B0CBE7;
 }
-
-/* ---------------------------------------------------------
-   Dark Mode
-   Keep the capsule transparent in normal state.
-   Active fills remain subtle.
-   --------------------------------------------------------- */
 
 [data-theme="dark"] .entries-filter-btn {
   border-color: rgba(148, 163, 184, 0.20);
