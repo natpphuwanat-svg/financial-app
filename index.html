@@ -5426,30 +5426,41 @@ function renderExpenseTypeSummary(entries) {
     </div>
   `;
   return; }
-  const rankColor =
+    const rankColor =
     selectedExpenseType === 'Fixed'
       ? '#A3CA7E'
       : selectedExpenseType === 'Variable'
         ? '#B0CBE7'
         : 'var(--text-sub)';
-  container.innerHTML = topExpenses.map((item, index) => `
-    <div class="top-spending-item">
-      <div
-        class="top-spending-rank"
-        style="color: ${rankColor};"
-      >
-        ${String(index + 1).padStart(2, '0')}
+  container.innerHTML = `
+    ${topExpenses.map((item, index) => `
+      <div class="top-spending-item">
+        <div
+          class="top-spending-rank"
+          style="color: ${rankColor};"
+        >
+          ${String(index + 1).padStart(2, '0')}
+        </div>
+        <div class="top-spending-name">
+          ${item.title}
+        </div>
+        <div class="top-spending-amount">
+          ฿${Number(item.amount || 0).toLocaleString('en-US', {
+            minimumFractionDigits: 2
+          })}
+        </div>
       </div>
-      <div class="top-spending-name">
-        ${item.title}
-      </div>
-      <div class="top-spending-amount">
-        ฿${Number(item.amount || 0).toLocaleString('en-US', {
-          minimumFractionDigits: 2
-        })}
-      </div>
-    </div>
-  `).join('');
+    `).join('')}
+    <button
+      type="button"
+      class="top-spending-view-all"
+      aria-label="View all expenses"
+    >
+      VIEW ALL
+      <i data-lucide="arrow-right"></i>
+    </button>
+  `;
+  lucide.createIcons();
   }
   document
   .getElementById('expenseBreakdownList')
