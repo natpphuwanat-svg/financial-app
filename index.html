@@ -568,10 +568,14 @@ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10); }
 .placeholder-page { min-height: 60vh; display: flex; align-items: center; justify-content: center; }
 .placeholder-title { font-size: 24px; font-weight: 800; color: var(--text-main); letter-spacing: 0.3px; }
 .entries-filter { display: flex; width: 100%; margin-bottom: 22px; gap: 0; }
+.entries-expense-filter { display: flex; width: 100%; margin-top: -10px; margin-bottom: 22px; gap: 0; }
+.entries-expense-filter[hidden] { display: none; }
+.entries-expense-filter .entries-filter-btn { flex: 1; }
+.entries-expense-filter .entries-filter-btn.active span::after { background: var(--expense-color); }
 .entries-filter-btn { position: relative; flex: 1; appearance: none; -webkit-appearance: none;
-border: none; outline: none; background: transparent; color: var(--text-sub); padding: 8px 2px 10px;
-font-family: inherit; font-size: 11px; font-weight: 800; letter-spacing: 0.3px;
-text-align: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+ border: none; outline: none; background: transparent; color: var(--text-sub); padding: 8px 2px 10px;
+ font-family: inherit; font-size: 11px; font-weight: 800; letter-spacing: 0.3px;
+ text-align: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .entries-filter-btn span { position: relative; display: inline-block; }
 .entries-filter-btn.active span { transform: scale(1.10); }
 .entries-filter-btn.active span::after { content: ""; position: absolute; left: 0; right: 0;
@@ -2498,6 +2502,29 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
           <span>DEDUCTION</span>
         </button>
       </div>
+      <div class="entries-expense-filter" id="entriesExpenseFilter" hidden>
+    <button
+      class="entries-filter-btn active"
+      type="button"
+      data-expense-filter="all"
+      onclick="setExpenseEntryFilter('all')">
+    <span>ALL</span>
+  </button>
+   <button
+    class="entries-filter-btn"
+    type="button"
+    data-expense-filter="fixed"
+    onclick="setExpenseEntryFilter('fixed')">
+    <span>FIXED</span>
+  </button>
+  <button
+    class="entries-filter-btn"
+    type="button"
+    data-expense-filter="variable"
+    onclick="setExpenseEntryFilter('variable')">
+    <span>VARIABLE</span>
+  </button>
+    </div>
       <div class="entries-list" id="entriesList">
         <div class="loading-state">No entries yet.</div>
       </div>
@@ -3122,6 +3149,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     let currentEntries = [];
     let currentAnnualEntries = [];
     let currentEntryFilter = 'all';
+    let currentExpenseEntryFilter = 'all';
     let lastFetchTime = 0;
     const REFRESH_THRESHOLD = 60 * 1000;
     
@@ -3708,46 +3736,61 @@ function changeInsightsPeriod(delta) {
    );
   }
   
-  function renderEntryGroup(type, items) {
+  function renderEntryGroup(type, items, displayType = type) {
   if (!items || items.length === 0) return '';
   const typeClass = type.toLowerCase();
   return `
     <div class="entry-group">
-   <div class="entry-group-header">
-  <div class="entry-group-title"> ${type.toUpperCase()} (${items.length})
-  </div>
-  <div class="entry-group-count"> ฿${items.reduce((sum, item) => sum + Number(item.amount || 0), 0).toLocaleString('en-US', {
-      minimumFractionDigits: 2
-    })}
-  </div>
-    </div>
+      <div class="entry-group-header">
+        <div class="entry-group-title">
+          ${displayType.toUpperCase()} (${items.length})
+        </div>
+        <div class="entry-group-count">
+          ฿${items.reduce(
+            (sum, item) =>
+              sum + Number(item.amount || 0),
+            0
+          ).toLocaleString('en-US', {
+            minimumFractionDigits: 2
+          })}
+        </div>
+      </div>
       <div class="entry-group-divider"></div>
       <div class="entry-group-items">
         ${items.map(item => `
-          <div class="entry-row"
-               onclick='openModal("edit", ${JSON.stringify({
-                 rowIndex: item.id,
-                 rawDate: item.entry_date,
-                 title: item.title,
-                 amount: Number(item.amount),
-                 type: item.financial_type.toLowerCase(),
-                 financialType: item.financial_type,
-                 icon: item.icon
-               })})'>
+          <div
+            class="entry-row"
+            onclick='openModal("edit", ${JSON.stringify({
+              rowIndex: item.id,
+              rawDate: item.entry_date,
+              title: item.title,
+              amount: Number(item.amount),
+              type: item.financial_type.toLowerCase(),
+              financialType: item.financial_type,
+              icon: item.icon
+            })})'
+          >
             <div class="entry-left">
               <div class="entry-badge ${typeClass}">
                 <i data-lucide="${item.icon || 'circle'}"></i>
               </div>
               <div class="entry-info">
-                <div class="entry-title">${item.title}</div>
-                <div class="entry-type">${type.toUpperCase()}</div>
+                <div class="entry-title">
+                  ${item.title}
+                </div>
+                <div class="entry-type">
+                  ${type.toUpperCase()}
+                </div>
               </div>
             </div>
             <div class="entry-right">
               <div class="entry-amount ${typeClass}">
-                ฿${Number(item.amount).toLocaleString('en-US', {
-                  minimumFractionDigits: 2
-                })}
+                ฿${Number(item.amount).toLocaleString(
+                  'en-US',
+                  {
+                    minimumFractionDigits: 2
+                  }
+                )}
               </div>
             </div>
           </div>
@@ -3759,41 +3802,73 @@ function changeInsightsPeriod(delta) {
 
 function renderEntriesPage(entries) {
   currentEntries = entries || [];
+  const expenseSubFilter =
+    document.getElementById('entriesExpenseFilter');
+  if (expenseSubFilter) {
+    expenseSubFilter.hidden =
+      currentEntryFilter !== 'expense'; }
   let filteredEntries = currentEntries;
   if (currentEntryFilter !== 'all') {
     filteredEntries = currentEntries.filter(item =>
       item.financial_type.toLowerCase() === currentEntryFilter
     );
   }
+  let entryGroupTitle = null;
+  if (currentEntryFilter === 'expense') {
+    if (currentExpenseEntryFilter === 'fixed') {
+      filteredEntries = filteredEntries.filter(item =>
+        getExpenseType(item.title) === 'Fixed'
+      );
+      entryGroupTitle = 'Fixed';
+    } else if (currentExpenseEntryFilter === 'variable') {
+      filteredEntries = filteredEntries.filter(item =>
+        getExpenseType(item.title) === 'Variable'
+      );
+      entryGroupTitle = 'Variable';
+    } else {
+      entryGroupTitle = 'Expense';
+    }
+  }
   if (filteredEntries.length === 0) {
-  const isFuture = isSelectedMonthFuture();
-  const emptyText =
-    isFuture && currentEntries.length === 0
-      ? 'Upcoming'
-      : 'No entries yet.';
-  document.getElementById('entriesList').innerHTML =
-    `<div class="loading-state">${emptyText}</div>`;
-  return; }
+    const isFuture = isSelectedMonthFuture();
+    const emptyText =
+      isFuture && currentEntries.length === 0
+        ? 'Upcoming'
+        : 'No entries yet.';
+    document.getElementById('entriesList').innerHTML =
+      `<div class="loading-state">${emptyText}</div>`;
+    return; }
   const grouped = {
     Income: [],
     Expense: [],
     Deduction: []
   };
-filteredEntries.forEach(item => {
-  if (grouped[item.financial_type]) {
-    grouped[item.financial_type].push(item);
-  }
-});
-Object.keys(grouped).forEach(type => {
-  grouped[type].sort((a, b) => Number(b.amount) - Number(a.amount));
-});
+  filteredEntries.forEach(item => {
+    if (grouped[item.financial_type]) {
+      grouped[item.financial_type].push(item); }
+  });
+  Object.keys(grouped).forEach(type => {
+    grouped[type].sort(
+      (a, b) =>
+        Number(b.amount) - Number(a.amount)
+    );
+  });
   document.getElementById('entriesList').innerHTML = `
-    ${renderEntryGroup('Income', grouped.Income)}
-    ${renderEntryGroup('Expense', grouped.Expense)}
-    ${renderEntryGroup('Deduction', grouped.Deduction)}
+    ${
+      currentEntryFilter === 'expense'
+        ? renderEntryGroup(
+            'Expense',
+            grouped.Expense,
+            entryGroupTitle
+          )
+        : `
+          ${renderEntryGroup('Income', grouped.Income)}
+          ${renderEntryGroup('Expense', grouped.Expense)}
+          ${renderEntryGroup('Deduction', grouped.Deduction)}
+        `
+    }
   `;
-  lucide.createIcons();
-}
+  lucide.createIcons(); }
 
   function renderEntriesLoading() {
   document.getElementById('entriesList').innerHTML = `
@@ -9564,17 +9639,62 @@ const { error } = await supabaseClient
     console.error('Delete entry error:', err);
     alert('Error deleting entry.');
   }
-}
+ }
+
  function setEntryFilter(filter) {
   currentEntryFilter = filter;
-  document.querySelectorAll('.entries-filter-btn').forEach(btn => {
-    btn.classList.toggle(
-      'active',
-      btn.dataset.filter === filter
+  if (filter !== 'expense') {
+    currentExpenseEntryFilter = 'all'; }
+  document
+    .querySelectorAll(
+      '#entriesFilter .entries-filter-btn'
+    )
+    .forEach(btn => {
+      btn.classList.toggle(
+        'active',
+        btn.dataset.filter === filter
+      );
+    });
+  const expenseFilter =
+    document.getElementById(
+      'entriesExpenseFilter'
     );
-  });
-  renderEntriesPage(currentEntries);
-}
+  if (expenseFilter) {
+    expenseFilter.hidden =
+      filter !== 'expense'; }
+  document
+    .querySelectorAll(
+      '#entriesExpenseFilter .entries-filter-btn'
+    )
+    .forEach(btn => {
+      btn.classList.toggle(
+        'active',
+        btn.dataset.expenseFilter ===
+          currentExpenseEntryFilter
+      );
+    });
+    renderEntriesPage(currentEntries); }
+  
+  function setExpenseEntryFilter(filter) {
+  if (
+    !['all', 'fixed', 'variable'].includes(filter)
+  ) {
+    return; }
+  if (currentEntryFilter !== 'expense') {
+    return; }
+  currentExpenseEntryFilter = filter;
+  document
+    .querySelectorAll(
+      '#entriesExpenseFilter .entries-filter-btn'
+    )
+    .forEach(btn => {
+      btn.classList.toggle(
+        'active',
+        btn.dataset.expenseFilter === filter
+      );
+    });
+    renderEntriesPage(currentEntries); }
+    
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     media.addEventListener("change", (e) => {
       applyTheme(e.matches ? "dark" : "light");
