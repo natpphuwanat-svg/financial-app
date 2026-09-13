@@ -9724,6 +9724,8 @@ return Number(b.amount) - Number(a.amount); });
       : 'all';
       insightContext = {
         mode: insightsViewMode,
+        sourceYear: selectedYear,
+        sourceMonth: selectedMonth,
         year: selectedYear,
         month: selectedMonth,
         expenseType: selectedExpenseType,
@@ -9872,8 +9874,8 @@ return Number(b.amount) - Number(a.amount); });
     insightContext &&
     insightContextEntriesActive
     ) {
-    const normalYear = insightContext.year;
-    const normalMonth = insightContext.month;
+    const normalYear = insightContext.sourceYear;
+    const normalMonth = insightContext.sourceMonth;
     insightContextEntriesActive = false;
     selectedYear = normalYear;
     selectedMonth = normalMonth;
