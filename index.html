@@ -9780,10 +9780,10 @@ return Number(b.amount) - Number(a.amount); });
         btn.dataset.expenseFilter === currentExpenseEntryFilter
         );
       });
-      const expenseFilter =
+      const expenseFilterElement =
         document.getElementById('entriesExpenseFilter');
-      if (expenseFilter) {
-        expenseFilter.hidden = false; }
+      if (expenseFilterElement) {
+        expenseFilterElement.hidden = false; }
       renderEntriesLoading();
       requestAnimationFrame(() => {
         window.scrollTo({
