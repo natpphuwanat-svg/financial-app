@@ -3402,115 +3402,177 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     let lastFetchTime = 0;
     const REFRESH_THRESHOLD = 60 * 1000;
     function resetAppSession() {
-      fetchRequestId++;
-      insightContext = null;
-      insightContextEntriesActive = false;
-      currentEntryFilter = 'all';
-      currentExpenseEntryFilter = 'all';
-      selectedExpenseType = null;
-      selectedExpenseTitle = null;
-      selectedYear = realCurrentYear;
-      selectedMonth = realCurrentMonth;
-      insightsViewMode = 'month';
-      insightsViewModeTransitioning = false;
-      resetAnnualComparisonYears();
-      closeAnnualExpenseTrendTooltip();
+    const wasInsightContext = insightContext && insightContextEntriesActive;
+    const sessionTab = wasInsightContext ? 'insights' : currentTab;
+    fetchRequestId++;
+    insightContext = null;
+    insightContextEntriesActive = false;
+    currentEntryFilter = 'all';
+    currentExpenseEntryFilter = 'all';
+    selectedExpenseType = null;
+    selectedExpenseTitle = null;
+    selectedYear = realCurrentYear;
+    selectedMonth = realCurrentMonth;
+    insightsViewMode = 'month';
+    insightsViewModeTransitioning = false;
+    resetAnnualComparisonYears();
+    closeAnnualExpenseTrendTooltip();
+    currentTab = sessionTab;
+    tabScrollPositions[sessionTab] = 0;
+    floatingNavLocked = true;
+    userIsScrolling = false;
+    const bottomNav = document.querySelector('.floating-tab-bar');
+    const heroSection = document.querySelector('.hero-section');
+    const placeholderView = document.getElementById('placeholderView');
+    const insightsView = document.getElementById('insightsView');
+    const backButton = document.getElementById('insightContextBack');
+    const tabs = document.querySelectorAll('.floating-tab');
+    if (wasInsightContext) {
       currentTab = 'insights';
-      visitedTabs.overview = false;
-      visitedTabs.entries = false;
       visitedTabs.insights = true;
-      tabScrollPositions.overview = 0;
-      tabScrollPositions.entries = 0;
-      tabScrollPositions.insights = 0;
-      floatingNavLocked = true;
-      userIsScrolling = false;
-      const heroSection =
-        document.querySelector('.hero-section');
-      const placeholderView =
-        document.getElementById('placeholderView');
-      const insightsView =
-        document.getElementById('insightsView');
-      if (heroSection) {
-        heroSection.style.display = 'none';
-      }
-      if (placeholderView) {
-        placeholderView.style.display = 'none';
-      }
-      if (insightsView) {
-        insightsView.style.display = '';
-      }
-      const backButton =
-        document.getElementById(
-          'insightContextBack'
-          );
-      if (backButton) {
-        backButton.hidden = true;
-      }
-      const monthModeBtn =
-        document.getElementById(
-          'insightsMonthModeBtn'
-          );
-      const yearModeBtn =
-        document.getElementById(
-          'insightsYearModeBtn'
-          );
-      const periodCapsule =
-        document.querySelector(
-          '#insightsView .period-picker-capsule'
-          );
-      const insightsContent =
-        document.getElementById(
-          'insightsContent'
-          );
-      if (monthModeBtn) {
-        monthModeBtn.classList.add('active');
-      }
-      if (yearModeBtn) {
-        yearModeBtn.classList.remove('active');
-      }
-      if (periodCapsule) {
-        periodCapsule.classList.remove(
-          'is-year-mode'
-          );
-      }
-      if (insightsContent) {
-        insightsContent.classList.remove(
-          'is-year-mode'
-          );
-      }
-      const bottomNav =
-        document.querySelector(
-          '.floating-tab-bar'
-          );
-      const tabs =
-        document.querySelectorAll(
-          '.floating-tab'
-          );
-          tabs.forEach(button => {
-            button.classList.remove('active');
-          });
-          tabs[2]?.classList.add('active');
-      if (bottomNav) {
-        bottomNav.classList.remove('compact');
-      }
-      updatePeriodUI();
-      applyEntriesNavigationState({
-        entryFilter: 'all',
-        expenseFilter: 'all'
-      }, false);
-      requestAnimationFrame(() => {
-        window.scrollTo({
-          top: 0,
-          behavior: 'auto'
-        });
-      if (bottomNav) {
-        bottomNav.classList.remove('compact');
-      }
-      });
-      beginInsightsContentLoading();
-      fetchData();
+    if (backButton) {
+      backButton.hidden = true;
     }
-    document.addEventListener("DOMContentLoaded", () => {
+    if (heroSection) {
+      heroSection.style.display = 'none';
+    }
+    if (placeholderView) {
+      placeholderView.style.display = 'none';
+    }
+    beginInsightsContentLoading();
+    if (insightsView) {
+      insightsView.style.display = '';
+    }
+    tabs.forEach(button => {
+      button.classList.remove('active');
+    });
+    tabs[2]?.classList.add('active');
+    if (bottomNav) {
+      bottomNav.classList.remove('compact');
+    }
+    updatePeriodUI();
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'auto'
+      });
+      if (bottomNav) {
+        bottomNav.classList.remove('compact');
+      }
+    });
+    fetchData();
+    return;
+    }
+    if (sessionTab === 'overview') {
+      currentTab = 'overview';
+      visitedTabs.overview = true;
+    if (heroSection) {
+      heroSection.style.display = '';
+    }
+    if (placeholderView) {
+      placeholderView.style.display = 'none';
+    }
+    if (insightsView) {
+      insightsView.style.display = 'none';
+    }
+    if (backButton) {
+      backButton.hidden = true;
+    }
+    tabs.forEach(button => {
+      button.classList.remove('active');
+    });
+    tabs[0]?.classList.add('active');
+    if (bottomNav) {
+      bottomNav.classList.remove('compact');
+    }
+    updatePeriodUI();
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'auto'
+      });
+      if (bottomNav) {
+        bottomNav.classList.remove('compact');
+      }
+    });
+    fetchData();
+    return;
+    }
+    if (sessionTab === 'entries') {
+      currentTab = 'entries';
+      visitedTabs.entries = true;
+    if (heroSection) {
+      heroSection.style.display = 'none';
+    }
+    if (placeholderView) {
+      placeholderView.style.display = '';
+    }
+    if (insightsView) {
+      insightsView.style.display = 'none';
+    }
+    if (backButton) {
+      backButton.hidden = true;
+    }
+    tabs.forEach(button => {
+      button.classList.remove('active');
+    });
+    tabs[1]?.classList.add('active');
+    if (bottomNav) {
+      bottomNav.classList.remove('compact');
+    }
+    updatePeriodUI();
+    applyEntriesNavigationState({
+      entryFilter: 'all',
+      expenseFilter: 'all'
+    }, false);
+    renderEntriesLoading();
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'auto'
+      });
+      if (bottomNav) {
+        bottomNav.classList.remove('compact');
+      }
+    });
+    fetchData();
+    return;
+    }
+    currentTab = 'insights';
+    visitedTabs.insights = true;
+    if (backButton) {
+      backButton.hidden = true;
+    }
+    if (heroSection) {
+      heroSection.style.display = 'none';
+    }
+    if (placeholderView) {
+      placeholderView.style.display = 'none';
+    }
+      beginInsightsContentLoading();
+    if (insightsView) {
+      insightsView.style.display = '';
+    }
+    tabs.forEach(button => {
+    button.classList.remove('active');
+    });
+    tabs[2]?.classList.add('active');
+    if (bottomNav) {
+      bottomNav.classList.remove('compact');
+    }
+    updatePeriodUI();
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'auto'
+    });
+    if (bottomNav) {
+      bottomNav.classList.remove('compact');
+    }
+    });
+    fetchData();
+   }
+  document.addEventListener("DOMContentLoaded", () => {
   
   applyTheme(getPreferredTheme());
   updatePeriodUI();
@@ -3599,8 +3661,8 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       });
     });
    document.addEventListener(
-  'visibilitychange',
-  () => {
+    'visibilitychange',
+    () => {
     if (
       document.visibilityState !==
       'visible'
@@ -3615,10 +3677,10 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       return;
     }
     resetAppSession();
-  }
-  );
+    }
+    );
   
-    // Theme Toggle
+  // Theme Toggle
   function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   document.body.setAttribute('data-theme', theme); }
