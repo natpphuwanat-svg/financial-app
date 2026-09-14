@@ -587,7 +587,7 @@ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10); }
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 4px;
+  gap: 2px;
   height: 42px;
   padding: 0;
   border: 0;
@@ -606,12 +606,11 @@ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10); }
   display: none;
 }
 
-.insight-context-back .context-back-chevron {
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1;
-  color: var(--text-main);
-  transform: translateY(-1px);
+.insight-context-back svg {
+  width: 17px;
+  height: 17px;
+  stroke-width: 2.4;
+  flex: 0 0 17px;
 }
 
 .insight-context-back:active {
@@ -2674,7 +2673,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     onclick="returnToInsightContext()"
     aria-label="Back to Insights"
   >
-    <span class="context-back-chevron">‹</span>
+    <i data-lucide="chevron-left"></i>
     <span>ENTRIES</span>
   </button>
    </header>
