@@ -10078,12 +10078,12 @@ function openEntriesFromInsight() {
   selectedMonth = insightContext.month;
   selectedExpenseType = insightContext.expenseType;
   insightContextEntriesActive = true;
-  currentEntryFilter =
-    insightContext.entryFilter || 'expense';
-  currentExpenseEntryFilter =
-    currentEntryFilter === 'expense'
-      ? (insightContext.expenseFilter || 'all')
-      : 'all';
+  applyEntriesNavigationState({
+  entryFilter:
+    insightContext.entryFilter || 'expense',
+  expenseFilter:
+    insightContext.expenseFilter || 'all'
+  });
   if (heroSection) {
     heroSection.style.display = 'none'; }
   if (placeholderView) {
