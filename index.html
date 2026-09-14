@@ -10334,9 +10334,31 @@ const { error } = await supabaseClient
  }
 
  function setEntryFilter(filter) {
+  if (
+    !['all', 'income', 'expense', 'deduction']
+      .includes(filter)
+  ) {
+    return; }
+  if (
+    currentEntryFilter === filter
+  ) {
+    return; }
+  if (
+    insightContext &&
+    insightContextEntriesActive
+  ) {
+    pushInsightEntriesHistory(); }
   currentEntryFilter = filter;
   if (filter !== 'expense') {
     currentExpenseEntryFilter = 'all'; }
+  if (
+    insightContext &&
+    insightContextEntriesActive
+  ) {
+    insightContext.entryFilter =
+      currentEntryFilter;
+    insightContext.expenseFilter =
+      currentExpenseEntryFilter; }
   document
     .querySelectorAll(
       '#entriesFilter .entries-filter-btn'
@@ -10365,7 +10387,7 @@ const { error } = await supabaseClient
           currentExpenseEntryFilter
       );
     });
-    renderEntriesPage(currentEntries); }
+  renderEntriesPage(currentEntries); }
   
   function setExpenseEntryFilter(filter) {
   if (
