@@ -3598,52 +3598,26 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         });
       });
     });
-  document.addEventListener(
+   document.addEventListener(
   'visibilitychange',
   () => {
     if (
       document.visibilityState !==
       'visible'
     ) {
-      return; }
+      return;
+    }
     const elapsed =
       Date.now() - lastFetchTime;
     if (
       elapsed < REFRESH_THRESHOLD
     ) {
-      return; }
-    if (
-      elapsed >= REFRESH_THRESHOLD &&
-      insightContext
-    ) {
-      insightContext = null;
-      insightContextEntriesActive = false;
-      currentEntryFilter = 'all';
-      currentExpenseEntryFilter = 'all';
-    const backButton =
-      document.getElementById('insightContextBack');
-    if (backButton) {
-      backButton.hidden = true; }
+      return;
     }
-    const insightsView =
-      document.getElementById(
-        'insightsView'
-      );
-    const isInsightsVisible =
-      insightsView &&
-      insightsView.style.display !==
-      'none';
-    if (isInsightsVisible) {
-      if (
-        insightsViewMode === 'year'
-      ) {
-        fetchAnnualData();
-      } else {
-        fetchData(); }
-      return; }
-    fetchData();
+    resetAppSession();
   }
-);
+  );
+  
     // Theme Toggle
   function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
