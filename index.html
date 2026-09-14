@@ -4054,18 +4054,18 @@ function changeInsightsPeriod(delta) {
     insightContext.year = realCurrentYear;
     insightContext.month = realCurrentMonth;
   } else {
-    selectedExpenseType = null; }
+    selectedExpenseType = null;}
     selectedExpenseTitle = null;
     updatePeriodUI();
-  if (
+    if (
     insightsViewMode === 'year' &&
     document.getElementById('insightsView')?.style.display !== 'none'
   ) {
     fetchAnnualData();
   } else {
     fetchData();
-   }
   }
+}
   
   function isSelectedMonthFuture() {
   return (
