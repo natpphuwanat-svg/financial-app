@@ -4051,18 +4051,17 @@ function changeInsightsPeriod(delta) {
   selectedYear = realCurrentYear;
   resetAnnualComparisonYears();
   selectedMonth = realCurrentMonth;
-  selectedExpenseType = null;
-  selectedExpenseTitle = null;
   closeAnnualExpenseTrendTooltip();
   if (
-  insightContext &&
-  insightContextEntriesActive
+    insightContext &&
+    insightContextEntriesActive
   ) {
-  insightContext.year = realCurrentYear;
-  insightContext.month = realCurrentMonth;
-  insightContext.expenseType = selectedExpenseType;
-  }
-  updatePeriodUI();
+    insightContext.year = realCurrentYear;
+    insightContext.month = realCurrentMonth;
+  } else {
+    selectedExpenseType = null; }
+    selectedExpenseTitle = null;
+    updatePeriodUI();
   if (
     insightsViewMode === 'year' &&
     document.getElementById('insightsView')?.style.display !== 'none'
@@ -4070,8 +4069,8 @@ function changeInsightsPeriod(delta) {
     fetchAnnualData();
   } else {
     fetchData();
+   }
   }
-}
   
   function isSelectedMonthFuture() {
   return (
@@ -10429,24 +10428,6 @@ const { error } = await supabaseClient
       );
     });
   renderEntriesPage(currentEntries); }
-  if (
-    !['all', 'fixed', 'variable'].includes(filter)
-  ) {
-    return; }
-  if (currentEntryFilter !== 'expense') {
-    return; }
-  currentExpenseEntryFilter = filter;
-  document
-    .querySelectorAll(
-      '#entriesExpenseFilter .entries-filter-btn'
-    )
-    .forEach(btn => {
-      btn.classList.toggle(
-        'active',
-        btn.dataset.expenseFilter === filter
-      );
-    });
-    renderEntriesPage(currentEntries); }
     
   function setExpenseEntryFilter(filter) {
   if (
