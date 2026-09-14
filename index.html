@@ -10391,12 +10391,32 @@ const { error } = await supabaseClient
   
   function setExpenseEntryFilter(filter) {
   if (
-    !['all', 'fixed', 'variable'].includes(filter)
+    !['all', 'fixed', 'variable']
+      .includes(filter)
   ) {
     return; }
-  if (currentEntryFilter !== 'expense') {
+  if (
+    currentEntryFilter !== 'expense'
+  ) {
     return; }
+  if (
+    currentExpenseEntryFilter === filter
+  ) {
+    return; }
+  if (
+    insightContext &&
+    insightContextEntriesActive
+  ) {
+    pushInsightEntriesHistory(); }
   currentExpenseEntryFilter = filter;
+  if (
+    insightContext &&
+    insightContextEntriesActive
+  ) {
+    insightContext.entryFilter =
+      currentEntryFilter;
+    insightContext.expenseFilter =
+      currentExpenseEntryFilter; }
   document
     .querySelectorAll(
       '#entriesExpenseFilter .entries-filter-btn'
@@ -10404,7 +10424,8 @@ const { error } = await supabaseClient
     .forEach(btn => {
       btn.classList.toggle(
         'active',
-        btn.dataset.expenseFilter === filter
+        btn.dataset.expenseFilter ===
+          filter
       );
     });
     renderEntriesPage(currentEntries); }
