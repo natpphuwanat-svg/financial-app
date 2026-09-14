@@ -9797,38 +9797,32 @@ function pushInsightEntriesHistory() {
     !insightContext ||
     !insightContextEntriesActive
   ) {
-    return;
-  }
-
-  const currentState =
-    getCurrentEntriesNavigationState();
-
+    return; }
+  const currentState = {
+    entryFilter:
+      insightContext.entryFilter ||
+      currentEntryFilter,
+    expenseFilter:
+      insightContext.expenseFilter ||
+      currentExpenseEntryFilter,
+    scrollY: window.scrollY
+  };
   const history =
     insightContext.history || [];
-
-  const previousState =
+  const lastState =
     history.length > 0
       ? history[history.length - 1]
       : null;
-
   if (
-    previousState &&
-    previousState.entryFilter ===
+    lastState &&
+    lastState.entryFilter ===
       currentState.entryFilter &&
-    previousState.expenseFilter ===
+    lastState.expenseFilter ===
       currentState.expenseFilter
   ) {
-    return;
-  }
-
-  history.push({
-    entryFilter: currentState.entryFilter,
-    expenseFilter: currentState.expenseFilter,
-    scrollY: window.scrollY
-  });
-
-  insightContext.history = history;
-}
+    return; }
+  history.push(currentState);
+  insightContext.history = history; }
 
 function openEntriesFromInsight() {
   if (
