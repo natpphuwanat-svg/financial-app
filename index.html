@@ -10015,22 +10015,32 @@ function openEntriesFromInsight() {
     !insightContext ||
     !insightContextEntriesActive
   ) {
-    return; }
+    return;
+  }
   const history =
     insightContext.history || [];
   if (history.length > 0) {
     const previousState =
       history.pop();
-    insightContext.history = history;
+    insightContext.history =
+      history;
+    selectedYear =
+      previousState.year;
+    selectedMonth =
+      previousState.month;
+    selectedExpenseType =
+      insightContext.expenseType;
+    selectedExpenseTitle = null;
+    insightContext.year =
+      previousState.year;
+    insightContext.month =
+      previousState.month;
     applyEntriesNavigationState(
-      previousState
+      previousState,
+      false
     );
-    requestAnimationFrame(() => {
-      window.scrollTo({
-        top: previousState.scrollY || 0,
-        behavior: 'auto'
-      });
-    });
+    updatePeriodUI();
+    renderEntriesLoading();
     const bottomNav =
       document.querySelector(
         '.floating-tab-bar'
@@ -10040,7 +10050,21 @@ function openEntriesFromInsight() {
         'compact'
       );
     }
-    return; }
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top:
+          previousState.scrollY || 0,
+        behavior: 'auto'
+      });
+      if (bottomNav) {
+        bottomNav.classList.remove(
+          'compact'
+        );
+      }
+    });
+    fetchData();
+    return;
+  }
   const context = {
     ...insightContext
   };
@@ -10049,8 +10073,10 @@ function openEntriesFromInsight() {
   insightContextEntriesActive = false;
   currentEntryFilter = 'all';
   currentExpenseEntryFilter = 'all';
-  selectedYear = context.sourceYear;
-  selectedMonth = context.sourceMonth;
+  selectedYear =
+    context.sourceYear;
+  selectedMonth =
+    context.sourceMonth;
   selectedExpenseType =
     context.sourceExpenseType ??
     context.expenseType;
@@ -10060,8 +10086,8 @@ function openEntriesFromInsight() {
       'insightContextBack'
     );
   if (backButton) {
-    backButton.hidden = true; }
-  updatePeriodUI();
+    backButton.hidden = true;
+  }
   const bottomNav =
     document.querySelector(
       '.floating-tab-bar'
@@ -10085,11 +10111,15 @@ function openEntriesFromInsight() {
   currentTab = 'insights';
   visitedTabs.insights = true;
   if (heroSection) {
-    heroSection.style.display = 'none'; }
+    heroSection.style.display = 'none';
+  }
   if (placeholderView) {
-    placeholderView.style.display = 'none'; }
+    placeholderView.style.display = 'none';
+  }
+  beginInsightsContentLoading();
   if (insightsView) {
-    insightsView.style.display = ''; }
+    insightsView.style.display = '';
+  }
   tabs.forEach(button => {
     button.classList.remove('active');
   });
@@ -10101,9 +10131,11 @@ function openEntriesFromInsight() {
   }
   floatingNavLocked = true;
   userIsScrolling = false;
+  updatePeriodUI();
   requestAnimationFrame(() => {
     window.scrollTo({
-      top: context.scrollY || 0,
+      top:
+        context.scrollY || 0,
       behavior: 'auto'
     });
     if (bottomNav) {
@@ -10112,7 +10144,8 @@ function openEntriesFromInsight() {
       );
     }
   });
-  fetchData();}
+  fetchData();
+  }
         
   function goToEntriesFromOverview() {
     switchTab('entries');
