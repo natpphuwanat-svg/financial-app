@@ -3551,11 +3551,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
         );
     if (backButton) {
       backButton.hidden = true; }
-    const backButton =
-      document.getElementById('insightContextBack');
-    if (backButton) {
-      backButton.hidden = true; }
-    }
     const insightsView =
       document.getElementById(
         'insightsView'
@@ -3574,7 +3569,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       return; }
     fetchData();
   }
-);
+ );
     // Theme Toggle
   function applyTheme(theme) {
    document.body.setAttribute('data-theme', theme); }
