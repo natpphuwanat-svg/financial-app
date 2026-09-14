@@ -575,18 +575,26 @@ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10); }
   gap: 7px;
 }
 
+.entries-header {
+  justify-content: flex-start;
+}
+
+.entries-header:has(.insight-context-back:not([hidden])) .header-left {
+  display: none;
+}
+
 .insight-context-back {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 3px;
-  height: 34px;
-  padding: 0 2px;
+  justify-content: flex-start;
+  gap: 4px;
+  height: 42px;
+  padding: 0;
   border: 0;
   background: transparent;
-  color: var(--blue-grey);
+  color: var(--text-main);
   font-family: inherit;
-  font-size: 10px;
+  font-size: 20px;
   font-weight: 800;
   letter-spacing: 0.3px;
   line-height: 1;
@@ -598,14 +606,16 @@ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10); }
   display: none;
 }
 
-.insight-context-back svg {
-  width: 16px;
-  height: 16px;
-  stroke-width: 2.4;
+.insight-context-back .context-back-chevron {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--text-main);
+  transform: translateY(-1px);
 }
 
 .insight-context-back:active {
-  transform: scale(0.95);
+  transform: scale(0.97);
 }
 
 .entries-expense-filter {
@@ -2649,7 +2659,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 </div>
     <!-- Entries Page -->
   <div id="placeholderView" style="display:none;">
-    <header class="app-header">
+    <header class="app-header entries-header">
   <div class="header-left">
     <div class="home-icon-box">
       <i data-lucide="list-todo"></i>
@@ -2664,10 +2674,10 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     onclick="returnToInsightContext()"
     aria-label="Back to Insights"
   >
-    <i data-lucide="chevron-left"></i>
-    <span>BACK</span>
+    <span class="context-back-chevron">‹</span>
+    <span>ENTRIES</span>
   </button>
-  </header>
+   </header>
     <main class="container" id="entriesContent">
       <section class="period-bar">
     <button
