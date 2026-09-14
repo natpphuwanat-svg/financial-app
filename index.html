@@ -3881,18 +3881,35 @@ function changeMonth(delta) {
 
 function changeInsightsPeriod(delta) {
   if (insightsViewMode === 'year') {
-    const newYear = selectedYear + delta;
-    if (newYear < 2025) return;
+    const newYear =
+      selectedYear + delta;
+    if (newYear < 2025) {
+      return;
+    }
+    if (
+      insightContext &&
+      insightContextEntriesActive &&
+      newYear !== selectedYear
+    ) {
+      pushInsightEntriesHistory();
+    }
     selectedYear = newYear;
+    if (
+      insightContext &&
+      insightContextEntriesActive
+    ) {
+      insightContext.year = selectedYear;
+    }
     resetAnnualComparisonYears();
     selectedExpenseType = null;
     selectedExpenseTitle = null;
     closeAnnualExpenseTrendTooltip();
     updatePeriodUI();
     fetchAnnualData();
-    return; }
-    changeMonth(delta);
+    return;
   }
+  changeMonth(delta);
+}
   
   function setInsightsViewMode(mode) {
   if (
