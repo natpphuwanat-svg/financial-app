@@ -579,25 +579,41 @@ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10); }
   justify-content: flex-start;
 }
 
-.entries-header:has(.insight-context-back:not([hidden])) .header-left {
-  display: none;
+.entries-header .header-left {
+  display: flex;
 }
 
-.insight-context-back {
-  display: inline-flex;
+.context-entries-title {
+  display: none;
   align-items: center;
-  justify-content: flex-start;
-  gap: 2px;
   height: 42px;
-  padding: 0;
-  border: 0;
-  background: transparent;
   color: var(--text-main);
   font-family: inherit;
   font-size: 20px;
   font-weight: 800;
   letter-spacing: 0.3px;
   line-height: 1;
+}
+
+.entries-header:has(.insight-context-back:not([hidden])) .header-left {
+  display: none;
+}
+
+.entries-header:has(.insight-context-back:not([hidden])) .context-entries-title {
+  display: inline-flex;
+}
+
+.insight-context-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 42px;
+  flex: 0 0 28px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-main);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
@@ -610,11 +626,14 @@ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10); }
   width: 17px;
   height: 17px;
   stroke-width: 2.4;
-  flex: 0 0 17px;
 }
 
 .insight-context-back:active {
-  transform: scale(0.97);
+  transform: scale(0.92);
+}
+
+.entries-header:has(.insight-context-back:not([hidden])) {
+  gap: 0;
 }
 
 .entries-expense-filter {
@@ -2674,9 +2693,11 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     aria-label="Back to Insights"
   >
     <i data-lucide="chevron-left"></i>
-    <span>ENTRIES</span>
   </button>
-   </header>
+  <div class="context-entries-title" aria-hidden="true">
+    <span>ENTRIES</span>
+  </div>
+  </header>
     <main class="container" id="entriesContent">
       <section class="period-bar">
     <button
