@@ -9769,9 +9769,10 @@ window.addEventListener(
   { passive: true }
 );
 
-function applyEntriesNavigationState(state) {
+function applyEntriesNavigationState(state, render = true) {
   if (!state) return;
-  currentEntryFilter = state.entryFilter || 'all';
+  currentEntryFilter =
+    state.entryFilter || 'all';
   currentExpenseEntryFilter =
     state.entryFilter === 'expense'
       ? (state.expenseFilter || 'all')
@@ -9779,11 +9780,16 @@ function applyEntriesNavigationState(state) {
   if (
     insightContext &&
     insightContextEntriesActive
-    ) {
+  ) {
+    insightContext.year =
+      state.year ?? insightContext.year;
+    insightContext.month =
+      state.month ?? insightContext.month;
     insightContext.entryFilter =
-    currentEntryFilter;
+      currentEntryFilter;
     insightContext.expenseFilter =
-    currentExpenseEntryFilter; }
+      currentExpenseEntryFilter;
+  }
   document
     .querySelectorAll(
       '#entriesFilter .entries-filter-btn'
@@ -9800,7 +9806,8 @@ function applyEntriesNavigationState(state) {
     );
   if (expenseFilterElement) {
     expenseFilterElement.hidden =
-      currentEntryFilter !== 'expense'; }
+      currentEntryFilter !== 'expense';
+  }
   document
     .querySelectorAll(
       '#entriesExpenseFilter .entries-filter-btn'
@@ -9812,7 +9819,10 @@ function applyEntriesNavigationState(state) {
           currentExpenseEntryFilter
       );
     });
-  renderEntriesPage(currentEntries); }
+  if (render) {
+    renderEntriesPage(currentEntries);
+  }
+}
 
 function pushInsightEntriesHistory() {
   if (
