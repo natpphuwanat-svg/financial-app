@@ -3417,13 +3417,22 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     if (!picker) return;
     picker.addEventListener('change', () => {
       const newYear = Number(picker.value);
-      if (!newYear || newYear < 2025) return;
+      if (!newYear || newYear < 2025) {
+        return;
+      }
+      if (
+        insightContext &&
+        insightContextEntriesActive &&
+        newYear !== selectedYear
+      ) {
+        pushInsightEntriesHistory();
+      }
       selectedYear = newYear;
       if (
-      insightContext &&
-      insightContextEntriesActive
+        insightContext &&
+        insightContextEntriesActive
       ) {
-      insightContext.year = selectedYear; }
+        insightContext.year = selectedYear; }
       resetAnnualComparisonYears();
       renderAnnualComparisonYearMenu();
       updateAnnualComparisonYearLabel();
