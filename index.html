@@ -3407,41 +3407,51 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   updatePeriodUI();
   fetchData();
 
-  const yearPickerIds = [
+    const yearPickerIds = [
     'selectedYear',
     'entriesSelectedYear',
     'insightsSelectedYear'
   ];
+
   yearPickerIds.forEach(id => {
     const picker = document.getElementById(id);
     if (!picker) return;
     picker.addEventListener('change', () => {
       const newYear = Number(picker.value);
       if (!newYear || newYear < 2025) return;
+      if (newYear === selectedYear) return;
+      if (
+        insightContext &&
+        insightContextEntriesActive
+      ) {
+        pushInsightEntriesHistory();
+      }
       selectedYear = newYear;
       if (
-      insightContext &&
-      insightContextEntriesActive
+        insightContext &&
+        insightContextEntriesActive
       ) {
-      insightContext.year = selectedYear; }
+        insightContext.year = selectedYear;
+      }
       resetAnnualComparisonYears();
       renderAnnualComparisonYearMenu();
       updateAnnualComparisonYearLabel();
       selectedExpenseType = null;
       selectedExpenseTitle = null;
       if (insightsViewMode === 'year') {
-        closeAnnualExpenseTrendTooltip(); }
+        closeAnnualExpenseTrendTooltip();
+      }
       updatePeriodUI();
       if (
         insightsViewMode === 'year' &&
         document.getElementById('insightsView')?.style.display !== 'none'
-        ) {
-          fetchAnnualData();
-        } else {
-          fetchData();
-        }
-     });
-   });
+      ) {
+        fetchAnnualData();
+      } else {
+        fetchData();
+      }
+    });
+  });
   const monthPickerIds = [
     'selectedMonth',
     'entriesSelectedMonth',
@@ -3452,19 +3462,31 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     if (!picker) return;
     picker.addEventListener('change', () => {
       const newMonth = Number(picker.value);
-      if (!newMonth || newMonth < 1 || newMonth > 12) return;
+      if (
+        !newMonth ||
+        newMonth < 1 ||
+        newMonth > 12
+      ) {
+        return;
+      }
+      if (newMonth === selectedMonth) return;
+      if (
+        insightContext &&
+        insightContextEntriesActive
+      ) {
+        pushInsightEntriesHistory();
+      }
       selectedMonth = newMonth;
       if (
-      insightContext &&
-      insightContextEntriesActive
+        insightContext &&
+        insightContextEntriesActive
       ) {
-      insightContext.month = selectedMonth;
+        insightContext.month = selectedMonth;
       }
       selectedExpenseType = null;
       selectedExpenseTitle = null;
       updatePeriodUI();
       fetchData();
-      });
     });
   });
   document.addEventListener(
