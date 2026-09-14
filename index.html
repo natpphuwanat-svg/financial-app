@@ -3461,21 +3461,34 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     if (!picker) return;
     picker.addEventListener('change', () => {
       const newMonth = Number(picker.value);
-      if (!newMonth || newMonth < 1 || newMonth > 12) return;
-      selectedMonth = newMonth;
       if (
-      insightContext &&
-      insightContextEntriesActive
+        !newMonth ||
+        newMonth < 1 ||
+        newMonth > 12
       ) {
-      insightContext.month = selectedMonth;
+        return;
       }
-      selectedExpenseType = null;
-      selectedExpenseTitle = null;
-      updatePeriodUI();
-      fetchData();
+      if (
+        insightContext &&
+        insightContextEntriesActive &&
+        newMonth !== selectedMonth
+        ) {
+          pushInsightEntriesHistory();
+        }
+        selectedMonth = newMonth;
+        if (
+          insightContext &&
+          insightContextEntriesActive
+        ) {
+          insightContext.month = selectedMonth;
+        }
+        selectedExpenseType = null;
+        selectedExpenseTitle = null;
+        updatePeriodUI();
+        fetchData();
+        });
       });
     });
-  });
   document.addEventListener(
   'visibilitychange',
   () => {
