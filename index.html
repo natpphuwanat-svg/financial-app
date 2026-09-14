@@ -3848,17 +3848,30 @@ function changeMonth(delta) {
   currentDate.setMonth(
     currentDate.getMonth() + delta
   );
-  const newYear = currentDate.getFullYear();
-  const newMonth = currentDate.getMonth() + 1;
-  if (newYear < 2025) return;
+  const newYear =
+    currentDate.getFullYear();
+  const newMonth =
+    currentDate.getMonth() + 1;
+  if (newYear < 2025) {
+    return;
+  }
+  const isContextEntries =
+    insightContext &&
+    insightContextEntriesActive;
+  if (
+    isContextEntries &&
+    (
+      newYear !== selectedYear ||
+      newMonth !== selectedMonth
+    )
+  ) {
+    pushInsightEntriesHistory();
+  }
   selectedYear = newYear;
   selectedMonth = newMonth;
-  if (
-  insightContext &&
-  insightContextEntriesActive
-  ) {
-  insightContext.year = selectedYear;
-  insightContext.month = selectedMonth;
+  if (isContextEntries) {
+    insightContext.year = selectedYear;
+    insightContext.month = selectedMonth;
   }
   selectedExpenseType = null;
   selectedExpenseTitle = null;
