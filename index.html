@@ -9911,9 +9911,39 @@ function openEntriesFromInsight() {
   fetchData(); }
     
   function returnToInsightContext() {
-  if (!insightContext) {
+  if (
+    !insightContext ||
+    !insightContextEntriesActive
+  ) {
     return; }
-  const context = { ...insightContext };
+  const history =
+    insightContext.history || [];
+  if (history.length > 0) {
+    const previousState =
+      history.pop();
+    insightContext.history = history;
+    applyEntriesNavigationState(
+      previousState
+    );
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top: previousState.scrollY || 0,
+        behavior: 'auto'
+      });
+    });
+    const bottomNav =
+      document.querySelector(
+        '.floating-tab-bar'
+      );
+    if (bottomNav) {
+      bottomNav.classList.remove(
+        'compact'
+      );
+    }
+    return; }
+  const context = {
+    ...insightContext
+  };
   fetchRequestId++;
   insightContext = null;
   insightContextEntriesActive = false;
@@ -9922,23 +9952,36 @@ function openEntriesFromInsight() {
   selectedYear = context.sourceYear;
   selectedMonth = context.sourceMonth;
   selectedExpenseType =
-    context.sourceExpenseType ?? context.expenseType;
+    context.sourceExpenseType ??
+    context.expenseType;
   selectedExpenseTitle = null;
   const backButton =
-    document.getElementById('insightContextBack');
+    document.getElementById(
+      'insightContextBack'
+    );
   if (backButton) {
     backButton.hidden = true; }
   updatePeriodUI();
   const bottomNav =
-    document.querySelector('.floating-tab-bar');
+    document.querySelector(
+      '.floating-tab-bar'
+    );
   const heroSection =
-    document.querySelector('.hero-section');
+    document.querySelector(
+      '.hero-section'
+    );
   const placeholderView =
-    document.getElementById('placeholderView');
+    document.getElementById(
+      'placeholderView'
+    );
   const insightsView =
-    document.getElementById('insightsView');
+    document.getElementById(
+      'insightsView'
+    );
   const tabs =
-    document.querySelectorAll('.floating-tab');
+    document.querySelectorAll(
+      '.floating-tab'
+    );
   currentTab = 'insights';
   visitedTabs.insights = true;
   if (heroSection) {
@@ -9952,7 +9995,10 @@ function openEntriesFromInsight() {
   });
   tabs[2]?.classList.add('active');
   if (bottomNav) {
-    bottomNav.classList.remove('compact'); }
+    bottomNav.classList.remove(
+      'compact'
+    );
+  }
   floatingNavLocked = true;
   userIsScrolling = false;
   requestAnimationFrame(() => {
@@ -9961,15 +10007,18 @@ function openEntriesFromInsight() {
       behavior: 'auto'
     });
     if (bottomNav) {
-      bottomNav.classList.remove('compact'); }
+      bottomNav.classList.remove(
+        'compact'
+      );
+    }
   });
-  fetchData(); }
+  fetchData();}
         
-    function goToEntriesFromOverview() {
-      switchTab('entries');
-      renderEntriesPage(currentEntries); }
+  function goToEntriesFromOverview() {
+    switchTab('entries');
+    renderEntriesPage(currentEntries); }
     
-      // Main Navigation
+  // Main Navigation
   function switchTab(tab) {
   const bottomNav =
     document.querySelector('.floating-tab-bar');
