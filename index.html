@@ -9713,50 +9713,62 @@ return Number(b.amount) - Number(a.amount); });
       let floatingNavLocked = false;
       let userIsScrolling = false;
       
-    function updateBottomNavOnScroll() {
-      const bottomNav = document.querySelector('.floating-tab-bar');
-      if (!bottomNav) return;
-      const currentScrollY = window.scrollY;
-      if (
-        insightContext &&
-        insightContextEntriesActive &&
-        currentTab === 'insights'
-        ) {
-        insightContext.entryScrollY = currentScrollY;
-      } else {
-        tabScrollPositions[currentTab] = currentScrollY; }
-      if (floatingNavLocked && !userIsScrolling) {
-        bottomNav.classList.remove('compact');
-        return; }
-      if (userIsScrolling) {
-        floatingNavLocked = false; }
-        if (currentScrollY <= 0) {
-          bottomNav.classList.remove('compact');
-        } else {
-          bottomNav.classList.add('compact'); }
-    }
-        window.addEventListener('touchmove', () => {
-          userIsScrolling = true;
-        }, { passive: true });
-        window.addEventListener('wheel', () => {
-          userIsScrolling = true;
-        }, { passive: true });
-        window.addEventListener('scroll', () => {
-          if (!scrollTicking) {
-            window.requestAnimationFrame(() => {
-              updateBottomNavOnScroll();
-              scrollTicking = false; });
-              scrollTicking = true; }
-          if (annualExpenseTrendSelectedMonth !== null) {
-            closeAnnualExpenseTrendTooltip(); }
-        }, { passive: true });
-    
-    function getCurrentEntriesNavigationState() {
-  return {
-    entryFilter: currentEntryFilter,
-    expenseFilter: currentExpenseEntryFilter
-  };
+  function updateBottomNavOnScroll() {
+  const bottomNav = document.querySelector('.floating-tab-bar');
+  if (!bottomNav) return;
+  const currentScrollY = window.scrollY;
+  if (
+    insightContext &&
+    insightContextEntriesActive &&
+    currentTab === 'insights'
+  ) {
+    insightContext.entryScrollY = currentScrollY;
+  } else {
+    tabScrollPositions[currentTab] = currentScrollY;
+  }
+  if (floatingNavLocked && !userIsScrolling) {
+    bottomNav.classList.remove('compact');
+    return;
+  }
+  if (userIsScrolling) {
+    floatingNavLocked = false;
+  }
+  if (currentScrollY <= 0) {
+    bottomNav.classList.remove('compact');
+  } else {
+    bottomNav.classList.add('compact');
+  }
 }
+window.addEventListener(
+  'touchmove',
+  () => {
+    userIsScrolling = true;
+  },
+  { passive: true }
+);
+window.addEventListener(
+  'wheel',
+  () => {
+    userIsScrolling = true;
+  },
+  { passive: true }
+);
+window.addEventListener(
+  'scroll',
+  () => {
+    if (!scrollTicking) {
+      window.requestAnimationFrame(() => {
+        updateBottomNavOnScroll();
+        scrollTicking = false;
+      });
+      scrollTicking = true;
+    }
+    if (annualExpenseTrendSelectedMonth !== null) {
+      closeAnnualExpenseTrendTooltip();
+    }
+  },
+  { passive: true }
+);
 
 function applyEntriesNavigationState(state) {
   if (!state) return;
@@ -9862,8 +9874,6 @@ function openEntriesFromInsight() {
     history: []
   };
   insightContextEntriesActive = true;
-  currentEntryFilter = 'expense';
-  currentExpenseEntryFilter = expenseFilter;
   const bottomNav =
     document.querySelector('.floating-tab-bar');
   const heroSection =
@@ -9903,8 +9913,8 @@ function openEntriesFromInsight() {
   bottomNav.classList.remove('compact');
   updatePeriodUI();
   applyEntriesNavigationState({
-    entryFilter: currentEntryFilter,
-    expenseFilter: currentExpenseEntryFilter
+    entryFilter: 'expense',
+    expenseFilter: expenseFilter
   });
   renderEntriesLoading();
   requestAnimationFrame(() => {
@@ -10048,6 +10058,8 @@ function openEntriesFromInsight() {
     insightContextEntriesActive = false;
     selectedYear = normalYear;
     selectedMonth = normalMonth;
+    selectedExpenseType = null;
+    selectedExpenseTitle = null;
     currentEntryFilter = 'all';
     currentExpenseEntryFilter = 'all';
     updatePeriodUI();
