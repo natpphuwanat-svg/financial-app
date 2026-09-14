@@ -3421,6 +3421,11 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       const newYear = Number(picker.value);
       if (!newYear || newYear < 2025) return;
       selectedYear = newYear;
+      if (
+      insightContext &&
+      insightContextEntriesActive
+      ) {
+      insightContext.year = selectedYear; }
       resetAnnualComparisonYears();
       renderAnnualComparisonYearMenu();
       updateAnnualComparisonYearLabel();
@@ -3451,6 +3456,12 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       const newMonth = Number(picker.value);
       if (!newMonth || newMonth < 1 || newMonth > 12) return;
       selectedMonth = newMonth;
+      if (
+      insightContext &&
+      insightContextEntriesActive
+      ) {
+      insightContext.month = selectedMonth;
+      }
       selectedExpenseType = null;
       selectedExpenseTitle = null;
       updatePeriodUI();
