@@ -9749,14 +9749,19 @@ return Number(b.amount) - Number(a.amount); });
 
 function applyEntriesNavigationState(state) {
   if (!state) return;
-
   currentEntryFilter = state.entryFilter || 'all';
-
   currentExpenseEntryFilter =
     state.entryFilter === 'expense'
       ? (state.expenseFilter || 'all')
       : 'all';
-
+  if (
+    insightContext &&
+    insightContextEntriesActive
+    ) {
+    insightContext.entryFilter =
+    currentEntryFilter;
+    insightContext.expenseFilter =
+    currentExpenseEntryFilter; }
   document
     .querySelectorAll(
       '#entriesFilter .entries-filter-btn'
@@ -9767,17 +9772,13 @@ function applyEntriesNavigationState(state) {
         btn.dataset.filter === currentEntryFilter
       );
     });
-
   const expenseFilterElement =
     document.getElementById(
       'entriesExpenseFilter'
     );
-
   if (expenseFilterElement) {
     expenseFilterElement.hidden =
-      currentEntryFilter !== 'expense';
-  }
-
+      currentEntryFilter !== 'expense'; }
   document
     .querySelectorAll(
       '#entriesExpenseFilter .entries-filter-btn'
@@ -9789,9 +9790,7 @@ function applyEntriesNavigationState(state) {
           currentExpenseEntryFilter
       );
     });
-
-  renderEntriesPage(currentEntries);
-}
+  renderEntriesPage(currentEntries); }
 
 function pushInsightEntriesHistory() {
   if (
