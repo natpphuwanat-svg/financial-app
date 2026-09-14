@@ -4033,34 +4033,48 @@ function changeInsightsPeriod(delta) {
         target: periodCapsule
       });
     }
-  }, 450);
-}
+   }, 450);
+  }
   
   function resetToCurrent() {
+  const isContextEntries =
+    insightContext &&
+    insightContextEntriesActive;
+  const periodChanged =
+    selectedYear !== realCurrentYear ||
+    selectedMonth !== realCurrentMonth;
+  if (
+    isContextEntries &&
+    periodChanged
+  ) {
+    pushInsightEntriesHistory();
+  }
   selectedYear = realCurrentYear;
   resetAnnualComparisonYears();
   selectedMonth = realCurrentMonth;
   selectedExpenseType = null;
   selectedExpenseTitle = null;
   closeAnnualExpenseTrendTooltip();
-  if (
-  insightContext &&
-  insightContextEntriesActive
-  ) {
-  insightContext.year = realCurrentYear;
-  insightContext.month = realCurrentMonth;
-  insightContext.expenseType = selectedExpenseType;
+  if (isContextEntries) {
+    insightContext.year =
+      realCurrentYear;
+    insightContext.month =
+      realCurrentMonth;
+    insightContext.expenseType =
+      selectedExpenseType;
   }
   updatePeriodUI();
   if (
     insightsViewMode === 'year' &&
-    document.getElementById('insightsView')?.style.display !== 'none'
+    document.getElementById(
+      'insightsView'
+    )?.style.display !== 'none'
   ) {
     fetchAnnualData();
   } else {
     fetchData();
+   }
   }
-}
   
   function isSelectedMonthFuture() {
   return (
