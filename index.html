@@ -575,67 +575,6 @@ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10); }
   gap: 7px;
 }
 
-.entries-header {
-  justify-content: flex-start;
-}
-
-.entries-header .header-left {
-  display: flex;
-}
-
-.context-entries-title {
-  display: none;
-  align-items: center;
-  height: 42px;
-  color: var(--text-main);
-  font-family: inherit;
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: 0.3px;
-  line-height: 1;
-}
-
-.entries-header:has(.insight-context-back:not([hidden])) .header-left {
-  display: none;
-}
-
-.entries-header:has(.insight-context-back:not([hidden])) .context-entries-title {
-  display: inline-flex;
-}
-
-.insight-context-back {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 42px;
-  flex: 0 0 28px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--text-main);
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.insight-context-back[hidden] {
-  display: none;
-}
-
-.insight-context-back svg {
-  width: 17px;
-  height: 17px;
-  stroke-width: 2.4;
-}
-
-.insight-context-back:active {
-  transform: scale(0.92);
-}
-
-.entries-header:has(.insight-context-back:not([hidden])) {
-  gap: 0;
-}
-
 .entries-expense-filter {
   display: flex;
   align-items: center;
@@ -2677,30 +2616,19 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 </div>
     <!-- Entries Page -->
   <div id="placeholderView" style="display:none;">
-    <header class="app-header entries-header">
-  <div class="header-left">
-    <div class="home-icon-box">
-      <i data-lucide="list-todo"></i>
-    </div>
-    <div class="app-title">ENTRIES</div>
-  </div>
-  <button
-    class="insight-context-back"
-    id="insightContextBack"
-    type="button"
-    hidden
-    onclick="returnToInsightContext()"
-    aria-label="Back to Insights"
-  >
-    <i data-lucide="chevron-left"></i>
-  </button>
-  <div class="context-entries-title" aria-hidden="true">
-    <span>ENTRIES</span>
-  </div>
-  </header>
+    <header class="app-header">
+      <div class="header-left">
+        <div class="home-icon-box">
+          <i data-lucide="list-todo"></i>
+        </div>
+        <div class="app-title">ENTRIES</div>
+      </div>
+      <div class="header-right">
+      </div>
+    </header>
     <main class="container" id="entriesContent">
       <section class="period-bar">
-    <button
+  <button
     class="period-circle-btn"
     id="entriesPrevMonthBtn"
     type="button"
@@ -3399,8 +3327,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     let currentAnnualEntries = [];
     let currentEntryFilter = 'all';
     let currentExpenseEntryFilter = 'all';
-    let insightContext = null;
-    let insightContextEntriesActive = false;
     let lastFetchTime = 0;
     const REFRESH_THRESHOLD = 60 * 1000;
     
@@ -3472,19 +3398,6 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       elapsed < REFRESH_THRESHOLD
     ) {
       return; }
-    if (
-      elapsed >= REFRESH_THRESHOLD &&
-      insightContext
-    ) {
-      insightContext = null;
-      insightContextEntriesActive = false;
-      currentEntryFilter = 'all';
-      currentExpenseEntryFilter = 'all';
-    const backButton =
-      document.getElementById('insightContextBack');
-    if (backButton) {
-      backButton.hidden = true; }
-    }
     const insightsView =
       document.getElementById(
         'insightsView'
@@ -3835,27 +3748,25 @@ function changeMonth(delta) {
     selectedMonth - 1,
     1
   );
+
   currentDate.setMonth(
     currentDate.getMonth() + delta
   );
+
   const newYear = currentDate.getFullYear();
   const newMonth = currentDate.getMonth() + 1;
+
   if (newYear < 2025) return;
+
   selectedYear = newYear;
   selectedMonth = newMonth;
-  if (
-  insightContext &&
-  insightContextEntriesActive
-  ) {
-  insightContext.year = selectedYear;
-  insightContext.month = selectedMonth;
-  }
+
   selectedExpenseType = null;
   selectedExpenseTitle = null;
+
   updatePeriodUI();
   fetchData();
 }
-
 function changeInsightsPeriod(delta) {
   if (insightsViewMode === 'year') {
     const newYear = selectedYear + delta;
@@ -3981,14 +3892,6 @@ function changeInsightsPeriod(delta) {
   selectedExpenseType = null;
   selectedExpenseTitle = null;
   closeAnnualExpenseTrendTooltip();
-  if (
-  insightContext &&
-  insightContextEntriesActive
-  ) {
-  insightContext.year = realCurrentYear;
-  insightContext.month = realCurrentMonth;
-  insightContext.expenseType = selectedExpenseType;
-  }
   updatePeriodUI();
   if (
     insightsViewMode === 'year' &&
@@ -5580,8 +5483,7 @@ function renderExpenseTypeSummary(entries) {
       type="button"
       class="top-spending-view-all"
       aria-label="View all expenses"
-      onclick="openEntriesFromInsight()"
-      >
+    >
       VIEW ALL
       <i data-lucide="chevron-right"></i>
     </button>
@@ -9701,19 +9603,11 @@ return Number(b.amount) - Number(a.amount); });
       let scrollTicking = false;
       let floatingNavLocked = false;
       let userIsScrolling = false;
-      
     function updateBottomNavOnScroll() {
       const bottomNav = document.querySelector('.floating-tab-bar');
       if (!bottomNav) return;
       const currentScrollY = window.scrollY;
-      if (
-        insightContext &&
-        insightContextEntriesActive &&
-        currentTab === 'insights'
-        ) {
-        insightContext.entryScrollY = currentScrollY;
-      } else {
-        tabScrollPositions[currentTab] = currentScrollY; }
+      tabScrollPositions[currentTab] = currentScrollY;
       if (floatingNavLocked && !userIsScrolling) {
         bottomNav.classList.remove('compact');
         return; }
@@ -9739,303 +9633,62 @@ return Number(b.amount) - Number(a.amount); });
           if (annualExpenseTrendSelectedMonth !== null) {
             closeAnnualExpenseTrendTooltip(); }
         }, { passive: true });
-    
-    function openEntriesFromInsight() {
-      if (
-        insightsViewMode !== 'month' ||
-        document.getElementById('insightsView')?.style.display === 'none'
-        ) {
-      return; }
-      const expenseFilter =
-      selectedExpenseType === 'Fixed'
-      ? 'fixed'
-      : selectedExpenseType === 'Variable'
-      ? 'variable'
-      : 'all';
-      insightContext = {
-        mode: insightsViewMode,
-        sourceYear: selectedYear,
-        sourceMonth: selectedMonth,
-        sourceExpenseType: selectedExpenseType,
-        year: selectedYear,
-        month: selectedMonth,
-        expenseType: selectedExpenseType,
-        scrollY: window.scrollY,
-        entryScrollY: 0
-      };
-      insightContextEntriesActive = true;
-      currentEntryFilter = 'expense';
-      currentExpenseEntryFilter = expenseFilter;
-      const bottomNav =
-        document.querySelector('.floating-tab-bar');
-      const heroSection =
-        document.querySelector('.hero-section');
-      const placeholderView =
-        document.getElementById('placeholderView');
-      const insightsView =
-        document.getElementById('insightsView');
-      const tabs =
-        document.querySelectorAll('.floating-tab');
-      if (!bottomNav || !heroSection || !placeholderView || !insightsView) {
-      return; }
-      tabScrollPositions.insights = window.scrollY;
-      currentTab = 'insights';
-      visitedTabs.insights = true;
-      visitedTabs.entries = true;
-      floatingNavLocked = true;
-      userIsScrolling = false;
-      tabs.forEach(button => {
-      button.classList.remove('active');
-      });
-      tabs[2]?.classList.add('active');
-      heroSection.style.display = 'none';
-      placeholderView.style.display = '';
-      insightsView.style.display = 'none';
-      const backButton =
-        document.getElementById('insightContextBack');
-      if (backButton) {
-        backButton.hidden = false; }
-        bottomNav.classList.remove('compact');
-        updatePeriodUI();
-      document
-      .querySelectorAll('#entriesFilter .entries-filter-btn')
-      .forEach(btn => {
-        btn.classList.toggle(
-          'active',
-          btn.dataset.filter === currentEntryFilter
-          );
-      });
-      document
-      .querySelectorAll('#entriesExpenseFilter .entries-filter-btn')
-      .forEach(btn => {
-        btn.classList.toggle(
-        'active',
-        btn.dataset.expenseFilter === currentExpenseEntryFilter
-        );
-      });
-      const expenseFilterElement =
-        document.getElementById('entriesExpenseFilter');
-      if (expenseFilterElement) {
-        expenseFilterElement.hidden = false; }
-      renderEntriesLoading();
-      requestAnimationFrame(() => {
-        window.scrollTo({
-          top: 0,
-          behavior: 'auto'
-        });
-        bottomNav.classList.remove('compact');
-      });
-      fetchData();
-    }
-    
-  function returnToInsightContext() {
-  if (!insightContext) {
-    return; }
-  const context = { ...insightContext };
-  fetchRequestId++;
-  insightContext = null;
-  insightContextEntriesActive = false;
-  currentEntryFilter = 'all';
-  currentExpenseEntryFilter = 'all';
-  selectedYear = context.sourceYear;
-  selectedMonth = context.sourceMonth;
-  selectedExpenseType =
-    context.sourceExpenseType ?? context.expenseType;
-  selectedExpenseTitle = null;
-  const backButton =
-    document.getElementById('insightContextBack');
-  if (backButton) {
-    backButton.hidden = true; }
-  updatePeriodUI();
-  const bottomNav =
-    document.querySelector('.floating-tab-bar');
-  const heroSection =
-    document.querySelector('.hero-section');
-  const placeholderView =
-    document.getElementById('placeholderView');
-  const insightsView =
-    document.getElementById('insightsView');
-  const tabs =
-    document.querySelectorAll('.floating-tab');
-  currentTab = 'insights';
-  visitedTabs.insights = true;
-  if (heroSection) {
-    heroSection.style.display = 'none'; }
-  if (placeholderView) {
-    placeholderView.style.display = 'none'; }
-  if (insightsView) {
-    insightsView.style.display = ''; }
-  tabs.forEach(button => {
-    button.classList.remove('active');
-  });
-  tabs[2]?.classList.add('active');
-  if (bottomNav) {
-    bottomNav.classList.remove('compact'); }
-  floatingNavLocked = true;
-  userIsScrolling = false;
-  requestAnimationFrame(() => {
-    window.scrollTo({
-      top: context.scrollY || 0,
-      behavior: 'auto'
-    });
-    if (bottomNav) {
-      bottomNav.classList.remove('compact'); }
-  });
-  fetchData(); }
         
     function goToEntriesFromOverview() {
       switchTab('entries');
       renderEntriesPage(currentEntries); }
     
       // Main Navigation
-  function switchTab(tab) {
-  const bottomNav =
-    document.querySelector('.floating-tab-bar');
-  const heroSection =
-    document.querySelector('.hero-section');
-  const placeholderView =
-    document.getElementById('placeholderView');
-  const insightsView =
-    document.getElementById('insightsView');
-  const tabs =
-    document.querySelectorAll('.floating-tab');
-  if (!bottomNav) {
-    return; }
-  if (
-    tab === 'entries' &&
-    insightContext &&
-    insightContextEntriesActive
-    ) {
-    const normalYear = insightContext.sourceYear;
-    const normalMonth = insightContext.sourceMonth;
-    insightContextEntriesActive = false;
-    selectedYear = normalYear;
-    selectedMonth = normalMonth;
-    currentEntryFilter = 'all';
-    currentExpenseEntryFilter = 'all';
-    updatePeriodUI();
-    if (heroSection) {
-      heroSection.style.display = 'none'; }
-    if (placeholderView) {
-      placeholderView.style.display = ''; }
-    if (insightsView) {
-      insightsView.style.display = 'none'; }
-    const backButton =
-      document.getElementById('insightContextBack');
-    if (backButton) {
-      backButton.hidden = true; }
-    tabs.forEach(button => {
-      button.classList.remove('active');
-    });
-    tabs[1]?.classList.add('active');
-    tabScrollPositions.entries = 0;
-    currentTab = 'entries';
-    visitedTabs.entries = true;
-    floatingNavLocked = true;
-    userIsScrolling = false;
-    bottomNav.classList.remove('compact');
-    renderEntriesLoading();
-    requestAnimationFrame(() => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'auto'
-      });
+    function switchTab(tab) {
+      const bottomNav = document.querySelector('.floating-tab-bar');
+      const heroSection = document.querySelector('.hero-section');
+      const placeholderView = document.getElementById('placeholderView');
+      const insightsView = document.getElementById('insightsView');
+      const tabs = document.querySelectorAll('.floating-tab');
+      if (!bottomNav) return;
+      tabScrollPositions[currentTab] = window.scrollY;
+      floatingNavLocked = true;
+      userIsScrolling = false;
+      currentTab = tab;
       bottomNav.classList.remove('compact');
-    });
-    fetchData();
-    return; }
-  if (
-    tab === 'insights' &&
-    insightContext
-    ) {
-    selectedYear = insightContext.year;
-    selectedMonth = insightContext.month;
-    selectedExpenseType = insightContext.expenseType;
-    insightContextEntriesActive = true;
-    currentEntryFilter = 'expense';
-    if (selectedExpenseType === 'Fixed') {
-      currentExpenseEntryFilter = 'fixed';
-    } else if (selectedExpenseType === 'Variable') {
-      currentExpenseEntryFilter = 'variable';
-    } else {
-      currentExpenseEntryFilter = 'all'; }
-    if (heroSection) {
-      heroSection.style.display = 'none'; }
-    if (placeholderView) {
-      placeholderView.style.display = ''; }
-    if (insightsView) {
-      insightsView.style.display = 'none'; }
-    const backButton =
-      document.getElementById('insightContextBack');
-    if (backButton) {
-      backButton.hidden = false; }
-    tabs.forEach(button => {
-      button.classList.remove('active');
-    });
-    tabs[2]?.classList.add('active');
-    currentTab = 'insights';
-    visitedTabs.insights = true;
-    floatingNavLocked = true;
-    userIsScrolling = false;
-    bottomNav.classList.remove('compact');
-    updatePeriodUI();
-    requestAnimationFrame(() => {
-      window.scrollTo({
-        top: insightContext.entryScrollY || 0,
-        behavior: 'auto'
+      const firstVisit = !visitedTabs[tab];
+      visitedTabs[tab] = true;
+      tabs.forEach(button => {
+        button.classList.remove('active');
       });
-      bottomNav.classList.remove('compact');
-    });
-    renderEntriesPage(currentEntries);
-    return; }
-  tabScrollPositions[currentTab] = window.scrollY;
-  floatingNavLocked = true;
-  userIsScrolling = false;
-  currentTab = tab;
-  bottomNav.classList.remove('compact');
-  const firstVisit = !visitedTabs[tab];
-  visitedTabs[tab] = true;
-  tabs.forEach(button => {
-    button.classList.remove('active');
-  });
-  if (tab === 'overview') {
-    heroSection.style.display = '';
-    placeholderView.style.display = 'none';
-    insightsView.style.display = 'none';
-    tabs[0]?.classList.add('active'); }
-  if (tab === 'entries') {
-    heroSection.style.display = 'none';
-    placeholderView.style.display = '';
-    insightsView.style.display = 'none';
-    tabs[1]?.classList.add('active');
-    currentEntryFilter = 'all';
-    currentExpenseEntryFilter = 'all';
-    const backButton =
-      document.getElementById('insightContextBack');
-    if (backButton) {
-      backButton.hidden = true; }
-    renderEntriesPage(currentEntries); }
-    if (tab === 'insights') {
-      heroSection.style.display = 'none';
-      placeholderView.style.display = 'none';
-      insightsView.style.display = '';
-    tabs[2]?.classList.add('active');
-    requestAnimationFrame(() => {
-      updateExpenseChartCompactState();
-    });
-  }
-  lucide.createIcons();
-  requestAnimationFrame(() => {
-    const targetScroll = firstVisit
-      ? 0
-      : tabScrollPositions[tab];
-    window.scrollTo({
-      top: targetScroll,
-      behavior: 'auto'
-    });
-    bottomNav.classList.remove('compact');
-  });
-  }
+      if (tab === 'overview') {
+        heroSection.style.display = '';
+        placeholderView.style.display = 'none';
+        insightsView.style.display = 'none';
+        tabs[0].classList.add('active');
+      }
+      if (tab === 'entries') {
+        heroSection.style.display = 'none';
+        placeholderView.style.display = '';
+        insightsView.style.display = 'none';
+        tabs[1].classList.add('active');
+      }
+      if (tab === 'insights') {
+        heroSection.style.display = 'none';
+        placeholderView.style.display = 'none';
+        insightsView.style.display = '';
+        requestAnimationFrame(() => {
+          updateExpenseChartCompactState();
+        });
+        tabs[2].classList.add('active');
+      }
+      lucide.createIcons();
+      requestAnimationFrame(() => {
+        const targetScroll = firstVisit
+        ? 0
+        : tabScrollPositions[tab];
+        window.scrollTo({
+          top: targetScroll,
+          behavior: 'auto'
+        });
+        bottomNav.classList.remove('compact');
+      });
+    }
       
     // Modal Controls
     function selectType(type) {
