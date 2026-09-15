@@ -1751,6 +1751,27 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   min-height: 44px;
 }
 
+.annual-top-spending-month-btn {
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 10px;
+}
+
+.annual-top-spending-month-btn:active {
+  transform: scale(0.985);
+  opacity: 0.72;
+}
+
 .top-spending-rank {
   font-size: 11px;
   font-weight: 800;
@@ -9159,9 +9180,125 @@ const axisLabels =
   function toggleAnnualTopSpendingView() {
   annualTopSpendingExpanded =
     !annualTopSpendingExpanded;
+
   renderAnnualTopSpending(
     currentAnnualEntries
   );
+}
+
+function openAnnualTopSpendingMonth(month) {
+  if (
+    !annualTopSpendingExpanded ||
+    !Number.isInteger(Number(month))
+  ) {
+    return;
+  }
+  const targetMonth = Number(month);
+  if (
+    targetMonth < 1 ||
+    targetMonth > 12
+  ) {
+    return;
+  }
+  const expenseFilter =
+    selectedExpenseType === 'Fixed'
+      ? 'fixed'
+      : selectedExpenseType === 'Variable'
+        ? 'variable'
+        : 'all';
+  const insightsView =
+    document.getElementById(
+      'insightsView'
+    );
+  if (
+    !insightsView ||
+    insightsView.style.display === 'none'
+  ) {
+    return;
+  }
+  insightContext = {
+    mode: 'year',
+    sourceYear: selectedYear,
+    sourceMonth: targetMonth,
+    sourceExpenseType:
+      selectedExpenseType,
+    year: selectedYear,
+    month: targetMonth,
+    expenseType:
+      selectedExpenseType,
+    entryFilter: 'expense',
+    expenseFilter: expenseFilter,
+    scrollY: window.scrollY,
+    entryScrollY: 0,
+    history: []
+  };
+  insightContextEntriesActive = true;
+  const bottomNav =
+    document.querySelector(
+      '.floating-tab-bar'
+    );
+  const heroSection =
+    document.querySelector(
+      '.hero-section'
+    );
+  const placeholderView =
+    document.getElementById(
+      'placeholderView'
+    );
+  const tabs =
+    document.querySelectorAll(
+      '.floating-tab'
+    );
+  if (
+    !bottomNav ||
+    !heroSection ||
+    !placeholderView
+  ) {
+    return;
+  }
+  tabScrollPositions.insights =
+    window.scrollY;
+  currentTab = 'insights';
+  visitedTabs.insights = true;
+  visitedTabs.entries = true;
+  floatingNavLocked = true;
+  userIsScrolling = false;
+  selectedMonth = targetMonth;
+  tabs.forEach(button => {
+    button.classList.remove('active');
+  });
+  tabs[2]?.classList.add('active');
+  heroSection.style.display = 'none';
+  placeholderView.style.display = '';
+  if (insightsView) {
+    insightsView.style.display = 'none';
+  }
+  const backButton =
+    document.getElementById(
+      'insightContextBack'
+    );
+  if (backButton) {
+    backButton.hidden = false;
+  }
+  bottomNav.classList.remove(
+    'compact'
+  );
+  updatePeriodUI();
+  applyEntriesNavigationState({
+    entryFilter: 'expense',
+    expenseFilter: expenseFilter
+  });
+  renderEntriesLoading();
+  requestAnimationFrame(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'auto'
+    });
+    bottomNav.classList.remove(
+      'compact'
+    );
+  });
+  fetchData();
   }
   
   function renderAnnualTopSpending(entries) {
@@ -9268,32 +9405,49 @@ const axisLabels =
     annualTopSpendingExpanded
   );
   container.innerHTML = `
-    ${visibleMonths
-      .map((item, index) => `
-        <div class="top-spending-item">
-          <div
-            class="top-spending-rank"
-            style="color: ${rankColor};"
-          >
-            ${String(index + 1).padStart(2, '0')}
-          </div>
-          <div class="top-spending-name">
-            ${item.name}
-          </div>
-          <div class="top-spending-amount">
-            ฿${Number(
-              item.amount || 0
-            ).toLocaleString(
-              'en-US',
-              {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-              }
-            )}
-          </div>
+  ${visibleMonths
+    .map((item, index) => {
+      const rowContent = `
+        <div
+          class="top-spending-rank"
+          style="color: ${rankColor};"
+        >
+          ${String(index + 1).padStart(2, '0')}
         </div>
-      `)
-      .join('')}
+        <div class="top-spending-name">
+          ${item.name}
+        </div>
+        <div class="top-spending-amount">
+          ฿${Number(
+            item.amount || 0
+          ).toLocaleString(
+            'en-US',
+            {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            }
+          )}
+        </div>
+      `;
+      if (annualTopSpendingExpanded) {
+        return `
+          <button
+            type="button"
+            class="top-spending-item annual-top-spending-month-btn"
+            aria-label="View entries for ${item.name} ${selectedYear}"
+            onclick="openAnnualTopSpendingMonth(${item.month})"
+          >
+            ${rowContent}
+          </button>
+        `;
+      }
+      return `
+        <div class="top-spending-item">
+          ${rowContent}
+        </div>
+      `;
+    })
+    .join('')}
     ${
       !annualTopSpendingExpanded &&
       knownMonths.length > 3
@@ -10372,10 +10526,13 @@ function openEntriesFromInsight() {
       bottomNav.classList.remove(
         'compact'
       );
+      }
+    });
+    if (context.mode === 'year') {
+      fetchAnnualData();
+    } else {
+      fetchData();
     }
-  });
-  fetchData();
-  }
         
   function goToEntriesFromOverview() {
     switchTab('entries');
