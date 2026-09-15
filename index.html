@@ -3415,6 +3415,20 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     selectedMonth = realCurrentMonth;
     insightsViewMode = 'month';
     insightsViewModeTransitioning = false;
+    const monthModeBtn =
+      document.getElementById(
+        'insightsMonthModeBtn'
+      );
+    const yearModeBtn =
+      document.getElementById(
+        'insightsYearModeBtn'
+      );
+    if (monthModeBtn) {
+      monthModeBtn.classList.add('active');
+    }
+    if (yearModeBtn) {
+      yearModeBtn.classList.remove('active');
+    }
     resetAnnualComparisonYears();
     closeAnnualExpenseTrendTooltip();
     currentTab = sessionTab;
@@ -10322,8 +10336,10 @@ function openEntriesFromInsight() {
     selectedMonth = normalMonth;
     selectedExpenseType = null;
     selectedExpenseTitle = null;
-    currentEntryFilter = 'all';
-    currentExpenseEntryFilter = 'all';
+    applyEntriesNavigationState({
+      entryFilter: 'all',
+      expenseFilter: 'all'
+    }, false);
     updatePeriodUI();
     if (heroSection) {
       heroSection.style.display = 'none'; }
