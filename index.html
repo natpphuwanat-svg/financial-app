@@ -10391,78 +10391,18 @@ function openEntriesFromInsight() {
   return; }
   if (
   tab === 'insights' &&
-  insightContext
+  insightContext &&
+  insightContextEntriesActive
   ) {
-  selectedYear = insightContext.year;
-  selectedMonth = insightContext.month;
-  selectedExpenseType = insightContext.expenseType;
-  insightContextEntriesActive = true;
-  applyEntriesNavigationState({
-  entryFilter:
-    insightContext.entryFilter || 'expense',
-  expenseFilter:
-    insightContext.expenseFilter || 'all'
-  });
-  if (heroSection) {
-    heroSection.style.display = 'none'; }
-  if (placeholderView) {
-    placeholderView.style.display = ''; }
-  if (insightsView) {
-    insightsView.style.display = 'none'; }
-  const backButton =
-    document.getElementById('insightContextBack');
-  if (backButton) {
-    backButton.hidden = false; }
-  tabs.forEach(button => {
-    button.classList.remove('active');
-  });
-  tabs[2]?.classList.add('active');
-  currentTab = 'insights';
-  visitedTabs.insights = true;
-  floatingNavLocked = true;
-  userIsScrolling = false;
-  bottomNav.classList.remove('compact');
-  updatePeriodUI();
-  document
-    .querySelectorAll(
-      '#entriesFilter .entries-filter-btn'
-    )
-    .forEach(btn => {
-      btn.classList.toggle(
-        'active',
-        btn.dataset.filter ===
-          currentEntryFilter
-      );
-    });
-  const expenseFilterElement =
-    document.getElementById(
-      'entriesExpenseFilter'
-    );
-  if (expenseFilterElement) {
-    expenseFilterElement.hidden =
-      currentEntryFilter !== 'expense'; }
-  document
-    .querySelectorAll(
-      '#entriesExpenseFilter .entries-filter-btn'
-    )
-    .forEach(btn => {
-      btn.classList.toggle(
-        'active',
-        btn.dataset.expenseFilter ===
-          currentExpenseEntryFilter
-      );
-    });
-  requestAnimationFrame(() => {
-    window.scrollTo({
-      top:
-        insightContext.entryScrollY || 0,
-      behavior: 'auto'
-    });
-    bottomNav.classList.remove(
-      'compact'
-    );
-  });
-  renderEntriesPage(currentEntries);
+  resetAppSession();
+  return; }
+  if (
+  tab === 'insights' &&
+  currentTab === 'insights'
+  ) {
+  if (insightsViewMode === 'year') {
+    resetAppSession();
+  }
   return; }
   tabScrollPositions[currentTab] = window.scrollY;
   floatingNavLocked = true;
@@ -10484,8 +10424,10 @@ function openEntriesFromInsight() {
     placeholderView.style.display = '';
     insightsView.style.display = 'none';
     tabs[1]?.classList.add('active');
-    currentEntryFilter = 'all';
-    currentExpenseEntryFilter = 'all';
+    applyEntriesNavigationState({
+      entryFilter: 'all',
+      expenseFilter: 'all'
+    }, false);
     const backButton =
       document.getElementById('insightContextBack');
     if (backButton) {
