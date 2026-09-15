@@ -3415,6 +3415,24 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     selectedMonth = realCurrentMonth;
     insightsViewMode = 'month';
     insightsViewModeTransitioning = false;
+    const periodCapsule =
+      document.querySelector(
+        '#insightsView .period-picker-capsule'
+      );
+    const insightsContent =
+      document.getElementById(
+        'insightsContent'
+      );
+    if (periodCapsule) {
+      periodCapsule.classList.remove(
+        'is-year-mode'
+      );
+    }
+    if (insightsContent) {
+      insightsContent.classList.remove(
+        'is-year-mode'
+      );
+    }
     const monthModeBtn =
       document.getElementById(
         'insightsMonthModeBtn'
