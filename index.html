@@ -3428,7 +3428,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
     let insightContext = null;
     let insightContextEntriesActive = false;
     let lastFetchTime = 0;
-    const REFRESH_THRESHOLD = 60 * 1000;
+    const REFRESH_THRESHOLD = 5 * 60 * 1000;
     function resetAppSession() {
     const wasInsightContext = insightContext && insightContextEntriesActive;
     const sessionTab = wasInsightContext ? 'insights' : currentTab;
