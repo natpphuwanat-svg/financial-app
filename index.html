@@ -9174,7 +9174,8 @@ const axisLabels =
       'annualTopSpendingTitle'
     );
   if (!container || !title) {
-    return; }
+    return;
+  }
   const trendData =
     buildAnnualExpenseTrendData(
       entries
@@ -9201,51 +9202,61 @@ const axisLabels =
       'TOP VARIABLE MONTHS';
   } else {
     title.innerText =
-      'TOP SPENDING MONTHS'; }
+      'TOP SPENDING MONTHS';
+  }
   const visibleMonths =
-  annualTopSpendingExpanded
-    ? knownMonths.slice(0, 12)
-    : knownMonths.slice(0, 3);
-  if (topMonths.length === 0) {
-  const isFuture =
-    selectedYear > realCurrentYear;
-  if (isFuture) {
+    annualTopSpendingExpanded
+      ? knownMonths.slice(0, 12)
+      : knownMonths.slice(0, 3);
+  if (visibleMonths.length === 0) {
+    const isFuture =
+      selectedYear > realCurrentYear;
+    if (isFuture) {
+      container.innerHTML = `
+        <div class="top-spending-placeholder">
+          <div class="top-spending-placeholder-row">
+            <div class="top-spending-placeholder-rank">
+              01
+            </div>
+            <div class="top-spending-placeholder-name"></div>
+            <div class="top-spending-placeholder-amount"></div>
+          </div>
+          <div class="top-spending-placeholder-row">
+            <div class="top-spending-placeholder-rank">
+              02
+            </div>
+            <div class="top-spending-placeholder-name"></div>
+            <div class="top-spending-placeholder-amount"></div>
+          </div>
+          <div class="top-spending-placeholder-row">
+            <div class="top-spending-placeholder-rank">
+              03
+            </div>
+            <div class="top-spending-placeholder-name"></div>
+            <div class="top-spending-placeholder-amount"></div>
+          </div>
+        </div>
+      `;
+      return;
+    }
+    let emptyText =
+      'No expense data for this year';
+    if (selectedExpenseType === 'Fixed') {
+      emptyText =
+        'No fixed expenses for this year';
+    } else if (
+      selectedExpenseType === 'Variable'
+    ) {
+      emptyText =
+        'No variable expenses for this year';
+    }
     container.innerHTML = `
-      <div class="top-spending-placeholder">
-        <div class="top-spending-placeholder-row">
-          <div class="top-spending-placeholder-rank">01</div>
-          <div class="top-spending-placeholder-name"></div>
-          <div class="top-spending-placeholder-amount"></div>
-        </div>
-        <div class="top-spending-placeholder-row">
-          <div class="top-spending-placeholder-rank">02</div>
-          <div class="top-spending-placeholder-name"></div>
-          <div class="top-spending-placeholder-amount"></div>
-        </div>
-        <div class="top-spending-placeholder-row">
-          <div class="top-spending-placeholder-rank">03</div>
-          <div class="top-spending-placeholder-name"></div>
-          <div class="top-spending-placeholder-amount"></div>
-        </div>
+      <div class="top-spending-empty">
+        ${emptyText}
       </div>
     `;
-    return;}
-  let emptyText =
-    'No expense data for this year';
-  if (selectedExpenseType === 'Fixed') {
-    emptyText =
-      'No fixed expenses for this year';
-  } else if (
-    selectedExpenseType === 'Variable'
-  ) {
-    emptyText =
-      'No variable expenses for this year'; }
-  container.innerHTML = `
-    <div class="top-spending-empty">
-      ${emptyText}
-    </div>
-  `;
-  return; }
+    return;
+  }
   const rankColor =
     selectedExpenseType === 'Fixed'
       ? '#A3CA7E'
@@ -9253,51 +9264,51 @@ const axisLabels =
         ? '#B0CBE7'
         : 'var(--text-sub)';
   container.classList.toggle(
-  'is-expanded',
-  annualTopSpendingExpanded
+    'is-expanded',
+    annualTopSpendingExpanded
   );
   container.innerHTML = `
-  ${visibleMonths
-    .map((item, index) => `
-      <div class="top-spending-item">
-        <div
-          class="top-spending-rank"
-          style="color: ${rankColor};"
-        >
-          ${String(index + 1).padStart(2, '0')}
+    ${visibleMonths
+      .map((item, index) => `
+        <div class="top-spending-item">
+          <div
+            class="top-spending-rank"
+            style="color: ${rankColor};"
+          >
+            ${String(index + 1).padStart(2, '0')}
+          </div>
+          <div class="top-spending-name">
+            ${item.name}
+          </div>
+          <div class="top-spending-amount">
+            ฿${Number(
+              item.amount || 0
+            ).toLocaleString(
+              'en-US',
+              {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              }
+            )}
+          </div>
         </div>
-        <div class="top-spending-name">
-          ${item.name}
-        </div>
-        <div class="top-spending-amount">
-          ฿${Number(
-            item.amount || 0
-          ).toLocaleString(
-            'en-US',
-            {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2
-            }
-          )}
-        </div>
-      </div>
-    `)
-    .join('')}
-  ${
-    !annualTopSpendingExpanded &&
-    knownMonths.length > 3
-      ? `
-        <button
-          type="button"
-          class="top-spending-view-all"
-          aria-label="View all spending months"
-          onclick="toggleAnnualTopSpendingView()"
-        >
-          VIEW ALL
-          <i data-lucide="chevron-right"></i>
-        </button>
-      `
-      : ''
+      `)
+      .join('')}
+    ${
+      !annualTopSpendingExpanded &&
+      knownMonths.length > 3
+        ? `
+          <button
+            type="button"
+            class="top-spending-view-all"
+            aria-label="View all spending months"
+            onclick="toggleAnnualTopSpendingView()"
+          >
+            VIEW ALL
+            <i data-lucide="chevron-right"></i>
+          </button>
+        `
+        : ''
     }
   `;
   lucide.createIcons();
