@@ -1745,6 +1745,12 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   min-height: 30px;
 }
 
+.annual-top-spending-section
+.top-spending-list.is-expanded
+.top-spending-item {
+  min-height: 44px;
+}
+
 .top-spending-rank {
   font-size: 11px;
   font-weight: 800;
@@ -4460,6 +4466,7 @@ function renderEntriesPage(entries) {
   const expenseColorMap = {};
   let selectedExpenseTitle = null;
   let selectedExpenseType = null;
+  let annualTopSpendingExpanded = false;
   let annualExpenseTrendSelectedMonth = null;
   let monthlyComparisonType = 'Expense';
   let monthlyComparisonPeriod = 3;
@@ -8013,6 +8020,7 @@ function applyInsightsSummaryFutureState(
   }
   async function fetchAnnualData() {
   const requestId = ++fetchRequestId;
+  annualTopSpendingExpanded = false;
   try {
     const previousYear =
       selectedYear - 1;
@@ -8367,7 +8375,7 @@ function renderAnnualExpenseTypeSummary(entries) {
       </div>
     </div>
   `;
-}
+ }
 
 function selectAnnualExpenseType(type) {
   if (
@@ -8378,6 +8386,7 @@ function selectAnnualExpenseType(type) {
     selectedExpenseType = type;
   }
   selectedExpenseTitle = null;
+  annualTopSpendingExpanded = false;
   renderAnnualExpenseTypeSummary(
     currentAnnualEntries
   );
@@ -9147,6 +9156,14 @@ const axisLabels =
    );
   }
   
+  function toggleAnnualTopSpendingView() {
+  annualTopSpendingExpanded =
+    !annualTopSpendingExpanded;
+  renderAnnualTopSpending(
+    currentAnnualEntries
+  );
+  }
+  
   function renderAnnualTopSpending(entries) {
   const container =
     document.getElementById(
@@ -9185,8 +9202,10 @@ const axisLabels =
   } else {
     title.innerText =
       'TOP SPENDING MONTHS'; }
-  const topMonths =
-    knownMonths.slice(0, 3);
+  const visibleMonths =
+  annualTopSpendingExpanded
+    ? knownMonths.slice(0, 12)
+    : knownMonths.slice(0, 3);
   if (topMonths.length === 0) {
   const isFuture =
     selectedYear > realCurrentYear;
@@ -9233,33 +9252,55 @@ const axisLabels =
       : selectedExpenseType === 'Variable'
         ? '#B0CBE7'
         : 'var(--text-sub)';
-  container.innerHTML =
-    topMonths
-      .map((item, index) => `
-        <div class="top-spending-item">
-          <div
-            class="top-spending-rank"
-            style="color: ${rankColor};"
-          >
-            ${String(index + 1).padStart(2, '0')}
-          </div>
-          <div class="top-spending-name">
-            ${item.name}
-          </div>
-          <div class="top-spending-amount">
-            ฿${Number(
-              item.amount || 0
-            ).toLocaleString(
-              'en-US',
-              {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-              }
-            )}
-          </div>
+  container.classList.toggle(
+  'is-expanded',
+  annualTopSpendingExpanded
+  );
+  container.innerHTML = `
+  ${visibleMonths
+    .map((item, index) => `
+      <div class="top-spending-item">
+        <div
+          class="top-spending-rank"
+          style="color: ${rankColor};"
+        >
+          ${String(index + 1).padStart(2, '0')}
         </div>
-      `)
-      .join('');
+        <div class="top-spending-name">
+          ${item.name}
+        </div>
+        <div class="top-spending-amount">
+          ฿${Number(
+            item.amount || 0
+          ).toLocaleString(
+            'en-US',
+            {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            }
+          )}
+        </div>
+      </div>
+    `)
+    .join('')}
+  ${
+    !annualTopSpendingExpanded &&
+    knownMonths.length > 3
+      ? `
+        <button
+          type="button"
+          class="top-spending-view-all"
+          aria-label="View all spending months"
+          onclick="toggleAnnualTopSpendingView()"
+        >
+          VIEW ALL
+          <i data-lucide="chevron-right"></i>
+        </button>
+      `
+      : ''
+    }
+  `;
+  lucide.createIcons();
   }
   
   function renderYoY(
