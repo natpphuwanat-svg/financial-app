@@ -86,7 +86,7 @@
     margin: 0;
     min-height: 100%;
     background-color: var(--bg-color);
-}
+    }
 
     body{
     background-color: var(--bg-color);
@@ -2846,6 +2846,27 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
   font-weight: 500;
   line-height: 1.6;
   color: var(--text-sub);
+}
+
+html.modal-open,
+body.modal-open {
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+#entryModal {
+  overscroll-behavior: contain;
+  touch-action: none;
+}
+
+#entryModal .modal-content {
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
 
 </style>
@@ -11118,6 +11139,32 @@ function openEntriesFromInsight() {
       ?.addEventListener('change', () => {
         updateEntryNoteVisibility();
     });
+    
+    let modalScrollLocked = false;
+    let modalScrollY = 0;
+    function lockBackgroundScroll() {
+      if (modalScrollLocked) {
+        return; }
+      modalScrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${modalScrollY}px`;
+      document.body.style.left = '0';
+      document.body.style.right = '0';
+      document.body.style.width = '100%';
+      modalScrollLocked = true;
+    }
+
+    function unlockBackgroundScroll() {
+      if (!modalScrollLocked) {
+        return; }
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.width = '';
+      window.scrollTo(0, modalScrollY);
+      modalScrollLocked = false;
+    }
 
     function openModal(mode, item = null) {
       const modal = document.getElementById('entryModal');
@@ -11131,6 +11178,9 @@ function openEntriesFromInsight() {
       if (!modal) {
         return; }
       modal.classList.add('active');
+      document.documentElement.classList.add('modal-open');
+      document.body.classList.add('modal-open');
+      lockBackgroundScroll();
       if (mode === 'edit' && item) {
         modalTitle.innerText = 'Edit Entry';
         editRowIndex.value = item.rowIndex;
@@ -11163,11 +11213,13 @@ function openEntriesFromInsight() {
     }
 
     function closeModal() {
-      const modal =
-        document.getElementById('entryModal');
+      const modal = document.getElementById('entryModal');
       if (!modal) {
         return; }
       modal.classList.remove('active');
+      document.documentElement.classList.remove('modal-open');
+      document.body.classList.remove('modal-open');
+      unlockBackgroundScroll();
       document.getElementById('formNote').value = '';
       document.getElementById('formNoteGroup').hidden = true;
       document.getElementById('deleteBtn').style.display = 'none';
