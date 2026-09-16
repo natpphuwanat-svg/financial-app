@@ -520,49 +520,184 @@
     .entry-amount { font-size: 14px; }
     .entry-badge { width: 42px; height: 42px; font-size: 16px; }
     .entry-badge svg { width: 20px; height: 20px; stroke-width: 2.2; }
-   
-.floating-tab-bar { position: fixed; left: 50%;
-bottom: calc(env(safe-area-inset-bottom) + 20px);
-transform: translateX(-50%); width: min(70%, 390px); height: 64px;
-display: grid; grid-template-columns: repeat(3, 1fr); align-items: center; padding: 6px;
-background: rgba(255, 255, 255, 0.10);
-backdrop-filter: blur(30px);
--webkit-backdrop-filter: blur(30px);
-border: 1px solid rgba(255, 255, 255, 0.40); border-radius: 32px;
-box-shadow:
-0 4px 14px rgba(15, 23, 42, 0.07),
-0 1px 3px rgba(15, 23, 42, 0.04);
-z-index: 900;
-overflow: hidden; }
-.floating-tab { position: relative; z-index: 1;
-height: 52px; width: 100%; align-self: center; display: flex;
-flex-direction: column; align-items: center; justify-content: center; gap: 3px;
-border: none;
-background: transparent; color: var(--text-sub); border-radius: 26px; font-family: inherit; font-size: 11px;
-font-weight: 700; cursor: pointer; transition: color 0.28s ease, transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s ease, background 0.28s ease; }
-.floating-tab svg { width: 23px; height: 23px;
-stroke: currentColor; stroke-width: 2.1;
-transition: transform 0.2s ease; }
-.floating-tab.active { color: var(--blue-grey);
-background: rgba(190, 190, 190, 0.15); backdrop-filter: blur(22px) ; -webkit-backdrop-filter: blur(22px) ; }
-.floating-tab.active svg { stroke-width: 2.3; }
-.floating-tab:active { transform: scale(0.92); }
-[data-theme="dark"] .floating-tab-bar { background: rgba(25, 30, 43, 0.10);
-backdrop-filter: blur(30px);
--webkit-backdrop-filter: blur(30px);
-border-color: rgba(255, 255, 255, 0.15);
-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10); }
-[data-theme="dark"]
-.floating-tab { color: #94A3B8; }
-[data-theme="dark"]
-.floating-tab.active { color: var(--blue-grey);
- background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(22px) ; -webkit-backdrop-filter: blur(22px) ; }
-.floating-tab-bar { transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1); }
-.floating-tab-bar.compact { transform: translateX(-50%) scale(0.80); }
-@media (max-width: 360px) {
-.floating-tab-bar { width: 88%; }
-.floating-tab { font-size: 10px; }
+
+.floating-actions-group {
+  position: fixed;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom) + 20px);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  z-index: 900;
+  transition:
+    transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
 }
+
+.floating-tab-bar {
+  position: relative;
+  width: min(70vw, 390px);
+  height: 64px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.40);
+  border-radius: 32px;
+  box-shadow:
+    0 4px 14px rgba(15, 23, 42, 0.07),
+    0 1px 3px rgba(15, 23, 42, 0.04);
+  overflow: hidden;
+}
+
+.floating-tab {
+  position: relative;
+  z-index: 1;
+  height: 52px;
+  width: 100%;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border: none;
+  background: transparent;
+  color: var(--text-sub);
+  border-radius: 26px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    color 0.28s ease,
+    transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.28s ease,
+    background 0.28s ease;
+}
+
+.floating-tab svg {
+  width: 23px;
+  height: 23px;
+  stroke: currentColor;
+  stroke-width: 2.1;
+  transition: transform 0.2s ease;
+}
+
+.floating-tab.active {
+  color: var(--blue-grey);
+  background: rgba(190, 190, 190, 0.15);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+
+.floating-tab.active svg {
+  stroke-width: 2.3;
+}
+
+.floating-tab:active {
+  transform: scale(0.92);
+}
+
+.floating-add-button {
+  position: relative;
+  flex: 0 0 64px;
+  width: 64px;
+  height: 64px;
+  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.40);
+  border-radius: 50%;
+  background: var(--lime-400);
+  color: #365314;
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  box-shadow:
+    0 4px 14px rgba(15, 23, 42, 0.07),
+    0 1px 3px rgba(15, 23, 42, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.28s ease,
+    background 0.28s ease;
+}
+
+.floating-add-button svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  stroke-width: 2.4;
+}
+
+.floating-add-button:active {
+  transform: scale(0.92);
+}
+
+.floating-actions-group.compact {
+  transform: translateX(-50%) scale(0.80);
+}
+
+body:has(#entryModal.active) .floating-add-button {
+  opacity: 0;
+  pointer-events: none;
+}
+
+[data-theme="dark"] .floating-tab-bar {
+  background: rgba(25, 30, 43, 0.10);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.16),
+    0 1px 4px rgba(0, 0, 0, 0.10);
+}
+
+[data-theme="dark"] .floating-tab {
+  color: #94A3B8;
+}
+
+[data-theme="dark"] .floating-tab.active {
+  color: var(--blue-grey);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+
+[data-theme="dark"] .floating-add-button {
+  background: var(--lime-400);
+  color: #365314;
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.16),
+    0 1px 4px rgba(0, 0, 0, 0.10);
+}
+
+@media (max-width: 360px) {
+  .floating-tab-bar {
+    width: calc(88vw - 74px);
+  }
+
+  .floating-tab {
+    font-size: 10px;
+  }
+
+  .floating-actions-group {
+    gap: 8px;
+  }
+
+  .floating-add-button {
+    flex-basis: 64px;
+    width: 64px;
+    height: 64px;
+  }
+}
+
 .placeholder-page { min-height: 60vh; display: flex; align-items: center; justify-content: center; }
 .placeholder-title { font-size: 24px; font-weight: 800; color: var(--text-main); letter-spacing: 0.3px; }
 .entries-filter {
@@ -3332,21 +3467,42 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
 </section>
     </main>
   </div>
-  <!-- Floating Bottom Navigation -->
+  <!-- Floating Bottom Navigation + Global Add FAB -->
+<div class="floating-actions-group">
   <nav class="floating-tab-bar" aria-label="Main navigation">
-    <button class="floating-tab active" type="button" onclick="switchTab('overview')">
-  <i data-lucide="house"></i>
-  <span>Overview</span>
-</button>
-<button class="floating-tab" type="button" onclick="switchTab('entries')">
-  <i data-lucide="list-todo"></i>
-  <span>Entries</span>
-</button>
-<button class="floating-tab" type="button" onclick="switchTab('insights')">
-  <i data-lucide="chart-no-axes-combined"></i>
-  <span>Insights</span>
-</button>
+    <button
+      class="floating-tab active"
+      type="button"
+      onclick="switchTab('overview')"
+    >
+      <i data-lucide="house"></i>
+      <span>Overview</span>
+    </button>
+    <button
+      class="floating-tab"
+      type="button"
+      onclick="switchTab('entries')"
+    >
+      <i data-lucide="list-todo"></i>
+      <span>Entries</span>
+    </button>
+    <button
+      class="floating-tab"
+      type="button"
+      onclick="switchTab('insights')"
+    >
+      <i data-lucide="chart-no-axes-combined"></i>
+      <span>Insights</span>
+    </button>
   </nav>
+  <button
+    class="floating-add-button"
+    type="button"
+    aria-label="Add entry"
+  >
+    <i data-lucide="plus"></i>
+  </button>
+</div>
 
   <div class="modal" id="entryModal">
     <div class="modal-content">
@@ -10163,8 +10319,9 @@ return Number(b.amount) - Number(a.amount); });
       let userIsScrolling = false;
       
   function updateBottomNavOnScroll() {
-  const bottomNav = document.querySelector('.floating-tab-bar');
-  if (!bottomNav) return;
+  const floatingActionsGroup =
+    document.querySelector('.floating-actions-group');
+  if (!floatingActionsGroup) return;
   const currentScrollY = window.scrollY;
   if (
     insightContext &&
@@ -10176,16 +10333,16 @@ return Number(b.amount) - Number(a.amount); });
     tabScrollPositions[currentTab] = currentScrollY;
   }
   if (floatingNavLocked && !userIsScrolling) {
-    bottomNav.classList.remove('compact');
+    floatingActionsGroup.classList.remove('compact');
     return;
   }
   if (userIsScrolling) {
     floatingNavLocked = false;
   }
   if (currentScrollY <= 0) {
-    bottomNav.classList.remove('compact');
+    floatingActionsGroup.classList.remove('compact');
   } else {
-    bottomNav.classList.add('compact');
+    floatingActionsGroup.classList.add('compact');
   }
 }
 window.addEventListener(
