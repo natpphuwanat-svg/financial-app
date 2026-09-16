@@ -51,13 +51,13 @@
       /* Dark Base */
       --bg-color: #000000;
       --glass-bg: #000000;
-      --glass-card: rgba(53, 53, 53, 0.50);
+      --glass-card: rgba(21, 21, 21, 0.60);
       --glass-border: rgba(255, 255, 255, 0.08);
       --glass-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
       
       --text-main: #F8FAFC;
       --text-sub: #94A3B8;
-      --balance-bg: rgba(53, 53, 53, 0.50);
+      --balance-bg: rgba(21, 21, 21, 0.60);
 
       /* Header & Elements Dark */
       --icon-box-bg: #202B14;
@@ -72,7 +72,7 @@
       --expense-bg: rgba(244, 63, 94, 0.25);
       --deduction-color: #D97706;
       --deduction-bg: rgba(217, 119, 6, 0.25);
-      --modal-bg: rgba(0, 0, 0, 0.50);
+      --modal-bg: rgba(0, 0, 0, 0.40);
     }
 
     * { 
@@ -574,21 +574,21 @@
 }
 
 .type-btn.active.income {
-  background: var(--income-bg);
-  color: var(--text-main);
-  border-color: var(--income-color);
+  background: rgba(59, 177, 67, 0.40);
+  color: var(--income-color);
+  border-color: rgba(59, 177, 67, 0.60);
 }
 
 .type-btn.active.expense {
-  background: var(--expense-bg);
-  color: var(--text-main);
-  border-color: var(--expense-color);
+  background: rgba(244, 63, 94, 0.40);
+  color: var(--expense-color)
+  border-color: rgba(244, 63, 94, 0.60);
 }
 
 .type-btn.active.deduction {
-  background: var(--deduction-bg);
-  color: var(--text-main);
-  border-color: var(--deduction-color);
+  background: rgba(217, 119, 6, 0.40);
+  color: var(--deduction-color);
+  border-color: rgba(217, 119, 6, 0.60);
 }
 
 .modal-actions {
@@ -624,15 +624,15 @@
 }
 
 .submit-btn {
-  background: var(--text-sub);
-  color: var(--income-color);
+  background: rgba(59, 177, 67, 0.50);
+  color: rgba(59, 177, 67, 0.80);
   border: none;
 }
 
 .delete-btn {
   display: none;
-  background: var(--text-main);
-  color: var(--expense-color);
+  background: rgba(244, 63, 94, 0.50);
+  color: rgba(244, 63, 94, 0.80);
   border: none;
 }
 
