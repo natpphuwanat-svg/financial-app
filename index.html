@@ -612,10 +612,14 @@
 
     .form-group { margin-bottom: 18px; }
     .form-label { display: block; font-size: 11px; font-weight: 800; color: var(--text-sub); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
-    .form-control { width: 100%; height: 48px; min-height: 48px; padding: 0 14px; border-radius: 16px; border: 1px solid var(--glass-border);
-      background: var(--glass-bg); color: var(--text-main); font-size: 15px; font-weight: 600; line-height: 48px; outline: none; }
+    .form-control { display: block; width: 100%; min-width: 0; max-width: 100%; height: 48px; min-height: 48px; box-sizing: border-box; padding: 0 14px;
+      border-radius: 16px; border: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--text-main); font-size: 15px; font-weight: 600; line-height: 48px; outline: none; }
     .form-control:focus { border-color: var(--lime-400); }
     .form-control::placeholder { color: var(--text-sub); opacity: 0.72; }
+    #formDate { display: block; width: 100%; min-width: 0; max-width: 100%;
+      box-sizing: border-box; padding-left: 14px; padding-right: 14px; -webkit-appearance: none; appearance: none; }
+    #formDate::-webkit-date-and-time-value { text-align: left; }
+    #formDate::-webkit-calendar-picker-indicator { margin: 0; padding: 0; }
     .item-picker-wrap { position: relative; width: 100%; }
     .item-picker { appearance: none; -webkit-appearance: none; padding-right: 42px; line-height: normal; cursor: pointer; }
     .item-picker-chevron { position: absolute; top: 50%; right: 14px; width: 16px; height: 16px; transform: translateY(-50%); color: var(--text-sub); opacity: 0.48; pointer-events: none; }
