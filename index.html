@@ -49,15 +49,15 @@
 
     [data-theme="dark"] {
       /* Dark Base */
-      --bg-color: #424242;
-      --glass-bg: #424242;
-      --glass-card: rgba(0, 0, 0, 0.50);
+      --bg-color: #000000;
+      --glass-bg: #000000;
+      --glass-card: rgba(53, 53, 53, 0.50);
       --glass-border: rgba(255, 255, 255, 0.08);
       --glass-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
       
       --text-main: #F8FAFC;
       --text-sub: #94A3B8;
-      --balance-bg: rgba(0, 0, 0, 0.50);
+      --balance-bg: rgba(53, 53, 53, 0.50);
 
       /* Header & Elements Dark */
       --icon-box-bg: #202B14;
@@ -481,7 +481,7 @@
 
     /* Liquid Glass Modal */
     .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--modal-bg);
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 1000; align-items: flex-end; justify-content: center; }
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 1000; align-items: flex-end; justify-content: center; }
     .modal.active { display: flex; }
     .modal-content {
       background: var(--glass-card);
@@ -624,7 +624,7 @@
 }
 
 .submit-btn {
-  background: var(--text-main);
+  background: var(--text-sub);
   color: var(--income-color);
   border: none;
 }
@@ -633,7 +633,7 @@
   display: none;
   background: var(--text-main);
   color: var(--expense-color);
-  border: 1px solid var(--expense-color);
+  border: none;
 }
 
     .form-group { margin-bottom: 18px; }
