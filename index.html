@@ -567,15 +567,19 @@
 
 .modal-actions {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: stretch;
   gap: 10px;
+  width: 100%;
   margin-top: 10px;
 }
 
 .submit-btn,
 .delete-btn {
-  width: 100%;
+  flex: 1 1 0;
+  width: 0;
   height: 52px;
+  min-height: 52px;
   margin: 0;
   padding: 0;
   border-radius: 18px;
@@ -608,19 +612,19 @@
 
     .form-group { margin-bottom: 18px; }
     .form-label { display: block; font-size: 11px; font-weight: 800; color: var(--text-sub); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
-    .form-control { 
-      width: 100%; padding: 14px; border-radius: 16px; 
-      border: 1px solid var(--glass-border); background: var(--glass-bg); 
-      color: var(--text-main); font-size: 15px; font-weight: 600; outline: none; 
-    }
+    .form-control { width: 100%; height: 48px; min-height: 48px; padding: 0 14px; border-radius: 16px; border: 1px solid var(--glass-border);
+      background: var(--glass-bg); color: var(--text-main); font-size: 15px; font-weight: 600; line-height: 48px; outline: none; }
     .form-control:focus { border-color: var(--lime-400); }
+    .form-control::placeholder { color: var(--text-sub); opacity: 0.72; }
+    .item-picker-wrap { position: relative; width: 100%; }
+    .item-picker { appearance: none; -webkit-appearance: none; padding-right: 42px; line-height: normal; cursor: pointer; }
+    .item-picker-chevron { position: absolute; top: 50%; right: 14px; width: 16px; height: 16px; transform: translateY(-50%); color: var(--text-sub); opacity: 0.48; pointer-events: none; }
+    .item-picker-chevron svg { width: 16px; height: 16px; stroke-width: 2; }
     .type-selector { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
     .type-btn { padding: 12px; border-radius: 14px; border: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--text-sub); font-size: 13px; font-weight: 700; cursor: pointer; text-align: center; }
     .type-btn.active.income { background: var(--income-bg); color: var(--income-color); border-color: var(--income-color); }
     .type-btn.active.expense { background: var(--expense-bg); color: var(--expense-color); border-color: var(--expense-color); }
     .type-btn.active.deduction { background: var(--deduction-bg); color: var(--deduction-color); border-color: var(--deduction-color); }
-    .submit-btn { width: 100%; background: var(--text-main); color: var(--bg-color); border: none; padding: 16px; border-radius: 18px; font-size: 16px; font-weight: 800; cursor: pointer; margin-top: 10px; }
-    .delete-btn { width: 100%; background: var(--expense-bg); color: var(--expense-color); border: 1px solid var(--expense-color); padding: 14px; border-radius: 18px; font-size: 14px; font-weight: 800; cursor: pointer; margin-top: 10px; display: none; }
     .loading-state { text-align: center; padding: 40px 0; color: var(--text-sub); font-size: 14px; font-weight: 600; }
     .year-nav-btn i,
     .month-arrow-btn i{ width:18px; height:18px; stroke:currentColor; stroke-width:2.4; }
@@ -3678,13 +3682,20 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
       </div>
       <div class="form-group">
         <label class="form-label">Item</label>
-        <select
-          class="form-control"
-          id="formTitle"
-          required
-        >
-          <option value="" disabled>Select item</option>
-        </select>
+        <div class="item-picker-wrap">
+          <select
+            class="form-control item-picker"
+            id="formTitle"
+            required
+            >
+            <option value="" disabled>Select item</option>
+          </select>
+          <i
+            data-lucide="chevron-down"
+            class="item-picker-chevron"
+            aria-hidden="true"
+            ></i>
+        </div>
       </div>
       <div
         class="form-group"
@@ -3696,7 +3707,7 @@ background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.08), tran
           type="text"
           class="form-control"
           id="formNote"
-          placeholder="Optional"
+          placeholder="Add a note"
           autocomplete="off"
         >
       </div>
