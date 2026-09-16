@@ -579,19 +579,19 @@
 
 .type-btn.active.income {
   background: var(--income-bg);
-  color: var(--income-color);
+  color: var(--text-main);
   border-color: var(--income-color);
 }
 
 .type-btn.active.expense {
   background: var(--expense-bg);
-  color: var(--expense-color);
+  color: var(--text-main);
   border-color: var(--expense-color);
 }
 
 .type-btn.active.deduction {
   background: var(--deduction-bg);
-  color: var(--deduction-color);
+  color: var(--text-main);
   border-color: var(--deduction-color);
 }
 
@@ -629,15 +629,15 @@
 
 .submit-btn {
   background: var(--action-save);
-  color: var(--bg-color);
+  color: var(--text-main);
   border: none;
 }
 
 .delete-btn {
   display: none;
-  background: var(--expense-bg);
-  color: var(--bg-color);
-  border: 1px solid var(--expense-color);
+  background: var(--action-delete);
+  color: var(--text-main);
+  border: none;
 }
 
     .form-group { margin-bottom: 18px; }
@@ -694,7 +694,7 @@
   grid-template-columns: repeat(3, 1fr);
   align-items: center;
   padding: 6px;
-  background: rgba(255, 255, 255, 0.10);
+  background: var(--glass-card);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
   border: 1px solid rgba(255, 255, 255, 0.40);
@@ -800,7 +800,7 @@ body:has(#entryModal.active) .floating-add-button {
 }
 
 [data-theme="dark"] .floating-tab-bar {
-  background: rgba(25, 30, 43, 0.10);
+  background: var(--glass-card);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
   border-color: rgba(255, 255, 255, 0.15);
