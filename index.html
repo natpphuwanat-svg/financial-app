@@ -3837,6 +3837,7 @@ body.modal-open {
     let lastFetchTime = 0;
     const REFRESH_THRESHOLD = 5 * 60 * 1000;
     function resetAppSession() {
+    closeModal();
     const wasInsightContext = insightContext && insightContextEntriesActive;
     const sessionTab = wasInsightContext ? 'insights' : currentTab;
     fetchRequestId++;
