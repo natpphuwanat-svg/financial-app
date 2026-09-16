@@ -39,12 +39,14 @@
       
       /* Functional Colors */
       --income-color: #3BB143;
-      --income-bg: rgba(59, 177, 67, 0.16);
+      --income-bg: rgba(59, 177, 67, 0.20);
       --expense-color: #F43F5E;
-      --expense-bg: rgba(244, 63, 94, 0.16);
+      --expense-bg: rgba(244, 63, 94, 0.20);
       --deduction-color: #D97706;
-      --deduction-bg: rgba(217, 119, 6, 0.16);
+      --deduction-bg: rgba(217, 119, 6, 0.20);
       --modal-bg: rgba(15, 23, 42, 0.25);
+      --action-save: var(--income-color);
+      --action-delete: var(--expense-color);
     }
 
     [data-theme="dark"] {
@@ -67,12 +69,14 @@
       
       /* Functional Colors (Dark) */
       --income-color: #3BB143;
-      --income-bg: rgba(59, 177, 67, 0.16);
+      --income-bg: rgba(59, 177, 67, 0.20);
       --expense-color: #F43F5E;
-      --expense-bg: rgba(244, 63, 94, 0.16);
+      --expense-bg: rgba(244, 63, 94, 0.20);
       --deduction-color: #D97706;
-      --deduction-bg: rgba(217, 119, 6, 0.16);
+      --deduction-bg: rgba(217, 119, 6, 0.20);
       --modal-bg: rgba(0, 0, 0, 0.25);
+      --action-save: var(--income-color);
+      --action-delete: var(--expense-color);
     }
 
     * { 
@@ -481,7 +485,7 @@
 
     /* Liquid Glass Modal */
     .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--modal-bg);
-      backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 1000; align-items: flex-end; justify-content: center; }
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 1000; align-items: flex-end; justify-content: center; }
     .modal.active { display: flex; }
     .modal-content {
       background: var(--glass-card);
@@ -624,7 +628,7 @@
 }
 
 .submit-btn {
-  background: var(--text-main);
+  background: var(--action-save);
   color: var(--bg-color);
   border: none;
 }
@@ -632,7 +636,7 @@
 .delete-btn {
   display: none;
   background: var(--expense-bg);
-  color: var(--expense-color);
+  color: var(--bg-color);
   border: 1px solid var(--expense-color);
 }
 
@@ -651,10 +655,6 @@
     .item-picker-chevron { position: absolute; top: 50%; right: 14px; width: 16px; height: 16px; transform: translateY(-50%); color: var(--text-sub); opacity: 0.48; pointer-events: none; }
     .item-picker-chevron svg { width: 16px; height: 16px; stroke-width: 2; }
     .type-selector { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-    .type-btn { padding: 12px; border-radius: 14px; border: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--text-sub); font-size: 13px; font-weight: 700; cursor: pointer; text-align: center; }
-    .type-btn.active.income { background: var(--income-bg); color: var(--income-color); border-color: var(--income-color); }
-    .type-btn.active.expense { background: var(--expense-bg); color: var(--expense-color); border-color: var(--expense-color); }
-    .type-btn.active.deduction { background: var(--deduction-bg); color: var(--deduction-color); border-color: var(--deduction-color); }
     .loading-state { text-align: center; padding: 40px 0; color: var(--text-sub); font-size: 14px; font-weight: 600; }
     .year-nav-btn i,
     .month-arrow-btn i{ width:18px; height:18px; stroke:currentColor; stroke-width:2.4; }
