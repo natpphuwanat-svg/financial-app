@@ -16,14 +16,13 @@
     <style>
     :root {
       /* Palette */
-      --morning-butter: #F3D98F;
       --blue-grey: #7298C7;
       --lime-400: #A3E635;
 
       /* Light Glass Base */
       --bg-color: #F5F5F7;
       --glass-bg: rgba(255, 255, 255, 0.55);
-      --glass-card: rgba(255, 255, 255, 0.35);
+      --glass-card: rgba(255, 255, 255, 0.40);
       --glass-border: rgba(15, 23, 42, 0.08);
       --glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.08);
       
@@ -46,14 +45,14 @@
       --deduction-bg: rgba(217, 119, 6, 0.35);
       --modal-bg: rgba(15, 23, 42, 0.35);
       --action-save: var(--income-color);
-      --action-delete: rgb(255, 0, 0)
+      --action-delete: rgba(255, 0, 0)
     }
 
     [data-theme="dark"] {
       /* Dark Base */
-      --bg-color: #0b0f19;
-      --glass-bg: #0b0f19;
-      --glass-card: rgba(31, 38, 55, 0.35);
+      --bg-color: #000000;
+      --glass-bg: rgba(0, 0, 0, 0.55)
+      --glass-card: rgba(32, 32, 32, 0.40);
       --glass-border: rgba(255, 255, 255, 0.08);
       --glass-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
       
@@ -76,7 +75,7 @@
       --deduction-bg: rgba(217, 119, 6, 0.35);
       --modal-bg: rgba(0, 0, 0, 0.35);
       --action-save: var(--income-color);
-      --action-delete: rgb(255, 0, 0)
+      --action-delete: rgba(255, 0, 0)
     }
 
     * { 
@@ -485,7 +484,7 @@
 
     /* Liquid Glass Modal */
     .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--modal-bg);
-      backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 1000; align-items: flex-end; justify-content: center; }
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 1000; align-items: flex-end; justify-content: center; }
     .modal.active { display: flex; }
     .modal-content {
       background: var(--glass-card);
