@@ -39,11 +39,11 @@
       
       /* Functional Colors */
       --income-color: #3BB143;
-      --income-bg: rgba(59, 177, 67, 0.50);
+      --income-bg: rgba(59, 177, 67, 0.35);
       --expense-color: #F43F5E;
-      --expense-bg: rgba(244, 63, 94, 0.50);
+      --expense-bg: rgba(244, 63, 94, 0.35);
       --deduction-color: #D97706;
-      --deduction-bg: rgba(217, 119, 6, 0.50);
+      --deduction-bg: rgba(217, 119, 6, 0.35);
       --modal-bg: rgba(15, 23, 42, 0.25);
       --action-save: var(--income-color);
       --action-delete: rgb(255, 0, 0)
@@ -69,11 +69,11 @@
       
       /* Functional Colors (Dark) */
       --income-color: #3BB143;
-      --income-bg: rgba(59, 177, 67, 0.50);
+      --income-bg: rgba(59, 177, 67, 0.35);
       --expense-color: #F43F5E;
-      --expense-bg: rgba(244, 63, 94, 0.50);
+      --expense-bg: rgba(244, 63, 94, 0.35);
       --deduction-color: #D97706;
-      --deduction-bg: rgba(217, 119, 6, 0.50);
+      --deduction-bg: rgba(217, 119, 6, 0.35);
       --modal-bg: rgba(0, 0, 0, 0.25);
       --action-save: var(--income-color);
       --action-delete: rgb(255, 0, 0)
@@ -485,7 +485,7 @@
 
     /* Liquid Glass Modal */
     .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--modal-bg);
-      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 1000; align-items: flex-end; justify-content: center; }
+      backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); z-index: 1000; align-items: flex-end; justify-content: center; }
     .modal.active { display: flex; }
     .modal-content {
       background: var(--glass-card);
@@ -694,9 +694,9 @@
   grid-template-columns: repeat(3, 1fr);
   align-items: center;
   padding: 6px;
-  background: var(--modal-bg);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
   border: 1px solid rgba(255, 255, 255, 0.40);
   border-radius: 32px;
   box-shadow:
@@ -800,9 +800,9 @@ body:has(#entryModal.active) .floating-add-button {
 }
 
 [data-theme="dark"] .floating-tab-bar {
-  background: var(--modal-bg);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
+  background: rgba(25, 30, 43, 0.10);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
   border-color: rgba(255, 255, 255, 0.15);
   box-shadow:
     0 4px 16px rgba(0, 0, 0, 0.16),
