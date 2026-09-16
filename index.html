@@ -39,14 +39,14 @@
       
       /* Functional Colors */
       --income-color: #3BB143;
-      --income-bg: rgba(59, 177, 67, 0.20);
+      --income-bg: rgba(59, 177, 67, 0.50);
       --expense-color: #F43F5E;
-      --expense-bg: rgba(244, 63, 94, 0.20);
+      --expense-bg: rgba(244, 63, 94, 0.50);
       --deduction-color: #D97706;
-      --deduction-bg: rgba(217, 119, 6, 0.20);
+      --deduction-bg: rgba(217, 119, 6, 0.50);
       --modal-bg: rgba(15, 23, 42, 0.25);
       --action-save: var(--income-color);
-      --action-delete: var(--expense-color);
+      --action-delete: rgb(255, 0, 0)
     }
 
     [data-theme="dark"] {
@@ -69,14 +69,14 @@
       
       /* Functional Colors (Dark) */
       --income-color: #3BB143;
-      --income-bg: rgba(59, 177, 67, 0.20);
+      --income-bg: rgba(59, 177, 67, 0.50);
       --expense-color: #F43F5E;
-      --expense-bg: rgba(244, 63, 94, 0.20);
+      --expense-bg: rgba(244, 63, 94, 0.50);
       --deduction-color: #D97706;
-      --deduction-bg: rgba(217, 119, 6, 0.20);
+      --deduction-bg: rgba(217, 119, 6, 0.50);
       --modal-bg: rgba(0, 0, 0, 0.25);
       --action-save: var(--income-color);
-      --action-delete: var(--expense-color);
+      --action-delete: rgb(255, 0, 0)
     }
 
     * { 
@@ -694,7 +694,7 @@
   grid-template-columns: repeat(3, 1fr);
   align-items: center;
   padding: 6px;
-  background: var(--glass-card);
+  background: var(--modal-bg);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
   border: 1px solid rgba(255, 255, 255, 0.40);
@@ -800,7 +800,7 @@ body:has(#entryModal.active) .floating-add-button {
 }
 
 [data-theme="dark"] .floating-tab-bar {
-  background: var(--glass-card);
+  background: var(--modal-bg);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
   border-color: rgba(255, 255, 255, 0.15);
