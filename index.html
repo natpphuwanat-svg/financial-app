@@ -39,25 +39,25 @@
       
       /* Functional Colors */
       --income-color: #3BB143;
-      --income-bg: rgba(59, 177, 67, 0.16);
+      --income-bg: rgba(59, 177, 67, 0.25);
       --expense-color: #F43F5E;
-      --expense-bg: rgba(244, 63, 94, 0.16);
+      --expense-bg: rgba(244, 63, 94, 0.25);
       --deduction-color: #D97706;
-      --deduction-bg: rgba(217, 119, 6, 0.16);
-      --modal-bg: rgba(15, 23, 42, 0.35);
+      --deduction-bg: rgba(217, 119, 6, 0.25);
+      --modal-bg: rgba(15, 23, 42, 0.40);
     }
 
     [data-theme="dark"] {
       /* Dark Base */
-      --bg-color: #0b0f19;
-      --glass-bg: #0b0f19;
-      --glass-card: rgba(31, 38, 55, 0.50);
+      --bg-color: #424242;
+      --glass-bg: #424242;
+      --glass-card: rgba(0, 0, 0, 0.50);
       --glass-border: rgba(255, 255, 255, 0.08);
       --glass-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
       
       --text-main: #F8FAFC;
       --text-sub: #94A3B8;
-      --balance-bg: rgba(31, 38, 55, 0.70);
+      --balance-bg: rgba(0, 0, 0, 0.50);
 
       /* Header & Elements Dark */
       --icon-box-bg: #202B14;
@@ -67,12 +67,12 @@
       
       /* Functional Colors (Dark) */
       --income-color: #3BB143;
-      --income-bg: rgba(59, 177, 67, 0.16);
+      --income-bg: rgba(59, 177, 67, 0.25);
       --expense-color: #F43F5E;
-      --expense-bg: rgba(244, 63, 94, 0.16);
+      --expense-bg: rgba(244, 63, 94, 0.25);
       --deduction-color: #D97706;
-      --deduction-bg: rgba(217, 119, 6, 0.16);
-      --modal-bg: rgba(0, 0, 0, 0.65);
+      --deduction-bg: rgba(217, 119, 6, 0.25);
+      --modal-bg: rgba(0, 0, 0, 0.50);
     }
 
     * { 
@@ -575,19 +575,19 @@
 
 .type-btn.active.income {
   background: var(--income-bg);
-  color: var(--income-color);
+  color: var(--text-main);
   border-color: var(--income-color);
 }
 
 .type-btn.active.expense {
   background: var(--expense-bg);
-  color: var(--expense-color);
+  color: var(--text-main);
   border-color: var(--expense-color);
 }
 
 .type-btn.active.deduction {
   background: var(--deduction-bg);
-  color: var(--deduction-color);
+  color: var(--text-main);
   border-color: var(--deduction-color);
 }
 
@@ -625,13 +625,13 @@
 
 .submit-btn {
   background: var(--text-main);
-  color: var(--bg-color);
+  color: var(--income-color);
   border: none;
 }
 
 .delete-btn {
   display: none;
-  background: var(--expense-bg);
+  background: var(--text-main);
   color: var(--expense-color);
   border: 1px solid var(--expense-color);
 }
@@ -651,10 +651,6 @@
     .item-picker-chevron { position: absolute; top: 50%; right: 14px; width: 16px; height: 16px; transform: translateY(-50%); color: var(--text-sub); opacity: 0.48; pointer-events: none; }
     .item-picker-chevron svg { width: 16px; height: 16px; stroke-width: 2; }
     .type-selector { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-    .type-btn { padding: 12px; border-radius: 14px; border: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--text-sub); font-size: 13px; font-weight: 700; cursor: pointer; text-align: center; }
-    .type-btn.active.income { background: var(--income-bg); color: var(--income-color); border-color: var(--income-color); }
-    .type-btn.active.expense { background: var(--expense-bg); color: var(--expense-color); border-color: var(--expense-color); }
-    .type-btn.active.deduction { background: var(--deduction-bg); color: var(--deduction-color); border-color: var(--deduction-color); }
     .loading-state { text-align: center; padding: 40px 0; color: var(--text-sub); font-size: 14px; font-weight: 600; }
     .year-nav-btn i,
     .month-arrow-btn i{ width:18px; height:18px; stroke:currentColor; stroke-width:2.4; }
