@@ -11316,59 +11316,87 @@ function openEntriesFromInsight() {
         return 'Income';
       }
       if (currentTab === 'insights') {
-        if (selectedExpenseType === 'Fixed' ||
-            selectedExpenseType === 'Variable') {
+        if (
+          selectedExpenseType === 'Fixed' ||
+          selectedExpenseType === 'Variable'
+        ) {
           return 'Expense';
         }
         return 'Income';
       }
       return 'Income';
     }
-
+    
     function openModal(mode, item = null) {
-      const modal = document.getElementById('entryModal');
-      const modalTitle = document.getElementById('modalTitle');
-      const editRowIndex = document.getElementById('editRowIndex');
-      const formDate = document.getElementById('formDate');
-      const formTitle = document.getElementById('formTitle');
-      const formNote = document.getElementById('formNote');
-      const formAmount = document.getElementById('formAmount');
-      const deleteBtn = document.getElementById('deleteBtn');
-      const modalActions = document.querySelector('.modal-actions');
+      const modal =
+        document.getElementById('entryModal');
+      const modalTitle =
+        document.getElementById('modalTitle');
+      const editRowIndex =
+        document.getElementById('editRowIndex');
+      const formDate =
+        document.getElementById('formDate');
+      const formNote =
+        document.getElementById('formNote');
+      const formAmount =
+        document.getElementById('formAmount');
+      const deleteBtn =
+        document.getElementById('deleteBtn');
+      const modalActions =
+        document.querySelector('.modal-actions');
       if (!modal) {
-        return; }
+        return;
+      }
       modal.classList.add('active');
-      document.documentElement.classList.add('modal-open');
-      document.body.classList.add('modal-open');
+      document.documentElement.classList.add(
+        'modal-open'
+      );
+      document.body.classList.add(
+        'modal-open'
+      );
       lockBackgroundScroll();
       if (mode === 'edit' && item) {
         modalTitle.innerText = 'Edit Entry';
-        editRowIndex.value = item.rowIndex;
+        editRowIndex.value =
+          item.rowIndex;
         formDate.value =
-          String(item.rawDate || '').slice(0, 7);
-        formAmount.value = item.amount ?? '';
+          String(item.rawDate || '')
+            .slice(0, 7);
+        formAmount.value =
+          item.amount ?? '';
         selectType(
           item.financialType,
           item.title
         );
-        formNote.value = item.note || '';
+        formNote.value =
+          item.note || '';
         updateEntryNoteVisibility();
-        deleteBtn.style.display = 'block';
-        modalActions?.classList.remove('single-action');
+        deleteBtn.style.display =
+          'block';
+        modalActions?.classList.remove(
+          'single-action'
+        );
         requestAnimationFrame(() => {
           lucide.createIcons();
         });
-        return; }
+        return;
+      }
       if (mode === 'add') {
-        modalTitle.innerText = 'Add Entry';
+        modalTitle.innerText =
+          'Add Entry';
         editRowIndex.value = '';
-        const addMonth = String(selectedMonth).padStart(2, '0');
+        const addMonth =
+          String(selectedMonth)
+            .padStart(2, '0');
         formDate.value =
           `${selectedYear}-${addMonth}`;
         formAmount.value = '';
         formNote.value = '';
-        deleteBtn.style.display = 'none';
-        modalActions?.classList.add('single-action');
+        deleteBtn.style.display =
+          'none';
+        modalActions?.classList.add(
+          'single-action'
+        );
         selectType(
           getAddEntryDefaultType()
         );
@@ -11377,145 +11405,208 @@ function openEntriesFromInsight() {
         });
       }
     }
-
+    
     function closeModal() {
-      const modal = document.getElementById('entryModal');
+      const modal =
+        document.getElementById('entryModal');
       if (!modal) {
-        return; }
+        return;
+      }
       modal.classList.remove('active');
-      document.documentElement.classList.remove('modal-open');
-      document.body.classList.remove('modal-open');
+      document.documentElement.classList.remove(
+        'modal-open'
+      );
+      document.body.classList.remove(
+        'modal-open'
+      );
       unlockBackgroundScroll();
-      document.getElementById('formNote').value = '';
-      document.getElementById('formNoteGroup').hidden = true;
-      document.getElementById('deleteBtn').style.display = 'none';
+      document.getElementById(
+        'formNote'
+      ).value = '';
+      document.getElementById(
+        'formNoteGroup'
+      ).hidden = true;
+      document.getElementById(
+        'deleteBtn'
+      ).style.display = 'none';
     }
-
-  const iconMap = {
-  // Income
-  "เงินเดือน": "briefcase-business",
-  "apple music": "music",
-  "ยอดขายทะลุเป้าหมาย": "trending-up",
-  "อื่นๆ": "ellipsis",
-
-  // Expense
-  "3BB": "wifi",
-  "แม่": "user-round",
-  "AIS Bill": "smartphone",
-  "ศรีสวัสดิ์": "motorbike",
-  "สยามชัย": "plug",
-  "แชร์": "repeat-2",
-  "Spay later": "shopping-basket",
-  "SEasy": "credit-card",
-  "Tpay later": "shopping-cart",
-
-  // Deduction
-  "มาสาย": "clock-8",
-  "ลืมรูดบัตร": "scan-line",
-  "ออนไลน์ออกก่อนเกิน": "clock-alert",
-  "ออนไลน์ออกก่อน": "clock-arrow-right",
-  "ไม่สแกนนิ้ว": "fingerprint",
-  "ผิดกฎระเบียบ": "circle-alert",
-  "ลาป่วย": "pill",
-  "ออมทรัพย์": "landmark",
-  "ผ่อนสินค้า": "scan-barcode"
-  };
-
-  function getEntryIcon(title) {
-    return iconMap[title] || "circle-help";
-  }
-
+    
+    const iconMap = {
+      // Income
+      "เงินเดือน": "briefcase-business",
+      "apple music": "music",
+      "ยอดขายทะลุเป้าหมาย": "trending-up",
+      "อื่นๆ": "ellipsis",
+    
+      // Expense
+      "3BB": "wifi",
+      "แม่": "user-round",
+      "AIS Bill": "smartphone",
+      "ศรีสวัสดิ์": "motorbike",
+      "สยามชัย": "plug",
+      "แชร์": "repeat-2",
+      "Spay later": "shopping-basket",
+      "SEasy": "credit-card",
+      "Tpay later": "shopping-cart",
+    
+      // Deduction
+      "มาสาย": "clock-8",
+      "ลืมรูดบัตร": "scan-line",
+      "ออนไลน์ออกก่อนเกิน": "clock-alert",
+      "ออนไลน์ออกก่อน": "clock-arrow-right",
+      "ไม่สแกนนิ้ว": "fingerprint",
+      "ผิดกฎระเบียบ": "circle-alert",
+      "ลาป่วย": "pill",
+      "ออมทรัพย์": "landmark",
+      "ผ่อนสินค้า": "scan-barcode"
+    };
+    
+    function getEntryIcon(title) {
+      return iconMap[title] ||
+        "circle-help";
+    }
+    
     // Form Submissions
-  async function handleFormSubmit(e) {
-  e.preventDefault();
-  const rowIndex =
-    document.getElementById('editRowIndex').value;
-  const submitBtn =
-    document.getElementById('submitBtn');
-  const formDate =
-    document.getElementById('formDate');
-  const formTitle =
-    document.getElementById('formTitle');
-  const formNote =
-    document.getElementById('formNote');
-  const formAmount =
-    document.getElementById('formAmount');
-  const selectedItem =
-    formTitle.value.trim();
-  const selectedNote =
-    selectedItem === 'อื่นๆ'
-      ? formNote.value.trim()
-      : '';
-  const databaseDate =
-    formDate.value
-      ? `${formDate.value}-01`
-      : '';
-  const entryData = {
-    financial_type: selectedType,
-    entry_date: databaseDate,
-    title: selectedItem,
-    note: selectedNote,
-    amount: parseFloat(formAmount.value),
-    icon: getEntryIcon(selectedItem)
-  };
-  submitBtn.innerText = 'Saving...';
-  submitBtn.disabled = true;
-  try {
-    if (!rowIndex) {
-      const { error } =
-        await supabaseClient
-          .from('financial_entries')
-          .insert([entryData]);
-      if (error) {
-        throw error; }
-      closeModal();
-      fetchData();
-      return; }
-      const { error } =
-      await supabaseClient
-        .from('financial_entries')
-        .update(entryData)
-        .eq('id', rowIndex);
-     if (error) {
-      throw error; }
-    closeModal();
-    fetchData();
-  } catch (err) {
-    console.error(
-      'Save entry error:',
-      err
-    );
-    alert('Error saving entry.');
-  } finally {
-      const isEdit =
-        Boolean(
-          document.getElementById('editRowIndex').value
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+      const rowIndex =
+        document.getElementById(
+          'editRowIndex'
+        ).value;
+      const submitBtn =
+        document.getElementById(
+          'submitBtn'
         );
+      const formDate =
+        document.getElementById(
+          'formDate'
+        );
+      const formTitle =
+        document.getElementById(
+          'formTitle'
+        );
+      const formNote =
+        document.getElementById(
+          'formNote'
+        );
+      const formAmount =
+        document.getElementById(
+          'formAmount'
+        );
+      const selectedItem =
+        formTitle.value.trim();
+      const selectedNote =
+        selectedItem === 'อื่นๆ'
+          ? formNote.value.trim()
+          : '';
+      const databaseDate =
+        formDate.value
+          ? `${formDate.value}-01`
+          : '';
+      const entryData = {
+        financial_type:
+          selectedType,
+        entry_date:
+          databaseDate,
+        title:
+          selectedItem,
+        note:
+          selectedNote,
+        amount:
+          parseFloat(
+            formAmount.value
+          ),
+        icon:
+          getEntryIcon(
+            selectedItem
+          )
+      };
       submitBtn.innerText =
-        isEdit
-          ? 'SAVE'
-          : 'SAVE ENTRY';
-      submitBtn.disabled = false;
+        'Saving...';
+      submitBtn.disabled =
+        true;
+      try {
+        if (!rowIndex) {
+          const { error } =
+            await supabaseClient
+              .from('financial_entries')
+              .insert([entryData]);
+          if (error) {
+            throw error;
+          }
+          closeModal();
+          fetchData();
+          return;
+        }
+        const { error } =
+          await supabaseClient
+            .from('financial_entries')
+            .update(entryData)
+            .eq('id', rowIndex);
+        if (error) {
+          throw error;
+        }
+        closeModal();
+        fetchData();
+      } catch (err) {
+        console.error(
+          'Save entry error:',
+          err
+        );
+        alert(
+          'Error saving entry.'
+        );
+      } finally {
+        const isEdit =
+          Boolean(
+            document.getElementById(
+              'editRowIndex'
+            ).value
+          );
+        submitBtn.innerText =
+          isEdit
+            ? 'SAVE'
+            : 'SAVE ENTRY';
+    
+        submitBtn.disabled =
+          false;
+      }
     }
-
-  async function handleDelete() {
-  if (!confirm('Are you sure you want to delete this entry?')) return;
-  const rowIndex = document.getElementById('editRowIndex').value;
-  try {
-    const { error } = await supabaseClient
-      .from('financial_entries')
-      .delete()
-      .eq('id', rowIndex);
-  if (error) {
-      throw error; }
-    closeModal();
-    fetchData();
-  } catch (err) {
-    console.error('Delete entry error:', err);
-    alert('Error deleting entry.');
-  }
- }
-
+    
+    async function handleDelete() {
+      if (
+        !confirm(
+          'Are you sure you want to delete this entry?'
+        )
+      ) {
+        return;
+      }
+      const rowIndex =
+        document.getElementById(
+          'editRowIndex'
+        ).value;
+      try {
+        const { error } =
+          await supabaseClient
+            .from('financial_entries')
+            .delete()
+            .eq('id', rowIndex);
+        if (error) {
+          throw error;
+        }
+        closeModal();
+        fetchData();
+      } catch (err) {
+        console.error(
+          'Delete entry error:',
+          err
+        );
+        alert(
+          'Error deleting entry.'
+        );
+      }
+     }
+    
  function setEntryFilter(filter) {
   if (
     !['all', 'income', 'expense', 'deduction']
