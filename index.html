@@ -675,41 +675,33 @@
     .item-picker option[value=""] { color: var(--text-sub); }
     .item-picker-chevron { position: absolute; top: 50%; right: 14px; width: 16px; height: 16px; transform: translateY(-50%); color: var(--text-sub); opacity: 0.48; pointer-events: none; }
     .item-picker-chevron svg { width: 16px; height: 16px; stroke-width: 2; }
+
     #recordForm,
     #addNewItemPanel {
       transition:
-        opacity 0.28s ease,
-        transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
-        max-height 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+        opacity 0.28s ease;
     }
     
     #recordForm {
-      max-height: 900px;
       opacity: 1;
-      transform: translateX(0);
-      overflow: hidden;
+      pointer-events: auto;
     }
     
     #recordForm.is-panel-hidden {
-      max-height: 0;
       opacity: 0;
-      transform: translateX(-20px);
       pointer-events: none;
     }
     
     #addNewItemPanel {
-      max-height: 0;
       opacity: 0;
-      transform: translateX(20px);
       pointer-events: none;
-      overflow: hidden;
+      display: none;
     }
     
     #addNewItemPanel.is-visible {
-      max-height: 560px;
       opacity: 1;
-      transform: translateX(0);
       pointer-events: auto;
+      display: block;
     }
     
     .add-new-item-preview .form-control:disabled {
@@ -726,21 +718,22 @@
     }
     
     .custom-icon-preview {
-      width: 48px;
-      height: 48px;
-      flex: 0 0 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 16px;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      color: var(--text-sub);
-      transition:
-        color 0.2s ease,
-        border-color 0.2s ease,
-        background 0.2s ease;
-    }
+    width: 48px;
+    height: 48px;
+    flex: 0 0 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-sub);
+    transition:
+      color 0.2s ease,
+      background 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
     
     .custom-icon-preview svg {
       width: 21px;
@@ -760,6 +753,16 @@
       flex: 1 1 auto;
       width: 0;
       min-width: 0;
+    }
+    
+    .custom-icon-preview:focus-within,
+    .custom-icon-preview.is-active {
+      border-color: var(--lime-400);
+      border-width: 2px;
+    }
+    
+    .custom-icon-preview.is-active {
+      color: var(--text-main);
     }
     
     .add-new-item-actions {
@@ -11535,13 +11538,9 @@ function openEntriesFromInsight() {
     
     function updateCustomIconPreview() {
       const input =
-        document.getElementById(
-          'customItemIcon'
-        );
+        document.getElementById('customItemIcon');
       const preview =
-        document.getElementById(
-          'customIconPreview'
-        );
+        document.getElementById('customIconPreview');
       if (!input || !preview) {
         return;
       }
@@ -11563,8 +11562,27 @@ function openEntriesFromInsight() {
         'is-fallback',
         !iconName
       );
+      preview.classList.toggle(
+        'is-active',
+        document.activeElement === input
+      );
       lucide.createIcons();
     }
+    
+    document
+      .getElementById('customItemIcon')
+      ?.addEventListener('focus', () => {
+        document
+          .getElementById('customIconPreview')
+          ?.classList.add('is-active');
+      });
+    document
+      .getElementById('customItemIcon')
+      ?.addEventListener('blur', () => {
+        document
+          .getElementById('customIconPreview')
+          ?.classList.remove('is-active');
+      });
     
     async function handleAddNewItem() {
       const nameInput =
