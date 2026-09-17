@@ -4157,13 +4157,39 @@ body.modal-open {
     fetchData();
    }
   document.addEventListener("DOMContentLoaded", () => {
-  
   applyTheme(getPreferredTheme());
   updatePeriodUI();
-  loadCustomItems()
-     .finally(() => {
-      fetchData();
+  loadCustomItems().catch(error => {
+  console.error(
+    'Load custom items error:',
+    error
+    );
   });
+  document
+  .getElementById(
+    'cancelAddNewItemBtn'
+  )
+  ?.addEventListener(
+    'click',
+    closeAddNewItemPanel
+  );
+  document
+    .getElementById(
+      'addNewItemBtn'
+    )
+    ?.addEventListener(
+      'click',
+      handleAddNewItem
+    );
+  document
+    .getElementById(
+      'customItemIcon'
+    )
+    ?.addEventListener(
+      'input',
+      updateCustomIconPreview
+    );
+  fetchData();
   const yearPickerIds = [
     'selectedYear',
     'entriesSelectedYear',
@@ -11196,40 +11222,402 @@ function openEntriesFromInsight() {
   });
   }
       
-      // Modal Controls
-      const entryItemOptions = {
-      Income: [
-        'เงินเดือน',
-        'apple music',
-        'ยอดขายทะลุเป้าหมาย',
-        'อื่นๆ'
-      ],
-      Expense: [
-        '3BB',
-        'แม่',
-        'AIS Bill',
-        'ศรีสวัสดิ์',
-        'สยามชัย',
-        'แชร์',
-        'Spay later',
-        'SEasy',
-        'Tpay later',
-        'อื่นๆ'
-      ],
-      Deduction: [
-        'มาสาย',
-        'ลืมรูดบัตร',
-        'ออนไลน์ออกก่อนเกิน',
-        'ออนไลน์ออกก่อน',
-        'ไม่สแกนนิ้ว',
-        'ผิดกฎระเบียบ',
-        'ลาป่วย',
-        'ออมทรัพย์',
-        'ผ่อนสินค้า',
-        'อื่นๆ'
-      ]
+    // Modal Controls
+    let customItemsByType = {
+      Income: [],
+      Expense: [],
+      Deduction: []
     };
-
+    let customItemIconMap = {};
+    let customItemsLoaded = false;
+    const entryItemOptions = {
+    Income: [
+      'เงินเดือน',
+      'apple music',
+      'ยอดขายทะลุเป้าหมาย',
+      'อื่นๆ'
+    ],
+    Expense: [
+      '3BB',
+      'แม่',
+      'AIS Bill',
+      'ศรีสวัสดิ์',
+      'สยามชัย',
+      'แชร์',
+      'Spay later',
+      'SEasy',
+      'Tpay later',
+      'อื่นๆ'
+    ],
+    Deduction: [
+      'มาสาย',
+      'ลืมรูดบัตร',
+      'ออนไลน์ออกก่อนเกิน',
+      'ออนไลน์ออกก่อน',
+      'ไม่สแกนนิ้ว',
+      'ผิดกฎระเบียบ',
+      'ลาป่วย',
+      'ออมทรัพย์',
+      'ผ่อนสินค้า',
+      'อื่นๆ'
+    ]
+  };
+    async function loadCustomItems() {
+      const { data, error } =
+        await supabaseClient
+          .from('custom_items')
+          .select(
+            'id, type, name, icon, created_at'
+          )
+          .order('created_at', {
+            ascending: true
+          });
+      if (error) {
+        console.error(
+          'Load custom items error:',
+          error
+        );
+        customItemsLoaded = false;
+        return;
+      }
+      customItemsByType = {
+        Income: [],
+        Expense: [],
+        Deduction: []
+      };
+      customItemIconMap = {};
+      (data || []).forEach(item => {
+        if (
+          !customItemsByType[item.type]
+        ) {
+          return;
+        }
+        const name =
+          String(item.name || '').trim();
+        const icon =
+          String(item.icon || '').trim();
+        if (!name) {
+          return;
+        }
+        customItemsByType[
+          item.type
+        ].push(name);
+        customItemIconMap[
+          `${item.type}::${name}`
+        ] =
+          icon || 'circle-help';
+      });
+      customItemsLoaded = true;
+    }
+  
+    function getAllEntryItemNames(type) {
+      const builtIn =
+        entryItemOptions[type] || [];
+      const custom =
+        customItemsByType[type] || [];
+      const merged = [
+        ...builtIn
+      ];
+      custom.forEach(item => {
+        const exists =
+          merged.some(
+            existing =>
+              existing.toLowerCase() ===
+              item.toLowerCase()
+          );
+        if (!exists) {
+          merged.push(item);
+        }
+      });
+      return merged;
+    }
+    
+    function openAddNewItemPanel() {
+      const form =
+        document.getElementById(
+          'recordForm'
+        );
+      const panel =
+        document.getElementById(
+          'addNewItemPanel'
+        );
+      const modalTitle =
+        document.getElementById(
+          'modalTitle'
+        );
+      const typePreview =
+        document.getElementById(
+          'customItemTypePreview'
+        );
+      const nameInput =
+        document.getElementById(
+          'customItemName'
+        );
+      const iconInput =
+        document.getElementById(
+          'customItemIcon'
+        );
+      if (
+        !form ||
+        !panel ||
+        !modalTitle
+      ) {
+        return;
+      }
+      modalTitle.innerText =
+        'ADD NEW ITEM';
+      if (typePreview) {
+        typePreview.innerHTML = `
+          <option value="">
+            + Add New Item
+          </option>
+        `;
+        typePreview.value = '';
+      }
+      form.classList.add(
+        'is-panel-hidden'
+      );
+      panel.classList.add(
+        'is-visible'
+      );
+      panel.setAttribute(
+        'aria-hidden',
+        'false'
+      );
+      if (nameInput) {
+        nameInput.value = '';
+      }
+      if (iconInput) {
+        iconInput.value = '';
+      }
+      updateCustomIconPreview();
+      requestAnimationFrame(() => {
+        if (nameInput) {
+          nameInput.focus();
+        }
+      });
+    }
+    
+    function closeAddNewItemPanel() {
+      const form =
+        document.getElementById(
+          'recordForm'
+        );
+      const panel =
+        document.getElementById(
+          'addNewItemPanel'
+        );
+      const modalTitle =
+        document.getElementById(
+          'modalTitle'
+        );
+      if (!form || !panel) {
+        return;
+      }
+      panel.classList.remove(
+        'is-visible'
+      );
+      panel.setAttribute(
+        'aria-hidden',
+        'true'
+      );
+      form.classList.remove(
+        'is-panel-hidden'
+      );
+      if (modalTitle) {
+        modalTitle.innerText =
+          'ADD ENTRY';
+      }
+      populateEntryItems(
+        selectedType
+      );
+    }
+    
+    function updateCustomIconPreview() {
+      const input =
+        document.getElementById(
+          'customItemIcon'
+        );
+      const preview =
+        document.getElementById(
+          'customIconPreview'
+        );
+      const previewText =
+        document.getElementById(
+          'customIconPreviewText'
+        );
+      if (
+        !input ||
+        !preview ||
+        !previewText
+      ) {
+        return;
+      }
+      const iconName =
+        input.value.trim();
+      const icon =
+        iconName || 'circle-help';
+      preview.innerHTML = `
+        <i
+          data-lucide="${icon}"
+        ></i>
+      `;
+      previewText.innerText =
+        iconName ||
+        'Enter a Lucide icon name';
+      preview.classList.toggle(
+        'is-valid',
+        Boolean(iconName)
+      );
+      preview.classList.toggle(
+        'is-fallback',
+        !iconName
+      );
+      lucide.createIcons();
+    }
+    
+    async function handleAddNewItem() {
+      const nameInput =
+        document.getElementById(
+          'customItemName'
+        );
+      const iconInput =
+        document.getElementById(
+          'customItemIcon'
+        );
+      const addButton =
+        document.getElementById(
+          'addNewItemBtn'
+        );
+      if (
+        !nameInput ||
+        !iconInput ||
+        !addButton
+      ) {
+        return;
+      }
+      const name =
+        nameInput.value.trim();
+      const icon =
+        iconInput.value.trim();
+      if (!name) {
+        alert(
+          'Please enter an item name.'
+        );
+        nameInput.focus();
+        return;
+      }
+      if (!icon) {
+        alert(
+          'Please enter a Lucide icon name.'
+        );
+        iconInput.focus();
+        return;
+      }
+      const allItems =
+        getAllEntryItemNames(
+          selectedType
+        );
+      const duplicate =
+        allItems.some(
+          item =>
+            item.toLowerCase() ===
+            name.toLowerCase()
+        );
+      if (duplicate) {
+        alert(
+          'This item already exists.'
+        );
+        nameInput.focus();
+        return;
+      }
+      addButton.disabled = true;
+      addButton.innerText =
+        'ADDING...';
+      try {
+        const {
+          data: existing,
+          error: checkError
+        } = await supabaseClient
+          .from('custom_items')
+          .select('id, name')
+          .eq(
+            'type',
+            selectedType
+          )
+          .ilike(
+            'name',
+            name
+          );
+        if (checkError) {
+          throw checkError;
+        }
+        if (
+          existing &&
+          existing.length > 0
+        ) {
+          alert(
+            'This item already exists.'
+          );
+          return;
+        }
+        const {
+          data: inserted,
+          error: insertError
+        } = await supabaseClient
+          .from('custom_items')
+          .insert([{
+            type:
+              selectedType,
+            name,
+            icon
+          }])
+          .select(
+            'id, type, name, icon, created_at'
+          )
+          .single();
+        if (insertError) {
+          throw insertError;
+        }
+        if (
+          !customItemsByType[
+            selectedType
+          ]
+        ) {
+          customItemsByType[
+            selectedType
+          ] = [];
+        }
+        customItemsByType[
+          selectedType
+        ].push(
+          inserted.name
+        );
+        customItemIconMap[
+          `${inserted.type}::${inserted.name}`
+        ] =
+          inserted.icon;
+        closeAddNewItemPanel();
+        populateEntryItems(
+          selectedType,
+          inserted.name
+        );
+      } catch (error) {
+        console.error(
+          'Add custom item error:',
+          error
+        );
+        alert(
+          'Error adding new item.'
+        );
+      } finally {
+        addButton.disabled =
+          false;
+        addButton.innerText =
+          'ADD';
+      }
+    }
+    
     function sortEntryItems(items) {
       const otherItem = 'อื่นๆ';
       const normalItems = (items || [])
@@ -11281,7 +11669,7 @@ function openEntriesFromInsight() {
       }
       const items =
         sortEntryItems(
-          entryItemOptions[type] || []
+          getAllEntryItemNames(type)
         );
       picker.innerHTML = `
         <option
@@ -11352,10 +11740,12 @@ function openEntriesFromInsight() {
         ) {
           event.target.value = '';
           updateEntryNoteVisibility();
+          openAddNewItemPanel();
           return;
         }
         updateEntryNoteVisibility();
       });
+      
     function ensureEntryDateValue() {
       const formDate =
         document.getElementById('formDate');
