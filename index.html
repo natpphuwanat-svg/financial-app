@@ -633,12 +633,22 @@
   border: none !important;
 }
 
+.modal-actions.single-action .submit-btn {
+  flex: 1 1 100%;
+  width: 100%;
+}
+
+.modal-actions.single-action .delete-btn {
+  display: none !important;
+}
+
 .delete-btn {
   display: none;
   background: rgba(244, 63, 94, 0.55);
   color: var(--texe-main);
   border: none !important;
 }
+
 
     .form-group { margin-bottom: 18px; }
     .form-label { display: block; font-size: 11px; font-weight: 800; color: var(--text-sub); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
@@ -3672,6 +3682,7 @@ body.modal-open {
     class="floating-add-button"
     type="button"
     aria-label="Add entry"
+    onclick="openModal('add')"
   >
     <i data-lucide="plus"></i>
   </button>
@@ -3780,7 +3791,7 @@ body.modal-open {
           class="submit-btn"
           id="submitBtn"
         >
-          Save
+          SAVE ENTRY
         </button>
         <button
           type="button"
@@ -11112,21 +11123,85 @@ function openEntriesFromInsight() {
       ]
     };
 
-    function populateEntryItems(type, selectedItem = '') {
-      const picker = document.getElementById('formTitle');
+    function sortEntryItems(items) {
+      const otherItem = 'อื่นๆ';
+      const normalItems = (items || [])
+        .filter(item => item !== otherItem);
+      const getGroup = item => {
+        const firstChar = String(item || '').trim().charAt(0);
+        if (/^[0-9]/.test(firstChar)) {
+          return 1;
+        }
+        if (/^[A-Za-z]/.test(firstChar)) {
+          return 2;
+        }
+        if (/^[ก-ฮ]/.test(firstChar)) {
+          return 3;
+        }
+        return 3;
+      };
+      normalItems.sort((a, b) => {
+        const groupA = getGroup(a);
+        const groupB = getGroup(b);
+        if (groupA !== groupB) {
+          return groupA - groupB;
+        }
+        return String(a).localeCompare(
+          String(b),
+          'th',
+          {
+            numeric: true,
+            sensitivity: 'base'
+          }
+        );
+      });
+      return [
+        ...normalItems,
+        ...(items || []).includes(otherItem)
+          ? [otherItem]
+          : []
+      ];
+    }
+    
+    function populateEntryItems(
+      type,
+      selectedItem = ''
+    ) {
+      const picker =
+        document.getElementById('formTitle');
       if (!picker) {
-        return; }
-      const items = entryItemOptions[type] || [];
+        return;
+      }
+      const items =
+        sortEntryItems(
+          entryItemOptions[type] || []
+        );
       picker.innerHTML = `
-        <option value="" disabled>Select item</option>
+        <option
+          value=""
+          disabled
+        >
+          Select item
+        </option>
         ${items.map(item => `
-          <option value="${item}">${item}</option>
+          <option value="${item}">
+            ${item}
+          </option>
         `).join('')}
+        <option
+          value="__add_new_item__"
+        >
+          + Add New Item
+        </option>
       `;
-      if (selectedItem && items.includes(selectedItem)) {
+      if (
+        selectedItem &&
+        items.includes(selectedItem)
+      ) {
         picker.value = selectedItem;
       } else {
-        picker.value = ''; }
+        picker.value = '';
+      }
       updateEntryNoteVisibility();
     }
     
@@ -11164,9 +11239,16 @@ function openEntriesFromInsight() {
     }
     document
       .getElementById('formTitle')
-      ?.addEventListener('change', () => {
+      ?.addEventListener('change', event => {
+        if (
+          event.target.value === '__add_new_item__'
+        ) {
+          event.target.value = '';
+          updateEntryNoteVisibility();
+          return;
+        }
         updateEntryNoteVisibility();
-    });
+      });
     
     let modalScrollLocked = false;
     let modalScrollY = 0;
@@ -11193,6 +11275,55 @@ function openEntriesFromInsight() {
       window.scrollTo(0, modalScrollY);
       modalScrollLocked = false;
     }
+    
+    function getAddEntryDefaultType() {
+      if (
+        insightContext &&
+        insightContextEntriesActive
+      ) {
+        if (
+          insightContext.expenseFilter === 'fixed' ||
+          insightContext.expenseFilter === 'variable'
+        ) {
+          return 'Expense';
+        }
+        if (insightContext.entryFilter === 'expense') {
+          return 'Expense';
+        }
+        if (insightContext.entryFilter === 'deduction') {
+          return 'Deduction';
+        }
+        if (insightContext.entryFilter === 'income') {
+          return 'Income';
+        }
+      }
+      if (currentTab === 'entries') {
+        if (
+          currentExpenseEntryFilter === 'fixed' ||
+          currentExpenseEntryFilter === 'variable'
+        ) {
+          return 'Expense';
+        }
+        if (currentEntryFilter === 'expense') {
+          return 'Expense';
+        }
+        if (currentEntryFilter === 'deduction') {
+          return 'Deduction';
+        }
+        if (currentEntryFilter === 'income') {
+          return 'Income';
+        }
+        return 'Income';
+      }
+      if (currentTab === 'insights') {
+        if (selectedExpenseType === 'Fixed' ||
+            selectedExpenseType === 'Variable') {
+          return 'Expense';
+        }
+        return 'Income';
+      }
+      return 'Income';
+    }
 
     function openModal(mode, item = null) {
       const modal = document.getElementById('entryModal');
@@ -11203,6 +11334,7 @@ function openEntriesFromInsight() {
       const formNote = document.getElementById('formNote');
       const formAmount = document.getElementById('formAmount');
       const deleteBtn = document.getElementById('deleteBtn');
+      const modalActions = document.querySelector('.modal-actions');
       if (!modal) {
         return; }
       modal.classList.add('active');
@@ -11222,6 +11354,7 @@ function openEntriesFromInsight() {
         formNote.value = item.note || '';
         updateEntryNoteVisibility();
         deleteBtn.style.display = 'block';
+        modalActions?.classList.remove('single-action');
         requestAnimationFrame(() => {
           lucide.createIcons();
         });
@@ -11229,16 +11362,20 @@ function openEntriesFromInsight() {
       if (mode === 'add') {
         modalTitle.innerText = 'Add Entry';
         editRowIndex.value = '';
-        formDate.value = '';
+        const addMonth = String(selectedMonth).padStart(2, '0');
+        formDate.value =
+          `${selectedYear}-${addMonth}`;
         formAmount.value = '';
         formNote.value = '';
         deleteBtn.style.display = 'none';
-        selectType('Income');
+        modalActions?.classList.add('single-action');
+        selectType(
+          getAddEntryDefaultType()
+        );
         requestAnimationFrame(() => {
           lucide.createIcons();
         });
       }
-    }
 
     function closeModal() {
       const modal = document.getElementById('entryModal');
@@ -11349,9 +11486,16 @@ function openEntriesFromInsight() {
     );
     alert('Error saving entry.');
   } finally {
-    submitBtn.innerText = 'Save';
-    submitBtn.disabled = false; }
-  }
+      const isEdit =
+        Boolean(
+          document.getElementById('editRowIndex').value
+        );
+      submitBtn.innerText =
+        isEdit
+          ? 'SAVE'
+          : 'SAVE ENTRY';
+      submitBtn.disabled = false;
+    }
 
   async function handleDelete() {
   if (!confirm('Are you sure you want to delete this entry?')) return;
