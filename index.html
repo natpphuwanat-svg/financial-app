@@ -636,8 +636,6 @@
 .modal-actions.single-action .submit-btn {
   flex: 1 1 100%;
   width: 100%;
-  background: var(--lime-400);
-  color: var(--text-main);
 }
 
 .modal-actions.single-action .delete-btn {
@@ -664,8 +662,7 @@
     #formDate::-webkit-date-and-time-value { text-align: left; }
     #formDate::-webkit-calendar-picker-indicator { margin: 0; padding: 0; }
     .item-picker-wrap { position: relative; width: 100%; }
-    .item-picker { appearance: none; -webkit-appearance: none; padding-right: 42px; line-height: normal; cursor: pointer; color: var(--text-main); }
-    .item-picker.placeholder-value { color: var(--text-sub); }
+    .item-picker { appearance: none; -webkit-appearance: none; padding-right: 42px; line-height: normal; cursor: pointer; }
     .item-picker-chevron { position: absolute; top: 50%; right: 14px; width: 16px; height: 16px; transform: translateY(-50%); color: var(--text-sub); opacity: 0.48; pointer-events: none; }
     .item-picker-chevron svg { width: 16px; height: 16px; stroke-width: 2; }
     .type-selector { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
@@ -4141,25 +4138,7 @@ body.modal-open {
         fetchData();
         });
       });
-    const entryFormDate =
-      document.getElementById('formDate');
-    if (entryFormDate) {
-      const restoreCurrentDate = () => {
-        if (!entryFormDate.value) {
-          entryFormDate.value =
-            `${realCurrentYear}-${String(realCurrentMonth).padStart(2, '0')}`;
-        }
-      };
-      entryFormDate.addEventListener(
-        'input',
-        restoreCurrentDate
-      );
-      entryFormDate.addEventListener(
-        'change',
-        restoreCurrentDate
-      );
-    }
-   });
+    });
    document.addEventListener(
     'visibilitychange',
     () => {
@@ -11220,12 +11199,11 @@ function openEntriesFromInsight() {
         items.includes(selectedItem)
       ) {
         picker.value = selectedItem;
-        picker.classList.remove('placeholder-value');
       } else {
         picker.value = '';
-        picker.classList.add('placeholder-value');
       }
       updateEntryNoteVisibility();
+    }
     
     function updateEntryNoteVisibility() {
       const picker = document.getElementById('formTitle');
@@ -11262,19 +11240,13 @@ function openEntriesFromInsight() {
     document
       .getElementById('formTitle')
       ?.addEventListener('change', event => {
-        const picker = event.target;
         if (
-          picker.value === '__add_new_item__'
+          event.target.value === '__add_new_item__'
         ) {
-          picker.value = '';
-          picker.classList.add('placeholder-value');
+          event.target.value = '';
           updateEntryNoteVisibility();
           return;
         }
-        picker.classList.toggle(
-          'placeholder-value',
-          picker.value === ''
-        );
         updateEntryNoteVisibility();
       });
     
