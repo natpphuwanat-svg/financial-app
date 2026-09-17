@@ -677,39 +677,42 @@
     .item-picker-chevron svg { width: 16px; height: 16px; stroke-width: 2; }
     #recordForm,
     #addNewItemPanel {
-      transition:
-        opacity 0.28s ease,
-        transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
-        max-height 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+      opacity: 1;
+      transform: translateX(0);
     }
     
     #recordForm {
-      max-height: 900px;
-      opacity: 1;
-      transform: translateX(0);
+      overflow: hidden;
+    }
+    
+    #addNewItemPanel {
+      overflow: hidden;
+      opacity: 0;
+      transform: translateX(12px);
+      pointer-events: none;
+    }
+    
+    .modal-content.is-panel-transitioning {
       overflow: hidden;
     }
     
     #recordForm.is-panel-hidden {
-      max-height: 0;
       opacity: 0;
-      transform: translateX(-20px);
+      transform: translateX(-12px);
       pointer-events: none;
-    }
-    
-    #addNewItemPanel {
-      max-height: 0;
-      opacity: 0;
-      transform: translateX(20px);
-      pointer-events: none;
-      overflow: hidden;
     }
     
     #addNewItemPanel.is-visible {
-      max-height: 560px;
       opacity: 1;
       transform: translateX(0);
       pointer-events: auto;
+    }
+    
+    #recordForm,
+    #addNewItemPanel {
+      transition:
+        opacity 0.22s ease,
+        transform 0.30s cubic-bezier(0.22, 1, 0.36, 1);
     }
     
     .add-new-item-preview .form-control:disabled {
@@ -740,6 +743,13 @@
         color 0.2s ease,
         border-color 0.2s ease,
         background 0.2s ease;
+        box-shadow 0.2s ease;
+    }
+    
+    .custom-icon-preview-wrap:focus-within
+    .custom-icon-preview {
+      border-color: var(--lime-400);
+      box-shadow: 0 0 0 1px var(--lime-400);
     }
     
     .custom-icon-preview svg {
@@ -3830,7 +3840,7 @@ body.modal-open {
 </div>
 
   <div class="modal" id="entryModal">
-  <div class="modal-content">
+  <div class="modal-content" id="entryModalContent">
     <div class="modal-header">
       <div class="modal-title" id="modalTitle">EDIT ENTRY</div>
 
@@ -11437,6 +11447,90 @@ function openEntriesFromInsight() {
       return merged;
     }
     
+    function transitionEntryModalPanel(targetPanel) {
+      const modalContent =
+        document.getElementById('entryModalContent');
+      const recordForm =
+        document.getElementById('recordForm');
+      const addNewItemPanel =
+        document.getElementById('addNewItemPanel');
+      if (
+        !modalContent ||
+        !recordForm ||
+        !addNewItemPanel
+      ) {
+        return;
+      }
+      const currentPanel =
+        targetPanel === 'new-item'
+          ? recordForm
+          : addNewItemPanel;
+      const nextPanel =
+        targetPanel === 'new-item'
+          ? addNewItemPanel
+          : recordForm;
+      const startHeight =
+        modalContent.getBoundingClientRect().height;
+      const wasVisible =
+        nextPanel.classList.contains('is-visible');
+      nextPanel.style.visibility = 'hidden';
+      nextPanel.style.pointerEvents = 'none';
+      nextPanel.classList.add('is-visible');
+      const nextHeight =
+        modalContent.scrollHeight;
+      if (!wasVisible) {
+        nextPanel.classList.remove('is-visible');
+      }
+      nextPanel.style.visibility = '';
+      nextPanel.style.pointerEvents = '';
+      modalContent.style.height =
+        `${startHeight}px`;
+      modalContent.classList.add(
+        'is-panel-transitioning'
+      );
+      void modalContent.offsetHeight;
+      if (targetPanel === 'new-item') {
+        recordForm.classList.add(
+          'is-panel-hidden'
+        );
+        addNewItemPanel.classList.add(
+          'is-visible'
+        );
+      } else {
+        addNewItemPanel.classList.remove(
+          'is-visible'
+        );
+        recordForm.classList.remove(
+          'is-panel-hidden'
+        );
+      }
+      requestAnimationFrame(() => {
+        modalContent.style.transition =
+          'height 0.38s cubic-bezier(0.22, 1, 0.36, 1)';
+        modalContent.style.height =
+          `${nextHeight}px`;
+      });
+      const finishTransition = () => {
+        modalContent.style.transition = '';
+        modalContent.style.height = '';
+        modalContent.classList.remove(
+          'is-panel-transitioning'
+        );
+        modalContent.removeEventListener(
+          'transitionend',
+          finishTransition
+        );
+      };
+      modalContent.addEventListener(
+        'transitionend',
+        event => {
+          if (event.propertyName === 'height') {
+            finishTransition();
+          }
+        }
+      );
+    }
+    
     function openAddNewItemPanel() {
       const form =
         document.getElementById(
@@ -11479,12 +11573,10 @@ function openEntriesFromInsight() {
         `;
         typePreview.value = '';
       }
-      form.classList.add(
-        'is-panel-hidden'
+      transitionEntryModalPanel(
+        'new-item'
       );
-      panel.classList.add(
-        'is-visible'
-      );
+      
       panel.setAttribute(
         'aria-hidden',
         'false'
@@ -11514,15 +11606,10 @@ function openEntriesFromInsight() {
       if (!form || !panel) {
         return;
       }
-      panel.classList.remove(
-        'is-visible'
-      );
+      transitionEntryModalPanel('entry');
       panel.setAttribute(
         'aria-hidden',
         'true'
-      );
-      form.classList.remove(
-        'is-panel-hidden'
       );
       if (modalTitle) {
         modalTitle.innerText =
