@@ -3681,7 +3681,7 @@ body.modal-open {
   <button
     class="floating-add-button"
     type="button"
-    aria-label="Add entry"
+    aria-label="ADD ENTRY"
     onclick="openModal('add')"
   >
     <i data-lucide="plus"></i>
@@ -3691,7 +3691,7 @@ body.modal-open {
   <div class="modal" id="entryModal">
   <div class="modal-content">
     <div class="modal-header">
-      <div class="modal-title" id="modalTitle">Edit Entry</div>
+      <div class="modal-title" id="modalTitle">EDIT ENTRY</div>
 
       <button
         type="button"
@@ -3799,7 +3799,7 @@ body.modal-open {
           id="deleteBtn"
           onclick="handleDelete()"
         >
-          Delete
+          DELETE
         </button>
       </div>
     </form>
@@ -11356,7 +11356,7 @@ function openEntriesFromInsight() {
       );
       lockBackgroundScroll();
       if (mode === 'edit' && item) {
-        modalTitle.innerText = 'Edit Entry';
+        modalTitle.innerText = 'EDIT ENTRY';
         editRowIndex.value =
           item.rowIndex;
         formDate.value =
@@ -11383,7 +11383,7 @@ function openEntriesFromInsight() {
       }
       if (mode === 'add') {
         modalTitle.innerText =
-          'Add Entry';
+          'ADD ENTRY';
         editRowIndex.value = '';
         const addMonth =
           String(selectedMonth)
