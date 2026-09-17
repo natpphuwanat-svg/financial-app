@@ -677,26 +677,137 @@
     .item-picker-chevron { position: absolute; top: 50%; right: 14px; width: 16px; height: 16px; transform: translateY(-50%); color: var(--text-sub); opacity: 0.48; pointer-events: none; }
     .item-picker-chevron svg { width: 16px; height: 16px; stroke-width: 2; }
     #recordForm,
-    #addNewItemPanel { transition: opacity 0.24s ease, transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), max-height 0.32s ease; }
-    #recordForm { max-height: 900px; opacity: 1; transform: translateX(0); overflow: hidden; }
-    #recordForm.is-panel-hidden { max-height: 0; opacity: 0; transform: translateX(-14px); pointer-events: none; }
-    #addNewItemPanel { max-height: 0; opacity: 0; transform: translateX(14px); pointer-events: none; overflow: hidden; }
-    #addNewItemPanel.is-visible { max-height: 560px; opacity: 1; transform: translateX(0); pointer-events: auto; }
-    .add-new-item-preview .form-control:disabled { opacity: 0.48; color: var(--text-sub); cursor: not-allowed; }
-    .custom-icon-preview-wrap { display: flex; align-items: center; gap: 12px; }
-    .custom-icon-preview { width: 48px; height: 48px; flex: 0 0 48px; display: flex; align-items: center;
-     justify-content: center; border-radius: 16px; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-sub); }
-    .custom-icon-preview svg { width: 21px; height: 21px; stroke-width: 2.1; }
-    .custom-icon-preview.is-valid { color: var(--text-main); }
-    .custom-icon-preview.is-fallback { color: var(--text-sub); }
-    .custom-icon-preview-text { min-width: 0; flex: 1; font-size: 11px; color: var(--text-sub); line-height: 1.35; }
-    .add-new-item-actions { display: flex; gap: 10px; width: 100%; margin-top: 10px; }
-    .add-new-item-actions button { flex: 1 1 0; width: 0; height: 52px; min-height: 52px; padding: 0; border-radius: 18px; border: none; font-family: inherit;
-     font-size: 15px; font-weight: 800; cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease; }
-    .add-new-item-actions button:active { transform: scale(0.98); }
-    .add-new-item-cancel { background: var(--glass-bg); color: var(--text-sub); border: 1px solid var(--glass-border) !important; }
-    .add-new-item-submit { background: rgba(59, 177, 67, 0.55); color: var(--text-main); }
-    .add-new-item-submit:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+    #addNewItemPanel {
+      transition:
+        opacity 0.28s ease,
+        transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+        max-height 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    
+    #recordForm {
+      max-height: 900px;
+      opacity: 1;
+      transform: translateX(0);
+      overflow: hidden;
+    }
+    
+    #recordForm.is-panel-hidden {
+      max-height: 0;
+      opacity: 0;
+      transform: translateX(-20px);
+      pointer-events: none;
+    }
+    
+    #addNewItemPanel {
+      max-height: 0;
+      opacity: 0;
+      transform: translateX(20px);
+      pointer-events: none;
+      overflow: hidden;
+    }
+    
+    #addNewItemPanel.is-visible {
+      max-height: 560px;
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+    
+    .add-new-item-preview .form-control:disabled {
+      opacity: 0.48;
+      color: var(--text-sub);
+      cursor: not-allowed;
+    }
+    
+    .custom-icon-preview-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+    }
+    
+    .custom-icon-preview {
+      width: 48px;
+      height: 48px;
+      flex: 0 0 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 16px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--text-sub);
+      transition:
+        color 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+    }
+    
+    .custom-icon-preview svg {
+      width: 21px;
+      height: 21px;
+      stroke-width: 2.1;
+    }
+    
+    .custom-icon-preview.is-valid {
+      color: var(--text-main);
+    }
+    
+    .custom-icon-preview.is-fallback {
+      color: var(--text-sub);
+    }
+    
+    .custom-icon-input {
+      flex: 1 1 auto;
+      width: 0;
+      min-width: 0;
+    }
+    
+    .add-new-item-actions {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      margin-top: 10px;
+    }
+    
+    .add-new-item-actions button {
+      flex: 1 1 0;
+      width: 0;
+      height: 52px;
+      min-height: 52px;
+      padding: 0;
+      border-radius: 18px;
+      border: none;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
+    }
+    
+    .add-new-item-actions button:active {
+      transform: scale(0.98);
+    }
+    
+    .add-new-item-cancel {
+      background: rgba(244, 63, 94, 0.55);
+      color: var(--text-main);
+      border: none !important;
+    }
+    
+    .add-new-item-submit {
+      background: rgba(59, 177, 67, 0.55);
+      color: var(--text-main);
+    }
+    
+    .add-new-item-submit:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
     .loading-state { text-align: center; padding: 40px 0; color: var(--text-sub); font-size: 14px; font-weight: 600; }
     .year-nav-btn i,
     .month-arrow-btn i{ width:18px; height:18px; stroke:currentColor; stroke-width:2.4; }
@@ -3866,31 +3977,26 @@ body.modal-open {
           maxlength="80"
         >
       </div>
-      <div class="form-group">
-        <label class="form-label">Icon</label>
+        <div class="form-group">
+      <label class="form-label">Icon</label>
+      <div class="custom-icon-preview-wrap">
+        <div
+          class="custom-icon-preview"
+          id="customIconPreview"
+          aria-hidden="true"
+        >
+          <i data-lucide="circle-help"></i>
+        </div>
         <input
           type="text"
-          class="form-control"
+          class="form-control custom-icon-input"
           id="customItemIcon"
           placeholder="Enter icon name"
           autocomplete="off"
           maxlength="80"
         >
       </div>
-      <div class="custom-icon-preview-wrap">
-        <div
-          class="custom-icon-preview"
-          id="customIconPreview"
-        >
-          <i data-lucide="circle-help"></i>
-        </div>
-        <div
-          class="custom-icon-preview-text"
-          id="customIconPreviewText"
-        >
-          Enter icon name
-        </div>
-      </div>
+    </div>
       <div class="add-new-item-actions">
         <button
           type="button"
@@ -11391,11 +11497,6 @@ function openEntriesFromInsight() {
         iconInput.value = '';
       }
       updateCustomIconPreview();
-      requestAnimationFrame(() => {
-        if (nameInput) {
-          nameInput.focus();
-        }
-      });
     }
     
     function closeAddNewItemPanel() {
@@ -11442,15 +11543,7 @@ function openEntriesFromInsight() {
         document.getElementById(
           'customIconPreview'
         );
-      const previewText =
-        document.getElementById(
-          'customIconPreviewText'
-        );
-      if (
-        !input ||
-        !preview ||
-        !previewText
-      ) {
+      if (!input || !preview) {
         return;
       }
       const iconName =
@@ -11460,11 +11553,9 @@ function openEntriesFromInsight() {
       preview.innerHTML = `
         <i
           data-lucide="${icon}"
+          aria-hidden="true"
         ></i>
       `;
-      previewText.innerText =
-        iconName ||
-        'Enter a Lucide icon name';
       preview.classList.toggle(
         'is-valid',
         Boolean(iconName)
