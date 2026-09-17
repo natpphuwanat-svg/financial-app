@@ -676,6 +676,27 @@
     .item-picker option[value=""] { color: var(--text-sub); }
     .item-picker-chevron { position: absolute; top: 50%; right: 14px; width: 16px; height: 16px; transform: translateY(-50%); color: var(--text-sub); opacity: 0.48; pointer-events: none; }
     .item-picker-chevron svg { width: 16px; height: 16px; stroke-width: 2; }
+    #recordForm,
+    #addNewItemPanel { transition: opacity 0.24s ease, transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), max-height 0.32s ease; }
+    #recordForm { max-height: 900px; opacity: 1; transform: translateX(0); overflow: hidden; }
+    #recordForm.is-panel-hidden { max-height: 0; opacity: 0; transform: translateX(-14px); pointer-events: none; }
+    #addNewItemPanel { max-height: 0; opacity: 0; transform: translateX(14px); pointer-events: none; overflow: hidden; }
+    #addNewItemPanel.is-visible { max-height: 560px; opacity: 1; transform: translateX(0); pointer-events: auto; }
+    .add-new-item-preview .form-control:disabled { opacity: 0.48; color: var(--text-sub); cursor: not-allowed; }
+    .custom-icon-preview-wrap { display: flex; align-items: center; gap: 12px; }
+    .custom-icon-preview { width: 48px; height: 48px; flex: 0 0 48px; display: flex; align-items: center;
+     justify-content: center; border-radius: 16px; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-sub); }
+    .custom-icon-preview svg { width: 21px; height: 21px; stroke-width: 2.1; }
+    .custom-icon-preview.is-valid { color: var(--text-main); }
+    .custom-icon-preview.is-fallback { color: var(--text-sub); }
+    .custom-icon-preview-text { min-width: 0; flex: 1; font-size: 11px; color: var(--text-sub); line-height: 1.35; }
+    .add-new-item-actions { display: flex; gap: 10px; width: 100%; margin-top: 10px; }
+    .add-new-item-actions button { flex: 1 1 0; width: 0; height: 52px; min-height: 52px; padding: 0; border-radius: 18px; border: none; font-family: inherit;
+     font-size: 15px; font-weight: 800; cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease; }
+    .add-new-item-actions button:active { transform: scale(0.98); }
+    .add-new-item-cancel { background: var(--glass-bg); color: var(--text-sub); border: 1px solid var(--glass-border) !important; }
+    .add-new-item-submit { background: rgba(59, 177, 67, 0.55); color: var(--text-main); }
+    .add-new-item-submit:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
     .loading-state { text-align: center; padding: 40px 0; color: var(--text-sub); font-size: 14px; font-weight: 600; }
     .year-nav-btn i,
     .month-arrow-btn i{ width:18px; height:18px; stroke:currentColor; stroke-width:2.4; }
@@ -3812,7 +3833,81 @@ body.modal-open {
           DELETE
         </button>
       </div>
-    </form>
+        </form>
+    <div
+      id="addNewItemPanel"
+      aria-hidden="true"
+    >
+      <div class="form-group add-new-item-preview">
+        <label class="form-label">Item</label>
+        <div class="item-picker-wrap">
+          <select
+            class="form-control item-picker"
+            id="customItemTypePreview"
+            disabled
+          >
+            <option value="">+ Add New Item</option>
+          </select>
+          <i
+            data-lucide="chevron-down"
+            class="item-picker-chevron"
+            aria-hidden="true"
+          ></i>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Item Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="customItemName"
+          placeholder="Enter item name"
+          autocomplete="off"
+          maxlength="80"
+        >
+      </div>
+      <div class="form-group">
+        <label class="form-label">Icon</label>
+        <input
+          type="text"
+          class="form-control"
+          id="customItemIcon"
+          placeholder="Enter icon name"
+          autocomplete="off"
+          maxlength="80"
+        >
+      </div>
+      <div class="custom-icon-preview-wrap">
+        <div
+          class="custom-icon-preview"
+          id="customIconPreview"
+        >
+          <i data-lucide="circle-help"></i>
+        </div>
+        <div
+          class="custom-icon-preview-text"
+          id="customIconPreviewText"
+        >
+          Enter icon name
+        </div>
+      </div>
+      <div class="add-new-item-actions">
+        <button
+          type="button"
+          class="add-new-item-cancel"
+          id="cancelAddNewItemBtn"
+        >
+          CANCEL
+        </button>
+        <button
+          type="button"
+          class="add-new-item-submit"
+          id="addNewItemBtn"
+        >
+          ADD
+        </button>
+      </div>
+    </div>
   </div>
  </div>
 
@@ -4065,8 +4160,10 @@ body.modal-open {
   
   applyTheme(getPreferredTheme());
   updatePeriodUI();
-  fetchData();
-
+  loadCustomItems()
+     .finally(() => {
+      fetchData();
+  });
   const yearPickerIds = [
     'selectedYear',
     'entriesSelectedYear',
@@ -11372,25 +11469,65 @@ function openEntriesFromInsight() {
     
     function openModal(mode, item = null) {
       const modal =
-        document.getElementById('entryModal');
+        document.getElementById(
+          'entryModal'
+        );
       const modalTitle =
-        document.getElementById('modalTitle');
+        document.getElementById(
+          'modalTitle'
+        );
       const editRowIndex =
-        document.getElementById('editRowIndex');
+        document.getElementById(
+          'editRowIndex'
+        );
       const formDate =
-        document.getElementById('formDate');
+        document.getElementById(
+          'formDate'
+        );
       const formNote =
-        document.getElementById('formNote');
+        document.getElementById(
+          'formNote'
+        );
       const formAmount =
-        document.getElementById('formAmount');
+        document.getElementById(
+          'formAmount'
+        );
       const deleteBtn =
-        document.getElementById('deleteBtn');
+        document.getElementById(
+          'deleteBtn'
+        );
       const modalActions =
-        document.querySelector('.modal-actions');
+        document.querySelector(
+          '.modal-actions'
+        );
+      const form =
+        document.getElementById(
+          'recordForm'
+        );
+      const addNewItemPanel =
+        document.getElementById(
+          'addNewItemPanel'
+        );
       if (!modal) {
         return;
       }
-      modal.classList.add('active');
+      if (addNewItemPanel) {
+        addNewItemPanel.classList.remove(
+          'is-visible'
+        );
+        addNewItemPanel.setAttribute(
+          'aria-hidden',
+          'true'
+        );
+      }
+      if (form) {
+        form.classList.remove(
+          'is-panel-hidden'
+        );
+      }
+      modal.classList.add(
+        'active'
+      );
       document.documentElement.classList.add(
         'modal-open'
       );
@@ -11398,13 +11535,18 @@ function openEntriesFromInsight() {
         'modal-open'
       );
       lockBackgroundScroll();
-      if (mode === 'edit' && item) {
-        modalTitle.innerText = 'EDIT ENTRY';
+      if (
+        mode === 'edit' &&
+        item
+      ) {
+        modalTitle.innerText =
+          'EDIT ENTRY';
         editRowIndex.value =
           item.rowIndex;
         formDate.value =
-          String(item.rawDate || '')
-            .slice(0, 7);
+          String(
+            item.rawDate || ''
+          ).slice(0, 7);
         formAmount.value =
           item.amount ?? '';
         selectType(
@@ -11451,11 +11593,23 @@ function openEntriesFromInsight() {
     
     function closeModal() {
       const modal =
-        document.getElementById('entryModal');
+        document.getElementById(
+          'entryModal'
+        );
       if (!modal) {
         return;
       }
-      modal.classList.remove('active');
+      const form =
+        document.getElementById(
+          'recordForm'
+        );
+      const addNewItemPanel =
+        document.getElementById(
+          'addNewItemPanel'
+        );
+      modal.classList.remove(
+        'active'
+      );
       document.documentElement.classList.remove(
         'modal-open'
       );
@@ -11463,6 +11617,28 @@ function openEntriesFromInsight() {
         'modal-open'
       );
       unlockBackgroundScroll();
+      if (form) {
+        form.classList.remove(
+          'is-panel-hidden'
+        );
+      }
+      if (addNewItemPanel) {
+        addNewItemPanel.classList.remove(
+          'is-visible'
+        );
+        addNewItemPanel.setAttribute(
+          'aria-hidden',
+          'true'
+        );
+      }
+      const modalTitle =
+        document.getElementById(
+          'modalTitle'
+        );
+      if (modalTitle) {
+        modalTitle.innerText =
+          'ADD ENTRY';
+      }
       document.getElementById(
         'formNote'
       ).value = '';
@@ -11504,10 +11680,20 @@ function openEntriesFromInsight() {
       "ผ่อนสินค้า": "scan-barcode"
     };
     
-    function getEntryIcon(title) {
+    function getEntryIcon(
+      title,
+      type = selectedType
+    ) {
+      const customIcon =
+        customItemIconMap[
+          `${type}::${title}`
+        ];
+      if (customIcon) {
+        return customIcon;
+      }
       return iconMap[title] ||
         "circle-help";
-    }
+     }
     
     // Form Submissions
     async function handleFormSubmit(e) {
@@ -11561,7 +11747,8 @@ function openEntriesFromInsight() {
           ),
         icon:
           getEntryIcon(
-            selectedItem
+            selectedItem,
+            selectedType
           )
       };
       submitBtn.innerText =
