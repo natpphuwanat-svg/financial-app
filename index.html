@@ -3164,7 +3164,7 @@ body.modal-open {
          <div class="highlight-card">
            <div class="highlight-card-content highlight-state-loading">
              <div class="highlight-empty">
-              Loading data...
+              loading data...
             </div>
           </div>
         </div>
@@ -3272,7 +3272,7 @@ body.modal-open {
   </button>
     </div>
       <div class="entries-list" id="entriesList">
-        <div class="loading-state">No entries yet.</div>
+        <div class="loading-state">no entries yet</div>
       </div>
     </main>
   </div>
@@ -3295,14 +3295,14 @@ body.modal-open {
     class="insights-view-mode-btn active"
     id="insightsMonthModeBtn"
     onclick="setInsightsViewMode('month')">
-    MONTH
+    Month
   </button>
   <button
     type="button"
     class="insights-view-mode-btn"
     id="insightsYearModeBtn"
     onclick="setInsightsViewMode('year')">
-    YEAR
+    Year
   </button>
 </section>
 <section class="period-bar">
@@ -5058,8 +5058,8 @@ function renderEntriesPage(entries) {
     const isFuture = isSelectedMonthFuture();
     const emptyText =
       isFuture && currentEntries.length === 0
-        ? 'Upcoming'
-        : 'No entries yet.';
+        ? 'upcoming'
+        : 'no entries yet';
     document.getElementById('entriesList').innerHTML =
       `<div class="loading-state">${emptyText}</div>`;
     return; }
@@ -8864,7 +8864,7 @@ function applyInsightsSummaryFutureState(
   document.getElementById(
     'insightsSummaryTitle'
   ).innerText =
-    'ANNUAL SUMMARY';
+    'Annual Summary';
   document.getElementById(
     'insightsIncome'
   ).innerText =
@@ -10273,7 +10273,7 @@ function openAnnualTopSpendingMonth(month) {
       <div class="highlight-card">
         <div class="highlight-card-content highlight-state-loading">
           <div class="highlight-empty">
-            Loading data...
+            loading data...
           </div>
         </div>
       </div>
@@ -10290,7 +10290,7 @@ function openAnnualTopSpendingMonth(month) {
     content = `
       <div class="highlight-card-content highlight-state-loading">
         <div class="highlight-empty">
-          Loading data...
+          loading data...
         </div>
       </div>
     `;
@@ -10317,7 +10317,7 @@ function openAnnualTopSpendingMonth(month) {
     content = `
       <div class="highlight-card-content highlight-state-error">
         <div class="highlight-empty">
-          Error loading data.
+          error loading data.
         </div>
       </div>
     `;
