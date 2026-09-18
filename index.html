@@ -4069,6 +4069,7 @@ body.modal-open {
     let insightContextEntriesActive = false;
     let lastFetchTime = 0;
     const REFRESH_THRESHOLD = 5 * 60 * 1000;
+    
     function resetAppSession() {
     closeModal();
     const wasInsightContext = insightContext && insightContextEntriesActive;
@@ -4079,6 +4080,8 @@ body.modal-open {
     currentEntryFilter = 'all';
     currentExpenseEntryFilter = 'all';
     selectedExpenseType = null;
+    selectedMonthExpenseType = null;
+    selectedYearExpenseType = null;
     selectedExpenseTitle = null;
     selectedYear = realCurrentYear;
     selectedMonth = realCurrentMonth;
@@ -4859,8 +4862,16 @@ function changeInsightsPeriod(delta) {
       'transitionend',
       handleTransitionEnd
     );
+    if (insightsViewMode === 'month') {
+      selectedMonthExpenseType = selectedExpenseType;
+    } else {
+      selectedYearExpenseType = selectedExpenseType;
+    }
     insightsViewMode = mode;
-    selectedExpenseType = null;
+    selectedExpenseType =
+      mode === 'month'
+        ? selectedMonthExpenseType
+        : selectedYearExpenseType;
     selectedExpenseTitle = null;
     monthModeBtn.classList.toggle(
       'active',
@@ -5157,6 +5168,8 @@ function renderEntriesPage(entries) {
   const expenseColorMap = {};
   let selectedExpenseTitle = null;
   let selectedExpenseType = null;
+  let selectedMonthExpenseType = null;
+  let selectedYearExpenseType = null;
   let annualTopSpendingExpanded = false;
   let annualExpenseTrendSelectedMonth = null;
   let monthlyComparisonType = 'Expense';
