@@ -1262,7 +1262,7 @@ body:has(#entryModal.active) .floating-add-button {
 .entry-badge svg { width: 20px; height: 20px; stroke-width: 2.2; }
 .entry-info { min-width: 0; flex: 1; }
 .entry-title { font-size: 14px; font-weight: 700; color: var(--text-main); line-height: 1.3; margin-bottom: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.entry-type {font-size: 10px; font-weight: 700; color: var(--text-sub); line-height: 1.2; letter-spacing: 0.3px; }
+.entry-type { min-width: 0; font-size: 10px; font-weight: 700; color: var(--text-sub); line-height: 1.2; letter-spacing: 0.3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .entry-right { flex-shrink: 0; margin-left: 14px; display: flex; align-items: center; }
 .entry-amount { font-size: 14px; font-weight: 800; white-space: nowrap; }
 .entries-loading { width: 100%; }
@@ -3120,7 +3120,7 @@ body.modal-open {
       <div class="balance-wallet">
         <i data-lucide="wallet"></i>
       </div>
-      <div class="balance-label">BALANCE</div>
+      <div class="balance-label">Balance</div>
       <div class="balance-amount" id="balanceAmount">฿0.00</div>
       <div class="balance-change" id="balanceChange"></div>
     </section>
@@ -3130,7 +3130,7 @@ body.modal-open {
         <div class="stat-icon">
           <i data-lucide="circle-arrow-down"></i>
         </div>
-        <div class="stat-label">INCOME</div>
+        <div class="stat-label">Income</div>
         <div class="stat-value" id="incomeAmount">฿0.00</div>
         <div class="stat-change" id="incomeChange"></div>
       </div>
@@ -3138,7 +3138,7 @@ body.modal-open {
         <div class="stat-icon">
             <i data-lucide="circle-arrow-up"></i>
         </div>
-        <div class="stat-label">EXPENSE</div>
+        <div class="stat-label">Expense</div>
         <div class="stat-value" id="expenseAmount">฿0.00</div>
         <div class="stat-change" id="expenseChange"></div>
       </div>
@@ -3146,7 +3146,7 @@ body.modal-open {
         <div class="stat-icon">
           <i data-lucide="receipt-text"></i>
         </div>
-        <div class="stat-label">DEDUCTION</div>
+        <div class="stat-label">Deduction</div>
         <div class="stat-value" id="deductionAmount">฿0.00</div>
         <div class="stat-change" id="deductionChange"></div>
       </div>
@@ -3154,12 +3154,12 @@ body.modal-open {
 
     <section>
       <div class="section-header">
-        <div class="section-title">HIGHLIGHTS</div>
+        <div class="section-title">Highlights</div>
         <button
           class="see-all-btn"
           type="button"
           onclick="goToEntriesFromOverview()">
-          SEE ALL
+          See All
         </button>
       </div>
        <div id="entryList" class="entry-list">
@@ -3238,16 +3238,16 @@ body.modal-open {
    </section>
       <div class="entries-filter" id="entriesFilter">
         <button class="entries-filter-btn active" type="button" data-filter="all" onclick="setEntryFilter('all')">
-          <span>ALL ENTRIES</span>
+          <span>All Entries</span>
         </button>
         <button class="entries-filter-btn" type="button" data-filter="income" onclick="setEntryFilter('income')">
-          <span>INCOME</span>
+          <span>Income</span>
         </button>
         <button class="entries-filter-btn" type="button" data-filter="expense" onclick="setEntryFilter('expense')">
-          <span>EXPENSE</span>
+          <span>Expense</span>
         </button>
         <button class="entries-filter-btn" type="button" data-filter="deduction" onclick="setEntryFilter('deduction')">
-          <span>DEDUCTION</span>
+          <span>Deduction</span>
         </button>
       </div>
       <div class="entries-expense-filter" id="entriesExpenseFilter" hidden>
@@ -3256,21 +3256,21 @@ body.modal-open {
       type="button"
       data-expense-filter="all"
       onclick="setExpenseEntryFilter('all')">
-    <span>ALL</span>
+    <span>All</span>
   </button>
    <button
     class="entries-filter-btn"
     type="button"
     data-expense-filter="fixed"
     onclick="setExpenseEntryFilter('fixed')">
-    <span>FIXED</span>
+    <span>Fixed</span>
   </button>
   <button
     class="entries-filter-btn"
     type="button"
     data-expense-filter="variable"
     onclick="setExpenseEntryFilter('variable')">
-    <span>VARIABLE</span>
+    <span>Variable</span>
   </button>
     </div>
       <div class="entries-list" id="entriesList">
@@ -3348,13 +3348,13 @@ body.modal-open {
       <section class="insights-section">
         <div class="insights-section-title"
           id="insightsSummaryTitle">
-          MONTHLY SUMMARY
+          Monthly Summary
         </div>
         <div class="monthly-summary-card" id="insightsMonthlySummaryCard">
           <div class="monthly-summary-row">
             <div class="monthly-summary-label">Income</div>
             <div class="monthly-summary-value-group">
-              <div class="monthly-summary-value income" id="insightsIncome">
+              <div class="monthly-summary-value Income" id="insightsIncome">
                 ฿0.00
               </div>
               <div class="monthly-summary-mom" id="insightsIncomeMoM">
@@ -3365,7 +3365,7 @@ body.modal-open {
           <div class="monthly-summary-row">
             <div class="monthly-summary-label">Expense</div>
             <div class="monthly-summary-value-group">
-              <div class="monthly-summary-value expense" id="insightsExpense">
+              <div class="monthly-summary-value Expense" id="insightsExpense">
                 ฿0.00
               </div>
               <div class="monthly-summary-mom" id="insightsExpenseMoM">
@@ -3418,7 +3418,7 @@ body.modal-open {
   data-insights-mode="month"
 >
   <div class="insights-section-title">
-    EXPENSE BREAKDOWN
+    Expense Breakdown
   </div>
   <div
     class="expense-type-summary"
@@ -3449,7 +3449,7 @@ body.modal-open {
   id="annualExpenseTrendSection"
 >
   <div class="insights-section-title">
-    EXPENSE BREAKDOWN
+    Expense Breakdown
   </div>
   <div
     class="expense-type-summary"
@@ -3482,7 +3482,7 @@ body.modal-open {
     data-insights-mode="month"
     >
   <div class="insights-section-title">
-    MONTHLY COMPARISON
+    Monthly Comparison
   </div>
   <div class="monthly-comparison-card" id="monthlyComparisonCard">
     <div class="monthly-comparison-controls">
@@ -3506,21 +3506,21 @@ body.modal-open {
             class="monthly-comparison-dropdown-option"
             data-type="Income"
             >
-            INCOME
+            Income
           </button>
           <button
             type="button"
             class="monthly-comparison-dropdown-option is-selected"
             data-type="Expense"
             >
-            EXPENSE
+            Expense
           </button>
           <button
             type="button"
             class="monthly-comparison-dropdown-option"
             data-type="Deduction"
             >
-            DEDUCTION
+            Deduction
           </button>
         </div>
       </div>
@@ -3664,7 +3664,7 @@ body.modal-open {
   </div>
   <div class="monthly-takeaway-card" id="monthlyTakeawayCard">
     <div class="monthly-takeaway-title">
-      MONTHLY TAKEAWAY
+      Monthly Takeaway
     </div>
     <div
       class="monthly-takeaway-content"
@@ -3678,7 +3678,7 @@ body.modal-open {
   data-insights-mode="year"
 >
   <div class="insights-section-title">
-    ANNUAL COMPARISON
+    Annual Comparison
   </div>
   <div class="monthly-comparison-card" id="annualComparisonCard">
     <div class="monthly-comparison-controls">
@@ -3690,7 +3690,7 @@ body.modal-open {
           aria-label="Select comparison type"
         >
           <span id="annualComparisonTypeLabel">
-            EXPENSE
+            Expense
           </span>
           <i data-lucide="chevron-down"></i>
         </button>
@@ -3704,21 +3704,21 @@ body.modal-open {
             class="monthly-comparison-dropdown-option"
             data-annual-type="Income"
           >
-            INCOME
+            Income
           </button>
           <button
             type="button"
             class="monthly-comparison-dropdown-option is-selected"
             data-annual-type="Expense"
           >
-            EXPENSE
+            Expense
           </button>
           <button
             type="button"
             class="monthly-comparison-dropdown-option"
             data-annual-type="Deduction"
           >
-            DEDUCTION
+            Deduction
           </button>
         </div>
       </div>
@@ -3786,7 +3786,7 @@ body.modal-open {
   >
   <div class="annual-takeaway-card" id="annualTakeawayCard">
     <div class="annual-takeaway-title">
-      ANNUAL TAKEAWAY
+      Annual Takeaway
     </div>
     <div
       class="annual-takeaway-content"
@@ -3865,11 +3865,11 @@ body.modal-open {
         <div class="type-selector">
           <button
             type="button"
-            class="type-btn income"
+            class="type-btn Income"
             data-type="Income"
             onclick="selectType('Income')"
           >
-            INCOME
+            Income
           </button>
           <button
             type="button"
@@ -3877,7 +3877,7 @@ body.modal-open {
             data-type="Expense"
             onclick="selectType('Expense')"
           >
-            EXPENSE
+            Expense
           </button>
           <button
             type="button"
@@ -3885,7 +3885,7 @@ body.modal-open {
             data-type="Deduction"
             onclick="selectType('Deduction')"
           >
-            DEDUCTION
+            Deduction
           </button>
         </div>
       </div>
@@ -5006,7 +5006,7 @@ function changeInsightsPeriod(delta) {
                   ${item.title}
                 </div>
                 <div class="entry-type">
-                  ${type.toUpperCase()}
+                   ${type.toUpperCase()}${item.note?.trim() ? ` • ${item.note.trim()}` : ''}
                 </div>
               </div>
             </div>
@@ -6191,7 +6191,7 @@ function renderExpenseTypeSummary(entries) {
     >
       <div class="expense-type-top">
         <div class="expense-type-label">
-          VARIABLE
+          variable
         </div>
         <div class="expense-type-percent">
           ${variablePercent}%
@@ -6466,11 +6466,11 @@ function renderExpenseTypeSummary(entries) {
   );
   const topExpenses = contextualExpenses.slice(0, 3);
   if (selectedExpenseType === 'Fixed') {
-    title.innerText = 'TOP FIXED';
+    title.innerText = 'Top Fixed';
   } else if (selectedExpenseType === 'Variable') {
-    title.innerText = 'TOP VARIABLE';
+    title.innerText = 'Top Variable';
   } else {
-    title.innerText = 'TOP SPENDING'; }
+    title.innerText = 'Top Spending'; }
   if (topExpenses.length === 0) {
   const isFuture = isSelectedMonthFuture();
   if (isFuture && expenses.length === 0) {
@@ -6536,7 +6536,7 @@ function renderExpenseTypeSummary(entries) {
       aria-label="View all expenses"
       onclick="openEntriesFromInsight()"
       >
-      VIEW ALL
+      View All
       <i data-lucide="chevron-right"></i>
     </button>
   `;
@@ -6599,7 +6599,7 @@ function renderExpenseTypeSummary(entries) {
   }
 
   const getTotals = entries => {
-    const income = entries
+    const Income = entries
       .filter(
         item => item.financial_type === 'Income'
       )
@@ -8866,7 +8866,7 @@ function applyInsightsSummaryFutureState(
   document.getElementById(
     'insightsSummaryTitle'
   ).innerText =
-    'ANNUAL SUMMARY';
+    'Annual Summary';
   document.getElementById(
     'insightsIncome'
   ).innerText =
@@ -10003,15 +10003,15 @@ function openAnnualTopSpendingMonth(month) {
       );
   if (selectedExpenseType === 'Fixed') {
     title.innerText =
-      'TOP FIXED MONTHS';
+      'Top Fixed Months';
   } else if (
     selectedExpenseType === 'Variable'
   ) {
     title.innerText =
-      'TOP VARIABLE MONTHS';
+      'Top Variable Months';
   } else {
     title.innerText =
-      'TOP SPENDING MONTHS';
+      'Top Spending Months';
   }
   const visibleMonths =
     annualTopSpendingExpanded
@@ -10130,7 +10130,7 @@ function openAnnualTopSpendingMonth(month) {
             aria-label="View all spending months"
             onclick="toggleAnnualTopSpendingView()"
           >
-            VIEW ALL
+            View All
             <i data-lucide="chevron-right"></i>
           </button>
         `
@@ -10619,7 +10619,7 @@ function openAnnualTopSpendingMonth(month) {
         'stat-change deduction'; }
   // 13. Insights — Monthly Summary
   document.getElementById('insightsSummaryTitle').innerText =
-  'MONTHLY SUMMARY';
+  'Monthly Summary';
   document.getElementById('insightsIncome').innerText =
     '฿' + totalIncome.toLocaleString('en-US', {
       minimumFractionDigits: 2 });
