@@ -5254,7 +5254,7 @@ function renderEntriesPage(entries) {
         selectedPeriod;
       if (monthlyComparisonPeriodLabel) {
         monthlyComparisonPeriodLabel.innerText =
-          `${selectedPeriod} MONTHS`; }
+          `${selectedPeriod} Months`; }
       monthlyComparisonPeriodOptions.forEach(
         item => {
           item.classList.toggle(
@@ -5368,7 +5368,7 @@ function renderEntriesPage(entries) {
         selectedType;
       if (monthlyComparisonTypeLabel) {
         monthlyComparisonTypeLabel.innerText =
-          selectedType.toUpperCase();
+          selectedType;
       }
       monthlyComparisonTypeOptions.forEach(
         item => {
@@ -6156,7 +6156,7 @@ function renderExpenseTypeSummary(entries) {
     >
       <div class="expense-type-top">
         <div class="expense-type-label">
-          FIXED
+          Fixed
         </div>
         <div class="expense-type-percent">
           ${fixedPercent}%
@@ -6189,7 +6189,7 @@ function renderExpenseTypeSummary(entries) {
     >
       <div class="expense-type-top">
         <div class="expense-type-label">
-          VARIABLE
+          Variable
         </div>
         <div class="expense-type-percent">
           ${variablePercent}%
@@ -6464,11 +6464,11 @@ function renderExpenseTypeSummary(entries) {
   );
   const topExpenses = contextualExpenses.slice(0, 3);
   if (selectedExpenseType === 'Fixed') {
-    title.innerText = 'TOP FIXED';
+    title.innerText = 'Top Fixed';
   } else if (selectedExpenseType === 'Variable') {
-    title.innerText = 'TOP VARIABLE';
+    title.innerText = 'Top Variable';
   } else {
-    title.innerText = 'TOP SPENDING'; }
+    title.innerText = 'TOP Spending'; }
   if (topExpenses.length === 0) {
   const isFuture = isSelectedMonthFuture();
   if (isFuture && expenses.length === 0) {
@@ -8997,7 +8997,7 @@ function renderAnnualExpenseTypeSummary(entries) {
     >
       <div class="expense-type-top">
         <div class="expense-type-label">
-          FIXED
+          Fixed
         </div>
         <div class="expense-type-percent">
           ${fixedPercent}%
@@ -9043,7 +9043,7 @@ function renderAnnualExpenseTypeSummary(entries) {
       >
       <div class="expense-type-top">
         <div class="expense-type-label">
-          VARIABLE
+          Variable
         </div>
         <div class="expense-type-percent">
           ${variablePercent}%
