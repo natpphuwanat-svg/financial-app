@@ -833,7 +833,7 @@
     .highlight-item .entry-right { flex-shrink: 0; margin-left: 14px; }
     [data-theme="dark"] .highlight-item + .highlight-item::before { background: rgba(148, 163, 184, 0.10); }
     .entry-title { font-size: 13px; }
-    .entry-date { font-size: 10px; font-weight: 600; text-transform: lowercase; }
+    .entry-date { font-size: 10px; font-weight: 600; }
     .entry-amount { font-size: 14px; }
     .entry-badge { width: 42px; height: 42px; font-size: 16px; }
     .entry-badge svg { width: 20px; height: 20px; stroke-width: 2.2; }
@@ -3072,7 +3072,7 @@ body.modal-open {
  <div class="home-icon-box">
   <i data-lucide="house"></i>
 </div>
-<div class="app-title">OVERVIEW</div>
+<div class="app-title">Overview</div>
     </div>
   </header>
   
@@ -3120,7 +3120,7 @@ body.modal-open {
       <div class="balance-wallet">
         <i data-lucide="wallet"></i>
       </div>
-      <div class="balance-label">BALANCE</div>
+      <div class="balance-label">Balance</div>
       <div class="balance-amount" id="balanceAmount">฿0.00</div>
       <div class="balance-change" id="balanceChange"></div>
     </section>
@@ -3130,7 +3130,7 @@ body.modal-open {
         <div class="stat-icon">
           <i data-lucide="circle-arrow-down"></i>
         </div>
-        <div class="stat-label">INCOME</div>
+        <div class="stat-label">Income</div>
         <div class="stat-value" id="incomeAmount">฿0.00</div>
         <div class="stat-change" id="incomeChange"></div>
       </div>
@@ -3138,7 +3138,7 @@ body.modal-open {
         <div class="stat-icon">
             <i data-lucide="circle-arrow-up"></i>
         </div>
-        <div class="stat-label">EXPENSE</div>
+        <div class="stat-label">Expense</div>
         <div class="stat-value" id="expenseAmount">฿0.00</div>
         <div class="stat-change" id="expenseChange"></div>
       </div>
@@ -3146,7 +3146,7 @@ body.modal-open {
         <div class="stat-icon">
           <i data-lucide="receipt-text"></i>
         </div>
-        <div class="stat-label">DEDUCTION</div>
+        <div class="stat-label">Deduction</div>
         <div class="stat-value" id="deductionAmount">฿0.00</div>
         <div class="stat-change" id="deductionChange"></div>
       </div>
@@ -3154,12 +3154,12 @@ body.modal-open {
 
     <section>
       <div class="section-header">
-        <div class="section-title">HIGHLIGHTS</div>
+        <div class="section-title">Highlights</div>
         <button
           class="see-all-btn"
           type="button"
           onclick="goToEntriesFromOverview()">
-          SEE ALL
+          See All
         </button>
       </div>
        <div id="entryList" class="entry-list">
@@ -3181,7 +3181,7 @@ body.modal-open {
     <div class="home-icon-box">
       <i data-lucide="list-todo"></i>
     </div>
-    <div class="app-title">ENTRIES</div>
+    <div class="app-title">Entries</div>
   </div>
   <button
     class="insight-context-back"
@@ -3194,7 +3194,7 @@ body.modal-open {
     <i data-lucide="chevron-left"></i>
   </button>
   <div class="context-entries-title" aria-hidden="true">
-    <span>ENTRIES</span>
+    <span>Entries</span>
   </div>
   </header>
     <main class="container" id="entriesContent">
@@ -3238,16 +3238,16 @@ body.modal-open {
    </section>
       <div class="entries-filter" id="entriesFilter">
         <button class="entries-filter-btn active" type="button" data-filter="all" onclick="setEntryFilter('all')">
-          <span>ALL ENTRIES</span>
+          <span>All Entries</span>
         </button>
         <button class="entries-filter-btn" type="button" data-filter="income" onclick="setEntryFilter('income')">
-          <span>INCOME</span>
+          <span>Income</span>
         </button>
         <button class="entries-filter-btn" type="button" data-filter="expense" onclick="setEntryFilter('expense')">
-          <span>EXPENSE</span>
+          <span>Expense</span>
         </button>
         <button class="entries-filter-btn" type="button" data-filter="deduction" onclick="setEntryFilter('deduction')">
-          <span>DEDUCTION</span>
+          <span>Deduction</span>
         </button>
       </div>
       <div class="entries-expense-filter" id="entriesExpenseFilter" hidden>
@@ -3256,21 +3256,21 @@ body.modal-open {
       type="button"
       data-expense-filter="all"
       onclick="setExpenseEntryFilter('all')">
-    <span>ALL</span>
+    <span>All</span>
   </button>
    <button
     class="entries-filter-btn"
     type="button"
     data-expense-filter="fixed"
     onclick="setExpenseEntryFilter('fixed')">
-    <span>FIXED</span>
+    <span>Fixed</span>
   </button>
   <button
     class="entries-filter-btn"
     type="button"
     data-expense-filter="variable"
     onclick="setExpenseEntryFilter('variable')">
-    <span>VARIABLE</span>
+    <span>Variable</span>
   </button>
     </div>
       <div class="entries-list" id="entriesList">
@@ -3285,7 +3285,7 @@ body.modal-open {
         <div class="home-icon-box">
           <i data-lucide="chart-no-axes-combined"></i>
         </div>
-        <div class="app-title">INSIGHTS</div>
+        <div class="app-title">Insights</div>
       </div>
       <div class="header-right">
       </div>
@@ -4969,7 +4969,7 @@ function changeInsightsPeriod(delta) {
     <div class="entry-group">
       <div class="entry-group-header">
         <div class="entry-group-title">
-          ${displayType.toUpperCase()} (${items.length})
+          ${displayType} (${items.length})
         </div>
         <div class="entry-group-count">
           ฿${items.reduce(
@@ -5006,7 +5006,7 @@ function changeInsightsPeriod(delta) {
                   ${item.title}
                 </div>
                 <div class="entry-type">
-                   ${type.toUpperCase()}${item.note?.trim() ? ` • ${item.note.trim()}` : ''}
+                   ${type}${item.note?.trim() ? ` • ${item.note.trim()}` : ''}
                  </div>
               </div>
             </div>
@@ -10350,7 +10350,7 @@ function openAnnualTopSpendingMonth(month) {
                   ${item.title}
                 </div>
                 <div class="entry-date">
-                  ${item.financial_type.toUpperCase()}
+                  ${item.financial_type}
                 </div>
               </div>
             </div>
