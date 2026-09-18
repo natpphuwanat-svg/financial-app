@@ -1262,7 +1262,7 @@ body:has(#entryModal.active) .floating-add-button {
 .entry-badge svg { width: 20px; height: 20px; stroke-width: 2.2; }
 .entry-info { min-width: 0; flex: 1; }
 .entry-title { font-size: 14px; font-weight: 700; color: var(--text-main); line-height: 1.3; margin-bottom: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.entry-type {font-size: 10px; font-weight: 700; color: var(--text-sub); line-height: 1.2; letter-spacing: 0.3px; }
+.entry-type { min-width: 0; font-size: 10px; font-weight: 700; color: var(--text-sub); line-height: 1.2; letter-spacing: 0.3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .entry-right { flex-shrink: 0; margin-left: 14px; display: flex; align-items: center; }
 .entry-amount { font-size: 14px; font-weight: 800; white-space: nowrap; }
 .entries-loading { width: 100%; }
@@ -5006,8 +5006,8 @@ function changeInsightsPeriod(delta) {
                   ${item.title}
                 </div>
                 <div class="entry-type">
-                  ${type.toUpperCase()}
-                </div>
+                   ${type.toUpperCase()}${item.note?.trim() ? ` • ${item.note.trim()}` : ''}
+                 </div>
               </div>
             </div>
             <div class="entry-right">
