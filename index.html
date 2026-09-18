@@ -4917,6 +4917,7 @@ function changeInsightsPeriod(delta) {
           annualComparisonType
       );
     });
+   }
   };
   periodCapsule.addEventListener(
     'transitionend',
@@ -5381,7 +5382,7 @@ function renderEntriesPage(entries) {
   });
   const monthlyComparisonTypeOptions =
   document.querySelectorAll(
-    '.monthly-comparison-dropdown-option'
+    '#monthlyComparisonTypeMenu .monthly-comparison-dropdown-option'
   );
   monthlyComparisonTypeOptions.forEach(option => {
   option.addEventListener(
