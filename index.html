@@ -3491,7 +3491,7 @@ body.modal-open {
           id="monthlyComparisonTypeBtn"
           aria-label="Select comparison type"
           >
-          <span id="monthlyComparisonTypeLabel">EXPENSE</span>
+          <span id="monthlyComparisonTypeLabel">Expense</span>
           <i data-lucide="chevron-down"></i>
         </button>
         <div
@@ -3529,7 +3529,7 @@ body.modal-open {
           id="monthlyComparisonPeriodBtn"
           aria-label="Select comparison period"
           >
-          <span id="monthlyComparisonPeriodLabel">3 MONTHS</span>
+          <span id="monthlyComparisonPeriodLabel">3 Months</span>
           <i data-lucide="chevron-down"></i>
         </button>
         <div
@@ -6468,7 +6468,7 @@ function renderExpenseTypeSummary(entries) {
   } else if (selectedExpenseType === 'Variable') {
     title.innerText = 'Top Variable';
   } else {
-    title.innerText = 'TOP Spending'; }
+    title.innerText = 'Top Spending'; }
   if (topExpenses.length === 0) {
   const isFuture = isSelectedMonthFuture();
   if (isFuture && expenses.length === 0) {
