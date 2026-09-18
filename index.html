@@ -4892,7 +4892,7 @@ function changeInsightsPeriod(delta) {
       );
     if (annualTypeLabel) {
       annualTypeLabel.innerText =
-      monthlyComparisonType; }
+      monthlyComparisonType.toUpperCase(); }
       fetchAnnualData();
     }
   };
@@ -4964,7 +4964,7 @@ function changeInsightsPeriod(delta) {
   
   function renderEntryGroup(type, items, displayType = type) {
   if (!items || items.length === 0) return '';
-  const typeClass = type;
+  const typeClass = type.toLowerCase();
   return `
     <div class="entry-group">
       <div class="entry-group-header">
@@ -4992,7 +4992,7 @@ function changeInsightsPeriod(delta) {
               title: item.title,
               note: item.note || '',
               amount: Number(item.amount),
-              type: item.financial_type,
+              type: item.financial_type.toLowerCase(),
               financialType: item.financial_type,
               icon: item.icon
             })})'
@@ -5037,7 +5037,7 @@ function renderEntriesPage(entries) {
   let filteredEntries = currentEntries;
   if (currentEntryFilter !== 'all') {
     filteredEntries = currentEntries.filter(item =>
-      item.financial_type === currentEntryFilter
+      item.financial_type.toLowerCase() === currentEntryFilter
     );
   }
   let entryGroupTitle = null;
@@ -5370,7 +5370,7 @@ function renderEntriesPage(entries) {
         selectedType;
       if (monthlyComparisonTypeLabel) {
         monthlyComparisonTypeLabel.innerText =
-          selectedType ;
+          selectedType.toUpperCase();
       }
       monthlyComparisonTypeOptions.forEach(
         item => {
@@ -6269,13 +6269,13 @@ function renderExpenseTypeSummary(entries) {
               ).join('')}
 
               <div class="expense-chart-future-message">
-                No expense data yet for ${selectedPeriodLabel }
+                NO EXPENSE DATA YET FOR ${selectedPeriodLabel.toUpperCase()}
               </div>
             `
             : `
               <div class="expense-chart-empty-label">
                 <div class="expense-chart-empty-title">
-                  No expense data
+                  NO EXPENSE DATA
                 </div>
 
                 <div class="expense-chart-empty-description">
@@ -9239,7 +9239,8 @@ function buildAnnualExpenseTrendData(entries) {
             months[index]?.name ||
             ''
           )
-            .slice(0, 3),
+            .slice(0, 3)
+            .toUpperCase(),
         amount,
         state,
         color:
@@ -9713,7 +9714,7 @@ const axisLabels =
       );
     if (tooltipMonth) {
       tooltipMonth.innerText =
-        point.name;
+        point.name.toUpperCase();
     }
     if (tooltipAmount) {
       tooltipAmount.innerText =
@@ -10335,13 +10336,13 @@ function openAnnualTopSpendingMonth(month) {
               title: item.title,
                note: item.note || '',
               amount: Number(item.amount),
-              type: item.financial_type,
+              type: item.financial_type.toLowerCase(),
               financialType: item.financial_type,
               icon: item.icon
             })})'
           >
             <div class="entry-left">
-              <div class="entry-badge ${item.financial_type}">
+              <div class="entry-badge ${item.financial_type.toLowerCase()}">
                 <i data-lucide="${item.icon || 'circle'}"></i>
               </div>
               <div>
@@ -10354,7 +10355,7 @@ function openAnnualTopSpendingMonth(month) {
               </div>
             </div>
             <div class="entry-right">
-              <div class="entry-amount ${item.financial_type}">
+              <div class="entry-amount ${item.financial_type.toLowerCase()}">
                 ฿${Number(item.amount).toLocaleString('en-US', {
                   minimumFractionDigits: 2
                 })}
@@ -10765,7 +10766,7 @@ highlightCandidates.push(currentItem); }
 const groupedCandidates = {
   income: [], expense: [], deduction: [] };
 highlightCandidates.forEach(function(item) {
-const type = item.financial_type;
+const type = item.financial_type.toLowerCase();
 if (type === 'income') { groupedCandidates.income.push(item); } 
 else if (type === 'expense') { groupedCandidates.expense.push(item); } 
 else if (type === 'deduction') { groupedCandidates.deduction.push(item); }
@@ -10790,8 +10791,8 @@ remainingCandidates
   .forEach(function(item) { highlights.push(item);
   });
 const typeOrder = { income: 1, expense: 2, deduction: 3 };
-highlights.sort(function(a, b) { const typeA = a.financial_type;
-const typeB = b.financial_type;
+highlights.sort(function(a, b) { const typeA = a.financial_type.toLowerCase();
+const typeB = b.financial_type.toLowerCase();
 if (typeOrder[typeA] !== typeOrder[typeB]) {
 return typeOrder[typeA] - typeOrder[typeB]; }
 return Number(b.amount) - Number(a.amount); });
@@ -11440,8 +11441,8 @@ function openEntriesFromInsight() {
         const exists =
           merged.some(
             existing =>
-              existing ===
-              item
+              existing.toLowerCase() ===
+              item.toLowerCase()
           );
         if (!exists) {
           merged.push(item);
@@ -11639,8 +11640,8 @@ function openEntriesFromInsight() {
       const duplicate =
         allItems.some(
           item =>
-            item ===
-            name
+            item.toLowerCase() ===
+            name.toLowerCase()
         );
       if (duplicate) {
         alert(
@@ -11844,7 +11845,7 @@ function openEntriesFromInsight() {
         if (btnType === type) {
           btn.classList.add(
             'active',
-            type
+            type.toLowerCase()
           );
         }
       });
