@@ -675,12 +675,6 @@
     .item-picker option[value=""] { color: var(--text-sub); }
     .item-picker-chevron { position: absolute; top: 50%; right: 14px; width: 16px; height: 16px; transform: translateY(-50%); color: var(--text-sub); opacity: 0.48; pointer-events: none; }
     .item-picker-chevron svg { width: 16px; height: 16px; stroke-width: 2; }
-
-   /* =========================================================
-   ADD ENTRY ↔ ADD NEW ITEM
-   Cross-fade only
-   ========================================================= */
-
     .modal-form-stage {
       display: grid;
       grid-template-columns: 1fr;
@@ -695,38 +689,32 @@
       width: 100%;
       min-width: 0;
       align-self: start;
-    
-      transition:
-        opacity 0.28s ease;
     }
     
-    /* ADD / EDIT ENTRY */
     .modal-form-stage > #recordForm {
       opacity: 1;
       pointer-events: auto;
       visibility: visible;
     }
     
-    /* ADD ENTRY fades out */
     .modal-form-stage > #recordForm.is-panel-hidden {
       opacity: 0;
       pointer-events: none;
       visibility: hidden;
     }
     
-    /* ADD NEW ITEM */
     .modal-form-stage > #addNewItemPanel {
       opacity: 0;
       pointer-events: none;
       visibility: hidden;
     }
     
-    /* ADD NEW ITEM fades in */
     .modal-form-stage > #addNewItemPanel.is-visible {
       opacity: 1;
       pointer-events: auto;
       visibility: visible;
     }
+
     .add-new-item-preview .form-control:disabled {
       opacity: 0.48;
       color: var(--text-sub);
