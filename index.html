@@ -4898,26 +4898,27 @@ function changeInsightsPeriod(delta) {
       resetAnnualComparisonYears();
       renderAnnualComparisonYearMenu();
       updateAnnualComparisonYearLabel();
-    const annualTypeLabel =
-      document.getElementById(
-        'annualComparisonTypeLabel'
-      );
-    if (annualTypeLabel) {
-      annualTypeLabel.innerText =
-        annualComparisonType;
+      const annualTypeLabel =
+        document.getElementById(
+          'annualComparisonTypeLabel'
+        );
+      if (annualTypeLabel) {
+        annualTypeLabel.innerText =
+          annualComparisonType;
+      }
+      const annualComparisonTypeOptions =
+        document.querySelectorAll(
+          '#annualComparisonTypeMenu .monthly-comparison-dropdown-option'
+        );
+      annualComparisonTypeOptions.forEach(option => {
+        option.classList.toggle(
+          'is-selected',
+          option.dataset.annualType ===
+            annualComparisonType
+        );
+      });
+      fetchAnnualData();
     }
-    const annualComparisonTypeOptions =
-      document.querySelectorAll(
-        '#annualComparisonTypeMenu .monthly-comparison-dropdown-option'
-      );
-    annualComparisonTypeOptions.forEach(option => {
-      option.classList.toggle(
-        'is-selected',
-        option.dataset.annualType ===
-          annualComparisonType
-      );
-    });
-   }
   };
   periodCapsule.addEventListener(
     'transitionend',
