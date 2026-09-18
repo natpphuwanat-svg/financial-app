@@ -4082,6 +4082,9 @@ body.modal-open {
     selectedExpenseType = null;
     selectedMonthExpenseType = null;
     selectedYearExpenseType = null;
+    monthlyComparisonType = 'Expense';
+    annualComparisonType = 'Expense';
+    monthlyComparisonPeriod = 3;
     selectedExpenseTitle = null;
     selectedYear = realCurrentYear;
     selectedMonth = realCurrentMonth;
@@ -4896,14 +4899,24 @@ function changeInsightsPeriod(delta) {
       renderAnnualComparisonYearMenu();
       updateAnnualComparisonYearLabel();
     const annualTypeLabel =
-    document.getElementById(
-      'annualComparisonTypeLabel'
+      document.getElementById(
+        'annualComparisonTypeLabel'
       );
     if (annualTypeLabel) {
       annualTypeLabel.innerText =
-      monthlyComparisonType.toUpperCase(); }
-      fetchAnnualData();
+        annualComparisonType;
     }
+    const annualComparisonTypeOptions =
+      document.querySelectorAll(
+        '#annualComparisonTypeMenu .monthly-comparison-dropdown-option'
+      );
+    annualComparisonTypeOptions.forEach(option => {
+      option.classList.toggle(
+        'is-selected',
+        option.dataset.annualType ===
+          annualComparisonType
+      );
+    });
   };
   periodCapsule.addEventListener(
     'transitionend',
@@ -5173,6 +5186,7 @@ function renderEntriesPage(entries) {
   let annualTopSpendingExpanded = false;
   let annualExpenseTrendSelectedMonth = null;
   let monthlyComparisonType = 'Expense';
+  let annualComparisonType = 'Expense';
   let monthlyComparisonPeriod = 3;
   let paymentHistoryEntries = [];
   let previousMonthEntries = [];
@@ -5405,6 +5419,41 @@ function renderEntriesPage(entries) {
     }
    );
   });
+  const annualComparisonTypeOptions =
+    document.querySelectorAll(
+      '#annualComparisonTypeMenu .monthly-comparison-dropdown-option'
+    );
+  annualComparisonTypeOptions.forEach(option => {
+    option.addEventListener(
+      'click',
+      async () => {
+        const selectedType =
+          option.dataset.annualType;
+        if (!selectedType) {
+          return;
+        }
+        annualComparisonType =
+          selectedType;
+        if (annualComparisonTypeLabel) {
+          annualComparisonTypeLabel.innerText =
+            selectedType;
+        }
+        annualComparisonTypeOptions.forEach(
+          item => {
+            item.classList.toggle(
+              'is-selected',
+              item === option
+            );
+          }
+        );
+        if (annualComparisonTypeMenu) {
+          annualComparisonTypeMenu.hidden = true;
+        }
+        await fetchAnnualComparison();
+      }
+    );
+  });
+  
   function getExpenseBarColor(title) {
   if (!title) return '#94A3B8';
   if (expenseColorMap[title]) {
@@ -6006,7 +6055,7 @@ function renderAnnualComparison(
     buildAnnualComparisonRows(
       entries,
       years,
-      monthlyComparisonType
+      annualComparisonType
     );
   rows.sort((a, b) => {
     const aValue =
