@@ -675,7 +675,6 @@
     .item-picker option[value=""] { color: var(--text-sub); }
     .item-picker-chevron { position: absolute; top: 50%; right: 14px; width: 16px; height: 16px; transform: translateY(-50%); color: var(--text-sub); opacity: 0.48; pointer-events: none; }
     .item-picker-chevron svg { width: 16px; height: 16px; stroke-width: 2; }
-    .item-picker option[value=""] { color: var(--text-sub); opacity: 0.6; }
     .modal-form-stage {
       display: grid;
       grid-template-columns: 1fr;
@@ -3902,8 +3901,8 @@ body.modal-open {
             <option value="" disabled selected>
               Select expense type
             </option>
-            <option value="FIXED">Fixed</option>
-            <option value="VARIABLE">Variable</option>
+            <option value="FIXED">FIXED</option>
+            <option value="VARIABLE">VARIABLE</option>
           </select>
           <i
             data-lucide="chevron-down"
@@ -4027,8 +4026,8 @@ body.modal-open {
             <option value="" disabled selected>
               Select expense type
             </option>
-            <option value="FIXED">Fixed</option>
-            <option value="VARIABLE">Variable</option>
+            <option value="FIXED">FIXED</option>
+            <option value="VARIABLE">VARIABLE</option>
           </select>
           <i
             data-lucide="chevron-down"
@@ -12096,18 +12095,6 @@ function openEntriesFromInsight() {
       updateEntryNoteVisibility();
     }
     
-    function updateExpenseTypePickerPlaceholder(
-      picker
-    ) {
-      if (!picker) {
-        return;
-      }
-      picker.classList.toggle(
-        'is-placeholder',
-        picker.value === ''
-      );
-    }
-    
     function updateEntryExpenseTypeVisibility() {
       const expenseTypeGroup =
         document.getElementById(
@@ -12232,27 +12219,6 @@ function openEntriesFromInsight() {
         }
         updateEntryNoteVisibility();
       });
-      document
-        .getElementById('formExpenseType')
-        ?.addEventListener(
-          'change',
-          event => {
-            updateExpenseTypePickerPlaceholder(
-              event.target
-            );
-          }
-        );
-      document
-        .getElementById('customItemExpenseType')
-        ?.addEventListener(
-          'change',
-          event => {
-            updateExpenseTypePickerPlaceholder(
-              event.target
-            );
-            updateAddNewItemButtonState();
-          }
-        );
       
     function ensureEntryDateValue() {
       const formDate =
@@ -12454,9 +12420,6 @@ function openEntriesFromInsight() {
         if (expenseTypePicker) {
           expenseTypePicker.value =
             '';
-          updateExpenseTypePickerPlaceholder(
-            expenseTypePicker
-            );
         }
         selectType(
           item.financialType,
@@ -12494,9 +12457,6 @@ function openEntriesFromInsight() {
         if (expenseTypePicker) {
           expenseTypePicker.value =
             '';
-          updateExpenseTypePickerPlaceholder(
-            expenseTypePicker
-            );
         }
         deleteBtn.style.display =
           'none';
@@ -12577,9 +12537,6 @@ function openEntriesFromInsight() {
       if (expenseTypePicker) {
         expenseTypePicker.value =
           '';
-        updateExpenseTypePickerPlaceholder(
-          expenseTypePicker
-          );
       }
       if (expenseTypeGroup) {
         expenseTypeGroup.hidden =
