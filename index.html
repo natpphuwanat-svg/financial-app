@@ -3887,6 +3887,30 @@ body.modal-open {
           </button>
         </div>
       </div>
+      <div
+        class="form-group"
+        id="customItemExpenseTypeGroup"
+        hidden
+      >
+        <label class="form-label">Expense Type</label>
+        <div class="item-picker-wrap">
+          <select
+            class="form-control item-picker"
+            id="customItemExpenseType"
+          >
+            <option value="" disabled selected>
+              Select expense type
+            </option>
+            <option value="FIXED">FIXED</option>
+            <option value="VARIABLE">VARIABLE</option>
+          </select>
+          <i
+            data-lucide="chevron-down"
+            class="item-picker-chevron"
+            aria-hidden="true"
+          ></i>
+        </div>
+      </div>
       <div class="form-group">
         <label class="form-label">Date</label>
         <input
@@ -4305,12 +4329,25 @@ body.modal-open {
       handleAddNewItem
     );
   document
-    .getElementById(
-      'customItemIcon'
-    )
+    .getElementById('customItemName')
     ?.addEventListener(
       'input',
-      updateCustomIconPreview
+      updateAddNewItemButtonState
+    );
+  document
+    .getElementById('customItemIcon')
+    ?.addEventListener(
+      'input',
+      () => {
+        updateCustomIconPreview();
+        updateAddNewItemButtonState();
+      }
+    );
+  document
+    .getElementById('customItemExpenseType')
+    ?.addEventListener(
+      'change',
+      updateAddNewItemButtonState
     );
   fetchData();
   const yearPickerIds = [
@@ -11484,9 +11521,8 @@ function openEntriesFromInsight() {
         await supabaseClient
           .from('custom_items')
           .select(
-            .select(
-              'id, type, name, icon, expense_type, created_at'
-            )
+            'id, type, name, icon, expense_type, created_at'
+          )
           .order('created_at', {
             ascending: true
           });
@@ -11593,12 +11629,30 @@ function openEntriesFromInsight() {
         document.getElementById(
           'customItemIcon'
         );
+      const expenseTypeGroup =
+        document.getElementById(
+          'customItemExpenseTypeGroup'
+        );
+      const expenseTypePicker =
+        document.getElementById(
+          'customItemExpenseType'
+        );
       if (
         !form ||
         !panel ||
         !modalTitle
       ) {
         return;
+      }
+      const isExpense =
+        selectedType === 'Expense';
+      if (expenseTypeGroup) {
+        expenseTypeGroup.hidden =
+          !isExpense;
+      }
+      if (expenseTypePicker) {
+        expenseTypePicker.value =
+          '';
       }
       modalTitle.innerText =
         'Add New Item';
@@ -11626,6 +11680,7 @@ function openEntriesFromInsight() {
       if (iconInput) {
         iconInput.value = '';
       }
+      updateAddNewItemButtonState();
       updateCustomIconPreview();
     }
     
@@ -11712,6 +11767,51 @@ function openEntriesFromInsight() {
           ?.classList.remove('is-active');
       });
     
+    function updateAddNewItemButtonState() {
+      const addButton =
+        document.getElementById(
+          'addNewItemBtn'
+        );
+      const nameInput =
+        document.getElementById(
+          'customItemName'
+        );
+      const iconInput =
+        document.getElementById(
+          'customItemIcon'
+        );
+      const expenseTypePicker =
+        document.getElementById(
+          'customItemExpenseType'
+        );
+      if (
+        !addButton ||
+        !nameInput ||
+        !iconInput
+      ) {
+        return;
+      }
+      const hasName =
+        Boolean(
+          nameInput.value.trim()
+        );
+      const hasIcon =
+        Boolean(
+          iconInput.value.trim()
+        );
+      const hasExpenseType =
+        selectedType !== 'Expense' ||
+        Boolean(
+          expenseTypePicker?.value
+        );
+      addButton.disabled =
+        !(
+          hasName &&
+          hasIcon &&
+          hasExpenseType
+        );
+    }
+    
     async function handleAddNewItem() {
       const nameInput =
         document.getElementById(
@@ -11720,6 +11820,10 @@ function openEntriesFromInsight() {
       const iconInput =
         document.getElementById(
           'customItemIcon'
+        );
+      const expenseTypePicker =
+        document.getElementById(
+          'customItemExpenseType'
         );
       const addButton =
         document.getElementById(
@@ -11745,9 +11849,24 @@ function openEntriesFromInsight() {
       }
       if (!icon) {
         alert(
-          'Please enter a Lucide icon name.'
+          'Please enter icon name.'
         );
         iconInput.focus();
+        return;
+      }
+      const expenseType =
+        selectedType === 'Expense'
+          ? expenseTypePicker?.value || ''
+          : null;
+      if (
+        selectedType === 'Expense' &&
+        !['FIXED', 'VARIABLE']
+          .includes(expenseType)
+      ) {
+        alert(
+          'Please select an expense type.'
+        );
+        expenseTypePicker?.focus();
         return;
       }
       const allItems =
@@ -11806,11 +11925,15 @@ function openEntriesFromInsight() {
             type:
               selectedType,
             name,
-            icon
+            icon,
+            expense_type:
+              selectedType === 'Expense'
+                ? expenseType
+                : null
           }])
           .select(
-            'id, type, name, icon, created_at'
-          )
+            'id, type, name, icon, expense_type, created_at'
+            )
           .single();
         if (insertError) {
           throw insertError;
@@ -11833,6 +11956,18 @@ function openEntriesFromInsight() {
           `${inserted.type}::${inserted.name}`
         ] =
           inserted.icon;
+        if (
+          inserted.type === 'Expense' &&
+          (
+            inserted.expense_type === 'FIXED' ||
+            inserted.expense_type === 'VARIABLE'
+          )
+        ) {
+          customItemExpenseTypeMap[
+            `Expense::${inserted.name}`
+          ] =
+            inserted.expense_type;
+        }
         closeAddNewItemPanel();
         populateEntryItems(
           selectedType,
@@ -11936,38 +12071,117 @@ function openEntriesFromInsight() {
       updateEntryNoteVisibility();
     }
     
-    function updateEntryNoteVisibility() {
-      const picker = document.getElementById('formTitle');
-      const noteGroup = document.getElementById('formNoteGroup');
-      const noteInput = document.getElementById('formNote');
-      if (!picker || !noteGroup || !noteInput) {
-        return; }
-      const isOther = picker.value === 'อื่นๆ';
-      noteGroup.hidden = !isOther;
-      if (!isOther) {
-        noteInput.value = '';
+    function updateEntryExpenseTypeVisibility() {
+      const expenseTypeGroup =
+        document.getElementById(
+          'formExpenseTypeGroup'
+        );
+      const expenseTypePicker =
+        document.getElementById(
+          'formExpenseType'
+        );
+      const itemPicker =
+        document.getElementById(
+          'formTitle'
+        );
+      if (
+        !expenseTypeGroup ||
+        !expenseTypePicker ||
+        !itemPicker
+      ) {
+        return;
+      }
+      const isExpense =
+        selectedType === 'Expense';
+      const item =
+        itemPicker.value;
+      const isOther =
+        item === 'อื่นๆ';
+      const isCustomExpense =
+        isExpense &&
+        customItemExpenseTypeMap[
+          `Expense::${item}`
+        ];
+      const shouldShow =
+        isExpense &&
+        (
+          isOther ||
+          Boolean(isCustomExpense)
+        );
+      expenseTypeGroup.hidden =
+        !shouldShow;
+      if (!shouldShow) {
+        expenseTypePicker.value = '';
       }
     }
     
-    function selectType(type, selectedItem = '') {
-      selectedType = type;
-      document.querySelectorAll('.type-btn').forEach(btn => {
-        const btnType = btn.dataset.type;
-        btn.classList.remove(
-          'active',
-          'income',
-          'expense',
-          'deduction'
+    function updateEntryNoteVisibility() {
+      const picker =
+        document.getElementById(
+          'formTitle'
         );
-        if (btnType === type) {
-          btn.classList.add(
-            'active',
-            type.toLowerCase()
-          );
-        }
-      });
-      populateEntryItems(type, selectedItem);
+      const noteGroup =
+        document.getElementById(
+          'formNoteGroup'
+        );
+      const noteInput =
+        document.getElementById(
+          'formNote'
+        );
+      if (
+        !picker ||
+        !noteGroup ||
+        !noteInput
+      ) {
+        return;
+      }
+      const isOther =
+        picker.value === 'อื่นๆ';
+      noteGroup.hidden =
+        !isOther;
+      if (!isOther) {
+        noteInput.value = '';
+      }
+      updateEntryExpenseTypeVisibility();
     }
+    
+    function selectType(
+      type,
+      selectedItem = '',
+      selectedExpenseType = ''
+    ) {
+      selectedType = type;
+      document
+        .querySelectorAll('.type-btn')
+        .forEach(btn => {
+          const btnType =
+            btn.dataset.type;
+          btn.classList.remove(
+            'active',
+            'income',
+            'expense',
+            'deduction'
+          );
+          if (btnType === type) {
+            btn.classList.add(
+              'active',
+              type.toLowerCase()
+            );
+          }
+        });
+      populateEntryItems(
+        type,
+        selectedItem
+      );
+      const expenseTypePicker =
+        document.getElementById(
+          'formExpenseType'
+        );
+      if (expenseTypePicker) {
+        expenseTypePicker.value =
+          selectedExpenseType || '';
+      }
+      updateEntryNoteVisibility(); }
     document
       .getElementById('formTitle')
       ?.addEventListener('change', event => {
@@ -12175,9 +12389,18 @@ function openEntriesFromInsight() {
           ).slice(0, 7);
         formAmount.value =
           item.amount ?? '';
+        const expenseTypePicker =
+          document.getElementById(
+            'formExpenseType'
+          );
+        if (expenseTypePicker) {
+          expenseTypePicker.value =
+            '';
+        }
         selectType(
           item.financialType,
-          item.title
+          item.title,
+          item.expenseType || ''
         );
         formNote.value =
           item.note || '';
@@ -12203,6 +12426,14 @@ function openEntriesFromInsight() {
           `${selectedYear}-${addMonth}`;
         formAmount.value = '';
         formNote.value = '';
+        const expenseTypePicker =
+          document.getElementById(
+            'formExpenseType'
+          );
+        if (expenseTypePicker) {
+          expenseTypePicker.value =
+            '';
+        }
         deleteBtn.style.display =
           'none';
         modalActions?.classList.add(
@@ -12271,6 +12502,22 @@ function openEntriesFromInsight() {
       document.getElementById(
         'formNoteGroup'
       ).hidden = true;
+      const expenseTypePicker =
+        document.getElementById(
+          'formExpenseType'
+        );
+      const expenseTypeGroup =
+        document.getElementById(
+          'formExpenseTypeGroup'
+        );
+      if (expenseTypePicker) {
+        expenseTypePicker.value =
+          '';
+      }
+      if (expenseTypeGroup) {
+        expenseTypeGroup.hidden =
+          true;
+      }
       document.getElementById(
         'deleteBtn'
       ).style.display = 'none';
@@ -12354,6 +12601,48 @@ function openEntriesFromInsight() {
         selectedItem === 'อื่นๆ'
           ? formNote.value.trim()
           : '';
+      const expenseTypePicker =
+        document.getElementById(
+          'formExpenseType'
+        );
+      const selectedExpenseType =
+        expenseTypePicker
+          ? expenseTypePicker.value
+          : '';
+      const requiresExpenseType =
+        selectedType === 'Expense' &&
+        (
+          selectedItem === 'อื่นๆ' ||
+          Boolean(
+            customItemExpenseTypeMap[
+              `Expense::${selectedItem}`
+            ]
+          )
+        );
+      if (
+        requiresExpenseType &&
+        !['FIXED', 'VARIABLE']
+          .includes(selectedExpenseType)
+      ) {
+        alert(
+          'Please select an expense type.'
+        );
+        expenseTypePicker?.focus();
+        return;
+      }
+      const existingExpenseType =
+        rowIndex &&
+        currentEntries.find(
+          entry =>
+            String(entry.id) ===
+            String(rowIndex)
+        )?.expense_type;
+      const databaseExpenseType =
+        selectedType !== 'Expense'
+          ? null
+          : requiresExpenseType
+            ? selectedExpenseType
+            : existingExpenseType || null;
       const databaseDate =
         formDate.value
           ? `${formDate.value}-01`
@@ -12375,7 +12664,9 @@ function openEntriesFromInsight() {
           getEntryIcon(
             selectedItem,
             selectedType
-          )
+          ),
+        expense_type:
+          databaseExpenseType
       };
       submitBtn.innerText =
         'Saving...';
