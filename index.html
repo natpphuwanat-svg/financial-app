@@ -5018,6 +5018,7 @@ function changeInsightsPeriod(delta) {
               amount: Number(item.amount),
               type: item.financial_type.toLowerCase(),
               financialType: item.financial_type,
+              expenseType: item.expense_type || null,
               icon: item.icon
             })})'
           >
@@ -5068,12 +5069,12 @@ function renderEntriesPage(entries) {
   if (currentEntryFilter === 'expense') {
     if (currentExpenseEntryFilter === 'fixed') {
       filteredEntries = filteredEntries.filter(item =>
-        getExpenseType(item.title) === 'Fixed'
+        getExpenseType(item) === 'Fixed'
       );
       entryGroupTitle = 'Fixed';
     } else if (currentExpenseEntryFilter === 'variable') {
       filteredEntries = filteredEntries.filter(item =>
-        getExpenseType(item.title) === 'Variable'
+        getExpenseType(item) === 'Variable'
       );
       entryGroupTitle = 'Variable';
     } else {
@@ -5471,26 +5472,62 @@ function renderEntriesPage(entries) {
   expenseColorMap[title] = assignedColor;
   return assignedColor; }
   const expenseTypeMap = {
-  Fixed: [
-    'แม่',
-    'ศรีสวัสดิ์',
-    'สยามชัย',
-    'แชร์',
-    '3BB'
-  ],
-  Variable: [
-    'Tpay later',
-    'SEasy',
-    'Spay later',
-    'AIS Bill'
-  ]
-};
-function getExpenseType(title) {
-  if (expenseTypeMap.Fixed.includes(title)) {
-    return 'Fixed'; }
-  if (expenseTypeMap.Variable.includes(title)) {
-    return 'Variable'; }
-  return null; }
+    Fixed: [
+      'แม่',
+      'ศรีสวัสดิ์',
+      'สยามชัย',
+      'แชร์',
+      '3BB'
+    ],
+    Variable: [
+      'Tpay later',
+      'SEasy',
+      'Spay later',
+      'AIS Bill'
+    ]
+  };
+  
+  function getExpenseType(itemOrTitle) {
+    if (
+      itemOrTitle &&
+      typeof itemOrTitle === 'object'
+    ) {
+      const databaseType =
+        String(
+          itemOrTitle.expense_type || ''
+        )
+          .trim()
+          .toUpperCase();
+      if (databaseType === 'FIXED') {
+        return 'Fixed';
+      }
+      if (databaseType === 'VARIABLE') {
+        return 'Variable';
+      }
+      const title =
+        String(
+          itemOrTitle.title || ''
+        ).trim();
+      if (expenseTypeMap.Fixed.includes(title)) {
+        return 'Fixed';
+      }
+      if (expenseTypeMap.Variable.includes(title)) {
+        return 'Variable';
+      }
+      return null;
+    }
+    const title =
+      String(
+        itemOrTitle || ''
+      ).trim();
+    if (expenseTypeMap.Fixed.includes(title)) {
+      return 'Fixed';
+    }
+    if (expenseTypeMap.Variable.includes(title)) {
+      return 'Variable';
+    }
+    return null; }
+
 function getMonthlyComparisonEntries(entries, type) {
   return (entries || [])
     .filter(item => item.financial_type === type)
@@ -5505,6 +5542,7 @@ function getMonthlyComparisonEntries(entries, type) {
       groups[title].entries.push(item);
       return groups;
     }, {}); }
+    
 function formatMonthlyComparisonMonth(
   monthData,
   months,
@@ -6185,7 +6223,7 @@ function renderExpenseTypeSummary(entries) {
   let variableTotal = 0;
   expenses.forEach(item => {
     const amount = Number(item.amount || 0);
-    const type = getExpenseType(item.title);
+    const type = getExpenseType(item);
     if (type === 'Fixed') {
       fixedTotal += amount;
     }
@@ -6362,7 +6400,7 @@ function renderExpenseTypeSummary(entries) {
     selectedExpenseType
       ? expenses.filter(
           item =>
-            getExpenseType(item.title) ===
+            getExpenseType(item) ===
             selectedExpenseType
         )
       : expenses;
@@ -6400,10 +6438,8 @@ function renderExpenseTypeSummary(entries) {
             maxAmount > 0
               ? (amount / maxAmount) * 93
               : 0;
-          const itemType =
-            getExpenseType(
-              item.title
-            );
+         const itemType =
+            getExpenseType(item);
           const percent =
             selectedExpenseType
               ? (
@@ -6520,7 +6556,7 @@ function renderExpenseTypeSummary(entries) {
   let contextualExpenses = expenses;
   if (selectedExpenseType) {
     contextualExpenses = expenses.filter(
-      item => getExpenseType(item.title) === selectedExpenseType
+      item => getExpenseType(item) === selectedExpenseType
     );
   }
   contextualExpenses.sort(
@@ -9008,7 +9044,7 @@ function renderAnnualExpenseTypeSummary(entries) {
     const amount =
       Number(item.amount || 0);
     const type =
-      getExpenseType(item.title);
+      getExpenseType(item);
     if (type === 'Fixed') {
       fixedTotal += amount;
     }
@@ -9256,7 +9292,7 @@ function buildAnnualExpenseTrendData(entries) {
           expenseEntries
             .filter(
               item =>
-                getExpenseType(item.title) ===
+                getExpenseType(item) ===
                 selectedExpenseType
             )
             .reduce(
@@ -11409,7 +11445,7 @@ function openEntriesFromInsight() {
       Expense: [],
       Deduction: []
     };
-    let customItemIconMap = {};
+    let customItemExpenseTypeMap = {};
     let customItemsLoaded = false;
     const entryItemOptions = {
     Income: [
@@ -11448,8 +11484,9 @@ function openEntriesFromInsight() {
         await supabaseClient
           .from('custom_items')
           .select(
-            'id, type, name, icon, created_at'
-          )
+            .select(
+              'id, type, name, icon, expense_type, created_at'
+            )
           .order('created_at', {
             ascending: true
           });
@@ -11467,6 +11504,7 @@ function openEntriesFromInsight() {
         Deduction: []
       };
       customItemIconMap = {};
+      customItemExpenseTypeMap = {};
       (data || []).forEach(item => {
         if (
           !customItemsByType[item.type]
@@ -11487,6 +11525,23 @@ function openEntriesFromInsight() {
           `${item.type}::${name}`
         ] =
           icon || 'circle-help';
+        const expenseType =
+          String(
+            item.expense_type || ''
+          )
+            .trim()
+            .toUpperCase();
+        if (
+          item.type === 'Expense' &&
+          (
+            expenseType === 'FIXED' ||
+            expenseType === 'VARIABLE'
+          )
+        ) {
+          customItemExpenseTypeMap[
+            `${item.type}::${name}`
+          ] = expenseType;
+        }
       });
       customItemsLoaded = true;
     }
