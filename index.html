@@ -3889,14 +3889,14 @@ body.modal-open {
       </div>
       <div
         class="form-group"
-        id="customItemExpenseTypeGroup"
+        id="formExpenseTypeGroup"
         hidden
       >
         <label class="form-label">Expense Type</label>
         <div class="item-picker-wrap">
           <select
             class="form-control item-picker"
-            id="customItemExpenseType"
+            id="formExpenseType"
           >
             <option value="" disabled selected>
               Select expense type
@@ -4011,6 +4011,30 @@ body.modal-open {
           autocomplete="off"
           maxlength="80"
         >
+      </div>
+      <div
+        class="form-group"
+        id="customItemExpenseTypeGroup"
+        hidden
+      >
+        <label class="form-label">Expense Type</label>
+        <div class="item-picker-wrap">
+          <select
+            class="form-control item-picker"
+            id="customItemExpenseType"
+          >
+            <option value="" disabled selected>
+              Select expense type
+            </option>
+            <option value="FIXED">FIXED</option>
+            <option value="VARIABLE">VARIABLE</option>
+          </select>
+          <i
+            data-lucide="chevron-down"
+            class="item-picker-chevron"
+            aria-hidden="true"
+          ></i>
+        </div>
       </div>
         <div class="form-group">
       <label class="form-label">Icon</label>
