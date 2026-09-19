@@ -3897,12 +3897,13 @@ body.modal-open {
           <select
             class="form-control item-picker"
             id="formExpenseType"
+            required
           >
             <option value="" disabled selected>
               Select expense type
             </option>
-            <option value="FIXED">FIXED</option>
-            <option value="VARIABLE">VARIABLE</option>
+            <option value="FIXED">Fixed</option>
+            <option value="VARIABLE">Variable</option>
           </select>
           <i
             data-lucide="chevron-down"
@@ -4022,12 +4023,13 @@ body.modal-open {
           <select
             class="form-control item-picker"
             id="customItemExpenseType"
+            required
           >
             <option value="" disabled selected>
               Select expense type
             </option>
-            <option value="FIXED">FIXED</option>
-            <option value="VARIABLE">VARIABLE</option>
+            <option value="FIXED">Fixed</option>
+            <option value="VARIABLE">Variable</option>
           </select>
           <i
             data-lucide="chevron-down"
@@ -11675,6 +11677,8 @@ function openEntriesFromInsight() {
           !isExpense;
       }
       if (expenseTypePicker) {
+        expenseTypePicker.required =
+          isExpense;
         expenseTypePicker.value =
           '';
       }
@@ -12134,6 +12138,8 @@ function openEntriesFromInsight() {
         );
       expenseTypeGroup.hidden =
         !shouldShow;
+      expenseTypePicker.required =
+        shouldShow;
       if (!shouldShow) {
         expenseTypePicker.value = '';
       }
